@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Quiz de preparação para a P3 — Teoria Algébrica dos Números</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --board: #F7F9FB;
+  --board-2: #EEF2F6;
+  --ink: #1C2230;
+  --muted: #5B6577;
+  --rule: #D6DCE4;
+  --blue: #1F4FA8;
+  --red: #B9312C;
+  --green: #1F7A4D;
+  --blue-wash: #E3EBF8;
+  --red-wash: #F8E6E5;
+  --green-wash: #E2F2E9;
+  --empty: #C9D1DC;
+  color-scheme: light;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --board: #12161D;
+    --board-2: #1A2029;
+    --ink: #E6EAF0;
+    --muted: #9AA4B4;
+    --rule: #2A313C;
+    --blue: #8AB0F2;
+    --red: #F08C84;
+    --green: #7BCB9C;
+    --blue-wash: #1C2840;
+    --red-wash: #3A2222;
+    --green-wash: #1B3328;
+    --empty: #39414E;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --board: #12161D;
+  --board-2: #1A2029;
+  --ink: #E6EAF0;
+  --muted: #9AA4B4;
+  --rule: #2A313C;
+  --blue: #8AB0F2;
+  --red: #F08C84;
+  --green: #7BCB9C;
+  --blue-wash: #1C2840;
+  --red-wash: #3A2222;
+  --green-wash: #1B3328;
+  --empty: #39414E;
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: inherit; }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+body {
+  margin: 0;
+  background: var(--board);
+  color: var(--ink);
+  font-family: "Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto;
+  height: env(safe-area-inset-top, 0px);
+  z-index: 10;
+  background: var(--board);
+}
+
+/* ---------- régua de tracinhos ---------- */
+.tally {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 5;
+  background: var(--board);
+  border-bottom: 1px solid var(--rule);
+}
+.tally-inner {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: 0.75rem 1.25rem 0.7rem;
+  display: flex;
+  align-items: flex-end;
+  gap: 1.1rem;
+  overflow-x: auto;
+}
+.group { display: flex; flex-direction: column; gap: 0.3rem; flex: 0 0 auto; }
+.marks { display: flex; gap: 5px; align-items: flex-end; height: 26px; }
+.mark {
+  width: 6px;
+  height: 22px;
+  border-radius: 3px;
+  background: var(--empty);
+  transform: rotate(-6deg);
+  transition: background-color 0.25s ease, height 0.25s ease;
+}
+.mark.current { background: var(--blue); height: 26px; }
+.mark.right { background: var(--green); }
+.mark.wrong { background: var(--red); }
+.group-name { font-size: 0.72rem; color: var(--muted); white-space: nowrap; }
+.count { margin-left: auto; font-size: 0.85rem; color: var(--muted); white-space: nowrap; padding-bottom: 1.1rem; }
+
+/* ---------- conteúdo ---------- */
+main { max-width: 46rem; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+h1 {
+  font-family: "Source Serif 4", Georgia, "Times New Roman", serif;
+  font-weight: 600;
+  font-size: clamp(1.7rem, 4.5vw, 2.35rem);
+  line-height: 1.15;
+  margin: 0 0 0.75rem;
+}
+h2 {
+  font-family: "Source Serif 4", Georgia, serif;
+  font-weight: 600;
+  font-size: 1.35rem;
+  margin: 2rem 0 0.75rem;
+}
+.lead { font-size: 1.05rem; color: var(--muted); max-width: 38rem; margin: 0 0 1.5rem; }
+.serif { font-family: "Source Serif 4", Georgia, serif; }
+
+.topics { list-style: none; padding: 0; margin: 0 0 2rem; }
+.topics li {
+  display: flex;
+  gap: 0.75rem;
+  align-items: baseline;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+.topics li:last-child { border-bottom: 0; }
+.topics .t-name { font-weight: 700; flex: 1 1 auto; }
+.topics .t-dicas { color: var(--muted); font-size: 0.9rem; white-space: nowrap; }
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+.btn {
+  display: inline-block;
+  border: 2px solid var(--blue);
+  background: var(--blue);
+  color: var(--board);
+  font-weight: 700;
+  padding: 0.65rem 1.4rem;
+  border-radius: 999px;
+}
+.btn:hover { filter: brightness(1.08); }
+.btn.ghost { background: transparent; color: var(--blue); }
+a.btn { text-decoration: none; }
+.btn:focus-visible, .opt:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+
+/* ---------- questão ---------- */
+.q-topic { color: var(--blue); font-weight: 700; font-size: 0.95rem; margin: 0 0 0.5rem; }
+.q-text {
+  font-family: "Source Serif 4", Georgia, serif;
+  font-size: 1.15rem;
+  line-height: 1.6;
+  margin: 0 0 1.4rem;
+}
+.opts { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.25rem; }
+.opt {
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-start;
+  text-align: left;
+  width: 100%;
+  color: var(--ink);
+  background: var(--board-2);
+  border: 2px solid transparent;
+  border-radius: 12px;
+  padding: 0.8rem 1rem;
+  font-family: "Source Serif 4", Georgia, serif;
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+.opt:hover:not([disabled]) { border-color: var(--blue); }
+.opt .key {
+  flex: 0 0 auto;
+  font-family: "Atkinson Hyperlegible", system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--muted);
+  border: 1.5px solid var(--rule);
+  border-radius: 50%;
+  width: 1.7rem;
+  height: 1.7rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.1rem;
+}
+.opt[disabled] { cursor: default; }
+.opt.is-right { background: var(--green-wash); border-color: var(--green); }
+.opt.is-right .key { border-color: var(--green); color: var(--green); }
+.opt.is-wrong { background: var(--red-wash); border-color: var(--red); }
+.opt.is-wrong .key { border-color: var(--red); color: var(--red); }
+.opt.faded { opacity: 0.55; }
+
+.feedback {
+  border-left: 4px solid var(--blue);
+  padding: 0.25rem 0 0.25rem 1rem;
+  margin: 0 0 1.5rem;
+}
+.feedback.right { border-color: var(--green); }
+.feedback.wrong { border-color: var(--red); }
+.verdict { font-weight: 700; margin: 0 0 0.35rem; }
+.feedback.right .verdict { color: var(--green); }
+.feedback.wrong .verdict { color: var(--red); }
+.feedback .expl { font-family: "Source Serif 4", Georgia, serif; font-size: 1.02rem; line-height: 1.6; margin: 0 0 0.5rem; }
+.feedback .see { font-size: 0.9rem; color: var(--muted); margin: 0; }
+.nav { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
+.hint { font-size: 0.85rem; color: var(--muted); }
+
+/* ---------- identificação ---------- */
+.nome-box { margin: 0 0 1.5rem; max-width: 26rem; }
+.nome-box label { display: block; font-weight: 700; margin-bottom: 0.4rem; }
+.nome-box input { width: 100%; font: inherit; padding: 0.6rem 0.8rem; border: 2px solid var(--rule); border-radius: 10px; background: var(--board); color: var(--ink); }
+.nome-box input:focus { outline: none; border-color: var(--blue); }
+.nome-box .erro { color: var(--red); font-size: 0.9rem; margin: 0.4rem 0 0; min-height: 1.2em; }
+.ident { border: 2px solid var(--blue); background: var(--blue-wash); border-radius: 14px; padding: 1rem 1.25rem; margin: 0.5rem 0 1.5rem; }
+.ident .quem { font-size: 1.4rem; font-weight: 700; margin: 0; }
+.ident .quando { color: var(--muted); margin: 0.2rem 0 0.6rem; }
+.ident .nota { font-family: "Source Serif 4", Georgia, serif; font-size: 2rem; font-weight: 600; margin: 0; }
+
+/* ---------- resultado ---------- */
+.score {
+  font-family: "Source Serif 4", Georgia, serif;
+  font-size: clamp(2.6rem, 9vw, 3.6rem);
+  font-weight: 600;
+  line-height: 1;
+  margin: 0.25rem 0 0.5rem;
+}
+.score small { font-size: 0.45em; color: var(--muted); font-weight: 400; }
+.diag { list-style: none; padding: 0; margin: 1rem 0 2rem; }
+.diag li { padding: 1rem 0; border-bottom: 1px solid var(--rule); }
+.diag li:last-child { border-bottom: 0; }
+.diag-head { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+.diag-name { font-weight: 700; flex: 1 1 14rem; }
+.diag .marks { height: 24px; }
+.diag-verdict { margin: 0.4rem 0 0; font-size: 0.95rem; }
+.diag-verdict.ok { color: var(--green); }
+.diag-verdict.mid { color: var(--blue); }
+.diag-verdict.weak { color: var(--red); }
+.review { margin: 0 0 1.5rem; }
+.review-item { border-left: 4px solid var(--red); padding: 0.1rem 0 0.1rem 1rem; margin: 0 0 1.25rem; }
+.review-item .q-text { font-size: 1.02rem; margin-bottom: 0.5rem; }
+.review-item p { margin: 0 0 0.4rem; }
+.ans { font-family: "Source Serif 4", Georgia, serif; }
+.label-right { color: var(--green); font-weight: 700; }
+.label-wrong { color: var(--red); font-weight: 700; }
+
+mjx-container { color: inherit; }
+mjx-container[display="true"] { overflow-x: auto; overflow-y: hidden; max-width: 100%; }
+
+@media (prefers-reduced-motion: reduce) {
+  .mark { transition: none; }
+}
+@media (max-width: 520px) {
+  .tally-inner { gap: 0.8rem; padding: 0.6rem 1rem; }
+  .group-name { display: none; }
+  .count { padding-bottom: 0; }
+  main { padding-top: 1.5rem; }
+}
+</style>
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$']],
+      displayMath: [['\\[', '\\]']],
+      macros: {
+        Z: '\\mathbb{Z}', Q: '\\mathbb{Q}', R: '\\mathbb{R}',
+        C: '\\mathbb{C}', F: '\\mathbb{F}', OK: '\\mathcal{O}_K',
+        N: '\\operatorname{N}', Log: '\\operatorname{Log}'
+      }
+    },
+    svg: { fontCache: 'global' },
+    startup: {
+      typeset: false,
+      ready: function () {
+        MathJax.startup.defaultReady();
+        MathJax.startup.promise.then(function () { window.__mjReady && window.__mjReady(); });
+      }
+    }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js" defer></script>
+</head>
+<body>
+
+<div class="tally" aria-hidden="true">
+  <div class="tally-inner" id="tally"></div>
+</div>
+
+<main id="app" aria-live="polite"></main>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ------------------------------------------------------------------
+     Temas e dicas correspondentes (numeração da lista de dicas da P3)
+  ------------------------------------------------------------------ */
+  var TOPICS = [
+    { name: "Imersão canônica", long: "Imersão canônica e volume", dicas: "dicas 1 a 4" },
+    { name: "Grupo de classes", long: "Grupo de classes e cota de Minkowski", dicas: "dicas 5 a 13" },
+    { name: "Número de classes", long: "Cálculo do número de classes", dicas: "dicas 14 a 18" },
+    { name: "Imersão logarítmica", long: "Imersão logarítmica e raízes da unidade", dicas: "dicas 19 a 24" },
+    { name: "Dirichlet", long: "Teorema de Dirichlet e unidades", dicas: "dicas 25 a 34" }
+  ];
+
+  var BANK = [
+    // ---------- Tema 0: imersão canônica e volume
+    { t: 0, dica: "dica 1",
+      q: "Para $K = \\Q(\\sqrt[3]{2})$, quanto valem $s$, $t$ e a dimensão real de $\\mathcal{L}^{st}$?",
+      o: ["$s = 1$, $t = 1$, e a dimensão é $3$.", "$s = 3$, $t = 0$, e a dimensão é $3$.", "$s = 1$, $t = 2$, e a dimensão é $5$.", "$s = 1$, $t = 1$, e a dimensão é $2$."],
+      e: "$x^3 - 2$ tem uma raiz real e um par de raízes complexas conjugadas: $s = 1$ e $t = 1$. A dimensão real de $\\mathcal{L}^{st} = \\R^s \\times \\C^t$ é $s + 2t = 3 = n$: cada par complexo contribui com uma coordenada complexa, isto é, duas reais." },
+    { t: 0, dica: "dica 1",
+      q: "Para $K = \\Q(\\zeta_7)$, quanto valem $s$ e $t$?",
+      o: ["$s = 0$ e $t = 3$.", "$s = 6$ e $t = 0$.", "$s = 0$ e $t = 6$.", "$s = 2$ e $t = 2$."],
+      e: "Nenhuma raiz primitiva sétima da unidade é real, então os $6$ monomorfismos formam $3$ pares conjugados. Em geral, $\\Q(\\zeta_p)$ com $p$ ímpar é totalmente complexo, com $t = \\frac{p-1}{2}$." },
+    { t: 0, dica: "dica 3",
+      q: "Qual é o volume do domínio fundamental de $\\sigma(\\OK)$ para $K = \\Q(i)$?",
+      o: ["$1$", "$2$", "$\\tfrac12$", "$4$"],
+      e: "$2^{-t}\\sqrt{|\\Delta_K|} = 2^{-1}\\sqrt4 = 1$. Confere com a geometria: identificando $\\C$ com $\\R^2$, $\\sigma(\\Z[i])$ é a rede $\\Z^2$, de volume $1$." },
+    { t: 0, dica: "dica 3",
+      q: "Em $K = \\Q(\\sqrt{-5})$, com $\\Delta_K = -20$, o ideal $P = \\langle 2, 1+\\sqrt{-5}\\rangle$ tem norma $2$. Qual é o volume do domínio fundamental de $\\sigma(P)$?",
+      o: ["$2\\sqrt5$", "$\\sqrt5$", "$4\\sqrt5$", "$\\sqrt{10}$"],
+      e: "$\\operatorname{vol}(\\sigma(P)) = 2^{-t}\\N(P)\\sqrt{|\\Delta_K|} = \\tfrac12 \\cdot 2 \\cdot \\sqrt{20} = 2\\sqrt5$: o volume de $\\sigma(\\OK)$, que é $\\sqrt5$, multiplicado pelo índice $\\N(P) = 2$." },
+    { t: 0, dica: "dica 4",
+      q: "Para $\\alpha \\in K$, quanto vale a norma de Minkowski $\\N(\\sigma(\\alpha)) = \\sigma_1(\\alpha)\\cdots\\sigma_s(\\alpha)\\,|\\sigma_{s+1}(\\alpha)|^2 \\cdots |\\sigma_{s+t}(\\alpha)|^2$?",
+      o: ["$\\N(\\alpha)$", "$|\\N(\\alpha)|^2$", "$\\operatorname{Tr}(\\alpha)$", "$\\N(\\alpha)^{1/n}$"],
+      e: "Como $|\\sigma_{s+j}(\\alpha)|^2 = \\sigma_{s+j}(\\alpha)\\,\\overline{\\sigma_{s+j}(\\alpha)}$, e os conjugados complexos são exatamente os monomorfismos que faltam, o produto é $\\prod_{i=1}^n \\sigma_i(\\alpha) = \\N(\\alpha)$. É isso que liga a geometria de $\\mathcal{L}^{st}$ à aritmética de $K$." },
+    { t: 0, dica: "dica 1",
+      q: "Na prova de que $\\sigma(\\alpha_1), \\dots, \\sigma(\\alpha_n)$ são $\\R$-linearmente independentes, troca-se cada par de colunas $(\\operatorname{Re}\\sigma_{s+j}, \\operatorname{Im}\\sigma_{s+j})$ por $(\\sigma_{s+j}, \\overline{\\sigma}_{s+j})$. Para quê?",
+      o: ["Para chegar à matriz $(\\sigma_i(\\alpha_j))$, cujo determinante ao quadrado é $\\Delta(\\alpha_1,\\dots,\\alpha_n) \\neq 0$; a troca só multiplica o determinante por $(-2i)^t$.",
+          "Para tornar a matriz real.",
+          "Para que o determinante passe a valer $1$.",
+          "Porque $\\operatorname{Re}$ e $\\operatorname{Im}$ não são funções lineares."],
+      e: "As colunas $(y, z)$ viram $(y + iz,\\ y - iz)$, operação de determinante $-2i$. Assim o determinante original é não nulo se, e só se, $\\det(\\sigma_i(\\alpha_j)) \\neq 0$, e o quadrado deste é o discriminante, não nulo para uma base. $\\operatorname{Re}$ e $\\operatorname{Im}$ são $\\R$-lineares." },
+    { t: 0, dica: "dica 2",
+      q: "Por que $\\sigma(\\OK)$ é uma rede em $\\mathcal{L}^{st}$, mas $\\sigma(K)$ não é?",
+      o: ["$\\sigma(\\OK)$ é gerado pela imagem de uma $\\Z$-base de $\\OK$, que são $n$ vetores $\\R$-linearmente independentes; já $\\sigma(K)$ é denso em $\\mathcal{L}^{st}$.",
+          "Porque $\\OK$ é finito e $K$ é infinito.",
+          "Porque $\\sigma$ é injetora em $\\OK$, mas não em $K$.",
+          "Porque $\\sigma(K)$ não é um subgrupo aditivo."],
+      e: "Uma $\\Z$-base de $\\OK$ tem $n$ elementos $\\Q$-linearmente independentes, que $\\sigma$ leva em vetores $\\R$-linearmente independentes. Como $K = \\Q \\cdot \\OK$, o conjunto $\\sigma(K)$ contém múltiplos racionais arbitrariamente pequenos dos vetores da rede: é denso e não discreto. A imersão $\\sigma$ é injetora em todo $K$." },
+    { t: 0, dica: "dica 3",
+      q: "Se $J \\subseteq I$ são ideais não nulos de $\\OK$ com $|I/J| = 3$, quanto vale $\\operatorname{vol}(\\sigma(J))/\\operatorname{vol}(\\sigma(I))$?",
+      o: ["$3$", "$9$", "$\\tfrac13$", "$\\sqrt3$"],
+      e: "$\\N(J) = |\\OK/J| = |\\OK/I| \\cdot |I/J| = 3\\N(I)$, e o volume é proporcional à norma. Geometricamente: o índice de uma sub-rede é a razão entre os volumes dos domínios fundamentais." },
+
+    // ---------- Tema 1: grupo de classes e cota de Minkowski
+    { t: 1, dica: "dica 7",
+      q: "Na prova da cota de Minkowski para ideais, escolhem-se $c_i$ com $c_1 \\cdots c_{s+t}$ um pouco maior que $\\left(\\frac4\\pi\\right)^t \\operatorname{vol}(\\sigma(I))$. Quanto vale $\\left(\\frac4\\pi\\right)^t \\operatorname{vol}(\\sigma(I))$?",
+      o: ["$\\left(\\frac2\\pi\\right)^t \\N(I)\\sqrt{|\\Delta_K|}$", "$\\left(\\frac4\\pi\\right)^t \\N(I)\\sqrt{|\\Delta_K|}$", "$\\left(\\frac2\\pi\\right)^t \\sqrt{|\\Delta_K|}$", "$2^{-t}\\N(I)\\sqrt{|\\Delta_K|}$"],
+      e: "$\\left(\\frac4\\pi\\right)^t \\cdot 2^{-t}\\N(I)\\sqrt{|\\Delta_K|} = \\left(\\frac2\\pi\\right)^t\\N(I)\\sqrt{|\\Delta_K|}$. O ponto $\\ell = \\sigma(\\alpha)$ dado pelo lema tem $|\\N(\\alpha)| < c_1\\cdots c_{s+t}$; fazendo esse produto tender ao limite, obtém-se a cota." },
+    { t: 1, dica: "dica 6",
+      q: "No lema de Minkowski em $\\mathcal{L}^{st}$, de onde vem o fator $\\left(\\frac4\\pi\\right)^t$?",
+      o: ["O conjunto dado por $|x_i| < c_i$ e $|x_{s+j}|^2 < c_{s+j}$ tem volume $2^s\\pi^t c_1 \\cdots c_{s+t}$, e o Teorema de Minkowski pede volume maior que $2^n V = 2^s 4^t V$.",
+          "Do volume da bola unitária de $\\R^n$.",
+          "Da constante de Minkowski $M_{st}$.",
+          "Do fator $2^{-t}$ no volume de $\\sigma(\\OK)$."],
+      e: "Cada coordenada real dá um intervalo de comprimento $2c_i$; cada coordenada complexa dá um disco de raio $\\sqrt{c_{s+j}}$, de área $\\pi c_{s+j}$. A condição $2^s\\pi^t\\prod c_i > 2^s 4^t V$ é exatamente $\\prod c_i > \\left(\\frac4\\pi\\right)^t V$." },
+    { t: 1, dica: "dica 9",
+      q: "Por que o grupo de classes $\\mathcal{H}$ é finito?",
+      o: ["Toda classe contém um ideal de norma limitada por uma constante que só depende de $K$, e há apenas finitos ideais com norma limitada.",
+          "Porque $\\OK$ é noetheriano.",
+          "Porque $\\OK$ tem apenas finitos ideais primos.",
+          "Porque todo ideal fracionário é principal."],
+      e: "A cota $\\left(\\frac2\\pi\\right)^t\\sqrt{|\\Delta_K|}$ não depende da classe. E há finitos ideais de norma $\\le B$: cada um contém a sua norma, um inteiro $\\le B$, e há finitos ideais contendo um inteiro fixo. $\\OK$ tem infinitos primos." },
+    { t: 1, dica: "dica 10",
+      q: "Se $h = 5$ e $I^3$ é principal, então:",
+      o: ["$I$ é principal.", "$I^5$ não é principal.", "$I^2$ é principal, mas $I$ não.", "Nada se pode concluir."],
+      e: "A ordem de $[I]$ divide $3$, porque $I^3$ é principal, e divide $h = 5$. Como $\\operatorname{mdc}(3,5) = 1$, a ordem é $1$. Explicitamente, $1 = 2\\cdot 3 - 5$ dá $[I] = [I]^{6}[I]^{-5} = 1$." },
+    { t: 1, dica: "dica 10",
+      q: "Se $h = 4$ e $I^2$ é principal, $I$ é necessariamente principal?",
+      o: ["Não: $\\operatorname{mdc}(2, 4) = 2$, e a classe de $I$ pode ter ordem $2$.",
+          "Sim, sempre.",
+          "Sim, porque $I^4$ é principal.",
+          "Não; aliás, $I$ nunca é principal."],
+      e: "O lema só se aplica com $\\operatorname{mdc}(q, h) = 1$. Um exemplo do fenômeno, com $h = 2$: em $\\Z[\\sqrt{-5}]$, $P = \\langle 2, 1+\\sqrt{-5}\\rangle$ não é principal, mas $P^2 = \\langle 2 \\rangle$ é." },
+    { t: 1, dica: "dica 12",
+      q: "O critério de DIP só pede que os primos $P$ com $\\N(P) \\le M_{st}\\sqrt{|\\Delta_K|}$ sejam principais. Por que basta olhar esses primos?",
+      o: ["Toda classe contém um ideal $I$ com $\\N(I) \\le M_{st}\\sqrt{|\\Delta_K|}$; cada fator primo de $I$ tem norma $\\le \\N(I)$; se todos forem principais, $I$ é principal.",
+          "Porque todo ideal de norma grande é principal.",
+          "Porque o grupo de classes é gerado pelos primos de norma $2$.",
+          "Porque primos de norma grande são sempre inertes."],
+      e: "A norma é multiplicativa e cada fator tem norma $\\ge 2$, então $\\N(P_j) \\le \\N(I)$. Um primo de norma maior que a cota pode existir e até não ser principal — mas a classe dele também contém um ideal pequeno." },
+    { t: 1, dica: "dica 13",
+      q: "Por que $M_{st}\\sqrt{|\\Delta_K|} \\ge 1$ para todo corpo $K$?",
+      o: ["A classe trivial contém um ideal de norma $\\le M_{st}\\sqrt{|\\Delta_K|}$, e toda norma de ideal é um inteiro $\\ge 1$.",
+          "Porque $|\\Delta_K| \\ge 1$ e $M_{st} \\ge 1$.",
+          "Porque $M_{st} = 1$ para todo $K$.",
+          "Porque $\\sqrt{|\\Delta_K|} \\ge n$."],
+      e: "$M_{st}$ é sempre menor que $1$ — por exemplo, $M_{1,1} \\approx 0{,}28$ —, então $|\\Delta_K| \\ge 1$ não basta. A desigualdade sai do corolário aplicado a qualquer classe, e dela vem $|\\Delta_K| > 1$ para $n \\ge 2$: todo corpo diferente de $\\Q$ tem algum primo ramificado." },
+    { t: 1, dica: "dica 5",
+      q: "$\\OK$ é um domínio de fatoração única se, e somente se:",
+      o: ["$h(\\OK) = 1$.", "$h(\\OK)$ é finito.", "$U$ é finito.", "$\\Delta_K$ é livre de quadrados."],
+      e: "Num anel de Dedekind, DFU equivale a DIP, e DIP significa que todo ideal fracionário é principal, isto é, $\\mathcal{H}$ é trivial. $h$ é sempre finito; $U$ só é finito para $\\Q$ e os quadráticos imaginários; e $\\Q(\\sqrt{-23})$ tem $\\Delta_K = -23$, livre de quadrados, e $h = 3$." },
+
+    // ---------- Tema 2: cálculo do número de classes
+    { t: 2, dica: "dica 14",
+      q: "Em $K = \\Q(\\sqrt{-11})$, a cota é $M_{st}\\sqrt{|\\Delta_K|} \\approx 2{,}11$, e $\\OK = \\Z[\\theta]$ com $\\theta = \\frac{1+\\sqrt{-11}}{2}$ e $p_\\theta = x^2 - x + 3$. O que basta verificar para concluir que $h = 1$?",
+      o: ["Que não há ideal primo de norma $2$: como $x^2 - x + 3$ é irredutível em $\\F_2[x]$, $\\langle 2 \\rangle$ é primo, de norma $4$.",
+          "Que $\\langle 2 \\rangle$ e $\\langle 3 \\rangle$ são principais.",
+          "Que $x^2 + 11$ é irredutível módulo $2$.",
+          "Que $11$ é ramificado."],
+      e: "Pelo critério, só importam primos com $\\N(P) \\le 2{,}11$, isto é, de norma $2$. Como $2$ é inerte, não há nenhum, e $\\OK$ é DIP. Usar $x^2 + 11$ seria trabalhar em $\\Z[\\sqrt{-11}] \\neq \\OK$ — e, aliás, $x^2 + 11 \\equiv (x+1)^2$ módulo $2$." },
+    { t: 2, dica: "dica 15",
+      q: "Em $\\Q(\\sqrt{-5})$, a cota é $\\frac2\\pi\\sqrt{20} \\approx 2{,}85$, e $\\langle 2 \\rangle = P^2$ com $P = \\langle 2, 1+\\sqrt{-5}\\rangle$ não principal. Quanto vale $h$?",
+      o: ["$2$", "$1$", "$3$", "$4$"],
+      e: "Toda classe contém um ideal de norma $1$ ou $2$, isto é, $\\OK$ ou $P$. Como $P$ não é principal, há exatamente duas classes." },
+    { t: 2, dica: "dica 16",
+      q: "Em $\\Q(\\sqrt{-23})$, $h = 3$, e $P$ é um ideal primo de norma $2$ que não é principal. Qual é o menor $k \\ge 1$ com $P^k$ principal?",
+      o: ["$3$", "$2$", "$6$", "Nenhum: $P^k$ nunca é principal."],
+      e: "A ordem de $[P]$ divide $h = 3$ e não é $1$, logo é $3$. Confere com as normas: com $\\theta = \\frac{1+\\sqrt{-23}}{2}$, o elemento $1 + \\theta$ tem norma $8$, e $\\langle 1+\\theta \\rangle$ é o cubo de um dos primos acima de $2$." },
+    { t: 2, dica: "dica 17",
+      q: "Em $K = \\Q(\\sqrt[3]{2})$, com $\\Delta_K = -108$ e $s = t = 1$, a cota é $M_{st}\\sqrt{|\\Delta_K|} \\approx 2{,}94$. Como se conclui que $\\OK$ é DIP?",
+      o: ["Só importam primos de norma $2$, e $\\langle 2 \\rangle = \\langle \\sqrt[3]{2} \\rangle^3$ é potência de um primo principal.",
+          "É preciso analisar os primos $2$ e $3$.",
+          "$\\OK$ não é DIP, pois $\\Delta_K$ não é livre de quadrados.",
+          "Basta observar que $s = 1$."],
+      e: "$x^3 - 2 \\equiv x^3 \\pmod 2$, então $\\langle 2 \\rangle = P^3$ com $P = \\langle 2, \\sqrt[3]{2}\\rangle = \\langle \\sqrt[3]{2} \\rangle$, pois $2 = (\\sqrt[3]{2})^3$. O único primo de norma $\\le 2{,}94$ é principal. Discriminante não livre de quadrados não impede $h = 1$." },
+    { t: 2, dica: "dica 18",
+      q: "Para $K = \\Q(\\zeta_5)$, com $s = 0$, $t = 2$ e $\\Delta_K = 125$, a cota é $\\approx 1{,}70$. O que se conclui?",
+      o: ["Toda classe contém um ideal de norma $1$, isto é, $\\OK$; logo $h = 1$.",
+          "É preciso analisar o primo $2$.",
+          "$h = 2$.",
+          "Nada: a cota só vale para corpos quadráticos."],
+      e: "Como a cota é menor que $2$, o único ideal de norma $\\le 1{,}70$ é $\\OK$, e todas as classes são triviais. Para $\\Q(\\zeta_7)$ a cota já é $\\approx 4{,}13$, e é preciso olhar os primos acima de $2$ e $3$." },
+    { t: 2, dica: "dica 15",
+      q: "Em $\\Z[\\sqrt{-6}]$, temos $\\langle 2 \\rangle = P_2^2$ e $\\langle 3 \\rangle = P_3^2$, com $P_2$ e $P_3$ não principais, e $P_2P_3 = \\langle \\sqrt{-6}\\rangle$. Sabendo que a cota é $\\approx 3{,}12$, quanto vale $h$?",
+      o: ["$2$", "$3$", "$4$", "$1$"],
+      e: "As classes têm representantes de norma $\\le 3$: $\\OK$, $P_2$ e $P_3$. Como $P_2P_3$ é principal, $[P_3] = [P_2]^{-1}$; e como $P_2^2$ é principal, $[P_2]^{-1} = [P_2]$. Restam as classes de $\\OK$ e de $P_2$." },
+    { t: 2, dica: "dica 14",
+      q: "Para quantos $d < 0$ livres de quadrados o anel de inteiros de $\\Q(\\sqrt d)$ é DIP?",
+      o: ["$9$", "Infinitos.", "$5$", "Só para $d = -1$ e $d = -3$."],
+      e: "Pelo Teorema de Heegner–Stark–Baker, são $d \\in \\{-1, -2, -3, -7, -11, -19, -43, -67, -163\\}$. Para cada um, a cota de Minkowski verifica $h = 1$ com poucas contas; o difícil é provar que a lista está completa." },
+    { t: 2, dica: "dica 14",
+      q: "Para $K = \\Q(\\sqrt{-67})$, a cota é $\\approx 5{,}21$. Quais primos racionais precisam ser analisados?",
+      o: ["$2$, $3$ e $5$.", "$2$ e $3$.", "$2$, $3$, $5$ e $7$.", "Apenas $67$."],
+      e: "Analisam-se os primos $p \\le 5{,}21$. Com $\\theta = \\frac{1+\\sqrt{-67}}{2}$ e $p_\\theta = x^2 - x + 17$, o polinômio é irredutível módulo $2$, $3$ e $5$: os três são inertes, não há primos de norma $\\le 5$, e $h = 1$." },
+
+    // ---------- Tema 3: imersão logarítmica e raízes da unidade
+    { t: 3, dica: "dica 19",
+      q: "Por que $\\Log(U)$ está contido no hiperplano $V = \\{x_1 + \\cdots + x_{s+t} = 0\\}$?",
+      o: ["Para $\\varepsilon \\in U$, temos $|\\N(\\varepsilon)| = 1$, e $\\sum_i \\Log_i(\\varepsilon) = \\log|\\N(\\varepsilon)| = 0$.",
+          "Porque toda unidade tem todos os conjugados de módulo $1$.",
+          "Porque $\\Log$ é um homomorfismo.",
+          "Porque $U$ é finito."],
+      e: "Unidades têm norma $\\pm 1$. Os conjugados não precisam ter módulo $1$ — se tivessem, pelo Lema de Kronecker, a unidade seria raiz da unidade. E $U$ é infinito em geral." },
+    { t: 3, dica: "dica 19",
+      q: "Por que, para $j > s$, a imersão logarítmica usa $\\Log_j(x) = \\log|x|^2$ em vez de $\\log|x|$?",
+      o: ["Cada coordenada complexa representa um par de monomorfismos conjugados, de mesmo módulo; com o quadrado, vale $\\sum_i \\Log_i(\\alpha) = \\log|\\N(\\alpha)|$.",
+          "Para que $\\Log_j(x)$ seja sempre positivo.",
+          "Para que $\\Log$ seja injetora.",
+          "Porque $\\log|x|$ não está definido para $x$ complexo."],
+      e: "$|\\sigma_{s+j}(\\alpha)|$ aparece duas vezes em $|\\N(\\alpha)|$: uma por $\\sigma_{s+j}$ e outra pelo conjugado. O fator $2$ faz a soma dar $\\log|\\N(\\alpha)|$, o que põe $\\Log(U)$ no hiperplano $V$. E $\\Log$ não é injetora: seu núcleo em $U$ são as raízes da unidade." },
+    { t: 3, dica: "dica 20",
+      q: "No Lema de Kronecker, por que a hipótese $\\alpha \\in \\OK$ é essencial?",
+      o: ["Porque $\\frac{3+4i}{5}$ tem todos os conjugados de módulo $1$ e não é raiz da unidade — ele não é inteiro algébrico.",
+          "Porque sem ela os conjugados de $\\alpha$ não estariam definidos.",
+          "Porque toda raiz da unidade está em $\\Q$.",
+          "Não é essencial: o lema vale para todo $\\alpha \\in K$."],
+      e: "$\\frac{3+4i}{5}$ é raiz de $5x^2 - 6x + 5$, com conjugados $\\frac{3 \\pm 4i}{5}$, ambos de módulo $1$. Raízes da unidade são inteiros algébricos (raízes de $x^m - 1$), e é a integralidade que limita os coeficientes na prova." },
+    { t: 3, dica: "dica 20",
+      q: "Na prova do Lema de Kronecker, por que é finito o conjunto dos $\\beta \\in \\OK$ com todos os conjugados de módulo $1$?",
+      o: ["Os coeficientes do polinômio característico de $\\beta$ são inteiros e limitados — o de grau $n-k$ tem módulo $\\le \\binom nk$ —; há finitos polinômios assim, cada um com no máximo $n$ raízes.",
+          "Porque $\\OK$ é finito.",
+          "Porque o círculo unitário é compacto.",
+          "Porque todo $\\beta$ assim é raiz da unidade."],
+      e: "Os coeficientes são, a menos de sinal, as funções simétricas elementares dos conjugados, todos de módulo $1$, e são inteiros porque $\\beta \\in \\OK$. Aplicando isso a $\\alpha, \\alpha^2, \\alpha^3, \\dots$, todos no mesmo conjunto finito, obtém-se $\\alpha^a = \\alpha^b$ com $a < b$." },
+    { t: 3, dica: "dicas 22 e 30",
+      q: "Qual é o grupo $W$ das raízes da unidade de $K = \\Q(i)$?",
+      o: ["$\\{\\pm1, \\pm i\\}$, de ordem $4$.", "$\\{\\pm 1\\}$.", "As raízes oitavas da unidade.", "$\\{1\\}$."],
+      e: "As raízes da unidade de $\\Q(i)$ são as unidades de $\\Z[i]$, todas de módulo $1$: $\\pm1$ e $\\pm i$. As raízes oitavas primitivas $\\frac{\\pm1 \\pm i}{\\sqrt2}$ não estão em $\\Q(i)$." },
+    { t: 3, dica: "dica 22",
+      q: "Por que o grupo $W$ das raízes da unidade de $K$ tem ordem par?",
+      o: ["Porque $-1 \\in W$.", "Porque $n$ é par.", "Porque $W$ é cíclico.", "Porque $t \\ge 1$."],
+      e: "$-1$ é raiz da unidade e está em todo corpo $K$, então $2$ divide $|W|$. O corpo $\\Q$ tem $n = 1$ e $W = \\{\\pm1\\}$, de ordem $2$; ser cíclico não força ordem par." },
+    { t: 3, dica: "dica 22",
+      q: "Se $K$ tem algum monomorfismo real ($s \\ge 1$), então $W$ é:",
+      o: ["$\\{\\pm 1\\}$", "$\\{1\\}$", "infinito", "cíclico de ordem $s$"],
+      e: "Se $\\zeta \\in W$, então $\\sigma_1(\\zeta)$ é uma raiz da unidade real, isto é, $\\pm 1$; como $\\sigma_1$ é injetora, $\\zeta = \\pm1$. Por isso só corpos totalmente complexos podem ter raízes da unidade além de $\\pm 1$." },
+    { t: 3, dica: "dica 21",
+      q: "Por que todo subgrupo finito $G$ do grupo multiplicativo $F^*$ de um corpo, de ordem $N$, é cíclico?",
+      o: ["Para cada $d \\mid N$, a equação $x^d = 1$ tem no máximo $d$ soluções em $F$; daí o número $\\psi(d)$ de elementos de ordem $d$ é $0$ ou $\\varphi(d)$, e como $\\sum_{d \\mid N}\\psi(d) = N = \\sum_{d\\mid N}\\varphi(d)$, vale $\\psi(N) = \\varphi(N) > 0$.",
+          "Porque todo grupo abeliano finito é cíclico.",
+          "Porque $G$ é gerado por $-1$.",
+          "Porque $N$ é primo."],
+      e: "Se há um elemento $x$ de ordem $d$, suas $d$ potências são todas as soluções de $x^d = 1$, e entre elas exatamente $\\varphi(d)$ têm ordem $d$. Nem todo grupo abeliano finito é cíclico — $\\Z/2 \\times \\Z/2$ não é —, mas ele não cabe dentro de $F^*$: teria quatro soluções de $x^2 = 1$." },
+
+    // ---------- Tema 4: Dirichlet e unidades
+    { t: 4, dica: "dica 28",
+      q: "Qual é o posto do grupo de unidades de $\\Q(\\sqrt[3]{2})$?",
+      o: ["$1$", "$0$", "$2$", "$3$"],
+      e: "$s = 1$ e $t = 1$, então o posto é $s + t - 1 = 1$. Como $s \\ge 1$, $W = \\{\\pm1\\}$, e uma unidade de ordem infinita é $\\sqrt[3]{2} - 1$: sua norma é $-p(1) = -(1 - 2) = 1$, com $p = x^3 - 2$." },
+    { t: 4, dica: "dicas 28 e 33",
+      q: "Qual é o posto do grupo de unidades de $\\Q(\\zeta_7)$?",
+      o: ["$2$", "$0$", "$3$", "$6$"],
+      e: "$s = 0$ e $t = 3$, logo o posto é $3 - 1 = 2$. Para $\\Q(\\zeta_5)$, com $t = 2$, o posto é $1$." },
+    { t: 4, dica: "dica 34",
+      q: "Em um corpo cúbico totalmente real, o grupo das unidades é isomorfo a:",
+      o: ["$\\{\\pm 1\\} \\times \\Z^2$", "$\\{\\pm 1\\} \\times \\Z$", "um grupo finito", "$\\Z^3$"],
+      e: "$s = 3$ e $t = 0$ dão posto $2$, e $W = \\{\\pm1\\}$, pois há monomorfismos reais. É o caso do corpo de $x^3 - x^2 - 2x + 1$, de discriminante $49$." },
+    { t: 4, dica: "dica 29",
+      q: "Para quais corpos de números o grupo de unidades é finito?",
+      o: ["$\\Q$ e os corpos quadráticos imaginários.", "Apenas $\\Q$.", "Os corpos totalmente complexos.", "Os corpos de grau ímpar."],
+      e: "$U$ é finito se, e só se, $s + t - 1 = 0$, isto é, $(s, t) = (1, 0)$ ou $(0, 1)$: $K = \\Q$ ou $K$ quadrático imaginário. $\\Q(\\zeta_5)$ é totalmente complexo, mas tem posto $1$." },
+    { t: 4, dica: "dica 31",
+      q: "Qual é a unidade fundamental de $\\Q(\\sqrt6)$?",
+      o: ["$5 + 2\\sqrt6$", "$1 + \\sqrt6$", "$2 + \\sqrt6$", "$7 + 3\\sqrt6$"],
+      e: "$\\N(5 + 2\\sqrt6) = 25 - 24 = 1$. Unidades $a + b\\sqrt6 > 1$ têm $a, b \\ge 1$; com $b = 1$, $a^2 = 6 \\pm 1$ não é quadrado, e com $b = 2$ vem $a = 5$. As outras alternativas têm normas $-5$, $-2$ e $-5$: nem são unidades." },
+    { t: 4, dica: "dica 31",
+      q: "Em $\\Q(\\sqrt5)$, a unidade fundamental é $\\frac{1+\\sqrt5}{2}$. Por que $2 + \\sqrt5$, que também é unidade, não é fundamental?",
+      o: ["Porque $2 + \\sqrt5 = \\left(\\frac{1+\\sqrt5}{2}\\right)^3$.",
+          "Porque $\\N(2 + \\sqrt5) = -1$.",
+          "Porque $2 + \\sqrt5$ não é inteiro algébrico.",
+          "Porque $2 + \\sqrt5 > 4$."],
+      e: "Com $\\phi = \\frac{1+\\sqrt5}{2}$, temos $\\phi^2 = \\phi + 1$ e $\\phi^3 = 2\\phi + 1 = 2 + \\sqrt5$. A norma $-1$ só diz que é unidade. O detalhe aqui é que $\\OK = \\Z[\\phi]$, e a menor unidade maior que $1$ tem coordenadas meio-inteiras." },
+    { t: 4, dica: "dica 32",
+      q: "Como o Teorema de Dirichlet garante infinitas soluções inteiras de $x^2 - 7y^2 = 1$?",
+      o: ["O posto de $U$ em $\\Q(\\sqrt7)$ é $1$; $\\varepsilon = 8 + 3\\sqrt7$ tem norma $1$, e as potências $\\varepsilon^k = x_k + y_k\\sqrt7$ dão infinitas soluções distintas.",
+          "Porque $7$ é primo.",
+          "Porque toda unidade de $\\Q(\\sqrt7)$ tem norma $1$.",
+          "Porque $U$ é finito."],
+      e: "Como $7 \\not\\equiv 1 \\pmod 4$, $\\OK = \\Z[\\sqrt7]$, e unidades de norma $1$ são exatamente as soluções da equação de Pell. As potências de $\\varepsilon > 1$ são distintas, e a norma é multiplicativa. Nem toda unidade tem norma $1$ em geral: em $\\Q(\\sqrt2)$, $1 + \\sqrt2$ tem norma $-1$." },
+    { t: 4, dica: "dicas 25 e 27",
+      q: "Na prova de que $E = \\Log(U)$ tem posto $s + t - 1$, mostra-se que $V$ é coberto pelos translados $\\ell + B$, $\\ell \\in E$, de um conjunto limitado $B$. Por que isso conclui a prova?",
+      o: ["Porque uma rede $L$ em $\\R^m$ tem posto $m$ se, e somente se, $\\R^m$ é coberto pelos translados de um conjunto limitado por elementos de $L$.",
+          "Pelo Lema de Kronecker.",
+          "Pelo Teorema de Minkowski.",
+          "Porque a multiplicação por $y$ tem determinante $\\N(y)$."],
+      e: "Se o posto fosse menor que $\\dim V$, a rede estaria num subespaço próprio, e os translados de um limitado ficariam a distância limitada dele — não cobririam $V$. O Teorema de Minkowski e a multiplicação por $y$ entram antes, para construir $B$." }
+  ];
+
+  /* ------------------------------------------------------------------
+     Sorteio: a cada tentativa, 4 questões de cada tema, escolhidas
+     entre as 40 do banco. Dá preferência às menos vistas neste navegador.
+  ------------------------------------------------------------------ */
+  var PER_TOPIC = 4;
+  var SEEN_KEY = "quiz-p3-tan:vistas:v1";
+  function shuffleArr(a) {
+    a = a.slice();
+    for (var j = a.length - 1; j > 0; j--) {
+      var r = Math.floor(Math.random() * (j + 1));
+      var t = a[j]; a[j] = a[r]; a[r] = t;
+    }
+    return a;
+  }
+  function loadSeen() {
+    try { var v = JSON.parse(localStorage.getItem(SEEN_KEY)); return (v && typeof v === "object") ? v : {}; }
+    catch (e) { return {}; }
+  }
+  function saveSeen(v) { try { localStorage.setItem(SEEN_KEY, JSON.stringify(v)); } catch (e) {} }
+  var seen = loadSeen();
+  function draw() {
+    var sel = [];
+    TOPICS.forEach(function (tp, ti) {
+      var pool = [];
+      BANK.forEach(function (q, bi) { if (q.t === ti) pool.push(bi); });
+      pool = shuffleArr(pool);
+      pool.sort(function (a, b) { return (seen[a] || 0) - (seen[b] || 0); });
+      pool.slice(0, PER_TOPIC).forEach(function (bi) { sel.push(bi); });
+    });
+    sel.forEach(function (bi) { seen[bi] = (seen[bi] || 0) + 1; });
+    saveSeen(seen);
+    return sel.map(function (bi) { return BANK[bi]; });
+  }
+  var QUESTIONS = (function () {
+    var out = [];
+    TOPICS.forEach(function (tp, ti) {
+      BANK.filter(function (q) { return q.t === ti; }).slice(0, PER_TOPIC).forEach(function (q) { out.push(q); });
+    });
+    return out;
+  })();
+
+
+  /* ------------------------------------------------------------------
+     Estado
+  ------------------------------------------------------------------ */
+  var state = { i: 0, answers: [], order: [] };
+  var app = document.getElementById("app");
+  var tally = document.getElementById("tally");
+  var KEYS = ["a", "b", "c", "d"];
+
+  var mjResolve;
+  var mjReady = new Promise(function (res) { mjResolve = res; });
+  window.__mjReady = function () { mjResolve(); };
+  setTimeout(function () { mjResolve(); }, 8000);
+
+  function typeset(el) {
+    return mjReady.then(function () {
+      if (window.MathJax && MathJax.typesetPromise) {
+        return MathJax.typesetPromise([el]).catch(function () {});
+      }
+    });
+  }
+  function clearMath(el) {
+    if (window.MathJax && MathJax.typesetClear) { try { MathJax.typesetClear([el]); } catch (e) {} }
+  }
+  function shuffle(n) {
+    var a = [];
+    for (var k = 0; k < n; k++) a.push(k);
+    for (var j = n - 1; j > 0; j--) {
+      var r = Math.floor(Math.random() * (j + 1));
+      var t = a[j]; a[j] = a[r]; a[r] = t;
+    }
+    return a;
+  }
+
+  /* ------------------------------------------------------------------
+     Régua de tracinhos
+  ------------------------------------------------------------------ */
+  function renderTally() {
+    var html = "";
+    TOPICS.forEach(function (tp, ti) {
+      html += '<div class="group"><div class="marks">';
+      QUESTIONS.forEach(function (q, qi) {
+        if (q.t !== ti) return;
+        var cls = "mark";
+        var a = state.answers[qi];
+        if (a === true) cls += " right";
+        else if (a === false) cls += " wrong";
+        else if (qi === state.i && state.started && !state.done) cls += " current";
+        html += '<span class="' + cls + '"></span>';
+      });
+      html += '</div><span class="group-name">' + tp.name + "</span></div>";
+    });
+    var answered = state.answers.filter(function (x) { return x !== undefined; }).length;
+    html += '<span class="count">' + answered + " de " + QUESTIONS.length + "</span>";
+    tally.innerHTML = html;
+  }
+
+  /* ------------------------------------------------------------------
+     Telas
+  ------------------------------------------------------------------ */
+  var nomeAluno = "";
+  function esc(t) { return String(t).replace(/[&<>"']/g, function (c) { return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+
+  function renderIntro() {
+    clearMath(app);
+    var rows = TOPICS.map(function (tp) {
+      return '<li><span class="t-name">' + tp.long + '</span><span class="t-dicas">' + tp.dicas + "</span></li>";
+    }).join("");
+    app.innerHTML =
+      "<h1>Quiz de preparação para a P3</h1>" +
+      '<p class="lead">Teoria Algébrica dos Números. São 20 questões de múltipla escolha, quatro por tema, sorteadas a cada tentativa de um banco de 40 — oito por tema. Ao refazer o quiz, você recebe de preferência questões que ainda não viu. ' +
+      "Cada resposta é corrigida na hora, com a justificativa e a dica da lista que trata do assunto. " +
+      "No final, você vê em quais temas está seguro e quais precisa rever.</p>" +
+      '<ul class="topics">' + rows + "</ul>" +
+      '<div class="nome-box"><label for="nome">Seu nome</label>' +
+      '<input id="nome" type="text" autocomplete="name" placeholder="Digite seu nome completo" value="' + esc(nomeAluno) + '">' +
+      '<p class="erro" id="nome-erro"></p></div>' +
+      '<div class="nav"><button class="btn" id="start">Começar o quiz</button>' +
+      '<span class="hint">Use as teclas 1 a 4 para responder e Enter para avançar.</span></div>';
+    var campo = document.getElementById("nome");
+    function comecar() {
+      var n = campo.value.trim();
+      if (!n) { document.getElementById("nome-erro").textContent = "Escreva seu nome para começar."; campo.focus(); return; }
+      nomeAluno = n;
+      start();
+    }
+    document.getElementById("start").addEventListener("click", comecar);
+    campo.addEventListener("keydown", function (ev) { if (ev.key === "Enter") { ev.preventDefault(); comecar(); } });
+    renderTally();
+  }
+
+  function start() {
+    QUESTIONS = draw();
+    state = { i: 0, answers: [], order: QUESTIONS.map(function (q) { return shuffle(q.o.length); }), started: true, done: false };
+    renderQuestion();
+  }
+
+  function renderQuestion() {
+    var qi = state.i, q = QUESTIONS[qi], order = state.order[qi];
+    clearMath(app);
+    var opts = order.map(function (oi, pos) {
+      return '<button class="opt" data-oi="' + oi + '"><span class="key">' + KEYS[pos] + "</span><span>" + q.o[oi] + "</span></button>";
+    }).join("");
+    app.innerHTML =
+      '<p class="q-topic">Questão ' + (qi + 1) + " de " + QUESTIONS.length + ": " + TOPICS[q.t].long + "</p>" +
+      '<div class="q-text">' + q.q + "</div>" +
+      '<div class="opts" role="group" aria-label="Alternativas">' + opts + "</div>" +
+      '<div id="fb"></div>';
+    Array.prototype.forEach.call(app.querySelectorAll(".opt"), function (b) {
+      b.addEventListener("click", function () { answer(parseInt(b.getAttribute("data-oi"), 10)); });
+    });
+    renderTally();
+    typeset(app).then(function () {
+      var first = app.querySelector(".opt");
+      if (first) first.focus({ preventScroll: true });
+    });
+    window.scrollTo({ top: 0 });
+  }
+
+  function answer(oi) {
+    var qi = state.i;
+    if (state.answers[qi] !== undefined) return;
+    var q = QUESTIONS[qi];
+    var ok = oi === 0;
+    state.answers[qi] = ok;
+    Array.prototype.forEach.call(app.querySelectorAll(".opt"), function (b) {
+      var bo = parseInt(b.getAttribute("data-oi"), 10);
+      b.disabled = true;
+      if (bo === 0) b.classList.add("is-right");
+      else if (bo === oi) b.classList.add("is-wrong");
+      else b.classList.add("faded");
+    });
+    var last = qi === QUESTIONS.length - 1;
+    var fb = document.getElementById("fb");
+    fb.innerHTML =
+      '<div class="feedback ' + (ok ? "right" : "wrong") + '">' +
+      '<p class="verdict">' + (ok ? "Correto." : "Não é essa.") + "</p>" +
+      '<p class="expl">' + q.e + "</p>" +
+      '<p class="see">Para rever: ' + q.dica + " da lista de dicas.</p></div>" +
+      '<div class="nav"><button class="btn" id="next">' + (last ? "Ver o diagnóstico" : "Próxima questão") + "</button></div>";
+    document.getElementById("next").addEventListener("click", next);
+    renderTally();
+    typeset(fb).then(function () {
+      document.getElementById("next").focus({ preventScroll: true });
+      fb.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    });
+  }
+
+  function next() {
+    if (state.i < QUESTIONS.length - 1) { state.i++; renderQuestion(); }
+    else { state.done = true; renderResults(); }
+  }
+
+  function verdictFor(n) {
+    if (n === 4) return { cls: "ok", txt: "Seguro neste tema." };
+    if (n === 3) return { cls: "mid", txt: "Quase lá: reveja a questão que errou." };
+    return { cls: "weak", txt: "Ponto fraco: vale estudar este tema antes da prova." };
+  }
+
+  function renderResults() {
+    clearMath(app);
+    var total = state.answers.filter(function (x) { return x === true; }).length;
+    var diag = TOPICS.map(function (tp, ti) {
+      var marks = "", right = 0;
+      QUESTIONS.forEach(function (q, qi) {
+        if (q.t !== ti) return;
+        var a = state.answers[qi];
+        if (a) right++;
+        marks += '<span class="mark ' + (a ? "right" : "wrong") + '"></span>';
+      });
+      var v = verdictFor(right);
+      var extra = right < 4 ? " Revise as " + tp.dicas + "." : "";
+      return '<li><div class="diag-head"><span class="diag-name">' + tp.long + '</span><span class="marks">' + marks +
+             '</span><span>' + right + " de 4</span></div>" +
+             '<p class="diag-verdict ' + v.cls + '">' + v.txt + extra + "</p></li>";
+    }).join("");
+
+    var wrong = [];
+    QUESTIONS.forEach(function (q, qi) { if (state.answers[qi] === false) wrong.push(qi); });
+    var review = wrong.length === 0
+      ? "<p>Você acertou todas. Ainda assim, vale escrever à mão as demonstrações das dicas: na prova, as questões pedem provas completas.</p>"
+      : wrong.map(function (qi) {
+          var q = QUESTIONS[qi];
+          return '<div class="review-item"><div class="q-text">' + (qi + 1) + ". " + q.q + "</div>" +
+                 '<p class="ans"><span class="label-right">Resposta:</span> ' + q.o[0] + "</p>" +
+                 '<p class="ans">' + q.e + "</p>" +
+                 '<p class="see">Para rever: ' + q.dica + ".</p></div>";
+        }).join("");
+
+    app.innerHTML =
+      "<h1>Seu diagnóstico</h1>" +
+      '<div class="ident"><p class="quem">' + esc(nomeAluno) + '</p>' +
+      '<p class="quando">Concluído em ' + new Date().toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" }) + '</p>' +
+      '<p class="nota">' + total + " de " + QUESTIONS.length + " acertos</p></div>" +
+      '<p class="lead">Cada linha mostra um tema da prova. Os temas em vermelho são os que pedem mais estudo; ' +
+      "a numeração das dicas é a da lista distribuída para a P3.</p>" +
+      '<ul class="diag">' + diag + "</ul>" +
+      (wrong.length ? "<h2>As questões que você errou</h2>" : "<h2>Resultado</h2>") +
+      '<div class="review">' + review + "</div>" +
+      '<div class="nav"><button class="btn" id="again">Refazer o quiz</button>' +
+      '<a class="btn ghost" href="index.html">Outros testes da disciplina</a>' +
+      '<a class="btn ghost" href="../index.html">Voltar às disciplinas</a></div>';
+    document.getElementById("again").addEventListener("click", start);
+    renderTally();
+    typeset(app);
+    window.scrollTo({ top: 0 });
+  }
+
+  /* ------------------------------------------------------------------
+     Teclado
+  ------------------------------------------------------------------ */
+  document.addEventListener("keydown", function (ev) {
+    if (!state.started || state.done) return;
+    if (ev.key >= "1" && ev.key <= "4") {
+      var b = app.querySelectorAll(".opt")[parseInt(ev.key, 10) - 1];
+      if (b && !b.disabled) { ev.preventDefault(); b.click(); }
+    } else if (ev.key === "Enter" || ev.key === "ArrowRight") {
+      var n = document.getElementById("next");
+      if (n && state.answers[state.i] !== undefined) { ev.preventDefault(); n.click(); }
+    }
+  });
+
+  renderIntro();
+})();
+</script>
+</body>
+</html>

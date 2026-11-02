@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Quiz de preparação para a P2 — Teoria Algébrica dos Números</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --board: #F7F9FB;
+  --board-2: #EEF2F6;
+  --ink: #1C2230;
+  --muted: #5B6577;
+  --rule: #D6DCE4;
+  --blue: #1F4FA8;
+  --red: #B9312C;
+  --green: #1F7A4D;
+  --blue-wash: #E3EBF8;
+  --red-wash: #F8E6E5;
+  --green-wash: #E2F2E9;
+  --empty: #C9D1DC;
+  color-scheme: light;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --board: #12161D;
+    --board-2: #1A2029;
+    --ink: #E6EAF0;
+    --muted: #9AA4B4;
+    --rule: #2A313C;
+    --blue: #8AB0F2;
+    --red: #F08C84;
+    --green: #7BCB9C;
+    --blue-wash: #1C2840;
+    --red-wash: #3A2222;
+    --green-wash: #1B3328;
+    --empty: #39414E;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --board: #12161D;
+  --board-2: #1A2029;
+  --ink: #E6EAF0;
+  --muted: #9AA4B4;
+  --rule: #2A313C;
+  --blue: #8AB0F2;
+  --red: #F08C84;
+  --green: #7BCB9C;
+  --blue-wash: #1C2840;
+  --red-wash: #3A2222;
+  --green-wash: #1B3328;
+  --empty: #39414E;
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: inherit; }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+body {
+  margin: 0;
+  background: var(--board);
+  color: var(--ink);
+  font-family: "Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto;
+  height: env(safe-area-inset-top, 0px);
+  z-index: 10;
+  background: var(--board);
+}
+
+/* ---------- régua de tracinhos ---------- */
+.tally {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 5;
+  background: var(--board);
+  border-bottom: 1px solid var(--rule);
+}
+.tally-inner {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: 0.75rem 1.25rem 0.7rem;
+  display: flex;
+  align-items: flex-end;
+  gap: 1.1rem;
+  overflow-x: auto;
+}
+.group { display: flex; flex-direction: column; gap: 0.3rem; flex: 0 0 auto; }
+.marks { display: flex; gap: 5px; align-items: flex-end; height: 26px; }
+.mark {
+  width: 6px;
+  height: 22px;
+  border-radius: 3px;
+  background: var(--empty);
+  transform: rotate(-6deg);
+  transition: background-color 0.25s ease, height 0.25s ease;
+}
+.mark.current { background: var(--blue); height: 26px; }
+.mark.right { background: var(--green); }
+.mark.wrong { background: var(--red); }
+.group-name { font-size: 0.72rem; color: var(--muted); white-space: nowrap; }
+.count { margin-left: auto; font-size: 0.85rem; color: var(--muted); white-space: nowrap; padding-bottom: 1.1rem; }
+
+/* ---------- conteúdo ---------- */
+main { max-width: 46rem; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+h1 {
+  font-family: "Source Serif 4", Georgia, "Times New Roman", serif;
+  font-weight: 600;
+  font-size: clamp(1.7rem, 4.5vw, 2.35rem);
+  line-height: 1.15;
+  margin: 0 0 0.75rem;
+}
+h2 {
+  font-family: "Source Serif 4", Georgia, serif;
+  font-weight: 600;
+  font-size: 1.35rem;
+  margin: 2rem 0 0.75rem;
+}
+.lead { font-size: 1.05rem; color: var(--muted); max-width: 38rem; margin: 0 0 1.5rem; }
+.serif { font-family: "Source Serif 4", Georgia, serif; }
+
+.topics { list-style: none; padding: 0; margin: 0 0 2rem; }
+.topics li {
+  display: flex;
+  gap: 0.75rem;
+  align-items: baseline;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+.topics li:last-child { border-bottom: 0; }
+.topics .t-name { font-weight: 700; flex: 1 1 auto; }
+.topics .t-dicas { color: var(--muted); font-size: 0.9rem; white-space: nowrap; }
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+.btn {
+  display: inline-block;
+  border: 2px solid var(--blue);
+  background: var(--blue);
+  color: var(--board);
+  font-weight: 700;
+  padding: 0.65rem 1.4rem;
+  border-radius: 999px;
+}
+.btn:hover { filter: brightness(1.08); }
+.btn.ghost { background: transparent; color: var(--blue); }
+a.btn { text-decoration: none; }
+.btn:focus-visible, .opt:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+
+/* ---------- questão ---------- */
+.q-topic { color: var(--blue); font-weight: 700; font-size: 0.95rem; margin: 0 0 0.5rem; }
+.q-text {
+  font-family: "Source Serif 4", Georgia, serif;
+  font-size: 1.15rem;
+  line-height: 1.6;
+  margin: 0 0 1.4rem;
+}
+.opts { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.25rem; }
+.opt {
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-start;
+  text-align: left;
+  width: 100%;
+  color: var(--ink);
+  background: var(--board-2);
+  border: 2px solid transparent;
+  border-radius: 12px;
+  padding: 0.8rem 1rem;
+  font-family: "Source Serif 4", Georgia, serif;
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+.opt:hover:not([disabled]) { border-color: var(--blue); }
+.opt .key {
+  flex: 0 0 auto;
+  font-family: "Atkinson Hyperlegible", system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--muted);
+  border: 1.5px solid var(--rule);
+  border-radius: 50%;
+  width: 1.7rem;
+  height: 1.7rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.1rem;
+}
+.opt[disabled] { cursor: default; }
+.opt.is-right { background: var(--green-wash); border-color: var(--green); }
+.opt.is-right .key { border-color: var(--green); color: var(--green); }
+.opt.is-wrong { background: var(--red-wash); border-color: var(--red); }
+.opt.is-wrong .key { border-color: var(--red); color: var(--red); }
+.opt.faded { opacity: 0.55; }
+
+.feedback {
+  border-left: 4px solid var(--blue);
+  padding: 0.25rem 0 0.25rem 1rem;
+  margin: 0 0 1.5rem;
+}
+.feedback.right { border-color: var(--green); }
+.feedback.wrong { border-color: var(--red); }
+.verdict { font-weight: 700; margin: 0 0 0.35rem; }
+.feedback.right .verdict { color: var(--green); }
+.feedback.wrong .verdict { color: var(--red); }
+.feedback .expl { font-family: "Source Serif 4", Georgia, serif; font-size: 1.02rem; line-height: 1.6; margin: 0 0 0.5rem; }
+.feedback .see { font-size: 0.9rem; color: var(--muted); margin: 0; }
+.nav { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
+.hint { font-size: 0.85rem; color: var(--muted); }
+
+/* ---------- identificação ---------- */
+.nome-box { margin: 0 0 1.5rem; max-width: 26rem; }
+.nome-box label { display: block; font-weight: 700; margin-bottom: 0.4rem; }
+.nome-box input { width: 100%; font: inherit; padding: 0.6rem 0.8rem; border: 2px solid var(--rule); border-radius: 10px; background: var(--board); color: var(--ink); }
+.nome-box input:focus { outline: none; border-color: var(--blue); }
+.nome-box .erro { color: var(--red); font-size: 0.9rem; margin: 0.4rem 0 0; min-height: 1.2em; }
+.ident { border: 2px solid var(--blue); background: var(--blue-wash); border-radius: 14px; padding: 1rem 1.25rem; margin: 0.5rem 0 1.5rem; }
+.ident .quem { font-size: 1.4rem; font-weight: 700; margin: 0; }
+.ident .quando { color: var(--muted); margin: 0.2rem 0 0.6rem; }
+.ident .nota { font-family: "Source Serif 4", Georgia, serif; font-size: 2rem; font-weight: 600; margin: 0; }
+
+/* ---------- resultado ---------- */
+.score {
+  font-family: "Source Serif 4", Georgia, serif;
+  font-size: clamp(2.6rem, 9vw, 3.6rem);
+  font-weight: 600;
+  line-height: 1;
+  margin: 0.25rem 0 0.5rem;
+}
+.score small { font-size: 0.45em; color: var(--muted); font-weight: 400; }
+.diag { list-style: none; padding: 0; margin: 1rem 0 2rem; }
+.diag li { padding: 1rem 0; border-bottom: 1px solid var(--rule); }
+.diag li:last-child { border-bottom: 0; }
+.diag-head { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+.diag-name { font-weight: 700; flex: 1 1 14rem; }
+.diag .marks { height: 24px; }
+.diag-verdict { margin: 0.4rem 0 0; font-size: 0.95rem; }
+.diag-verdict.ok { color: var(--green); }
+.diag-verdict.mid { color: var(--blue); }
+.diag-verdict.weak { color: var(--red); }
+.review { margin: 0 0 1.5rem; }
+.review-item { border-left: 4px solid var(--red); padding: 0.1rem 0 0.1rem 1rem; margin: 0 0 1.25rem; }
+.review-item .q-text { font-size: 1.02rem; margin-bottom: 0.5rem; }
+.review-item p { margin: 0 0 0.4rem; }
+.ans { font-family: "Source Serif 4", Georgia, serif; }
+.label-right { color: var(--green); font-weight: 700; }
+.label-wrong { color: var(--red); font-weight: 700; }
+
+mjx-container { color: inherit; }
+mjx-container[display="true"] { overflow-x: auto; overflow-y: hidden; max-width: 100%; }
+
+@media (prefers-reduced-motion: reduce) {
+  .mark { transition: none; }
+}
+@media (max-width: 520px) {
+  .tally-inner { gap: 0.8rem; padding: 0.6rem 1rem; }
+  .group-name { display: none; }
+  .count { padding-bottom: 0; }
+  main { padding-top: 1.5rem; }
+}
+</style>
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$']],
+      displayMath: [['\\[', '\\]']],
+      macros: {
+        Z: '\\mathbb{Z}', Q: '\\mathbb{Q}', R: '\\mathbb{R}',
+        C: '\\mathbb{C}', F: '\\mathbb{F}', OK: '\\mathcal{O}_K',
+        N: '\\operatorname{N}'
+      }
+    },
+    svg: { fontCache: 'global' },
+    startup: {
+      typeset: false,
+      ready: function () {
+        MathJax.startup.defaultReady();
+        MathJax.startup.promise.then(function () { window.__mjReady && window.__mjReady(); });
+      }
+    }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js" defer></script>
+</head>
+<body>
+
+<div class="tally" aria-hidden="true">
+  <div class="tally-inner" id="tally"></div>
+</div>
+
+<main id="app" aria-live="polite"></main>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ------------------------------------------------------------------
+     Temas e dicas correspondentes (numeração da lista de dicas da P2)
+  ------------------------------------------------------------------ */
+  var TOPICS = [
+    { name: "Ideais fracionários", long: "Anéis de Dedekind e ideais fracionários", dicas: "dicas 1 a 10 e 29 a 32" },
+    { name: "Norma", long: "Norma de ideais", dicas: "dicas 11 a 17 e 33" },
+    { name: "Kummer", long: "Teoria de Kummer e ramificação", dicas: "dicas 18 a 24 e 34" },
+    { name: "Fatoração", long: "Fatoração explícita", dicas: "dicas 25 a 28" },
+    { name: "Redes", long: "Redes, Minkowski e somas de quadrados", dicas: "dicas 35 a 51" }
+  ];
+
+  var BANK = [
+
+    // ---------- Tema 0: ideais fracionários
+    { t: 0, dica: "dica 1",
+      q: "Qual das propriedades abaixo <em>não</em> faz parte da definição de anel de Dedekind?",
+      o: ["Todo ideal é principal.",
+          "É noetheriano.",
+          "É integralmente fechado no seu corpo de frações.",
+          "Todo ideal primo não nulo é maximal."],
+      e: "Todo $\\OK$ é de Dedekind, mas nem todo é domínio de ideais principais: em $\\Z[\\sqrt{-5}]$, o ideal $\\langle 2, 1+\\sqrt{-5}\\rangle$ não é principal. Ser DIP é justamente o que o número de classes mede." },
+    { t: 0, dica: "dica 30",
+      q: "Por que $D = \\Z[\\sqrt{-3}]$ não é um anel de Dedekind?",
+      o: ["Não é integralmente fechado: $\\frac{1+\\sqrt{-3}}{2}$ é raiz de $x^2 - x + 1$, está no corpo de frações de $D$ e não está em $D$.",
+          "Não é noetheriano.",
+          "Tem um ideal primo não nulo que não é maximal.",
+          "Não é um domínio de integridade."],
+      e: "$D$ é noetheriano e seus primos não nulos são maximais (os quocientes são finitos). O que falha é o fecho integral: o anel de inteiros de $\\Q(\\sqrt{-3})$ é $\\Z\\bigl[\\frac{1+\\sqrt{-3}}{2}\\bigr] \\supsetneq D$. Uma consequência: com $P = \\langle 2, 1+\\sqrt{-3}\\rangle$, vale $P^2 = 2P$ mas $P \\neq \\langle 2\\rangle$, e o cancelamento falha." },
+    { t: 0, dica: "dica 31",
+      q: "Em $\\OK = \\Z[\\sqrt{-5}]$, seja $P = \\langle 2, 1+\\sqrt{-5}\\rangle$, com $P^2 = \\langle 2 \\rangle$. Quem é $P^{-1} = \\{\\alpha \\in K : \\alpha P \\subseteq \\OK\\}$?",
+      o: ["$\\tfrac12 P$", "$2P$", "$P$", "$\\OK$"],
+      e: "$P \\cdot \\tfrac12 P = \\tfrac12 P^2 = \\tfrac12 \\langle 2\\rangle = \\OK$, e o inverso de um ideal fracionário é único. Repare que $\\frac{1+\\sqrt{-5}}{2} \\in P^{-1} \\setminus \\OK$: o inverso é estritamente maior que $\\OK$ e não é um ideal de $\\OK$." },
+    { t: 0, dica: "dica 32",
+      q: "Sejam $P \\neq Q$ ideais primos não nulos, $I = P^2 Q$ e $J = P Q^3$. Então:",
+      o: ["$I + J = PQ$ e $I \\cap J = P^2Q^3$.",
+          "$I + J = P^2Q^3$ e $I \\cap J = PQ$.",
+          "$I + J = P^3Q^4$ e $I \\cap J = PQ$.",
+          "$I + J = \\OK$ e $I \\cap J = IJ$."],
+      e: "Como dividir é conter, $I + J$ é o maior divisor comum (expoentes mínimos) e $I \\cap J$ o menor múltiplo comum (expoentes máximos). Confira: $(I+J)(I \\cap J) = P^3Q^4 = IJ$." },
+
+    // ---------- Tema 1: norma
+    { t: 1, dica: "dica 33",
+      q: "Quantos ideais de $\\Z[i]$ têm norma $5$?",
+      o: ["Dois: $\\langle 2+i \\rangle$ e $\\langle 2-i \\rangle$.",
+          "Um: $\\langle 5 \\rangle$.",
+          "Nenhum.",
+          "Quatro: $\\langle 2+i\\rangle$, $\\langle 2-i\\rangle$, $\\langle -2+i\\rangle$ e $\\langle -2-i\\rangle$."],
+      e: "Um ideal de norma prima é primo, então os ideais de norma $5$ são os primos acima de $5$: $\\langle 5\\rangle = \\langle 2+i\\rangle\\langle 2-i\\rangle$. O ideal $\\langle 5 \\rangle$ tem norma $25$, e $\\langle -2-i\\rangle = \\langle 2+i\\rangle$, $\\langle -2+i\\rangle = \\langle 2-i\\rangle$, pois os geradores são associados." },
+    { t: 1, dica: "dicas 14 a 16",
+      q: "Se $I$ é um ideal de $\\OK$ com $\\N(I) = 15$, então:",
+      o: ["$I = P_1P_2$, com $P_1$ e $P_2$ primos de normas $3$ e $5$.",
+          "$I$ é um ideal primo.",
+          "$I$ é necessariamente principal.",
+          "$I$ pode ter três ou mais fatores primos."],
+      e: "Pela multiplicatividade, $\\N(I)$ é o produto das normas dos fatores primos, e cada uma é uma potência $p^f > 1$. Como $15 = 3 \\cdot 5$, sobram exatamente dois fatores. Nada garante que $I$ seja principal." },
+    { t: 1, dica: "dica 17",
+      q: "Seja $P$ um ideal primo não nulo de $\\OK$, com $[K:\\Q] = n$, e $p$ o primo racional em $P$. Então:",
+      o: ["$\\N(P) = p^f$ com $1 \\le f \\le n$.",
+          "$\\N(P) = p$.",
+          "$\\N(P) = p^n$.",
+          "$\\N(P)$ pode ter um fator primo $q \\neq p$."],
+      e: "$\\OK/P$ é um corpo finito de característica $p$, logo tem $p^f$ elementos. Como $\\OK/P$ é quociente de $\\OK/\\langle p\\rangle$, que tem $p^n$ elementos, $f \\le n$. Os casos $f = 1$ e $f = n$ ocorrem, mas não são os únicos." },
+    { t: 1, dica: "dica 11",
+      q: "Seja $I \\neq \\{0\\}$ um ideal de $\\OK$ com $\\N(I) = 6$. Qual elemento certamente pertence a $I$?",
+      o: ["$6$", "$2$", "$3$", "$1$"],
+      e: "O grupo aditivo $\\OK/I$ tem ordem $\\N(I) = 6$; por Lagrange, $6 \\cdot (1 + I) = 0$, isto é, $6 \\in I$. Já $1 \\in I$ só se $I = \\OK$, e $2$ ou $3$ podem não estar em $I$." },
+
+    // ---------- Tema 2: Kummer
+    { t: 2, dica: "dicas 23 e 27",
+      q: "Seja $K = \\Q(\\sqrt[3]{2})$, com $\\OK = \\Z[\\sqrt[3]{2}]$. Como o ideal $\\langle 5 \\rangle$ se fatora?",
+      o: ["$\\langle 5\\rangle = P_1P_2$, com $\\N(P_1) = 5$ e $\\N(P_2) = 25$.",
+          "$\\langle 5 \\rangle$ é primo.",
+          "$\\langle 5 \\rangle = P^3$.",
+          "$\\langle 5\\rangle = P_1P_2P_3$, cada um de norma $5$."],
+      e: "Como $3^3 = 27 \\equiv 2 \\pmod 5$, temos $x^3 - 2 \\equiv (x-3)(x^2+3x+4) \\pmod 5$, e o fator quadrático é irredutível (discriminante $-7 \\equiv 3$, que não é quadrado módulo $5$). Por Kummer–Dedekind, $e_1 = e_2 = 1$, $f_1 = 1$, $f_2 = 2$ — e $1 + 2 = 3 = n$." },
+    { t: 2, dica: "dicas 18 e 22",
+      q: "No critério “$I_g$ é primo se, e somente se, $\\bar g$ é irredutível”, por que se exige que $\\bar g$ divida $\\bar p_\\alpha$?",
+      o: ["Porque sem isso $I_g$ pode ser o anel todo: em $\\Z[i]$, com $p = 3$ e $g = x$, o polinômio $\\bar g$ é irredutível, mas $I_g = \\langle 3, i \\rangle = \\OK$.",
+          "Para garantir que $g$ seja mônico.",
+          "Para que $I_g$ seja finitamente gerado.",
+          "Porque senão $\\bar g$ teria grau maior que $n$."],
+      e: "Em geral, $\\OK/I_g \\cong \\F_p[x]/\\langle \\bar g, \\bar p_\\alpha \\rangle$, e esse quociente só depende de $\\gcd(\\bar g, \\bar p_\\alpha)$. No exemplo, $\\gcd(x, x^2+1) = 1$ em $\\F_3[x]$, então o quociente é zero e $I_g = \\OK$ — de fato, $i$ é uma unidade." },
+    { t: 2, dica: "dica 24",
+      q: "Num corpo $K$ de grau $6$, tem-se $\\langle p \\rangle = P_1^2 P_2$ com grau residual $f_1 = 1$. Quanto vale $f_2$?",
+      o: ["$4$", "$3$", "$5$", "$1$"],
+      e: "Pela identidade $\\sum e_i f_i = n$: $2 \\cdot 1 + 1 \\cdot f_2 = 6$, logo $f_2 = 4$." },
+    { t: 2, dica: "dica 34",
+      q: "Se $\\OK = \\Z[\\alpha]$ e $\\bar p_\\alpha = (x+1)^2(x^2+x+1)$ em $\\F_2[x]$, quantos ideais de $\\OK$ contêm $\\langle 2 \\rangle$?",
+      o: ["$6$", "$2$", "$3$", "$4$"],
+      e: "Conter $\\langle 2\\rangle$ é dividir $\\langle 2 \\rangle = P_1^2 P_2$. Os divisores são $P_1^a P_2^b$ com $0 \\le a \\le 2$ e $0 \\le b \\le 1$: são $3 \\cdot 2 = 6$, contando $\\OK$ e o próprio $\\langle 2 \\rangle$." },
+
+    // ---------- Tema 3: fatoração
+    { t: 3, dica: "dica 25",
+      q: "Em $\\Z[\\sqrt{-2}]$, o primo $5$ é:",
+      o: ["inerte.",
+          "decomposto.",
+          "ramificado.",
+          "inerte ou decomposto, conforme o gerador escolhido para $\\OK$."],
+      e: "$-2 \\equiv 3$ não é quadrado módulo $5$ (os quadrados são $0, 1, 4$), então $x^2 + 2$ é irredutível em $\\F_5[x]$ e $\\langle 5 \\rangle$ é primo, de norma $25$." },
+    { t: 3, dica: "dica 26",
+      q: "Em $\\Z[\\sqrt{-5}]$, temos $6 = 2 \\cdot 3 = (1+\\sqrt{-5})(1-\\sqrt{-5})$. O que explica essas duas fatorações?",
+      o: ["$\\langle 6 \\rangle = P_2^2 P_3 P_3'$ com primos não principais; cada fatoração de $6$ agrupa esses primos de um jeito.",
+          "$2$ e $3$ não são irredutíveis em $\\Z[\\sqrt{-5}]$.",
+          "$\\Z[\\sqrt{-5}]$ não é um anel de Dedekind.",
+          "$2$ e $1 + \\sqrt{-5}$ são associados."],
+      e: "$\\langle 2 \\rangle = P_2^2$, $\\langle 3 \\rangle = P_3P_3'$, e $\\langle 1 \\pm \\sqrt{-5} \\rangle$ é o produto de $P_2$ por um dos primos acima de $3$. Não há elementos de norma $2$ ou $3$ ($a^2 + 5b^2$ nunca vale $2$ ou $3$), logo esses primos não são principais — e é isso que torna $2$, $3$ e $1 \\pm \\sqrt{-5}$ irredutíveis." },
+    { t: 3, dica: "dica 28",
+      q: "Em $\\Z[\\sqrt{-5}]$, o primo $5$ é ramificado. O ideal primo acima de $5$ é:",
+      o: ["principal: $\\langle 5 \\rangle = \\langle \\sqrt{-5} \\rangle^2$.",
+          "não principal, porque $5$ é ramificado.",
+          "o próprio $\\langle 5 \\rangle$.",
+          "$\\langle 5, 1 + \\sqrt{-5} \\rangle$, que não é principal."],
+      e: "$x^2 + 5 \\equiv x^2 \\pmod 5$ dá $\\langle 5 \\rangle = P^2$ com $P = \\langle 5, \\sqrt{-5}\\rangle = \\langle \\sqrt{-5} \\rangle$, pois $5 = -(\\sqrt{-5})^2$. Ramificação e principalidade são coisas independentes. Já $\\langle 5, 1+\\sqrt{-5}\\rangle = \\OK$: ele contém $6 - 5 = 1$." },
+    { t: 3, dica: "dica 26",
+      q: "Em $\\Z[\\sqrt{-10}]$, temos $\\langle 2 \\rangle = P^2$. O primo $P$ é principal?",
+      o: ["Não: um gerador teria norma $2$, e $a^2 + 10b^2 = 2$ não tem solução inteira.",
+          "Sim, gerado por $\\sqrt{-10}$.",
+          "Sim, porque $2$ é ramificado.",
+          "Não, porque $P = \\langle 2 \\rangle$."],
+      e: "Se $P = \\langle \\gamma \\rangle$, então $|\\N(\\gamma)| = \\N(P) = 2$. Como $\\N(a + b\\sqrt{-10}) = a^2 + 10b^2$ nunca vale $2$, $P$ não é principal. E $\\sqrt{-10}$ tem norma $10$, não $2$." },
+
+    // ---------- Tema 4: redes e quadrados
+    { t: 4, dica: "dica 42",
+      q: "Para $L = \\Z^2$, o quadrado aberto $(-1,1)^2$ é limitado, convexo e simétrico, tem volume $4 = 2^2 \\operatorname{vol}(\\mathcal T)$ e não contém ponto não nulo de $L$. Isso mostra que:",
+      o: ["a desigualdade estrita no Teorema de Minkowski não pode ser trocada por $\\ge$.",
+          "o Teorema de Minkowski falha para $n = 2$.",
+          "a hipótese de convexidade é desnecessária.",
+          "$\\Z^2$ não é uma rede de posto completo."],
+      e: "O exemplo atinge exatamente $2^n \\operatorname{vol}(\\mathcal T)$ sem ter ponto não nulo, então a hipótese estrita é necessária. Para conjuntos compactos, a versão com $\\ge$ vale — mas esse quadrado é aberto." },
+    { t: 4, dica: "dicas 43 e 50",
+      q: "Para $p = 13$, temos $5^2 = 25 \\equiv -1 \\pmod{13}$. Qual ponto da rede $L_2 = \\{(a,b) \\in \\Z^2 : b \\equiv 5a \\pmod{13}\\}$ escreve $13$ como soma de dois quadrados?",
+      o: ["$(3, 2)$", "$(2, 3)$", "$(1, 5)$", "$(0, 13)$"],
+      e: "$(3,2) \\in L_2$, pois $5 \\cdot 3 = 15 \\equiv 2$, e $3^2 + 2^2 = 13$. Já $(2,3) \\notin L_2$ ($5 \\cdot 2 \\equiv 10$), apesar de $2^2 + 3^2 = 13$; e $(1,5)$, $(0,13)$ estão em $L_2$, mas dão $26$ e $169$. Todo ponto de $L_2$ tem $a^2 + b^2 \\equiv a^2(1 + 5^2) \\equiv 0 \\pmod{13}$; Minkowski no disco de raio $\\sqrt{2p}$ é o que força a soma a ser exatamente $p$." },
+    { t: 4, dica: "dicas 50 e 51",
+      q: "Uma rede $L \\subseteq \\Z^2$ tem domínio fundamental de volume $7$. Quantos elementos tem $\\Z^2/L$?",
+      o: ["$7$", "$49$", "$\\sqrt 7$", "Infinitos."],
+      e: "O índice $|\\Z^2/L|$ é o valor absoluto do determinante da mudança de base de $\\Z^2$ para $L$, que é a razão entre os volumes dos domínios fundamentais: $7/1 = 7$." },
+    { t: 4, dica: "dica 44",
+      q: "Na prova de que todo primo ímpar $p$ é soma de quatro quadrados, aplica-se Minkowski à rede $L_4$, com $\\operatorname{vol}(\\mathcal T) = p^2$, e à bola de raio $\\sqrt{2p}$. Por que esse raio?",
+      o: ["Porque o volume $\\frac{\\pi^2}{2}(2p)^2 = 2\\pi^2p^2$ supera $2^4p^2$, e os pontos da bola têm $a^2+b^2+c^2+d^2 < 2p$; sendo essa soma positiva e múltipla de $p$, ela vale $p$.",
+          "Porque é o menor raio para o qual a bola contém $L_4$.",
+          "Porque $2p$ é o volume do domínio fundamental de $L_4$.",
+          "Porque com raio $\\sqrt{p}$ a bola não seria convexa."],
+      e: "As duas exigências se equilibram: o raio precisa ser grande o bastante para Minkowski valer ($2\\pi^2 \\approx 19{,}74 > 16$) e pequeno o bastante para que a única soma possível, múltipla de $p$ e menor que $2p$, seja $p$." },
+
+    // ================= questões da versão B =================
+
+    // ---------- Tema 0: ideais fracionários
+    { t: 0, dica: "dica 2",
+      q: "Por que todo ideal primo não nulo $P$ de $\\OK$ é maximal?",
+      o: ["Porque $\\OK/P$ é um domínio finito, já que $\\N(P) < \\infty$, e todo domínio finito é corpo.",
+          "Porque $\\OK$ é um domínio de ideais principais.",
+          "Porque $P$ contém um primo racional $p$, e $\\langle p \\rangle$ é maximal em $\\OK$.",
+          "Porque em $\\OK$ todo ideal próprio é maximal."],
+      e: "$\\OK/P$ é domínio por ser $P$ primo, e é finito porque ideais não nulos têm norma finita. Num domínio finito, a multiplicação por $a \\neq 0$ é injetiva, logo bijetiva, e $a$ tem inverso. Já $\\langle p \\rangle$ em geral não é maximal: em $\\Z[i]$, $\\langle 5 \\rangle = \\langle 2+i\\rangle\\langle 2-i\\rangle$." },
+    { t: 0, dica: "dica 7",
+      q: "Na prova de que $PP^{-1} = \\OK$, usa-se que, se $I \\neq \\{0\\}$ e $IS \\subseteq I$, então $S \\subseteq \\OK$. Qual propriedade de $\\OK$ sustenta esse fato?",
+      o: ["$\\OK$ é integralmente fechado: cada $s \\in S$ deixa estável o $\\Z$-módulo finitamente gerado $I$, logo é inteiro algébrico.",
+          "$\\OK$ é um domínio de ideais principais.",
+          "Todo ideal primo não nulo de $\\OK$ é maximal.",
+          "O número de classes de $\\OK$ é finito."],
+      e: "Se $sI \\subseteq I$ e $I$ é um $\\Z$-módulo finitamente gerado não nulo, o critério dos módulos finitamente gerados diz que $s$ é inteiro algébrico; como $s \\in K$, segue $s \\in \\OK$. É exatamente aqui que o fecho integral entra na teoria dos ideais fracionários." },
+    { t: 0, dica: "dica 9",
+      q: "Em $\\OK = \\Z[i]$, considere o ideal fracionário $I = \\tfrac12 \\langle 1+i \\rangle$. Quem é $I^{-1}$?",
+      o: ["$\\langle 1+i \\rangle$", "$\\tfrac12 \\langle 1-i \\rangle$", "$\\langle 2 \\rangle$", "$2\\langle 1+i \\rangle$"],
+      e: "$I \\cdot \\langle 1+i\\rangle = \\tfrac12 \\langle (1+i)^2 \\rangle = \\tfrac12 \\langle 2i \\rangle = \\langle i \\rangle = \\OK$. Pela dica 9, com $c = 2$ e $J = \\langle 1+i\\rangle$: $I^{-1} = 2J^{-1} = \\frac{2}{1+i}\\OK = \\langle 1-i \\rangle = \\langle 1+i \\rangle$, pois $1-i$ e $1+i$ são associados." },
+    { t: 0, dica: "dica 4",
+      q: "O fato de que todo ideal não nulo de $\\OK$ contém um produto de ideais primos não nulos é provado tomando um ideal maximal entre os contraexemplos. Qual propriedade garante que esse ideal maximal existe?",
+      o: ["$\\OK$ é noetheriano.",
+          "$\\OK$ é integralmente fechado.",
+          "Todo ideal primo não nulo é maximal.",
+          "$\\OK$ é um domínio de fatoração única."],
+      e: "Num anel noetheriano, toda família não vazia de ideais tem elemento maximal. Esse ideal maximal $I$ não pode ser primo; tomando $a, b \\notin I$ com $ab \\in I$, os ideais $I + \\langle a\\rangle$ e $I + \\langle b \\rangle$ são maiores e contêm produtos de primos, e o produto deles cai dentro de $I$ — contradição. Cada propriedade de Dedekind tem seu papel: aqui é a noetherianidade." },
+
+    // ---------- Tema 1: norma
+    { t: 1, dica: "dica 12",
+      q: "Em $\\Z[i]$, com $\\Delta_K = -4$, o ideal $I = \\langle 1+i \\rangle$ tem $\\Z$-base $\\{1+i,\\, 2\\}$, e $\\Delta(1+i, 2) = -16$. Quanto vale $\\N(I)$?",
+      o: ["$2$", "$4$", "$16$", "$-4$"],
+      e: "Pela dica 12, $\\N(I) = \\bigl|\\Delta(1+i, 2)/\\Delta_K\\bigr|^{1/2} = |{-16}/{-4}|^{1/2} = 2$, como deveria: $\\N(\\langle 1+i\\rangle) = |\\N(1+i)| = 2$. O quociente dos discriminantes é o <em>quadrado</em> do índice." },
+    { t: 1, dica: "dica 13",
+      q: "Em $\\Z[\\sqrt3]$, quanto vale $\\N(\\langle 5 + 2\\sqrt3 \\rangle)$?",
+      o: ["$13$", "$37$", "$-13$", "$169$"],
+      e: "$\\N(\\langle \\alpha \\rangle) = |\\N(\\alpha)|$, e $\\N(5 + 2\\sqrt3) = 25 - 3 \\cdot 4 = 13$. Somar os quadrados ($25 + 12 = 37$) é o erro de usar a fórmula de um corpo imaginário; e a norma de um ideal é sempre positiva." },
+    { t: 1, dica: "dica 16",
+      q: "Vale a recíproca de “se $\\N(I)$ é primo, então $I$ é primo”?",
+      o: ["Não: em $\\Z[i]$, o ideal $\\langle 3 \\rangle$ é primo e $\\N(\\langle 3 \\rangle) = 9$.",
+          "Sim, sempre.",
+          "Sim, quando $K$ é um corpo quadrático.",
+          "Não: em $\\Z[i]$, o ideal $\\langle 1+i \\rangle$ é primo e tem norma $2$."],
+      e: "Um primo $P$ tem norma $p^f$, que só é primo quando $f = 1$. Em $\\Z[i]$, $3$ é inerte ($x^2+1$ é irredutível em $\\F_3[x]$), então $\\langle 3 \\rangle$ é primo de norma $9$. O exemplo de $\\langle 1+i\\rangle$ é verdadeiro, mas não contradiz nada." },
+    { t: 1, dica: "dica 11",
+      q: "Por que um ideal não nulo $I$ de $\\OK$ é um $\\Z$-módulo livre de posto exatamente $n = [K:\\Q]$, e não menor?",
+      o: ["Porque $\\N(I) \\in I$, então $\\N(I)\\,\\OK \\subseteq I \\subseteq \\OK$, e $\\N(I)\\,\\OK$ já tem posto $n$.",
+          "Porque todo ideal de $\\OK$ é principal.",
+          "Porque $\\OK/I$ é infinito.",
+          "Porque todo subgrupo de $\\Z^n$ tem posto $n$."],
+      e: "$I$ é subgrupo de $\\OK \\cong \\Z^n$, logo é livre de posto no máximo $n$; e contém $\\N(I)\\OK \\cong \\Z^n$, logo tem posto pelo menos $n$. Nem todo subgrupo de $\\Z^n$ tem posto $n$: $\\Z \\times \\{0\\}$ tem posto $1$." },
+
+    // ---------- Tema 2: Kummer
+    { t: 2, dica: "dicas 23 e 25",
+      q: "Em $K = \\Q(\\sqrt{-7})$, temos $\\OK = \\Z[\\theta]$, com $\\theta = \\frac{1+\\sqrt{-7}}{2}$ e $p_\\theta = x^2 - x + 2$. Como $\\langle 2 \\rangle$ se fatora em $\\OK$?",
+      o: ["$\\langle 2 \\rangle = PP'$, com $P \\neq P'$ de norma $2$: o primo $2$ é decomposto.",
+          "$\\langle 2 \\rangle = P^2$, pois $x^2 + 7 \\equiv (x+1)^2 \\pmod 2$.",
+          "$\\langle 2 \\rangle$ é primo.",
+          "$\\langle 2 \\rangle = P^2$, com $\\N(P) = 4$."],
+      e: "$x^2 - x + 2 \\equiv x(x-1) \\pmod 2$, com fatores distintos, então $2$ se decompõe. A armadilha é usar $x^2 + 7$: ele é o polinômio minimal de $\\sqrt{-7}$, mas $\\Z[\\sqrt{-7}] \\neq \\OK$, e Kummer–Dedekind exige $\\OK = \\Z[\\alpha]$. De fato, $2 \\nmid \\Delta_K = -7$, então $2$ não pode ramificar." },
+    { t: 2, dica: "dica 21",
+      q: "Quando $\\OK = \\Z[\\alpha]$, os ideais de $\\OK$ que contêm $\\langle p \\rangle$ correspondem a quê?",
+      o: ["Aos divisores mônicos $\\bar g$ de $\\bar p_\\alpha$ em $\\F_p[x]$, via $\\bar g \\mapsto I_g = \\langle p, g(\\alpha) \\rangle$.",
+          "Aos polinômios irredutíveis de $\\F_p[x]$.",
+          "Aos divisores de $p$ em $\\Z$.",
+          "Aos elementos de $\\OK/\\langle p \\rangle$."],
+      e: "Todo ideal que contém $p$ é da forma $I_g$, e $I_g$ só depende de $\\gcd(\\bar g, \\bar p_\\alpha)$; por isso basta olhar os divisores mônicos de $\\bar p_\\alpha$. Os primos acima de $p$ correspondem aos divisores irredutíveis, e a correspondência preserva a divisibilidade, $I_g \\mid I_h \\iff \\bar g \\mid \\bar h$ — o que se inverte é a inclusão." },
+    { t: 2, dica: "dica 24",
+      q: "Num corpo $K$ de grau $3$, qual destas fatorações de $\\langle p \\rangle$ é impossível?",
+      o: ["$\\langle p \\rangle = P_1P_2$, com graus residuais $f_1 = f_2 = 1$.",
+          "$\\langle p \\rangle = P_1^2P_2$, com $f_1 = f_2 = 1$.",
+          "$\\langle p \\rangle = P_1P_2$, com $f_1 = 1$ e $f_2 = 2$.",
+          "$\\langle p \\rangle$ primo, com $f = 3$."],
+      e: "A identidade $\\sum e_if_i = n = 3$ descarta a primeira: $1 \\cdot 1 + 1 \\cdot 1 = 2$. As outras dão $2 + 1$, $1 + 2$ e $3$, e todas ocorrem em corpos cúbicos." },
+    { t: 2, dica: "dica 20",
+      q: "Com $\\OK = \\Z[\\alpha]$ e $g, h \\in \\Z[x]$ mônicos com $\\bar g$, $\\bar h$ dividindo $\\bar p_\\alpha$, quando vale $I_g \\mid I_h$?",
+      o: ["Quando $\\bar g \\mid \\bar h$ em $\\F_p[x]$.",
+          "Quando $\\bar h \\mid \\bar g$ em $\\F_p[x]$.",
+          "Quando $g \\mid h$ em $\\Z[x]$.",
+          "Quando $\\deg g \\le \\deg h$."],
+      e: "$I_g \\mid I_h \\iff I_h \\subseteq I_g \\iff h(\\alpha) \\in I_g \\iff \\bar g \\mid \\bar h$. A divisibilidade vai no mesmo sentido nos polinômios e nos ideais — o que se inverte é a inclusão. Basta a relação módulo $p$; em $\\Z[x]$ ela é forte demais." },
+
+    // ---------- Tema 3: fatoração
+    { t: 3, dica: "dica 25",
+      q: "Em $\\Z[\\sqrt3]$, o primo $11$ é:",
+      o: ["decomposto.", "inerte.", "ramificado.", "decomposto ou inerte, conforme o gerador escolhido para $\\OK$."],
+      e: "Como $5^2 = 25 \\equiv 3 \\pmod{11}$, temos $x^2 - 3 \\equiv (x-5)(x+5)$, com fatores distintos, e $\\langle 11\\rangle = \\langle 11, \\sqrt3 - 5\\rangle\\langle 11, \\sqrt3 + 5\\rangle$. Como $11 \\nmid \\Delta_K = 12$, não poderia ramificar." },
+    { t: 3, dica: "dica 27",
+      q: "Seja $\\theta$ uma raiz de $x^3 - x - 1$, com $\\Delta = -23$ e $\\OK = \\Z[\\theta]$. Sabendo que $x^3 - x - 1 \\equiv (x-3)(x-10)^2 \\pmod{23}$, como $\\langle 23 \\rangle$ se fatora?",
+      o: ["$\\langle 23 \\rangle = P_1 P_2^2$, com $f_1 = f_2 = 1$.",
+          "$\\langle 23 \\rangle = P^3$.",
+          "$\\langle 23 \\rangle$ é primo.",
+          "$\\langle 23 \\rangle = P_1P_2P_3$, cada um de norma $23$."],
+      e: "Por Kummer–Dedekind, $\\langle 23\\rangle = \\langle 23, \\theta - 3\\rangle\\langle 23, \\theta - 10 \\rangle^2$, e $1 \\cdot 1 + 2 \\cdot 1 = 3$ confere. Não é coincidência que $23$ divida o discriminante: quando $\\OK = \\Z[\\theta]$, um primo ramifica exatamente quando divide $\\Delta$." },
+    { t: 3, dica: "dica 26",
+      q: "Em $\\Z[\\sqrt{-13}]$, temos $14 = 2 \\cdot 7 = (1+\\sqrt{-13})(1-\\sqrt{-13})$. Qual é a fatoração de $\\langle 14 \\rangle$ em ideais primos?",
+      o: ["$P_2^2 P_7 P_7'$, com $P_7 \\neq P_7'$.",
+          "$P_2 P_2' P_7 P_7'$, com $P_2 \\neq P_2'$.",
+          "$P_2^2 P_7^2$.",
+          "$P_2 P_7$."],
+      e: "$x^2 + 13 \\equiv (x+1)^2 \\pmod 2$: $2$ ramifica, $\\langle 2\\rangle = P_2^2$. E $x^2 + 13 \\equiv (x-1)(x+1) \\pmod 7$: $7$ se decompõe. Cada lado de $14 = 2\\cdot 7 = (1+\\sqrt{-13})(1-\\sqrt{-13})$ agrupa os mesmos quatro primos de outro jeito; como $a^2 + 13b^2$ nunca vale $2$ nem $7$, nenhum deles é principal." },
+    { t: 3, dica: "dica 26",
+      q: "Em $\\Z[\\sqrt{-5}]$, os ideais $P_2 = \\langle 2, 1+\\sqrt{-5} \\rangle$ e $P_3 = \\langle 3, 1+\\sqrt{-5} \\rangle$ não são principais. E o produto $P_2P_3$?",
+      o: ["É principal: $P_2P_3 = \\langle 1+\\sqrt{-5} \\rangle$.",
+          "Não é principal, por ser produto de ideais não principais.",
+          "É igual a $\\langle 6 \\rangle$.",
+          "É igual a $\\OK$."],
+      e: "$1 + \\sqrt{-5}$ pertence a $P_2$ e a $P_3$, e tem norma $6 = \\N(P_2)\\N(P_3)$; pela fatoração única, $\\langle 1+\\sqrt{-5}\\rangle = P_2P_3$. O produto de dois ideais não principais pode ser principal: as classes de $P_2$ e $P_3$ são inversas no grupo de classes." },
+
+    // ---------- Tema 4: redes e quadrados
+    { t: 4, dica: "dica 41",
+      q: "Onde a simetria de $X$ é usada na prova do Teorema de Minkowski?",
+      o: ["Para que, dados $x, y \\in X$ com $x - y \\in 2L$, o ponto $\\frac{x-y}{2} = \\frac12 x + \\frac12(-y)$ esteja em $X$.",
+          "Para garantir que $X$ tenha volume.",
+          "Para garantir que $X$ seja limitado.",
+          "Para que o domínio fundamental de $L$ seja simétrico."],
+      e: "A prova encontra $x \\neq y$ em $X$ com mesma imagem no toro $\\R^n/2L$. Simetria dá $-y \\in X$; convexidade dá o ponto médio $\\frac12 x + \\frac12(-y) \\in X$, que é um ponto não nulo de $L$. As duas hipóteses trabalham juntas nesse passo." },
+    { t: 4, dica: "dica 45",
+      q: "Por que $G = \\Z + \\Z\\sqrt2 \\subseteq \\R$ não é uma rede?",
+      o: ["Porque não é discreto: $1$ e $\\sqrt2$ são independentes sobre $\\Z$, mas não sobre $\\R$, e $G$ é denso em $\\R$.",
+          "Porque não é finitamente gerado.",
+          "Porque não é um subgrupo de $\\R$.",
+          "Porque $\\sqrt2$ é irracional, e redes só têm coordenadas racionais."],
+      e: "Uma rede é gerada por vetores linearmente independentes sobre $\\R$. Em $\\R$, dois geradores nunca são; e $G$ tem posto $2$ como grupo abeliano, então pelo teorema “subgrupo discreto $\\Rightarrow$ rede” ele não pode ser discreto. Redes podem ter coordenadas irracionais, como a hexagonal." },
+    { t: 4, dica: "dicas 46 e 47",
+      q: "A rede de $\\R^2$ gerada por $(2, 1)$ e $(1, 3)$ tem domínio fundamental de volume:",
+      o: ["$5$", "$7$", "$6$", "$\\sqrt5$"],
+      e: "O volume é $\\left|\\det\\begin{pmatrix} 2 & 1 \\\\ 1 & 3 \\end{pmatrix}\\right| = 6 - 1 = 5$, e não depende da base escolhida: mudar de base multiplica o determinante por $\\pm1$." },
+    { t: 4, dica: "dica 44",
+      q: "Para aplicar o argumento dos quatro quadrados com $p = 7$, é preciso $u, v \\in \\Z$ com $u^2 + v^2 + 1 \\equiv 0 \\pmod 7$. Qual par serve?",
+      o: ["$(u, v) = (2, 3)$", "$(u, v) = (1, 2)$", "$(u, v) = (1, 1)$", "$(u, v) = (3, 3)$"],
+      e: "$4 + 9 + 1 = 14 \\equiv 0 \\pmod 7$. Com esse par, a rede $L_4$ tem volume $49$, e Minkowski na bola de raio $\\sqrt{14}$ dá um ponto com soma de quadrados igual a $7$ — por exemplo, $7 = 2^2 + 1^2 + 1^2 + 1^2$." }
+  ];
+
+  /* ------------------------------------------------------------------
+     Sorteio: a cada tentativa, 4 questões de cada tema, escolhidas
+     entre as 40 do banco. Dá preferência às menos vistas neste navegador.
+  ------------------------------------------------------------------ */
+  var PER_TOPIC = 4;
+  var SEEN_KEY = "quiz-p2-tan:vistas:v1";
+  function shuffleArr(a) {
+    a = a.slice();
+    for (var j = a.length - 1; j > 0; j--) {
+      var r = Math.floor(Math.random() * (j + 1));
+      var t = a[j]; a[j] = a[r]; a[r] = t;
+    }
+    return a;
+  }
+  function loadSeen() {
+    try { var v = JSON.parse(localStorage.getItem(SEEN_KEY)); return (v && typeof v === "object") ? v : {}; }
+    catch (e) { return {}; }
+  }
+  function saveSeen(v) { try { localStorage.setItem(SEEN_KEY, JSON.stringify(v)); } catch (e) {} }
+  var seen = loadSeen();
+  function draw() {
+    var sel = [];
+    TOPICS.forEach(function (tp, ti) {
+      var pool = [];
+      BANK.forEach(function (q, bi) { if (q.t === ti) pool.push(bi); });
+      pool = shuffleArr(pool);
+      pool.sort(function (a, b) { return (seen[a] || 0) - (seen[b] || 0); });
+      pool.slice(0, PER_TOPIC).forEach(function (bi) { sel.push(bi); });
+    });
+    sel.forEach(function (bi) { seen[bi] = (seen[bi] || 0) + 1; });
+    saveSeen(seen);
+    return sel.map(function (bi) { return BANK[bi]; });
+  }
+  var QUESTIONS = (function () {
+    var out = [];
+    TOPICS.forEach(function (tp, ti) {
+      BANK.filter(function (q) { return q.t === ti; }).slice(0, PER_TOPIC).forEach(function (q) { out.push(q); });
+    });
+    return out;
+  })();
+
+
+  /* ------------------------------------------------------------------
+     Estado
+  ------------------------------------------------------------------ */
+  var state = { i: 0, answers: [], order: [] };
+  var app = document.getElementById("app");
+  var tally = document.getElementById("tally");
+  var KEYS = ["a", "b", "c", "d"];
+
+  var mjResolve;
+  var mjReady = new Promise(function (res) { mjResolve = res; });
+  window.__mjReady = function () { mjResolve(); };
+  setTimeout(function () { mjResolve(); }, 8000);
+
+  function typeset(el) {
+    return mjReady.then(function () {
+      if (window.MathJax && MathJax.typesetPromise) {
+        return MathJax.typesetPromise([el]).catch(function () {});
+      }
+    });
+  }
+  function clearMath(el) {
+    if (window.MathJax && MathJax.typesetClear) { try { MathJax.typesetClear([el]); } catch (e) {} }
+  }
+  function shuffle(n) {
+    var a = [];
+    for (var k = 0; k < n; k++) a.push(k);
+    for (var j = n - 1; j > 0; j--) {
+      var r = Math.floor(Math.random() * (j + 1));
+      var t = a[j]; a[j] = a[r]; a[r] = t;
+    }
+    return a;
+  }
+
+  /* ------------------------------------------------------------------
+     Régua de tracinhos
+  ------------------------------------------------------------------ */
+  function renderTally() {
+    var html = "";
+    TOPICS.forEach(function (tp, ti) {
+      html += '<div class="group"><div class="marks">';
+      QUESTIONS.forEach(function (q, qi) {
+        if (q.t !== ti) return;
+        var cls = "mark";
+        var a = state.answers[qi];
+        if (a === true) cls += " right";
+        else if (a === false) cls += " wrong";
+        else if (qi === state.i && state.started && !state.done) cls += " current";
+        html += '<span class="' + cls + '"></span>';
+      });
+      html += '</div><span class="group-name">' + tp.name + "</span></div>";
+    });
+    var answered = state.answers.filter(function (x) { return x !== undefined; }).length;
+    html += '<span class="count">' + answered + " de " + QUESTIONS.length + "</span>";
+    tally.innerHTML = html;
+  }
+
+  /* ------------------------------------------------------------------
+     Telas
+  ------------------------------------------------------------------ */
+  var nomeAluno = "";
+  function esc(t) { return String(t).replace(/[&<>"']/g, function (c) { return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+
+  function renderIntro() {
+    clearMath(app);
+    var rows = TOPICS.map(function (tp) {
+      return '<li><span class="t-name">' + tp.long + '</span><span class="t-dicas">' + tp.dicas + "</span></li>";
+    }).join("");
+    app.innerHTML =
+      "<h1>Quiz de preparação para a P2</h1>" +
+      '<p class="lead">Teoria Algébrica dos Números. São 20 questões de múltipla escolha, quatro por tema, sorteadas a cada tentativa de um banco de 40 — oito por tema. Ao refazer o quiz, você recebe de preferência questões que ainda não viu. ' +
+      "Cada resposta é corrigida na hora, com a justificativa e a dica da lista que trata do assunto. " +
+      "No final, você vê em quais temas está seguro e quais precisa rever.</p>" +
+      '<ul class="topics">' + rows + "</ul>" +
+      '<div class="nome-box"><label for="nome">Seu nome</label>' +
+      '<input id="nome" type="text" autocomplete="name" placeholder="Digite seu nome completo" value="' + esc(nomeAluno) + '">' +
+      '<p class="erro" id="nome-erro"></p></div>' +
+      '<div class="nav"><button class="btn" id="start">Começar o quiz</button>' +
+      '<span class="hint">Use as teclas 1 a 4 para responder e Enter para avançar.</span></div>';
+    var campo = document.getElementById("nome");
+    function comecar() {
+      var n = campo.value.trim();
+      if (!n) { document.getElementById("nome-erro").textContent = "Escreva seu nome para começar."; campo.focus(); return; }
+      nomeAluno = n;
+      start();
+    }
+    document.getElementById("start").addEventListener("click", comecar);
+    campo.addEventListener("keydown", function (ev) { if (ev.key === "Enter") { ev.preventDefault(); comecar(); } });
+    renderTally();
+  }
+
+  function start() {
+    QUESTIONS = draw();
+    state = { i: 0, answers: [], order: QUESTIONS.map(function (q) { return shuffle(q.o.length); }), started: true, done: false };
+    renderQuestion();
+  }
+
+  function renderQuestion() {
+    var qi = state.i, q = QUESTIONS[qi], order = state.order[qi];
+    clearMath(app);
+    var opts = order.map(function (oi, pos) {
+      return '<button class="opt" data-oi="' + oi + '"><span class="key">' + KEYS[pos] + "</span><span>" + q.o[oi] + "</span></button>";
+    }).join("");
+    app.innerHTML =
+      '<p class="q-topic">Questão ' + (qi + 1) + " de " + QUESTIONS.length + ": " + TOPICS[q.t].long + "</p>" +
+      '<div class="q-text">' + q.q + "</div>" +
+      '<div class="opts" role="group" aria-label="Alternativas">' + opts + "</div>" +
+      '<div id="fb"></div>';
+    Array.prototype.forEach.call(app.querySelectorAll(".opt"), function (b) {
+      b.addEventListener("click", function () { answer(parseInt(b.getAttribute("data-oi"), 10)); });
+    });
+    renderTally();
+    typeset(app).then(function () {
+      var first = app.querySelector(".opt");
+      if (first) first.focus({ preventScroll: true });
+    });
+    window.scrollTo({ top: 0 });
+  }
+
+  function answer(oi) {
+    var qi = state.i;
+    if (state.answers[qi] !== undefined) return;
+    var q = QUESTIONS[qi];
+    var ok = oi === 0;
+    state.answers[qi] = ok;
+    Array.prototype.forEach.call(app.querySelectorAll(".opt"), function (b) {
+      var bo = parseInt(b.getAttribute("data-oi"), 10);
+      b.disabled = true;
+      if (bo === 0) b.classList.add("is-right");
+      else if (bo === oi) b.classList.add("is-wrong");
+      else b.classList.add("faded");
+    });
+    var last = qi === QUESTIONS.length - 1;
+    var fb = document.getElementById("fb");
+    fb.innerHTML =
+      '<div class="feedback ' + (ok ? "right" : "wrong") + '">' +
+      '<p class="verdict">' + (ok ? "Correto." : "Não é essa.") + "</p>" +
+      '<p class="expl">' + q.e + "</p>" +
+      '<p class="see">Para rever: ' + q.dica + " da lista de dicas.</p></div>" +
+      '<div class="nav"><button class="btn" id="next">' + (last ? "Ver o diagnóstico" : "Próxima questão") + "</button></div>";
+    document.getElementById("next").addEventListener("click", next);
+    renderTally();
+    typeset(fb).then(function () {
+      document.getElementById("next").focus({ preventScroll: true });
+      fb.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    });
+  }
+
+  function next() {
+    if (state.i < QUESTIONS.length - 1) { state.i++; renderQuestion(); }
+    else { state.done = true; renderResults(); }
+  }
+
+  function verdictFor(n) {
+    if (n === 4) return { cls: "ok", txt: "Seguro neste tema." };
+    if (n === 3) return { cls: "mid", txt: "Quase lá: reveja a questão que errou." };
+    return { cls: "weak", txt: "Ponto fraco: vale estudar este tema antes da prova." };
+  }
+
+  function renderResults() {
+    clearMath(app);
+    var total = state.answers.filter(function (x) { return x === true; }).length;
+    var diag = TOPICS.map(function (tp, ti) {
+      var marks = "", right = 0;
+      QUESTIONS.forEach(function (q, qi) {
+        if (q.t !== ti) return;
+        var a = state.answers[qi];
+        if (a) right++;
+        marks += '<span class="mark ' + (a ? "right" : "wrong") + '"></span>';
+      });
+      var v = verdictFor(right);
+      var extra = right < 4 ? " Revise as " + tp.dicas + "." : "";
+      return '<li><div class="diag-head"><span class="diag-name">' + tp.long + '</span><span class="marks">' + marks +
+             '</span><span>' + right + " de 4</span></div>" +
+             '<p class="diag-verdict ' + v.cls + '">' + v.txt + extra + "</p></li>";
+    }).join("");
+
+    var wrong = [];
+    QUESTIONS.forEach(function (q, qi) { if (state.answers[qi] === false) wrong.push(qi); });
+    var review = wrong.length === 0
+      ? "<p>Você acertou todas. Ainda assim, vale escrever à mão as demonstrações das dicas: na prova, as questões pedem provas completas.</p>"
+      : wrong.map(function (qi) {
+          var q = QUESTIONS[qi];
+          return '<div class="review-item"><div class="q-text">' + (qi + 1) + ". " + q.q + "</div>" +
+                 '<p class="ans"><span class="label-right">Resposta:</span> ' + q.o[0] + "</p>" +
+                 '<p class="ans">' + q.e + "</p>" +
+                 '<p class="see">Para rever: ' + q.dica + ".</p></div>";
+        }).join("");
+
+    app.innerHTML =
+      "<h1>Seu diagnóstico</h1>" +
+      '<div class="ident"><p class="quem">' + esc(nomeAluno) + '</p>' +
+      '<p class="quando">Concluído em ' + new Date().toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" }) + '</p>' +
+      '<p class="nota">' + total + " de " + QUESTIONS.length + " acertos</p></div>" +
+      '<p class="lead">Cada linha mostra um tema da prova. Os temas em vermelho são os que pedem mais estudo; ' +
+      "a numeração das dicas é a da lista distribuída para a P2.</p>" +
+      '<ul class="diag">' + diag + "</ul>" +
+      (wrong.length ? "<h2>As questões que você errou</h2>" : "<h2>Resultado</h2>") +
+      '<div class="review">' + review + "</div>" +
+      '<div class="nav"><button class="btn" id="again">Refazer o quiz</button>' +
+      '<a class="btn ghost" href="index.html">Outros testes da disciplina</a>' +
+      '<a class="btn ghost" href="../index.html">Voltar às disciplinas</a></div>';
+    document.getElementById("again").addEventListener("click", start);
+    renderTally();
+    typeset(app);
+    window.scrollTo({ top: 0 });
+  }
+
+  /* ------------------------------------------------------------------
+     Teclado
+  ------------------------------------------------------------------ */
+  document.addEventListener("keydown", function (ev) {
+    if (!state.started || state.done) return;
+    if (ev.key >= "1" && ev.key <= "4") {
+      var b = app.querySelectorAll(".opt")[parseInt(ev.key, 10) - 1];
+      if (b && !b.disabled) { ev.preventDefault(); b.click(); }
+    } else if (ev.key === "Enter" || ev.key === "ArrowRight") {
+      var n = document.getElementById("next");
+      if (n && state.answers[state.i] !== undefined) { ev.preventDefault(); n.click(); }
+    }
+  });
+
+  renderIntro();
+})();
+</script>
+</body>
+</html>

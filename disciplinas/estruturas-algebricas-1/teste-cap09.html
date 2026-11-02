@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Teste de revisão – Capítulo 9: Anéis — Estruturas Algébricas 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #fbfaf7; --surface: #ffffff; --ink: #1d2330; --muted: #5d6675; --line: #e4e1d9;
+  --blue: #1f4e79; --blue-soft: #e8eef5; --ok: #2e7d4f; --ok-soft: #e6f3ec; --bad: #b03a2e; --bad-soft: #f8e9e7;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14171d; --surface: #1b1f27; --ink: #e7e9ee; --muted: #9aa3b2; --line: #2c3240;
+    --blue: #8db8e3; --blue-soft: #1f2a38; --ok: #6cc38f; --ok-soft: #1b2c23; --bad: #e58a80; --bad-soft: #33201e;
+    color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+  padding-bottom: env(safe-area-inset-bottom, 0px); }
+h1, h2 { font-family: "Source Serif 4", Georgia, "Times New Roman", serif; font-weight: 600; line-height: 1.25; }
+h1 { font-size: 1.9rem; margin: 0 0 12px; }
+h2 { font-size: 1.35rem; margin: 32px 0 12px; }
+.tally { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: blur(6px); border-bottom: 1px solid var(--line); padding-top: env(safe-area-inset-top, 0px); }
+.tally-inner { max-width: 760px; margin: 0 auto; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.group { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.marks { display: flex; flex-wrap: wrap; gap: 5px; }
+.mark { width: 14px; height: 14px; border-radius: 4px; border: 1.5px solid var(--line); background: var(--surface); }
+.mark.right { background: var(--ok); border-color: var(--ok); }
+.mark.wrong { background: var(--bad); border-color: var(--bad); }
+.mark.current { border-color: var(--blue); box-shadow: 0 0 0 2px var(--blue-soft); }
+.group-name { color: var(--muted); font-size: .88rem; white-space: nowrap; }
+.count { color: var(--muted); font-size: .88rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+main { max-width: 760px; margin: 0 auto; padding: 28px 16px 48px; }
+.lead { color: var(--muted); font-size: 1.02rem; }
+.nome-box { margin: 22px 0 8px; }
+.nome-box label { display: block; font-weight: 600; margin-bottom: 6px; }
+.nome-box input { width: 100%; max-width: 420px; padding: 10px 12px; font: inherit; color: var(--ink);
+  background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
+.nome-box input:focus { outline: 2px solid var(--blue); outline-offset: 1px; }
+.erro { color: var(--bad); font-size: .9rem; min-height: 1.2em; margin: 6px 0 0; }
+.nav { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 22px; }
+.btn { display: inline-block; padding: 9px 18px; border-radius: 8px; border: 1px solid var(--blue);
+  background: var(--blue); color: var(--bg); font: 500 .95rem Inter, system-ui, sans-serif; cursor: pointer; }
+.btn:hover { filter: brightness(1.08); }
+.btn.ghost { background: transparent; color: var(--blue); }
+a.btn { text-decoration: none; }
+.hint { color: var(--muted); font-size: .86rem; }
+.q-topic { color: var(--muted); font-size: .85rem; text-transform: uppercase; letter-spacing: .04em; margin: 0 0 8px; }
+.q-text { font-family: "Source Serif 4", Georgia, serif; font-size: 1.15rem; line-height: 1.6; margin-bottom: 18px; }
+.opts { display: flex; flex-direction: column; gap: 10px; }
+.opt { display: flex; align-items: flex-start; gap: 12px; width: 100%; text-align: left; padding: 12px 14px;
+  border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--ink);
+  font: 1rem/1.5 Inter, system-ui, sans-serif; cursor: pointer; transition: border-color .15s, background .15s; }
+.opt:hover:not(:disabled) { border-color: var(--blue); }
+.opt:disabled { cursor: default; }
+.opt .key { flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--blue-soft); color: var(--blue); font-weight: 600; font-size: .85rem; }
+.opt.is-right { border-color: var(--ok); background: var(--ok-soft); }
+.opt.is-right .key { background: var(--ok); color: var(--surface); }
+.opt.is-wrong { border-color: var(--bad); background: var(--bad-soft); }
+.opt.is-wrong .key { background: var(--bad); color: var(--surface); }
+.opt.faded { opacity: .55; }
+.feedback { margin-top: 18px; padding: 14px 16px; border-radius: 10px; border-left: 4px solid var(--line); background: var(--surface); }
+.feedback.right { border-left-color: var(--ok); }
+.feedback.wrong { border-left-color: var(--bad); }
+.verdict { margin: 0 0 6px; font-weight: 600; }
+.feedback.right .verdict { color: var(--ok); }
+.feedback.wrong .verdict { color: var(--bad); }
+.expl { color: var(--ink); }
+.ident { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; margin: 6px 0 14px; }
+.ident p { margin: 2px 0; }
+.quem { font-weight: 600; font-size: 1.05rem; }
+.quando { color: var(--muted); font-size: .9rem; }
+.nota { font-family: "Source Serif 4", Georgia, serif; font-size: 1.4rem; font-weight: 600; color: var(--blue); }
+.review { display: flex; flex-direction: column; gap: 14px; }
+.review-item { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+.review-item .q-text { font-size: 1.05rem; margin-bottom: 8px; }
+.ans { margin: 6px 0; }
+.label-right { color: var(--ok); font-weight: 600; }
+@media (max-width: 600px) { h1 { font-size: 1.55rem; } .q-text { font-size: 1.05rem; } }
+
+.temas { list-style: none; padding: 0; margin: 4px 0 18px; }
+.temas li { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--line); }
+.temas li:last-child { border-bottom: none; }
+.temas .tnome { flex: 1; }
+.temas .tnota { font-variant-numeric: tabular-nums; font-weight: 600; white-space: nowrap; }
+.temas .tcom { display: block; color: var(--muted); font-size: .88rem; font-weight: 400; }
+.temas .ok { color: var(--ok); } .temas .mid { color: var(--muted); } .temas .low { color: var(--bad); }
+</style>
+</head>
+<body>
+<div class="tally" aria-hidden="true">
+  <div class="tally-inner" id="tally"></div>
+</div>
+<main id="app" aria-live="polite"></main>
+<script>
+var INFO = {"titulo": "Teste de revisão – Capítulo 9", "capitulo": "Capítulo 9: Anéis", "curto": "Capítulo 9"};
+var TEMAS = [{"nome": "Definição, exemplos e propriedades", "n": 3}, {"nome": "Divisores de zero, domínios e corpos", "n": 3}, {"nome": "Característica", "n": 2}];
+var BANCO = [
+ {
+  "t": 0,
+  "q": "Qual dos anéis é um anel com unidade NÃO comutativo?",
+  "o": [
+   "M<sub>2</sub>(ℝ)",
+   "ℤ",
+   "2ℤ",
+   "ℤ<sub>6</sub>"
+  ],
+  "e": "Para matrizes, em geral AB ≠ BA. ℤ e ℤ<sub>6</sub> são comutativos com unidade; 2ℤ é comutativo sem unidade."
+ },
+ {
+  "t": 0,
+  "q": "O anel 2ℤ (inteiros pares) é:",
+  "o": [
+   "comutativo e sem unidade",
+   "um domínio de integridade",
+   "um corpo",
+   "não é anel"
+  ],
+  "e": "2ℤ é fechado para soma e produto, mas não contém 1, e nenhum par e satisfaz e·2 = 2. É anel de integridade, mas não domínio (falta unidade)."
+ },
+ {
+  "t": 0,
+  "q": "Em qualquer anel, quanto vale (−a)(−b)?",
+  "o": [
+   "ab",
+   "−ab",
+   "a + b",
+   "Depende do anel"
+  ],
+  "e": "a(−b) = −(ab), pois ab + a(−b) = a(b − b) = a0 = 0. Aplicando duas vezes, (−a)(−b) = −(a(−b)) = ab."
+ },
+ {
+  "t": 0,
+  "q": "Em qualquer anel A, quanto vale a·0?",
+  "o": [
+   "0",
+   "a",
+   "1",
+   "depende do anel"
+  ],
+  "e": "a·0 = a(0 + 0) = a·0 + a·0; somando −(a·0), obtemos 0 = a·0."
+ },
+ {
+  "t": 0,
+  "q": "Seja A um anel com unidade em que 1 = 0. Então:",
+  "o": [
+   "A = {0}",
+   "A é um corpo",
+   "A não tem divisores de zero",
+   "isso é impossível"
+  ],
+  "e": "Para todo a ∈ A, a = a·1 = a·0 = 0."
+ },
+ {
+  "t": 0,
+  "q": "Quais são os elementos invertíveis de ℤ?",
+  "o": [
+   "1 e −1",
+   "todos os inteiros não nulos",
+   "apenas 1",
+   "nenhum"
+  ],
+  "e": "Se ab = 1 com a, b inteiros, então |a| = |b| = 1."
+ },
+ {
+  "t": 0,
+  "q": "Quais são os elementos invertíveis de ℤ ⊕ ℤ?",
+  "o": [
+   "(1, 1), (1, −1), (−1, 1) e (−1, −1)",
+   "todos os pares diferentes de (0, 0)",
+   "apenas (1, 1)",
+   "(1, 1) e (−1, −1)"
+  ],
+  "e": "(a, b) é invertível se, e somente se, a e b são invertíveis em ℤ, isto é, a, b ∈ {1, −1}."
+ },
+ {
+  "t": 1,
+  "q": "Qual elemento de ℤ<sub>12</sub> é divisor de zero?",
+  "o": [
+   "<span style=\"text-decoration:overline\">8</span>",
+   "<span style=\"text-decoration:overline\">5</span>",
+   "<span style=\"text-decoration:overline\">7</span>",
+   "<span style=\"text-decoration:overline\">1</span>"
+  ],
+  "e": "<span style=\"text-decoration:overline\">8</span> · <span style=\"text-decoration:overline\">3</span> = <span style=\"text-decoration:overline\">24</span> = <span style=\"text-decoration:overline\">0</span>, com <span style=\"text-decoration:overline\">3</span> ≠ <span style=\"text-decoration:overline\">0</span>. Já <span style=\"text-decoration:overline\">5</span>, <span style=\"text-decoration:overline\">7</span> e <span style=\"text-decoration:overline\">1</span> são invertíveis (primos com 12), e invertíveis não são divisores de zero."
+ },
+ {
+  "t": 1,
+  "q": "Quantos elementos invertíveis tem o anel ℤ<sub>14</sub>?",
+  "o": [
+   "6",
+   "7",
+   "13",
+   "12"
+  ],
+  "e": "Os invertíveis são <span style=\"text-decoration:overline\">a</span> com mdc(a, 14) = 1: 1, 3, 5, 9, 11, 13. São φ(14) = 6."
+ },
+ {
+  "t": 1,
+  "q": "Qual dos anéis é um corpo?",
+  "o": [
+   "ℤ<sub>7</sub>",
+   "ℤ<sub>8</sub>",
+   "ℤ",
+   "ℤ ⊕ ℤ"
+  ],
+  "e": "ℤ<sub>n</sub> é corpo se, e somente se, n é primo. Em ℤ<sub>8</sub>, <span style=\"text-decoration:overline\">2</span>·<span style=\"text-decoration:overline\">4</span> = <span style=\"text-decoration:overline\">0</span>; em ℤ, 2 não é invertível; em ℤ ⊕ ℤ, (1,0)(0,1) = (0,0)."
+ },
+ {
+  "t": 1,
+  "q": "Todo anel de integridade finito com pelo menos dois elementos é:",
+  "o": [
+   "um corpo",
+   "o anel ℤ<sub>p</sub> para algum primo p",
+   "um anel sem unidade",
+   "um anel com divisores de zero"
+  ],
+  "e": "Se a ≠ 0, a função x ↦ ax é injetora (cancelamento) e, por finitude, sobrejetora; daí aparecem a unidade e o inverso de a. Há corpos finitos que não são ℤ<sub>p</sub> (por exemplo, com 4 elementos)."
+ },
+ {
+  "t": 1,
+  "q": "ℤ ⊕ ℤ é um domínio de integridade?",
+  "o": [
+   "Não: (1, 0)·(0, 1) = (0, 0).",
+   "Sim, pois ℤ é domínio.",
+   "Sim, pois é comutativo.",
+   "Não, pois não tem unidade."
+  ],
+  "e": "(1, 0) e (0, 1) são não nulos e seu produto é zero: são divisores de zero. O anel tem unidade (1, 1)."
+ },
+ {
+  "t": 1,
+  "q": "ℤ<sub>n</sub> (n ≥ 2) é um domínio de integridade se, e somente se:",
+  "o": [
+   "n é primo",
+   "n é par",
+   "n é ímpar",
+   "sempre"
+  ],
+  "e": "Se n = ab com 1 &lt; a, b &lt; n, então <span style=\"text-decoration:overline\">a</span>·<span style=\"text-decoration:overline\">b</span> = <span style=\"text-decoration:overline\">0</span>. Se n é primo e n | ab, então n | a ou n | b."
+ },
+ {
+  "t": 1,
+  "q": "Qual é o inverso de <span style=\"text-decoration:overline\">3</span> no corpo ℤ<sub>7</sub>?",
+  "o": [
+   "<span style=\"text-decoration:overline\">5</span>",
+   "<span style=\"text-decoration:overline\">3</span>",
+   "<span style=\"text-decoration:overline\">4</span>",
+   "<span style=\"text-decoration:overline\">6</span>"
+  ],
+  "e": "3·5 = 15 ≡ 1 (mod 7)."
+ },
+ {
+  "t": 2,
+  "q": "Qual dos números abaixo NÃO pode ser a característica de um anel de integridade?",
+  "o": [
+   "6",
+   "0",
+   "2",
+   "7"
+  ],
+  "e": "A característica de um anel de integridade é 0 ou um número primo. Se fosse 6 = 2·3, então (2a)(3a) = 6a² = 0 daria 2a = 0 ou 3a = 0, contra a minimalidade."
+ },
+ {
+  "t": 2,
+  "q": "Qual é a característica do anel ℤ?",
+  "o": [
+   "0",
+   "1",
+   "2",
+   "infinita"
+  ],
+  "e": "n·a ≠ 0 para todos n ≥ 1 e a ≠ 0, então a característica é 0."
+ },
+ {
+  "t": 2,
+  "q": "Qual é a característica do corpo ℤ<sub>5</sub>?",
+  "o": [
+   "5",
+   "0",
+   "4",
+   "25"
+  ],
+  "e": "5·<span style=\"text-decoration:overline\">a</span> = <span style=\"text-decoration:overline\">5a</span> = <span style=\"text-decoration:overline\">0</span>, e m·<span style=\"text-decoration:overline\">1</span> ≠ <span style=\"text-decoration:overline\">0</span> para 0 &lt; m &lt; 5."
+ },
+ {
+  "t": 2,
+  "q": "Seja A um anel de integridade de característica p &gt; 0. Quanto vale (a + b)<sup>p</sup>?",
+  "o": [
+   "a<sup>p</sup> + b<sup>p</sup>",
+   "a<sup>p</sup> + p·ab + b<sup>p</sup>",
+   "(a + b)",
+   "0"
+  ],
+  "e": "No binômio, os coeficientes C(p, i), com 0 &lt; i &lt; p, são múltiplos de p, e pc = 0 para todo c ∈ A."
+ },
+ {
+  "t": 2,
+  "q": "Um corpo com 9 elementos tem característica:",
+  "o": [
+   "3",
+   "9",
+   "0",
+   "2"
+  ],
+  "e": "A característica p é um primo e p·1 = 0, então 1 tem ordem p no grupo aditivo, que tem 9 elementos. Por Lagrange, p | 9, logo p = 3."
+ }
+];
+</script>
+<script>
+(function () {
+  var N = 0; TEMAS.forEach(function (t) { N += t.n; });
+  var state = { i: 0, answers: [], order: [], sel: [], started: false, done: false };
+  var app = document.getElementById("app");
+  var tally = document.getElementById("tally");
+  var KEYS = ["a", "b", "c", "d", "e", "f"];
+  var nomeAluno = "";
+  function esc(t) { return String(t).replace(/[&<>"']/g, function (c) { return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+  function shuffle(n) {
+    var a = []; for (var k = 0; k < n; k++) a.push(k);
+    for (var j = n - 1; j > 0; j--) { var r = Math.floor(Math.random() * (j + 1)); var t = a[j]; a[j] = a[r]; a[r] = t; }
+    return a;
+  }
+  function sortear() {
+    var sel = [];
+    TEMAS.forEach(function (t, k) {
+      var pool = [];
+      BANCO.forEach(function (q, qi) { if (q.t === k) pool.push(qi); });
+      var idx = shuffle(pool.length);
+      for (var j = 0; j < t.n && j < pool.length; j++) sel.push(pool[idx[j]]);
+    });
+    return sel;
+  }
+  function Q(i) { return BANCO[state.sel[i]]; }
+  function renderTally() {
+    var h = '<div class="group"><div class="marks">';
+    for (var qi = 0; qi < N; qi++) {
+      var cls = "mark", a = state.answers[qi];
+      if (a === true) cls += " right"; else if (a === false) cls += " wrong";
+      else if (state.started && !state.done && qi === state.i) cls += " current";
+      h += '<span class="' + cls + '"></span>';
+    }
+    h += '</div><span class="group-name">' + INFO.curto + "</span></div>";
+    var answered = state.answers.filter(function (x) { return x !== undefined; }).length;
+    h += '<span class="count">' + answered + " de " + N + "</span>";
+    tally.innerHTML = h;
+  }
+  function renderIntro() {
+    var temas = TEMAS.map(function (t) { return t.nome + " (" + t.n + ")"; }).join("; ");
+    app.innerHTML =
+      "<h1>" + INFO.titulo + "</h1>" +
+      '<p class="lead">Estruturas Algébricas 1 · ' + INFO.capitulo + ". A cada tentativa são sorteadas " + N +
+      " questões de múltipla escolha de um banco de " + BANCO.length + ", divididas por tema: " + temas + ". " +
+      "Cada resposta é corrigida na hora, com a explicação. No final, você vê seu resultado, o desempenho em cada tema " +
+      "e as questões que errou. Ao refazer o teste, as questões mudam.</p>" +
+      '<div class="nome-box"><label for="nome">Seu nome</label>' +
+      '<input id="nome" type="text" autocomplete="name" placeholder="Digite seu nome completo" value="' + esc(nomeAluno) + '">' +
+      '<p class="erro" id="nome-erro"></p></div>' +
+      '<div class="nav"><button class="btn" id="start">Começar o teste</button>' +
+      '<span class="hint">Use as teclas 1 a 4 para responder e Enter para avançar.</span></div>';
+    var campo = document.getElementById("nome");
+    function comecar() {
+      var n = campo.value.trim();
+      if (!n) { document.getElementById("nome-erro").textContent = "Escreva seu nome para começar."; campo.focus(); return; }
+      nomeAluno = n; start();
+    }
+    document.getElementById("start").addEventListener("click", comecar);
+    campo.addEventListener("keydown", function (ev) { if (ev.key === "Enter") { ev.preventDefault(); comecar(); } });
+    renderTally();
+  }
+  function start() {
+    var sel = sortear();
+    state = { i: 0, answers: [], sel: sel, order: sel.map(function (qi) { return shuffle(BANCO[qi].o.length); }), started: true, done: false };
+    renderQuestion();
+  }
+  function renderQuestion() {
+    var qi = state.i, q = Q(qi), order = state.order[qi];
+    var opts = order.map(function (oi, pos) {
+      return '<button class="opt" data-oi="' + oi + '"><span class="key">' + KEYS[pos] + "</span><span>" + q.o[oi] + "</span></button>";
+    }).join("");
+    app.innerHTML =
+      '<p class="q-topic">Questão ' + (qi + 1) + " de " + N + " · " + TEMAS[q.t].nome + "</p>" +
+      '<div class="q-text">' + q.q + "</div>" +
+      '<div class="opts" role="group" aria-label="Alternativas">' + opts + "</div>" +
+      '<div id="fb"></div>';
+    Array.prototype.forEach.call(app.querySelectorAll(".opt"), function (b) {
+      b.addEventListener("click", function () { answer(parseInt(b.getAttribute("data-oi"), 10)); });
+    });
+    renderTally();
+    var first = app.querySelector(".opt"); if (first) first.focus({ preventScroll: true });
+    window.scrollTo({ top: 0 });
+  }
+  function answer(oi) {
+    var qi = state.i;
+    if (state.answers[qi] !== undefined) return;
+    var q = Q(qi), ok = oi === 0;
+    state.answers[qi] = ok;
+    Array.prototype.forEach.call(app.querySelectorAll(".opt"), function (b) {
+      var bo = parseInt(b.getAttribute("data-oi"), 10);
+      b.disabled = true;
+      if (bo === 0) b.classList.add("is-right");
+      else if (bo === oi) b.classList.add("is-wrong");
+      else b.classList.add("faded");
+    });
+    var last = qi === N - 1;
+    var fb = document.getElementById("fb");
+    fb.innerHTML =
+      '<div class="feedback ' + (ok ? "right" : "wrong") + '">' +
+      '<p class="verdict">' + (ok ? "Correto." : "Não é essa.") + "</p>" +
+      '<div class="expl">' + q.e + "</div></div>" +
+      '<div class="nav"><button class="btn" id="next">' + (last ? "Ver o resultado" : "Próxima questão") + "</button></div>";
+    document.getElementById("next").addEventListener("click", next);
+    renderTally();
+    document.getElementById("next").focus({ preventScroll: true });
+    fb.scrollIntoView({ block: "nearest", behavior: "smooth" });
+  }
+  function next() {
+    if (state.i < N - 1) { state.i++; renderQuestion(); }
+    else { state.done = true; renderResults(); }
+  }
+  function comentario(acertos, n) {
+    if (acertos === n) return { cls: "ok", txt: "Seguro neste tema." };
+    if (2 * acertos >= n) return { cls: "mid", txt: "Quase lá: reveja as questões que errou." };
+    return { cls: "low", txt: "Reveja este tema nas notas de aula." };
+  }
+  function renderResults() {
+    var total = state.answers.filter(function (x) { return x === true; }).length;
+    var frac = total / N;
+    var veredito = frac === 1 ? "Você acertou todas. Muito bem!"
+      : frac >= 0.75 ? "Bom resultado. Reveja as questões que errou."
+      : frac >= 0.5 ? "Resultado razoável. Vale reler o capítulo nas notas de aula."
+      : "Este capítulo precisa de mais estudo. Releia as notas de aula e tente de novo.";
+    var porTema = TEMAS.map(function () { return 0; });
+    state.sel.forEach(function (bi, qi) { if (state.answers[qi] === true) porTema[BANCO[bi].t]++; });
+    var temas = TEMAS.map(function (t, k) {
+      var c = comentario(porTema[k], t.n);
+      return '<li><span class="tnome">' + t.nome + '<span class="tcom">' + c.txt + '</span></span>' +
+             '<span class="tnota ' + c.cls + '">' + porTema[k] + " de " + t.n + "</span></li>";
+    }).join("");
+    var wrong = [];
+    for (var qi = 0; qi < N; qi++) if (state.answers[qi] === false) wrong.push(qi);
+    var review = wrong.map(function (qi) {
+      var q = Q(qi);
+      return '<div class="review-item"><div class="q-text">' + (qi + 1) + ". " + q.q + "</div>" +
+             '<p class="ans"><span class="label-right">Resposta:</span> ' + q.o[0] + "</p>" +
+             '<div class="ans">' + q.e + "</div></div>";
+    }).join("");
+    app.innerHTML =
+      "<h1>Seu resultado</h1>" +
+      '<div class="ident"><p class="quem">' + esc(nomeAluno) + "</p>" +
+      '<p class="quando">' + INFO.titulo + " · concluído em " + new Date().toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" }) + "</p>" +
+      '<p class="nota">' + total + " de " + N + " acertos</p></div>" +
+      '<p class="lead">' + veredito + "</p>" +
+      "<h2>Desempenho por tema</h2>" + '<ul class="temas">' + temas + "</ul>" +
+      (wrong.length ? '<h2>As questões que você errou</h2><div class="review">' + review + "</div>" : "") +
+      '<div class="nav"><button class="btn" id="again">Refazer com novas questões</button>' +
+      '<a class="btn ghost" href="index.html">Outros testes da disciplina</a>' +
+      '<a class="btn ghost" href="../index.html">Voltar às disciplinas</a></div>';
+    document.getElementById("again").addEventListener("click", start);
+    renderTally();
+    window.scrollTo({ top: 0 });
+  }
+  document.addEventListener("keydown", function (ev) {
+    if (!state.started || state.done) return;
+    if (ev.target && ev.target.tagName === "INPUT") return;
+    if (ev.key >= "1" && ev.key <= "4") {
+      var b = app.querySelectorAll(".opt")[parseInt(ev.key, 10) - 1];
+      if (b && !b.disabled) { ev.preventDefault(); b.click(); }
+    } else if (ev.key === "Enter" || ev.key === "ArrowRight") {
+      var nx = document.getElementById("next");
+      if (nx && state.answers[state.i] !== undefined) { ev.preventDefault(); nx.click(); }
+    }
+  });
+  renderIntro();
+})();
+</script>
+</body>
+</html>

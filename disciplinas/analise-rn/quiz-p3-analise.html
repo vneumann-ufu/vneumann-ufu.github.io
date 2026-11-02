@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Quiz de preparação para a P3 — Análise no Rⁿ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --board: #F7F9FB;
+  --board-2: #EEF2F6;
+  --ink: #1C2230;
+  --muted: #5B6577;
+  --rule: #D6DCE4;
+  --blue: #1F4FA8;
+  --red: #B9312C;
+  --green: #1F7A4D;
+  --blue-wash: #E3EBF8;
+  --red-wash: #F8E6E5;
+  --green-wash: #E2F2E9;
+  --empty: #C9D1DC;
+  color-scheme: light;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --board: #12161D;
+    --board-2: #1A2029;
+    --ink: #E6EAF0;
+    --muted: #9AA4B4;
+    --rule: #2A313C;
+    --blue: #8AB0F2;
+    --red: #F08C84;
+    --green: #7BCB9C;
+    --blue-wash: #1C2840;
+    --red-wash: #3A2222;
+    --green-wash: #1B3328;
+    --empty: #39414E;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --board: #12161D;
+  --board-2: #1A2029;
+  --ink: #E6EAF0;
+  --muted: #9AA4B4;
+  --rule: #2A313C;
+  --blue: #8AB0F2;
+  --red: #F08C84;
+  --green: #7BCB9C;
+  --blue-wash: #1C2840;
+  --red-wash: #3A2222;
+  --green-wash: #1B3328;
+  --empty: #39414E;
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: inherit; }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+body {
+  margin: 0;
+  background: var(--board);
+  color: var(--ink);
+  font-family: "Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto;
+  height: env(safe-area-inset-top, 0px);
+  z-index: 10;
+  background: var(--board);
+}
+
+/* ---------- régua de tracinhos ---------- */
+.tally {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 5;
+  background: var(--board);
+  border-bottom: 1px solid var(--rule);
+}
+.tally-inner {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: 0.75rem 1.25rem 0.7rem;
+  display: flex;
+  align-items: flex-end;
+  gap: 1.1rem;
+  overflow-x: auto;
+}
+.group { display: flex; flex-direction: column; gap: 0.3rem; flex: 0 0 auto; }
+.marks { display: flex; gap: 5px; align-items: flex-end; height: 26px; }
+.mark {
+  width: 6px;
+  height: 22px;
+  border-radius: 3px;
+  background: var(--empty);
+  transform: rotate(-6deg);
+  transition: background-color 0.25s ease, height 0.25s ease;
+}
+.mark.current { background: var(--blue); height: 26px; }
+.mark.right { background: var(--green); }
+.mark.wrong { background: var(--red); }
+.group-name { font-size: 0.72rem; color: var(--muted); white-space: nowrap; }
+.count { margin-left: auto; font-size: 0.85rem; color: var(--muted); white-space: nowrap; padding-bottom: 1.1rem; }
+
+/* ---------- conteúdo ---------- */
+main { max-width: 46rem; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+h1 {
+  font-family: "Source Serif 4", Georgia, "Times New Roman", serif;
+  font-weight: 600;
+  font-size: clamp(1.7rem, 4.5vw, 2.35rem);
+  line-height: 1.15;
+  margin: 0 0 0.75rem;
+}
+h2 {
+  font-family: "Source Serif 4", Georgia, serif;
+  font-weight: 600;
+  font-size: 1.35rem;
+  margin: 2rem 0 0.75rem;
+}
+.lead { font-size: 1.05rem; color: var(--muted); max-width: 38rem; margin: 0 0 1.5rem; }
+.serif { font-family: "Source Serif 4", Georgia, serif; }
+
+.topics { list-style: none; padding: 0; margin: 0 0 2rem; }
+.topics li {
+  display: flex;
+  gap: 0.75rem;
+  align-items: baseline;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+.topics li:last-child { border-bottom: 0; }
+.topics .t-name { font-weight: 700; flex: 1 1 auto; }
+.topics .t-dicas { color: var(--muted); font-size: 0.9rem; white-space: nowrap; }
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+.btn {
+  display: inline-block;
+  border: 2px solid var(--blue);
+  background: var(--blue);
+  color: var(--board);
+  font-weight: 700;
+  padding: 0.65rem 1.4rem;
+  border-radius: 999px;
+}
+.btn:hover { filter: brightness(1.08); }
+.btn.ghost { background: transparent; color: var(--blue); }
+a.btn { text-decoration: none; }
+.btn:focus-visible, .opt:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+
+/* ---------- questão ---------- */
+.q-topic { color: var(--blue); font-weight: 700; font-size: 0.95rem; margin: 0 0 0.5rem; }
+.q-text {
+  font-family: "Source Serif 4", Georgia, serif;
+  font-size: 1.15rem;
+  line-height: 1.6;
+  margin: 0 0 1.4rem;
+}
+.opts { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.25rem; }
+.opt {
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-start;
+  text-align: left;
+  width: 100%;
+  color: var(--ink);
+  background: var(--board-2);
+  border: 2px solid transparent;
+  border-radius: 12px;
+  padding: 0.8rem 1rem;
+  font-family: "Source Serif 4", Georgia, serif;
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+.opt:hover:not([disabled]) { border-color: var(--blue); }
+.opt .key {
+  flex: 0 0 auto;
+  font-family: "Atkinson Hyperlegible", system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--muted);
+  border: 1.5px solid var(--rule);
+  border-radius: 50%;
+  width: 1.7rem;
+  height: 1.7rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.1rem;
+}
+.opt[disabled] { cursor: default; }
+.opt.is-right { background: var(--green-wash); border-color: var(--green); }
+.opt.is-right .key { border-color: var(--green); color: var(--green); }
+.opt.is-wrong { background: var(--red-wash); border-color: var(--red); }
+.opt.is-wrong .key { border-color: var(--red); color: var(--red); }
+.opt.faded { opacity: 0.55; }
+
+.feedback {
+  border-left: 4px solid var(--blue);
+  padding: 0.25rem 0 0.25rem 1rem;
+  margin: 0 0 1.5rem;
+}
+.feedback.right { border-color: var(--green); }
+.feedback.wrong { border-color: var(--red); }
+.verdict { font-weight: 700; margin: 0 0 0.35rem; }
+.feedback.right .verdict { color: var(--green); }
+.feedback.wrong .verdict { color: var(--red); }
+.feedback .expl { font-family: "Source Serif 4", Georgia, serif; font-size: 1.02rem; line-height: 1.6; margin: 0 0 0.5rem; }
+.feedback .see { font-size: 0.9rem; color: var(--muted); margin: 0; }
+.nav { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
+.hint { font-size: 0.85rem; color: var(--muted); }
+
+/* ---------- resultado ---------- */
+.score {
+  font-family: "Source Serif 4", Georgia, serif;
+  font-size: clamp(2.6rem, 9vw, 3.6rem);
+  font-weight: 600;
+  line-height: 1;
+  margin: 0.25rem 0 0.5rem;
+}
+.score small { font-size: 0.45em; color: var(--muted); font-weight: 400; }
+.diag { list-style: none; padding: 0; margin: 1rem 0 2rem; }
+.diag li { padding: 1rem 0; border-bottom: 1px solid var(--rule); }
+.diag li:last-child { border-bottom: 0; }
+.diag-head { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+.diag-name { font-weight: 700; flex: 1 1 14rem; }
+.diag .marks { height: 24px; }
+.diag-verdict { margin: 0.4rem 0 0; font-size: 0.95rem; }
+.diag-verdict.ok { color: var(--green); }
+.diag-verdict.mid { color: var(--blue); }
+.diag-verdict.weak { color: var(--red); }
+.review { margin: 0 0 1.5rem; }
+.review-item { border-left: 4px solid var(--red); padding: 0.1rem 0 0.1rem 1rem; margin: 0 0 1.25rem; }
+.review-item .q-text { font-size: 1.02rem; margin-bottom: 0.5rem; }
+.review-item p { margin: 0 0 0.4rem; }
+.ans { font-family: "Source Serif 4", Georgia, serif; }
+.label-right { color: var(--green); font-weight: 700; }
+.label-wrong { color: var(--red); font-weight: 700; }
+
+mjx-container { color: inherit; }
+mjx-container[display="true"] { overflow-x: auto; overflow-y: hidden; max-width: 100%; }
+
+@media (prefers-reduced-motion: reduce) {
+  .mark { transition: none; }
+}
+@media (max-width: 520px) {
+  .tally-inner { gap: 0.8rem; padding: 0.6rem 1rem; }
+  .group-name { display: none; }
+  .count { padding-bottom: 0; }
+  main { padding-top: 1.5rem; }
+}
+</style>
+<style>
+.nome-box { margin: 0 0 1.5rem; max-width: 26rem; }
+.nome-box label { display: block; font-weight: 700; margin: 0 0 0.4rem; }
+.nome-box input {
+  width: 100%;
+  font: inherit;
+  color: var(--ink);
+  background: var(--board-2);
+  border: 2px solid var(--rule);
+  border-radius: 10px;
+  padding: 0.6rem 0.8rem;
+}
+.nome-box input:focus { outline: none; border-color: var(--blue); }
+.erro { color: var(--red); font-size: 0.9rem; min-height: 1.2rem; margin: 0.35rem 0 0; }
+.ident { margin: 0 0 1rem; }
+.ident .quem { font-weight: 700; font-size: 1.1rem; margin: 0; }
+.ident .quando { color: var(--muted); font-size: 0.9rem; margin: 0.15rem 0 0; }
+.parecer {
+  font-family: "Source Serif 4", Georgia, serif;
+  font-size: 1.08rem;
+  line-height: 1.65;
+  background: var(--blue-wash);
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  margin: 0 0 1.5rem;
+}
+.parecer p { margin: 0 0 0.6rem; }
+.parecer p:last-child { margin-bottom: 0; }
+</style>
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$']],
+      displayMath: [['\\[', '\\]']],
+      macros: {
+        R: '\\mathbb{R}', N: '\\mathbb{N}', Z: '\\mathbb{Z}', Q: '\\mathbb{Q}',
+        zero: '\\vec{0}', Lin: '\\mathcal{L}', GL: '\\mathrm{GL}',
+        vol: '\\operatorname{vol}', fr: '\\operatorname{fr}', inte: '\\operatorname{int}',
+        posto: '\\operatorname{posto}', sen: '\\operatorname{sen}', tr: '\\operatorname{tr}',
+        diam: '\\operatorname{diam}'
+      }
+    },
+    svg: { fontCache: 'global' },
+    startup: {
+      typeset: false,
+      ready: function () {
+        MathJax.startup.defaultReady();
+        MathJax.startup.promise.then(function () { window.__mjReady && window.__mjReady(); });
+      }
+    }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js" defer></script>
+</head>
+<body>
+
+<div class="tally" aria-hidden="true">
+  <div class="tally-inner" id="tally"></div>
+</div>
+
+<main id="app" aria-live="polite"></main>
+
+<script>
+var INFO = {"titulo": "Quiz de preparação para a P3", "lead": "Análise no $\\R^n$ · PMA005. São 20 questões de múltipla escolha, quatro por tema, sorteadas de um banco de 40 (a cada tentativa, questões diferentes), sobre a matéria da P3 (capítulos 6 e 7 das notas de aula). Cada resposta é corrigida na hora, com a explicação e a seção das notas que trata do assunto. No final, você recebe um diagnóstico por tema e um retorno sobre o seu resultado.", "fraco": "Ponto fraco: vale estudar este tema antes da prova.", "abertura": ["você acertou todas as %N questões. Excelente!", "você acertou %T de %N questões: um ótimo resultado.", "você acertou %T de %N questões: um bom resultado, mas ainda há pontos a ajustar.", "você acertou %T de %N questões. A base existe, mas vários pontos precisam ser revistos antes da prova.", "você acertou %T de %N questões. Este resultado mostra que ainda há bastante a estudar para a prova."], "conselho": "Releia essas seções das notas de aula e refaça os exercícios correspondentes.", "fecho": ["O próximo passo é escrever as demonstrações por extenso: na prova elas são cobradas completas, e o quiz não avalia isso.", "Você está bem encaminhado para a prova. Use o tempo que resta para treinar a redação das demonstrações.", "Depois de rever esses temas, refaça o quiz: a cada tentativa são sorteadas outras questões.", "Organize o estudo pelos temas acima e refaça o quiz em seguida. Se a dúvida persistir, traga-a para a aula ou para o atendimento.", "Não deixe para a véspera: comece pelos temas mais fracos, refaça os exemplos das notas e procure o professor no atendimento."]};
+var TOPICS = [{"name": "Blocos", "long": "Integral em blocos", "low": "integral em blocos", "ver": "seções 6.1 e 6.2"}, {"name": "Medida nula", "long": "Medida nula e critério de Lebesgue", "low": "medida nula e critério de Lebesgue", "ver": "seções 6.3 a 6.5"}, {"name": "Fubini", "long": "Teorema de Fubini", "low": "Teorema de Fubini", "ver": "seção 6.6"}, {"name": "Jordan", "long": "Conjuntos J-mensuráveis e somas de Riemann", "low": "conjuntos J-mensuráveis e somas de Riemann", "ver": "seções 6.7 a 6.9"}, {"name": "Mudança", "long": "Mudança de variáveis", "low": "mudança de variáveis", "ver": "capítulo 7"}];
+var BANK = [
+ {
+  "t": 0,
+  "ref": "Seção 6.2 das notas",
+  "q": "Sejam $f\\colon A\\to\\R$ limitada e $Q$ uma partição que refina $P$. Então:",
+  "o": [
+   "$s(f;P)\\le s(f;Q)\\le S(f;Q)\\le S(f;P)$.",
+   "$s(f;Q)\\le s(f;P)\\le S(f;P)\\le S(f;Q)$.",
+   "$s(f;Q)=s(f;P)$ e $S(f;Q)=S(f;P)$.",
+   "$S(f;Q)\\le s(f;P)$."
+  ],
+  "e": "Cada bloco $B$ de $P$ é reunião de blocos $B'$ de $Q$, e $m_B(f)\\le m_{B'}(f)$, $M_{B'}(f)\\le M_B(f)$. Refinar aumenta (ou mantém) as somas inferiores e diminui (ou mantém) as superiores."
+ },
+ {
+  "t": 0,
+  "ref": "Seção 6.2 das notas",
+  "q": "Uma função limitada $f\\colon A\\to\\R$ é integrável se, e somente se:",
+  "o": [
+   "para todo $\\varepsilon\\gt 0$ existe uma partição $P$ com $\\sum_{B\\in P}\\omega_B(f)\\vol B\\lt \\varepsilon$.",
+   "para todo $\\varepsilon\\gt 0$ existe uma partição $P$ com $\\omega_B(f)\\lt \\varepsilon$ em todo bloco $B\\in P$.",
+   "existe uma partição $P$ com $s(f;P)=S(f;P)$.",
+   "$f$ é contínua."
+  ],
+  "e": "É o critério de Riemann, pois $S(f;P)-s(f;P)=\\sum\\omega_B(f)\\vol B$. A segunda condição é suficiente, mas não necessária: a função característica de um sub-bloco é integrável e tem oscilação $1$ em todo bloco que encontra a fronteira dele."
+ },
+ {
+  "t": 0,
+  "ref": "Seção 6.2 das notas",
+  "q": "Seja $f\\colon[0,1]^2\\to\\R$ com $f=1$ em $\\Q^2$ e $f=0$ fora de $\\Q^2$. Então:",
+  "o": [
+   "$\\underline{\\int}f=0$ e $\\overline{\\int}f=1$; $f$ não é integrável.",
+   "$f$ é integrável com integral $0$, pois $\\Q^2$ é enumerável.",
+   "$f$ é integrável com integral $1$.",
+   "$\\underline{\\int}f=\\overline{\\int}f=1/2$."
+  ],
+  "e": "Todo bloco contém pontos de $\\Q^2$ e pontos fora dele, logo toda soma inferior vale $0$ e toda soma superior vale $1$. Pelo critério de Lebesgue, o problema é que $f$ é descontínua em todos os pontos."
+ },
+ {
+  "t": 0,
+  "ref": "Seção 6.2 das notas",
+  "q": "Seja $A=[0,2]\\times[1,4]\\times[0,1]$. Quanto vale $\\int_A5\\,dx$?",
+  "o": [
+   "$30$.",
+   "$15$.",
+   "$10$.",
+   "$60$."
+  ],
+  "e": "A integral de uma constante $c$ é $c\\vol A$, e $\\vol A=2\\cdot3\\cdot1=6$. Logo a integral vale $30$."
+ },
+ {
+  "t": 1,
+  "ref": "Seção 6.3 das notas",
+  "q": "Qual dos subconjuntos de $\\R^2$ tem medida nula?",
+  "o": [
+   "O gráfico de uma função contínua $f\\colon[0,1]\\to\\R$.",
+   "O quadrado aberto $(0,1)^2$.",
+   "$(\\R\\setminus\\Q)^2$.",
+   "Qualquer conjunto de interior vazio."
+  ],
+  "e": "Pela continuidade uniforme, o gráfico é coberto por retângulos de altura $\\varepsilon$ cuja soma das áreas é $\\varepsilon$. Um conjunto de medida nula tem interior vazio, mas a recíproca é falsa: $(\\R\\setminus\\Q)^2$ tem interior vazio e não tem medida nula (senão $\\R^2$ seria reunião de dois conjuntos de medida nula)."
+ },
+ {
+  "t": 1,
+  "ref": "Seção 6.4 das notas",
+  "q": "Seja $f\\colon[0,1]\\to\\R$, $f(x)=\\sen(1/x)$ para $x\\neq0$ e $f(0)=0$.",
+  "o": [
+   "$f$ é integrável, pois é limitada e só é descontínua em $0$.",
+   "$f$ não é integrável, pois não tem limite em $0$.",
+   "$f$ só é integrável se for redefinida em $0$ de modo contínuo.",
+   "$f$ não é integrável, pois oscila infinitas vezes."
+  ],
+  "e": "Pelo critério de Lebesgue, basta que $f$ seja limitada e que $D_f=\\{0\\}$ tenha medida nula. Nenhum valor em $0$ torna $f$ contínua, e isso é irrelevante para a integrabilidade."
+ },
+ {
+  "t": 1,
+  "ref": "Seção 6.4 das notas",
+  "q": "Seja $f\\colon[0,1]\\to\\R$ com $f(p/q)=1/q$ ($p/q$ irredutível) e $f(x)=0$ se $x$ é irracional.",
+  "o": [
+   "$f$ é integrável com integral $0$, pois $D_f=\\Q\\cap[0,1]$ tem medida nula.",
+   "$f$ não é integrável, pois é descontínua num conjunto denso.",
+   "$f$ é integrável, pois só é descontínua nos irracionais.",
+   "$f$ é integrável com integral positiva."
+  ],
+  "e": "$f$ é contínua nos irracionais e descontínua nos racionais; $\\Q\\cap[0,1]$ é enumerável, logo de medida nula. A integral é $0$, pois $f$ se anula fora de um conjunto de medida nula e a função nula é integrável."
+ },
+ {
+  "t": 1,
+  "ref": "Seção 6.5 das notas",
+  "q": "Seja $f\\colon[0,1]\\to\\R$ integrável e $g$ igual a $f$ fora de um conjunto $Z$ de medida nula. Então:",
+  "o": [
+   "$g$ pode não ser integrável; mas, se for, $\\int g=\\int f$.",
+   "$g$ é integrável e $\\int g=\\int f$.",
+   "$g$ é integrável, mas $\\int g$ pode diferir de $\\int f$.",
+   "$g$ nunca é integrável quando $Z\\neq\\emptyset$."
+  ],
+  "e": "Com $f=0$ e $g=\\chi_{\\Q\\cap[0,1]}$, $g$ não é integrável. Se $g$ for integrável, $f-g$ é integrável e se anula fora de $Z$, que tem interior vazio; daí $\\int(f-g)=0$."
+ },
+ {
+  "t": 2,
+  "ref": "Seção 6.6 das notas",
+  "q": "Quanto vale $\\int_{[0,1]\\times[0,2]}(x+y)\\,dx\\,dy$?",
+  "o": [
+   "$3$.",
+   "$2$.",
+   "$4$.",
+   "$3/2$."
+  ],
+  "e": "Pelo Teorema de Fubini, $\\int_0^1\\int_0^2(x+y)\\,dy\\,dx=\\int_0^1(2x+2)\\,dx=1+2=3$."
+ },
+ {
+  "t": 2,
+  "ref": "Seção 6.6 das notas",
+  "q": "Em $[0,1]^2$, seja $f(x,y)=1$ se $x=1/2$ e $y\\in\\Q$, e $f(x,y)=0$ nos demais pontos.",
+  "o": [
+   "$f$ é integrável, mas $y\\mapsto f(1/2,y)$ não é; por isso o Teorema de Fubini usa integrais inferior e superior na integração interna.",
+   "$f$ não é integrável.",
+   "O Teorema de Fubini não se aplica a $f$.",
+   "$y\\mapsto f(x,y)$ é integrável para todo $x$."
+  ],
+  "e": "$D_f=\\{1/2\\}\\times[0,1]$ tem medida nula, logo $f$ é integrável (com integral $0$). Mas $f_{1/2}$ é a função de Dirichlet. As funções $\\varphi$ e $\\psi$ do teorema diferem apenas em $x=1/2$."
+ },
+ {
+  "t": 2,
+  "ref": "Seção 6.6 das notas",
+  "q": "Quanto vale $\\displaystyle\\int_0^1\\int_x^1e^{y^2}\\,dy\\,dx$?",
+  "o": [
+   "$(e-1)/2$.",
+   "$e-1$.",
+   "$(e+1)/2$.",
+   "Não pode ser calculada, pois $e^{y^2}$ não tem primitiva elementar."
+  ],
+  "e": "A região é $\\{0\\le x\\le y\\le1\\}$. Trocando a ordem, $\\int_0^1\\int_0^ye^{y^2}\\,dx\\,dy=\\int_0^1ye^{y^2}\\,dy=\\frac12(e-1)$."
+ },
+ {
+  "t": 2,
+  "ref": "Seção 6.6 das notas",
+  "q": "Seja $f\\colon[0,1]^2\\to\\R$ limitada, e suponha que as duas integrais iteradas existam e sejam iguais. Então:",
+  "o": [
+   "$f$ pode não ser integrável em $[0,1]^2$.",
+   "$f$ é integrável, e sua integral é o valor comum.",
+   "$f$ é contínua fora de um conjunto de medida nula.",
+   "$f$ é integrável, por ser limitada."
+  ],
+  "e": "Há funções limitadas com integrais iteradas iguais que não são integráveis: a função característica do conjunto dos pontos $(k/2^l,j/2^l)$, com $k,j$ ímpares, é descontínua em todo ponto, mas cada reta horizontal ou vertical o encontra num conjunto finito. O Teorema de Fubini parte da integrabilidade de $f$."
+ },
+ {
+  "t": 3,
+  "ref": "Seção 6.7 das notas",
+  "q": "Sobre $X=\\Q\\cap[0,1]$:",
+  "o": [
+   "$X$ tem medida nula, mas não é J-mensurável, pois $\\fr X=[0,1]$.",
+   "$X$ é J-mensurável, com volume $0$.",
+   "$X$ não tem medida nula.",
+   "$X$ é J-mensurável, com volume $1$."
+  ],
+  "e": "Ser J-mensurável significa ter fronteira de medida nula. O volume interno de $X$ é $0$ e o externo é $1$. Para compactos, medida nula equivale a volume nulo, mas $X$ não é compacto."
+ },
+ {
+  "t": 3,
+  "ref": "Seção 6.8 das notas",
+  "q": "Qual é a área de $X=\\{(x,y)\\colon0\\le x\\le1,\\ x^2\\le y\\le x\\}$?",
+  "o": [
+   "$1/6$.",
+   "$1/3$.",
+   "$1/2$.",
+   "$1/12$."
+  ],
+  "e": "$X$ é a região entre os gráficos das funções contínuas $x^2\\le x$ sobre $[0,1]$. Logo $\\vol X=\\int_0^1(x-x^2)\\,dx=\\frac12-\\frac13=\\frac16$."
+ },
+ {
+  "t": 3,
+  "ref": "Seção 6.7 das notas",
+  "q": "Qual dos subconjuntos de $\\R^2$ é J-mensurável?",
+  "o": [
+   "$B[\\zero;1]\\cup\\{(2,2)\\}$.",
+   "$\\Q^2\\cap[0,1]^2$.",
+   "$[0,1]^2\\setminus\\Q^2$.",
+   "$(0,1)\\times(\\Q\\cap(0,1))$."
+  ],
+  "e": "A fronteira de $B[\\zero;1]\\cup\\{(2,2)\\}$ é o círculo unitário mais um ponto, que tem medida nula. Os outros três têm fronteira igual a $[0,1]^2$."
+ },
+ {
+  "t": 3,
+  "ref": "Seção 6.9 das notas",
+  "q": "Quanto vale $\\displaystyle\\lim_{k\\to\\infty}\\frac1{k^2}\\sum_{i,j=1}^k\\frac ik\\cdot\\frac jk$?",
+  "o": [
+   "$1/4$.",
+   "$1/2$.",
+   "$1$.",
+   "$1/3$."
+  ],
+  "e": "É uma soma de Riemann de $f(x,y)=xy$ em $[0,1]^2$, relativa à partição em quadrados de lado $1/k$ e aos vértices superiores direitos. Como a norma tende a $0$, o limite é $\\int_{[0,1]^2}xy=\\frac12\\cdot\\frac12=\\frac14$."
+ },
+ {
+  "t": 4,
+  "ref": "Seção 7.6 das notas",
+  "q": "Seja $T\\in\\Lin(\\R^2)$ com matriz $\\begin{bmatrix}2&1\\\\0&3\\end{bmatrix}$ e $X=[0,1]^2$. Qual é a área de $T(X)$?",
+  "o": [
+   "$6$.",
+   "$5$.",
+   "$7$.",
+   "$1$."
+  ],
+  "e": "$\\vol T(X)=|\\det T|\\vol X=6\\cdot1=6$. $T(X)$ é o paralelogramo gerado por $(2,0)$ e $(1,3)$."
+ },
+ {
+  "t": 4,
+  "ref": "Seção 7.6 das notas",
+  "q": "Quanto vale $\\displaystyle\\int_{x^2+y^2\\le1}(x^2+y^2)\\,dx\\,dy$?",
+  "o": [
+   "$\\pi/2$.",
+   "$2\\pi/3$.",
+   "$\\pi$.",
+   "$\\pi/4$."
+  ],
+  "e": "Em coordenadas polares, o integrando é $\\rho^2$ e o jacobiano é $\\rho$: $\\int_0^{2\\pi}\\int_0^1\\rho^3\\,d\\rho\\,d\\theta=2\\pi\\cdot\\frac14=\\frac\\pi2$. Esquecer o jacobiano dá $2\\pi/3$."
+ },
+ {
+  "t": 4,
+  "ref": "Seção 7.5 das notas",
+  "q": "Seja $h(t)=t^2$ em $X=[-1,1]$ e $f\\equiv1$. Comparando $\\int_{h(X)}f$ com $\\int_X(f\\circ h)|h'|$:",
+  "o": [
+   "os valores são $1$ e $2$; a fórmula falha porque $h$ não é injetiva no interior de $X$.",
+   "os dois lados valem $1$.",
+   "os dois lados valem $2$.",
+   "os valores são $1$ e $2$; a fórmula falha apenas porque $h'(0)=0$."
+  ],
+  "e": "$h(X)=[0,1]$, logo o lado esquerdo vale $1$, e $\\int_{-1}^1|2t|\\,dt=2$. A falha vem de $h$ cobrir $[0,1]$ duas vezes. Compare com $h(t)=t^3$, que também tem $h'(0)=0$, mas é injetiva: aí os dois lados valem $2$."
+ },
+ {
+  "t": 4,
+  "ref": "Seção 7.6 das notas",
+  "q": "Nas coordenadas esféricas $h(\\rho,\\phi,\\theta)=(\\rho\\sen\\phi\\cos\\theta,\\rho\\sen\\phi\\sen\\theta,\\rho\\cos\\phi)$, quanto vale $|\\det h'(\\rho,\\phi,\\theta)|$?",
+  "o": [
+   "$\\rho^2\\sen\\phi$.",
+   "$\\rho\\sen\\phi$.",
+   "$\\rho^2\\cos\\phi$.",
+   "$\\rho^2$."
+  ],
+  "e": "Desenvolvendo o determinante da matriz jacobiana obtém-se $\\pm\\rho^2\\sen\\phi$. Com ele, $\\vol B[\\zero;r]=\\int_0^r\\int_0^\\pi\\int_0^{2\\pi}\\rho^2\\sen\\phi\\,d\\theta\\,d\\phi\\,d\\rho=\\frac43\\pi r^3$."
+ },
+ {
+  "t": 0,
+  "ref": "Seção 6.2 das notas",
+  "q": "Seja $f\\colon[0,1]^2\\to\\R$ contínua com $1\\le f\\le3$. Então:",
+  "o": [
+   "$1\\le\\int f\\le3$.",
+   "$\\int f=2$.",
+   "$\\int f\\le1$.",
+   "$3\\le\\int f\\le9$."
+  ],
+  "e": "Se $m\\le f\\le M$, então $m\\vol A\\le\\int_Af\\le M\\vol A$, e aqui $\\vol A=1$. O valor exato depende de $f$."
+ },
+ {
+  "t": 0,
+  "ref": "Seção 6.1 das notas",
+  "q": "Seja $A=[0,2]\\times[0,3]$ e $P=P_1\\times P_2$ com $P_1=\\{0,1,2\\}$ e $P_2=\\{0,1,2,3\\}$. Quantos blocos tem $P$, e qual é a soma de seus volumes?",
+  "o": [
+   "$6$ blocos; a soma é $6$.",
+   "$12$ blocos; a soma é $6$.",
+   "$6$ blocos; a soma é $12$.",
+   "$5$ blocos; a soma é $6$."
+  ],
+  "e": "$P_1$ determina $2$ intervalos e $P_2$ determina $3$, logo $2\\cdot3=6$ blocos, todos quadrados de lado $1$. A soma dos volumes dos blocos de uma partição é sempre $\\vol A=6$."
+ },
+ {
+  "t": 0,
+  "ref": "Seção 6.2 das notas",
+  "q": "Seja $f(x,y)=x+y$ em $[0,1]^2$ e $P$ a partição com $P_1=P_2=\\{0,1/2,1\\}$. Quanto vale $S(f;P)$?",
+  "o": [
+   "$3/2$.",
+   "$1$.",
+   "$1/2$.",
+   "$2$."
+  ],
+  "e": "Os quatro blocos têm área $1/4$, e os máximos de $f$ neles são $1$, $3/2$, $3/2$ e $2$. Logo $S(f;P)=\\frac14(1+\\frac32+\\frac32+2)=\\frac32$. A integral vale $1$, e $s(f;P)=\\frac12$."
+ },
+ {
+  "t": 0,
+  "ref": "Seção 6.2 das notas",
+  "q": "Na demonstração de que toda função contínua num bloco $A$ é integrável, a propriedade decisiva é:",
+  "o": [
+   "a continuidade uniforme de $f$ no compacto $A$.",
+   "o Teorema do Valor Intermediário.",
+   "a existência de máximo de $f$ em $A$.",
+   "a diferenciabilidade de $f$."
+  ],
+  "e": "Dado $\\varepsilon$, a continuidade uniforme fornece $\\delta$ que torna a oscilação pequena em todos os blocos de diâmetro menor que $\\delta$ ao mesmo tempo; daí $\\sum\\omega_B(f)\\vol B$ é pequena."
+ },
+ {
+  "t": 1,
+  "ref": "Seção 6.3 das notas",
+  "q": "Todo subconjunto enumerável de $\\R^n$:",
+  "o": [
+   "tem medida nula.",
+   "é J-mensurável.",
+   "é fechado.",
+   "tem medida nula apenas se for limitado."
+  ],
+  "e": "Cubra o $k$-ésimo ponto por um bloco de volume $\\varepsilon/2^k$. $\\Q\\cap[0,1]$ é enumerável e não é J-mensurável nem fechado."
+ },
+ {
+  "t": 1,
+  "ref": "Seção 6.3 das notas",
+  "q": "Todo conjunto de medida nula em $\\R^n$:",
+  "o": [
+   "tem interior vazio.",
+   "é enumerável.",
+   "é limitado.",
+   "é J-mensurável."
+  ],
+  "e": "Um bloco não tem medida nula, logo um conjunto de medida nula não contém bloco algum. O conjunto de Cantor tem medida nula e não é enumerável; um hiperplano tem medida nula e não é limitado; $\\Q\\cap[0,1]$ não é J-mensurável."
+ },
+ {
+  "t": 1,
+  "ref": "Seção 6.3 das notas",
+  "q": "Sejam $X\\subset\\R^n$ de medida nula e $f\\colon\\R^n\\to\\R^n$ de classe $C^1$. Então:",
+  "o": [
+   "$f(X)$ tem medida nula.",
+   "$f(X)$ tem medida nula apenas se $f$ for um difeomorfismo.",
+   "$f(X)$ pode não ter medida nula.",
+   "$f(X)$ é enumerável."
+  ],
+  "e": "$f$ é lipschitziana em cada cubo compacto contido no domínio (Desigualdade do Valor Médio), e aplicações lipschitzianas preservam conjuntos de medida nula. Esse fato é usado na mudança de variáveis."
+ },
+ {
+  "t": 1,
+  "ref": "Seção 6.5 das notas",
+  "q": "Sejam $f,g\\colon A\\to\\R$ integráveis. Então:",
+  "o": [
+   "$fg$ e $\\max\\{f,g\\}$ são integráveis.",
+   "$f/g$ é integrável sempre que $g(x)\\neq0$ para todo $x$.",
+   "$fg$ é integrável, mas $\\max\\{f,g\\}$ pode não ser.",
+   "$f+g$ é integrável, mas $fg$ pode não ser."
+  ],
+  "e": "Os pontos de descontinuidade de $fg$ e de $\\max\\{f,g\\}$ estão em $D_f\\cup D_g$, que tem medida nula. Para $f/g$ é preciso $|g|\\ge k\\gt 0$: em $[0,1]$, $g(x)=x$ para $x\\gt 0$ e $g(0)=1$ não se anula, mas $1/g$ é ilimitada."
+ },
+ {
+  "t": 2,
+  "ref": "Seção 6.6 das notas",
+  "q": "Quanto vale $\\int_{[0,1]^2}xy^2\\,dx\\,dy$?",
+  "o": [
+   "$1/6$.",
+   "$1/5$.",
+   "$1/3$.",
+   "$1/2$."
+  ],
+  "e": "Por Fubini, $\\int_0^1x\\,dx\\cdot\\int_0^1y^2\\,dy=\\frac12\\cdot\\frac13=\\frac16$."
+ },
+ {
+  "t": 2,
+  "ref": "Seção 6.6 das notas",
+  "q": "Sejam $g\\colon[a,b]\\to\\R$ e $h\\colon[c,d]\\to\\R$ integráveis e $f(x,y)=g(x)h(y)$. Então:",
+  "o": [
+   "$f$ é integrável em $[a,b]\\times[c,d]$ e $\\int f=\\bigl(\\int_a^bg\\bigr)\\bigl(\\int_c^dh\\bigr)$.",
+   "$\\int f=\\int_a^bg+\\int_c^dh$.",
+   "$f$ pode não ser integrável.",
+   "a fórmula do produto vale apenas se $g$ e $h$ forem contínuas."
+  ],
+  "e": "$D_f\\subset(D_g\\times[c,d])\\cup([a,b]\\times D_h)$, que tem medida nula, logo $f$ é integrável. Por Fubini, $\\int f=\\int_a^b\\bigl(g(x)\\int_c^dh\\bigr)dx$."
+ },
+ {
+  "t": 2,
+  "ref": "Seção 6.8 das notas",
+  "q": "Qual integral iterada é igual a $\\displaystyle\\int_0^1\\int_y^1f(x,y)\\,dx\\,dy$, para $f$ contínua?",
+  "o": [
+   "$\\displaystyle\\int_0^1\\int_0^xf(x,y)\\,dy\\,dx$.",
+   "$\\displaystyle\\int_0^1\\int_x^1f(x,y)\\,dy\\,dx$.",
+   "$\\displaystyle\\int_0^1\\int_0^1f(x,y)\\,dy\\,dx$.",
+   "$\\displaystyle\\int_0^1\\int_0^{1-x}f(x,y)\\,dy\\,dx$."
+  ],
+  "e": "A região é $\\{(x,y)\\colon0\\le y\\le x\\le1\\}$: para cada $x\\in[0,1]$, $y$ varia de $0$ a $x$."
+ },
+ {
+  "t": 2,
+  "ref": "Seção 6.8 das notas",
+  "q": "Qual é o volume do cone $\\{(x,y,t)\\colon0\\le t\\le h,\\ x^2+y^2\\le r^2(1-t/h)^2\\}$?",
+  "o": [
+   "$\\pi r^2h/3$.",
+   "$\\pi r^2h/2$.",
+   "$\\pi r^2h$.",
+   "$2\\pi r^2h/3$."
+  ],
+  "e": "Integrando primeiro em $(x,y)$, a seção na altura $t$ é um disco de área $\\pi r^2(1-t/h)^2$, e $\\int_0^h\\pi r^2(1-t/h)^2dt=\\pi r^2h/3$."
+ },
+ {
+  "t": 3,
+  "ref": "Seção 6.7 das notas",
+  "q": "Seja $K\\subset\\R^n$ compacto de medida nula. Então:",
+  "o": [
+   "$K$ é J-mensurável e $\\vol K=0$.",
+   "$K$ pode não ser J-mensurável.",
+   "$K$ é finito.",
+   "$K$ tem volume positivo, se não for enumerável."
+  ],
+  "e": "$\\fr K\\subset K$ tem medida nula, e por compacidade $K$ é coberto por finitos blocos de volume total tão pequeno quanto se queira. O conjunto de Cantor é um exemplo não enumerável."
+ },
+ {
+  "t": 3,
+  "ref": "Seção 6.7 das notas",
+  "q": "Sejam $X,Y$ J-mensuráveis com $\\vol(X\\cap Y)=0$. Então $\\vol(X\\cup Y)$ é igual a:",
+  "o": [
+   "$\\vol X+\\vol Y$.",
+   "$\\max\\{\\vol X,\\vol Y\\}$.",
+   "$\\vol X+\\vol Y$ apenas se $X\\cap Y=\\emptyset$.",
+   "$\\vol X\\cdot\\vol Y$."
+  ],
+  "e": "Em geral $\\vol(X\\cup Y)=\\vol X+\\vol Y-\\vol(X\\cap Y)$, consequência de $\\chi_{X\\cup Y}=\\chi_X+\\chi_Y-\\chi_{X\\cap Y}$. É o que permite somar as integrais sobre as partes de uma decomposição, que podem se tocar nas fronteiras."
+ },
+ {
+  "t": 3,
+  "ref": "Seção 6.9 das notas",
+  "q": "Para toda decomposição $D$ de um conjunto J-mensurável $X$ e toda $f\\colon X\\to\\R$ limitada, vale:",
+  "o": [
+   "$s(f;D)\\le\\underline{\\int}_Xf\\le\\overline{\\int}_Xf\\le S(f;D)$.",
+   "$\\underline{\\int}_Xf\\le s(f;D)\\le S(f;D)\\le\\overline{\\int}_Xf$.",
+   "$s(f;D)=\\underline{\\int}_Xf$.",
+   "$S(f;D)\\le\\underline{\\int}_Xf$."
+  ],
+  "e": "É o Lema 6.39 das notas. Combinado com o limite quando $|D|\\to0$, mostra que a integral é o limite das somas de Riemann."
+ },
+ {
+  "t": 3,
+  "ref": "Seção 6.9 das notas",
+  "q": "Quanto vale $\\displaystyle\\lim_{k\\to\\infty}\\frac1k\\sum_{i=1}^k\\Bigl(\\frac ik\\Bigr)^2$?",
+  "o": [
+   "$1/3$.",
+   "$1/2$.",
+   "$1$.",
+   "$1/4$."
+  ],
+  "e": "É uma soma de Riemann de $x^2$ em $[0,1]$ relativa à decomposição em intervalos de comprimento $1/k$; o limite é $\\int_0^1x^2dx=1/3$."
+ },
+ {
+  "t": 4,
+  "ref": "Seção 7.6 das notas",
+  "q": "Quanto vale $\\displaystyle\\int_{1\\le x^2+y^2\\le4}\\frac{dx\\,dy}{x^2+y^2}$?",
+  "o": [
+   "$2\\pi\\log2$.",
+   "$\\pi\\log2$.",
+   "$3\\pi$.",
+   "$2\\pi$."
+  ],
+  "e": "Em coordenadas polares, $\\int_0^{2\\pi}\\int_1^2\\frac1{\\rho^2}\\rho\\,d\\rho\\,d\\theta=2\\pi\\log2$."
+ },
+ {
+  "t": 4,
+  "ref": "Seção 7.6 das notas",
+  "q": "Qual é a área da elipse $\\{(x,y)\\colon x^2/a^2+y^2/b^2\\le1\\}$, com $a,b\\gt 0$?",
+  "o": [
+   "$\\pi ab$.",
+   "$\\pi(a+b)$.",
+   "$\\pi a^2b^2$.",
+   "$2\\pi ab$."
+  ],
+  "e": "A elipse é a imagem do disco unitário pela aplicação linear $T(u,v)=(au,bv)$, com $|\\det T|=ab$; logo sua área é $ab\\cdot\\pi$."
+ },
+ {
+  "t": 4,
+  "ref": "Seção 7.5 das notas",
+  "q": "Ao usar coordenadas polares em $X=[0,r]\\times[0,2\\pi]$, a aplicação não é injetiva em $\\rho=0$ nem em $\\theta\\in\\{0,2\\pi\\}$, e o jacobiano se anula em $\\rho=0$. Por que isso não atrapalha?",
+  "o": [
+   "Porque esses problemas ocorrem só na fronteira de $X$, e a versão da fórmula do Corolário 7.10 exige injetividade e jacobiano não nulo apenas no interior.",
+   "Porque o jacobiano é positivo em todo $X$.",
+   "Porque a aplicação é um difeomorfismo de $\\R^2$ em $\\R^2$.",
+   "Atrapalha: a fórmula só vale para o disco sem a origem."
+  ],
+  "e": "A fronteira de $X$ tem medida nula, e sua imagem também; o corolário aproxima $X$ por compactos contidos no interior, onde a aplicação é um difeomorfismo."
+ },
+ {
+  "t": 4,
+  "ref": "Seção 7.6 das notas",
+  "q": "Seja $X\\subset\\R^3$ compacto e J-mensurável. Quanto vale $\\vol(2X)$, onde $2X=\\{2x\\colon x\\in X\\}$?",
+  "o": [
+   "$8\\vol X$.",
+   "$2\\vol X$.",
+   "$6\\vol X$.",
+   "$4\\vol X$."
+  ],
+  "e": "$2X=T(X)$ com $T=2I$, e $|\\det T|=2^3=8$."
+ }
+];
+var POR_TEMA = 4;
+</script>
+<script>
+(function () {
+  "use strict";
+
+  var state = { i: 0, answers: [], order: [] };
+  var app = document.getElementById("app");
+  var tally = document.getElementById("tally");
+  var KEYS = ["a", "b", "c", "d"];
+  var nomeAluno = "";
+
+  /* Sorteia POR_TEMA questões de cada tema do banco, na ordem dos temas */
+  function sortear() {
+    var sel = [];
+    TOPICS.forEach(function (tp, ti) {
+      var doTema = BANK.filter(function (q) { return q.t === ti; });
+      var ord = shuffle(doTema.length);
+      for (var k = 0; k < Math.min(POR_TEMA, doTema.length); k++) sel.push(doTema[ord[k]]);
+    });
+    return sel;
+  }
+  var QUESTIONS;
+
+  var mjResolve;
+  var mjReady = new Promise(function (res) { mjResolve = res; });
+  window.__mjReady = function () { mjResolve(); };
+  setTimeout(function () { mjResolve(); }, 8000);
+
+  function typeset(el) {
+    return mjReady.then(function () {
+      if (window.MathJax && MathJax.typesetPromise) {
+        return MathJax.typesetPromise([el]).catch(function () {});
+      }
+    });
+  }
+  function clearMath(el) {
+    if (window.MathJax && MathJax.typesetClear) { try { MathJax.typesetClear([el]); } catch (e) {} }
+  }
+  function esc(t) {
+    return String(t).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  function shuffle(n) {
+    var a = [];
+    for (var k = 0; k < n; k++) a.push(k);
+    for (var j = n - 1; j > 0; j--) {
+      var r = Math.floor(Math.random() * (j + 1));
+      var t = a[j]; a[j] = a[r]; a[r] = t;
+    }
+    return a;
+  }
+  function primeiroNome() { return esc(nomeAluno.split(/\s+/)[0]); }
+  function lista(xs) {
+    if (xs.length <= 1) return xs.join("");
+    return xs.slice(0, -1).join(", ") + " e " + xs[xs.length - 1];
+  }
+  function porTema() {
+    return TOPICS.map(function (tp, ti) {
+      var n = 0, right = 0;
+      QUESTIONS.forEach(function (q, qi) {
+        if (q.t !== ti) return;
+        n++;
+        if (state.answers[qi] === true) right++;
+      });
+      return { tp: tp, n: n, right: right };
+    });
+  }
+
+  /* ---------------- Régua de tracinhos ---------------- */
+  function renderTally() {
+    var html = "";
+    TOPICS.forEach(function (tp, ti) {
+      html += '<div class="group"><div class="marks">';
+      QUESTIONS.forEach(function (q, qi) {
+        if (q.t !== ti) return;
+        var cls = "mark";
+        var a = state.answers[qi];
+        if (a === true) cls += " right";
+        else if (a === false) cls += " wrong";
+        else if (qi === state.i && state.started && !state.done) cls += " current";
+        html += '<span class="' + cls + '"></span>';
+      });
+      html += '</div><span class="group-name">' + tp.name + "</span></div>";
+    });
+    var answered = state.answers.filter(function (x) { return x !== undefined; }).length;
+    html += '<span class="count">' + answered + " de " + QUESTIONS.length + "</span>";
+    tally.innerHTML = html;
+  }
+
+  /* ---------------- Telas ---------------- */
+  function renderIntro() {
+    clearMath(app);
+    var rows = TOPICS.map(function (tp) {
+      return '<li><span class="t-name">' + tp.long + '</span><span class="t-dicas">' + tp.ver + "</span></li>";
+    }).join("");
+    app.innerHTML =
+      "<h1>" + INFO.titulo + "</h1>" +
+      '<p class="lead">' + INFO.lead + "</p>" +
+      '<ul class="topics">' + rows + "</ul>" +
+      '<div class="nome-box"><label for="nome">Seu nome</label>' +
+      '<input id="nome" type="text" autocomplete="name" placeholder="Digite seu nome completo" value="' + esc(nomeAluno) + '">' +
+      '<p class="erro" id="nome-erro"></p></div>' +
+      '<div class="nav"><button class="btn" id="start">Começar o quiz</button>' +
+      '<span class="hint">Use as teclas 1 a 4 para responder e Enter para avançar.</span></div>';
+    var campo = document.getElementById("nome");
+    function comecar() {
+      var n = campo.value.trim().replace(/\s+/g, " ");
+      if (!n) {
+        document.getElementById("nome-erro").textContent = "Escreva seu nome para começar.";
+        campo.focus();
+        return;
+      }
+      nomeAluno = n;
+      start();
+    }
+    document.getElementById("start").addEventListener("click", comecar);
+    campo.addEventListener("keydown", function (ev) { if (ev.key === "Enter") { ev.preventDefault(); comecar(); } });
+    renderTally();
+    typeset(app);
+  }
+
+  function start() {
+    QUESTIONS = sortear();
+    state = { i: 0, answers: [], order: QUESTIONS.map(function (q) { return shuffle(q.o.length); }), started: true, done: false };
+    renderQuestion();
+  }
+
+  function renderQuestion() {
+    var qi = state.i, q = QUESTIONS[qi], order = state.order[qi];
+    clearMath(app);
+    var opts = order.map(function (oi, pos) {
+      return '<button class="opt" data-oi="' + oi + '"><span class="key">' + KEYS[pos] + "</span><span>" + q.o[oi] + "</span></button>";
+    }).join("");
+    app.innerHTML =
+      '<p class="q-topic">Questão ' + (qi + 1) + " de " + QUESTIONS.length + ": " + TOPICS[q.t].long + "</p>" +
+      '<div class="q-text">' + q.q + "</div>" +
+      '<div class="opts" role="group" aria-label="Alternativas">' + opts + "</div>" +
+      '<div id="fb"></div>';
+    Array.prototype.forEach.call(app.querySelectorAll(".opt"), function (b) {
+      b.addEventListener("click", function () { answer(parseInt(b.getAttribute("data-oi"), 10)); });
+    });
+    renderTally();
+    typeset(app).then(function () {
+      var first = app.querySelector(".opt");
+      if (first && !first.disabled) first.focus({ preventScroll: true });
+    });
+    window.scrollTo({ top: 0 });
+  }
+
+  function answer(oi) {
+    var qi = state.i;
+    if (state.answers[qi] !== undefined) return;
+    var q = QUESTIONS[qi];
+    var ok = oi === 0;
+    state.answers[qi] = ok;
+    Array.prototype.forEach.call(app.querySelectorAll(".opt"), function (b) {
+      var bo = parseInt(b.getAttribute("data-oi"), 10);
+      b.disabled = true;
+      if (bo === 0) b.classList.add("is-right");
+      else if (bo === oi) b.classList.add("is-wrong");
+      else b.classList.add("faded");
+    });
+    var last = qi === QUESTIONS.length - 1;
+    var fb = document.getElementById("fb");
+    fb.innerHTML =
+      '<div class="feedback ' + (ok ? "right" : "wrong") + '">' +
+      '<p class="verdict">' + (ok ? "Correto." : "Não é essa.") + "</p>" +
+      '<p class="expl">' + q.e + "</p>" +
+      '<p class="see">Para rever: ' + q.ref + ".</p></div>" +
+      '<div class="nav"><button class="btn" id="next">' + (last ? "Ver o diagnóstico" : "Próxima questão") + "</button></div>";
+    document.getElementById("next").addEventListener("click", next);
+    renderTally();
+    typeset(fb).then(function () {
+      var nb = document.getElementById("next");
+      if (nb) {
+        nb.focus({ preventScroll: true });
+        fb.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      }
+    });
+  }
+
+  function next() {
+    if (state.i < QUESTIONS.length - 1) { state.i++; renderQuestion(); }
+    else { state.done = true; renderResults(); }
+  }
+
+  function verdictFor(r) {
+    if (r.right === r.n) return { cls: "ok", txt: "Seguro neste tema." };
+    if (r.right === r.n - 1) return { cls: "mid", txt: "Quase lá: reveja a questão que errou." };
+    return { cls: "weak", txt: INFO.fraco };
+  }
+
+  /* Retorno personalizado */
+  function parecer(total, temas) {
+    var nome = primeiroNome();
+    var n = QUESTIONS.length;
+    var fortes = temas.filter(function (r) { return r.right === r.n; }).map(function (r) { return "<em>" + r.tp.low + "</em>"; });
+    var quase = temas.filter(function (r) { return r.right === r.n - 1; }).map(function (r) { return "<em>" + r.tp.low + "</em>"; });
+    var fracos = temas.filter(function (r) { return r.right < r.n - 1; });
+    var p = [];
+    var faixa;
+    if (total === n) faixa = 0;
+    else if (total >= 0.85 * n) faixa = 1;
+    else if (total >= 0.65 * n) faixa = 2;
+    else if (total >= 0.45 * n) faixa = 3;
+    else faixa = 4;
+    p.push(nome + ", " + INFO.abertura[faixa].replace("%T", total).replace("%N", n));
+    if (fortes.length && fortes.length < temas.length) {
+      p.push((fortes.length === 1 ? "Seu ponto forte foi " : "Seus pontos fortes foram ") + lista(fortes) + ".");
+    }
+    if (quase.length) {
+      p.push("Em " + lista(quase) + ", faltou pouco: releia as explicações das questões que errou.");
+    }
+    if (fracos.length) {
+      var itens = fracos.map(function (r) { return "<em>" + r.tp.low + "</em> (" + r.tp.ver + ")"; });
+      p.push((fracos.length === 1 ? "O tema que mais pede atenção é " : "Os temas que mais pedem atenção são ") +
+             lista(itens) + ". " + INFO.conselho);
+    }
+    p.push(INFO.fecho[faixa]);
+    return '<div class="parecer">' + p.map(function (x) { return "<p>" + x + "</p>"; }).join("") + "</div>";
+  }
+
+  function renderResults() {
+    clearMath(app);
+    var total = state.answers.filter(function (x) { return x === true; }).length;
+    var temas = porTema();
+    var diag = temas.map(function (r, ti) {
+      var marks = "";
+      QUESTIONS.forEach(function (q, qi) {
+        if (q.t !== ti) return;
+        marks += '<span class="mark ' + (state.answers[qi] ? "right" : "wrong") + '"></span>';
+      });
+      var v = verdictFor(r);
+      var extra = r.right < r.n ? " Para rever: " + r.tp.ver + "." : "";
+      return '<li><div class="diag-head"><span class="diag-name">' + r.tp.long + '</span><span class="marks">' + marks +
+             "</span><span>" + r.right + " de " + r.n + "</span></div>" +
+             '<p class="diag-verdict ' + v.cls + '">' + v.txt + extra + "</p></li>";
+    }).join("");
+
+    var wrong = [];
+    QUESTIONS.forEach(function (q, qi) { if (state.answers[qi] === false) wrong.push(qi); });
+    var review = wrong.map(function (qi) {
+      var q = QUESTIONS[qi];
+      return '<div class="review-item"><div class="q-text">' + (qi + 1) + ". " + q.q + "</div>" +
+             '<p class="ans"><span class="label-right">Resposta:</span> ' + q.o[0] + "</p>" +
+             '<p class="ans">' + q.e + "</p>" +
+             '<p class="see">Para rever: ' + q.ref + ".</p></div>";
+    }).join("");
+
+    var quando = new Date().toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" });
+    app.innerHTML =
+      "<h1>Seu diagnóstico</h1>" +
+      '<div class="ident"><p class="quem">' + esc(nomeAluno) + "</p>" +
+      '<p class="quando">' + INFO.titulo + " · concluído em " + quando + "</p></div>" +
+      '<p class="score">' + total + " <small>de " + QUESTIONS.length + " acertos</small></p>" +
+      parecer(total, temas) +
+      "<h2>Resultado por tema</h2>" +
+      '<ul class="diag">' + diag + "</ul>" +
+      (wrong.length ? "<h2>As questões que você errou</h2>" + '<div class="review">' + review + "</div>" : "") +
+      '<div class="nav"><button class="btn" id="again">Refazer o quiz</button>' +
+      '<a class="btn ghost" href="index.html">Outros testes da disciplina</a>' +
+      '<a class="btn ghost" href="../index.html">Voltar às disciplinas</a></div>';
+    document.getElementById("again").addEventListener("click", start);
+    renderTally();
+    typeset(app);
+    window.scrollTo({ top: 0 });
+  }
+
+  /* ---------------- Teclado ---------------- */
+  document.addEventListener("keydown", function (ev) {
+    if (!state.started || state.done) return;
+    if (ev.target && ev.target.tagName === "INPUT") return;
+    if (ev.key >= "1" && ev.key <= "4") {
+      var b = app.querySelectorAll(".opt")[parseInt(ev.key, 10) - 1];
+      if (b && !b.disabled) { ev.preventDefault(); b.click(); }
+    } else if (ev.key === "Enter" || ev.key === "ArrowRight") {
+      var nx = document.getElementById("next");
+      if (nx && state.answers[state.i] !== undefined) { ev.preventDefault(); nx.click(); }
+    }
+  });
+
+  QUESTIONS = sortear();
+  renderIntro();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Teste de revisão – Capítulo 6: Classes laterais e teorema de Lagrange — Estruturas Algébricas 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #fbfaf7; --surface: #ffffff; --ink: #1d2330; --muted: #5d6675; --line: #e4e1d9;
+  --blue: #1f4e79; --blue-soft: #e8eef5; --ok: #2e7d4f; --ok-soft: #e6f3ec; --bad: #b03a2e; --bad-soft: #f8e9e7;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14171d; --surface: #1b1f27; --ink: #e7e9ee; --muted: #9aa3b2; --line: #2c3240;
+    --blue: #8db8e3; --blue-soft: #1f2a38; --ok: #6cc38f; --ok-soft: #1b2c23; --bad: #e58a80; --bad-soft: #33201e;
+    color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+  padding-bottom: env(safe-area-inset-bottom, 0px); }
+h1, h2 { font-family: "Source Serif 4", Georgia, "Times New Roman", serif; font-weight: 600; line-height: 1.25; }
+h1 { font-size: 1.9rem; margin: 0 0 12px; }
+h2 { font-size: 1.35rem; margin: 32px 0 12px; }
+.tally { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: blur(6px); border-bottom: 1px solid var(--line); padding-top: env(safe-area-inset-top, 0px); }
+.tally-inner { max-width: 760px; margin: 0 auto; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.group { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.marks { display: flex; flex-wrap: wrap; gap: 5px; }
+.mark { width: 14px; height: 14px; border-radius: 4px; border: 1.5px solid var(--line); background: var(--surface); }
+.mark.right { background: var(--ok); border-color: var(--ok); }
+.mark.wrong { background: var(--bad); border-color: var(--bad); }
+.mark.current { border-color: var(--blue); box-shadow: 0 0 0 2px var(--blue-soft); }
+.group-name { color: var(--muted); font-size: .88rem; white-space: nowrap; }
+.count { color: var(--muted); font-size: .88rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+main { max-width: 760px; margin: 0 auto; padding: 28px 16px 48px; }
+.lead { color: var(--muted); font-size: 1.02rem; }
+.nome-box { margin: 22px 0 8px; }
+.nome-box label { display: block; font-weight: 600; margin-bottom: 6px; }
+.nome-box input { width: 100%; max-width: 420px; padding: 10px 12px; font: inherit; color: var(--ink);
+  background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
+.nome-box input:focus { outline: 2px solid var(--blue); outline-offset: 1px; }
+.erro { color: var(--bad); font-size: .9rem; min-height: 1.2em; margin: 6px 0 0; }
+.nav { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 22px; }
+.btn { display: inline-block; padding: 9px 18px; border-radius: 8px; border: 1px solid var(--blue);
+  background: var(--blue); color: var(--bg); font: 500 .95rem Inter, system-ui, sans-serif; cursor: pointer; }
+.btn:hover { filter: brightness(1.08); }
+.btn.ghost { background: transparent; color: var(--blue); }
+a.btn { text-decoration: none; }
+.hint { color: var(--muted); font-size: .86rem; }
+.q-topic { color: var(--muted); font-size: .85rem; text-transform: uppercase; letter-spacing: .04em; margin: 0 0 8px; }
+.q-text { font-family: "Source Serif 4", Georgia, serif; font-size: 1.15rem; line-height: 1.6; margin-bottom: 18px; }
+.opts { display: flex; flex-direction: column; gap: 10px; }
+.opt { display: flex; align-items: flex-start; gap: 12px; width: 100%; text-align: left; padding: 12px 14px;
+  border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--ink);
+  font: 1rem/1.5 Inter, system-ui, sans-serif; cursor: pointer; transition: border-color .15s, background .15s; }
+.opt:hover:not(:disabled) { border-color: var(--blue); }
+.opt:disabled { cursor: default; }
+.opt .key { flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--blue-soft); color: var(--blue); font-weight: 600; font-size: .85rem; }
+.opt.is-right { border-color: var(--ok); background: var(--ok-soft); }
+.opt.is-right .key { background: var(--ok); color: var(--surface); }
+.opt.is-wrong { border-color: var(--bad); background: var(--bad-soft); }
+.opt.is-wrong .key { background: var(--bad); color: var(--surface); }
+.opt.faded { opacity: .55; }
+.feedback { margin-top: 18px; padding: 14px 16px; border-radius: 10px; border-left: 4px solid var(--line); background: var(--surface); }
+.feedback.right { border-left-color: var(--ok); }
+.feedback.wrong { border-left-color: var(--bad); }
+.verdict { margin: 0 0 6px; font-weight: 600; }
+.feedback.right .verdict { color: var(--ok); }
+.feedback.wrong .verdict { color: var(--bad); }
+.expl { color: var(--ink); }
+.ident { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; margin: 6px 0 14px; }
+.ident p { margin: 2px 0; }
+.quem { font-weight: 600; font-size: 1.05rem; }
+.quando { color: var(--muted); font-size: .9rem; }
+.nota { font-family: "Source Serif 4", Georgia, serif; font-size: 1.4rem; font-weight: 600; color: var(--blue); }
+.review { display: flex; flex-direction: column; gap: 14px; }
+.review-item { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+.review-item .q-text { font-size: 1.05rem; margin-bottom: 8px; }
+.ans { margin: 6px 0; }
+.label-right { color: var(--ok); font-weight: 600; }
+@media (max-width: 600px) { h1 { font-size: 1.55rem; } .q-text { font-size: 1.05rem; } }
+
+.temas { list-style: none; padding: 0; margin: 4px 0 18px; }
+.temas li { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--line); }
+.temas li:last-child { border-bottom: none; }
+.temas .tnome { flex: 1; }
+.temas .tnota { font-variant-numeric: tabular-nums; font-weight: 600; white-space: nowrap; }
+.temas .tcom { display: block; color: var(--muted); font-size: .88rem; font-weight: 400; }
+.temas .ok { color: var(--ok); } .temas .mid { color: var(--muted); } .temas .low { color: var(--bad); }
+</style>
+</head>
+<body>
+<div class="tally" aria-hidden="true">
+  <div class="tally-inner" id="tally"></div>
+</div>
+<main id="app" aria-live="polite"></main>
+<script>
+var INFO = {"titulo": "Teste de revisão – Capítulo 6", "capitulo": "Capítulo 6: Classes laterais e teorema de Lagrange", "curto": "Capítulo 6"};
+var TEMAS = [{"nome": "Classes laterais", "n": 3}, {"nome": "Teorema de Lagrange e índice", "n": 3}, {"nome": "Teoremas de Fermat e de Euler", "n": 2}];
+var BANCO = [
+ {
+  "t": 0,
+  "q": "Em ℤ<sub>12</sub>, seja H = {<span style=\"text-decoration:overline\">0</span>, <span style=\"text-decoration:overline\">4</span>, <span style=\"text-decoration:overline\">8</span>}. Qual é a classe lateral <span style=\"text-decoration:overline\">2</span> + H?",
+  "o": [
+   "{<span style=\"text-decoration:overline\">2</span>, <span style=\"text-decoration:overline\">6</span>, <span style=\"text-decoration:overline\">10</span>}",
+   "{<span style=\"text-decoration:overline\">2</span>, <span style=\"text-decoration:overline\">4</span>, <span style=\"text-decoration:overline\">8</span>}",
+   "{<span style=\"text-decoration:overline\">0</span>, <span style=\"text-decoration:overline\">2</span>, <span style=\"text-decoration:overline\">4</span>}",
+   "{<span style=\"text-decoration:overline\">0</span>, <span style=\"text-decoration:overline\">4</span>, <span style=\"text-decoration:overline\">8</span>}"
+  ],
+  "e": "Em notação aditiva, a + H = {a + h : h ∈ H}: somamos <span style=\"text-decoration:overline\">2</span> a cada elemento de H."
+ },
+ {
+  "t": 0,
+  "q": "Seja H subgrupo de G e a ∈ G. Quando vale aH = H?",
+  "o": [
+   "Se, e somente se, a ∈ H.",
+   "Somente quando a = 1.",
+   "Se, e somente se, a ∉ H.",
+   "Sempre."
+  ],
+  "e": "Se a ∈ H, multiplicar H por a só reorganiza os elementos de H. Se a ∉ H, então a = a·1 ∈ aH, mas a ∉ H."
+ },
+ {
+  "t": 0,
+  "q": "Em D<sub>4</sub>, seja H = {e, s}. Qual é a classe lateral à esquerda rH?",
+  "o": [
+   "{r, rs}",
+   "{r, r³s}",
+   "{r, s}",
+   "{e, r}"
+  ],
+  "e": "rH = {re, rs} = {r, rs}. A opção {r, r³s} é a classe à direita Hr = {r, sr}, pois sr = r³s."
+ },
+ {
+  "t": 0,
+  "q": "Seja H subgrupo de G e a, b ∈ G. Qual condição equivale a aH = bH?",
+  "o": [
+   "a ∈ bH",
+   "a = b",
+   "ab ∈ H",
+   "a ∈ H e b ∉ H"
+  ],
+  "e": "Pelo lema das classes laterais, aH = bH ⟺ a ∈ bH ⟺ b ∈ aH. Representantes diferentes podem dar a mesma classe."
+ },
+ {
+  "t": 0,
+  "q": "Duas classes laterais à esquerda aH e bH de um subgrupo H:",
+  "o": [
+   "são iguais ou disjuntas",
+   "são sempre disjuntas",
+   "sempre têm o neutro em comum",
+   "podem ter elementos em comum sem serem iguais"
+  ],
+  "e": "As classes laterais à esquerda são as classes de equivalência de ∼<sub>H</sub>, logo formam uma partição de G."
+ },
+ {
+  "t": 0,
+  "q": "Em ℤ, com H = 3ℤ, a classe lateral 5 + H é igual a:",
+  "o": [
+   "2 + H",
+   "5ℤ",
+   "1 + H",
+   "3 + H"
+  ],
+  "e": "5 − 2 = 3 ∈ H, logo 5 + H = 2 + H = {…, −1, 2, 5, 8, …}."
+ },
+ {
+  "t": 0,
+  "q": "Em S<sub>3</sub>, seja H = {I, (1 3)}. Qual é a classe lateral à esquerda (1 2)H?",
+  "o": [
+   "{(1 2), (1 3 2)}",
+   "{(1 2), (1 2 3)}",
+   "{I, (1 2)}",
+   "{(1 2), (1 3)}"
+  ],
+  "e": "(1 2)(1 3) = (1 3 2), aplicando primeiro (1 3). A opção {(1 2), (1 2 3)} é a classe à direita H(1 2)."
+ },
+ {
+  "t": 1,
+  "q": "Seja G um grupo de ordem 24 e H um subgrupo de ordem 6. Quantas classes laterais à esquerda distintas H tem em G?",
+  "o": [
+   "4",
+   "6",
+   "18",
+   "144"
+  ],
+  "e": "Pelo teorema de Lagrange, |G : H| = |G|/|H| = 24/6 = 4."
+ },
+ {
+  "t": 1,
+  "q": "Seja G um grupo de ordem 30. Qual das ordens abaixo NÃO pode ser a ordem de um subgrupo de G?",
+  "o": [
+   "4",
+   "5",
+   "6",
+   "15"
+  ],
+  "e": "Pelo teorema de Lagrange, a ordem de um subgrupo divide |G| = 30, e 4 não divide 30."
+ },
+ {
+  "t": 1,
+  "q": "Seja G um grupo de ordem 13. O que se pode afirmar?",
+  "o": [
+   "G é cíclico.",
+   "G não é abeliano.",
+   "G tem um subgrupo de ordem 3.",
+   "G tem elementos de ordem 2."
+  ],
+  "e": "Grupo de ordem prima é cíclico: se a ≠ 1, então |a| divide 13 e |a| ≠ 1, logo |a| = 13 e ⟨a⟩ = G."
+ },
+ {
+  "t": 1,
+  "q": "Sejam H e K subgrupos de G com |H| = 8 e |K| = 15. Quanto vale |H ∩ K|?",
+  "o": [
+   "1",
+   "2",
+   "3",
+   "8"
+  ],
+  "e": "H ∩ K é subgrupo de H e de K, logo sua ordem divide 8 e 15. Como mdc(8, 15) = 1, temos H ∩ K = {1}."
+ },
+ {
+  "t": 1,
+  "q": "Seja G um grupo de ordem 15. Quais são as ordens possíveis dos elementos de G?",
+  "o": [
+   "1, 3, 5 e 15",
+   "1, 2, 3 e 5",
+   "apenas 1 e 15",
+   "qualquer número de 1 a 15"
+  ],
+  "e": "A ordem de cada elemento é |⟨a⟩|, que divide |G| = 15 pelo teorema de Lagrange."
+ },
+ {
+  "t": 1,
+  "q": "Seja G de ordem 60 e H um subgrupo de ordem 12. Qual é o índice |G : H|?",
+  "o": [
+   "5",
+   "48",
+   "12",
+   "720"
+  ],
+  "e": "|G : H| = |G|/|H| = 60/12 = 5."
+ },
+ {
+  "t": 1,
+  "q": "Suponha K ⊊ H ⊊ G subgrupos, com |K| = 42 e |G| = 420. Qual pode ser a ordem de H?",
+  "o": [
+   "84",
+   "60",
+   "126",
+   "42"
+  ],
+  "e": "|H| deve ser múltiplo de 42 (Lagrange em H) e divisor de 420 (Lagrange em G), diferente de 42 e de 420: as opções são 84 e 210. 60 não é múltiplo de 42 e 126 não divide 420."
+ },
+ {
+  "t": 2,
+  "q": "Qual é o resto da divisão de 2<sup>50</sup> por 7?",
+  "o": [
+   "4",
+   "1",
+   "2",
+   "6"
+  ],
+  "e": "Pelo pequeno teorema de Fermat, 2⁶ ≡ 1 (mod 7). Como 50 = 6·8 + 2, temos 2<sup>50</sup> ≡ 2² = 4 (mod 7)."
+ },
+ {
+  "t": 2,
+  "q": "Qual é o resto da divisão de 3<sup>100</sup> por 7?",
+  "o": [
+   "4",
+   "1",
+   "3",
+   "5"
+  ],
+  "e": "3⁶ ≡ 1 (mod 7) e 100 = 6·16 + 4, logo 3<sup>100</sup> ≡ 3⁴ = 81 ≡ 4 (mod 7)."
+ },
+ {
+  "t": 2,
+  "q": "Qual é o algarismo das unidades de 7<sup>2026</sup>?",
+  "o": [
+   "9",
+   "1",
+   "7",
+   "3"
+  ],
+  "e": "Pelo teorema de Euler–Fermat, 7⁴ ≡ 1 (mod 10), pois φ(10) = 4. Como 2026 = 4·506 + 2, temos 7<sup>2026</sup> ≡ 7² = 49 ≡ 9 (mod 10)."
+ },
+ {
+  "t": 2,
+  "q": "Qual é o resto da divisão de 2<sup>100</sup> por 11?",
+  "o": [
+   "1",
+   "2",
+   "10",
+   "4"
+  ],
+  "e": "Pelo pequeno teorema de Fermat, 2<sup>10</sup> ≡ 1 (mod 11), e 100 = 10·10."
+ },
+ {
+  "t": 2,
+  "q": "O pequeno teorema de Fermat afirma que, para p primo e a inteiro:",
+  "o": [
+   "a<sup>p</sup> ≡ a (mod p)",
+   "a<sup>p</sup> ≡ 1 (mod p) sempre",
+   "a<sup>p−1</sup> ≡ 0 (mod p)",
+   "a<sup>p</sup> ≡ p (mod a)"
+  ],
+  "e": "Se p ∤ a, então a<sup>p−1</sup> ≡ 1 (mod p), pois ℤ<sub>p</sub><sup>*</sup> tem p − 1 elementos; multiplicando por a, a<sup>p</sup> ≡ a. Se p | a, os dois lados são ≡ 0."
+ }
+];
+</script>
+<script>
+(function () {
+  var N = 0; TEMAS.forEach(function (t) { N += t.n; });
+  var state = { i: 0, answers: [], order: [], sel: [], started: false, done: false };
+  var app = document.getElementById("app");
+  var tally = document.getElementById("tally");
+  var KEYS = ["a", "b", "c", "d", "e", "f"];
+  var nomeAluno = "";
+  function esc(t) { return String(t).replace(/[&<>"']/g, function (c) { return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+  function shuffle(n) {
+    var a = []; for (var k = 0; k < n; k++) a.push(k);
+    for (var j = n - 1; j > 0; j--) { var r = Math.floor(Math.random() * (j + 1)); var t = a[j]; a[j] = a[r]; a[r] = t; }
+    return a;
+  }
+  function sortear() {
+    var sel = [];
+    TEMAS.forEach(function (t, k) {
+      var pool = [];
+      BANCO.forEach(function (q, qi) { if (q.t === k) pool.push(qi); });
+      var idx = shuffle(pool.length);
+      for (var j = 0; j < t.n && j < pool.length; j++) sel.push(pool[idx[j]]);
+    });
+    return sel;
+  }
+  function Q(i) { return BANCO[state.sel[i]]; }
+  function renderTally() {
+    var h = '<div class="group"><div class="marks">';
+    for (var qi = 0; qi < N; qi++) {
+      var cls = "mark", a = state.answers[qi];
+      if (a === true) cls += " right"; else if (a === false) cls += " wrong";
+      else if (state.started && !state.done && qi === state.i) cls += " current";
+      h += '<span class="' + cls + '"></span>';
+    }
+    h += '</div><span class="group-name">' + INFO.curto + "</span></div>";
+    var answered = state.answers.filter(function (x) { return x !== undefined; }).length;
+    h += '<span class="count">' + answered + " de " + N + "</span>";
+    tally.innerHTML = h;
+  }
+  function renderIntro() {
+    var temas = TEMAS.map(function (t) { return t.nome + " (" + t.n + ")"; }).join("; ");
+    app.innerHTML =
+      "<h1>" + INFO.titulo + "</h1>" +
+      '<p class="lead">Estruturas Algébricas 1 · ' + INFO.capitulo + ". A cada tentativa são sorteadas " + N +
+      " questões de múltipla escolha de um banco de " + BANCO.length + ", divididas por tema: " + temas + ". " +
+      "Cada resposta é corrigida na hora, com a explicação. No final, você vê seu resultado, o desempenho em cada tema " +
+      "e as questões que errou. Ao refazer o teste, as questões mudam.</p>" +
+      '<div class="nome-box"><label for="nome">Seu nome</label>' +
+      '<input id="nome" type="text" autocomplete="name" placeholder="Digite seu nome completo" value="' + esc(nomeAluno) + '">' +
+      '<p class="erro" id="nome-erro"></p></div>' +
+      '<div class="nav"><button class="btn" id="start">Começar o teste</button>' +
+      '<span class="hint">Use as teclas 1 a 4 para responder e Enter para avançar.</span></div>';
+    var campo = document.getElementById("nome");
+    function comecar() {
+      var n = campo.value.trim();
+      if (!n) { document.getElementById("nome-erro").textContent = "Escreva seu nome para começar."; campo.focus(); return; }
+      nomeAluno = n; start();
+    }
+    document.getElementById("start").addEventListener("click", comecar);
+    campo.addEventListener("keydown", function (ev) { if (ev.key === "Enter") { ev.preventDefault(); comecar(); } });
+    renderTally();
+  }
+  function start() {
+    var sel = sortear();
+    state = { i: 0, answers: [], sel: sel, order: sel.map(function (qi) { return shuffle(BANCO[qi].o.length); }), started: true, done: false };
+    renderQuestion();
+  }
+  function renderQuestion() {
+    var qi = state.i, q = Q(qi), order = state.order[qi];
+    var opts = order.map(function (oi, pos) {
+      return '<button class="opt" data-oi="' + oi + '"><span class="key">' + KEYS[pos] + "</span><span>" + q.o[oi] + "</span></button>";
+    }).join("");
+    app.innerHTML =
+      '<p class="q-topic">Questão ' + (qi + 1) + " de " + N + " · " + TEMAS[q.t].nome + "</p>" +
+      '<div class="q-text">' + q.q + "</div>" +
+      '<div class="opts" role="group" aria-label="Alternativas">' + opts + "</div>" +
+      '<div id="fb"></div>';
+    Array.prototype.forEach.call(app.querySelectorAll(".opt"), function (b) {
+      b.addEventListener("click", function () { answer(parseInt(b.getAttribute("data-oi"), 10)); });
+    });
+    renderTally();
+    var first = app.querySelector(".opt"); if (first) first.focus({ preventScroll: true });
+    window.scrollTo({ top: 0 });
+  }
+  function answer(oi) {
+    var qi = state.i;
+    if (state.answers[qi] !== undefined) return;
+    var q = Q(qi), ok = oi === 0;
+    state.answers[qi] = ok;
+    Array.prototype.forEach.call(app.querySelectorAll(".opt"), function (b) {
+      var bo = parseInt(b.getAttribute("data-oi"), 10);
+      b.disabled = true;
+      if (bo === 0) b.classList.add("is-right");
+      else if (bo === oi) b.classList.add("is-wrong");
+      else b.classList.add("faded");
+    });
+    var last = qi === N - 1;
+    var fb = document.getElementById("fb");
+    fb.innerHTML =
+      '<div class="feedback ' + (ok ? "right" : "wrong") + '">' +
+      '<p class="verdict">' + (ok ? "Correto." : "Não é essa.") + "</p>" +
+      '<div class="expl">' + q.e + "</div></div>" +
+      '<div class="nav"><button class="btn" id="next">' + (last ? "Ver o resultado" : "Próxima questão") + "</button></div>";
+    document.getElementById("next").addEventListener("click", next);
+    renderTally();
+    document.getElementById("next").focus({ preventScroll: true });
+    fb.scrollIntoView({ block: "nearest", behavior: "smooth" });
+  }
+  function next() {
+    if (state.i < N - 1) { state.i++; renderQuestion(); }
+    else { state.done = true; renderResults(); }
+  }
+  function comentario(acertos, n) {
+    if (acertos === n) return { cls: "ok", txt: "Seguro neste tema." };
+    if (2 * acertos >= n) return { cls: "mid", txt: "Quase lá: reveja as questões que errou." };
+    return { cls: "low", txt: "Reveja este tema nas notas de aula." };
+  }
+  function renderResults() {
+    var total = state.answers.filter(function (x) { return x === true; }).length;
+    var frac = total / N;
+    var veredito = frac === 1 ? "Você acertou todas. Muito bem!"
+      : frac >= 0.75 ? "Bom resultado. Reveja as questões que errou."
+      : frac >= 0.5 ? "Resultado razoável. Vale reler o capítulo nas notas de aula."
+      : "Este capítulo precisa de mais estudo. Releia as notas de aula e tente de novo.";
+    var porTema = TEMAS.map(function () { return 0; });
+    state.sel.forEach(function (bi, qi) { if (state.answers[qi] === true) porTema[BANCO[bi].t]++; });
+    var temas = TEMAS.map(function (t, k) {
+      var c = comentario(porTema[k], t.n);
+      return '<li><span class="tnome">' + t.nome + '<span class="tcom">' + c.txt + '</span></span>' +
+             '<span class="tnota ' + c.cls + '">' + porTema[k] + " de " + t.n + "</span></li>";
+    }).join("");
+    var wrong = [];
+    for (var qi = 0; qi < N; qi++) if (state.answers[qi] === false) wrong.push(qi);
+    var review = wrong.map(function (qi) {
+      var q = Q(qi);
+      return '<div class="review-item"><div class="q-text">' + (qi + 1) + ". " + q.q + "</div>" +
+             '<p class="ans"><span class="label-right">Resposta:</span> ' + q.o[0] + "</p>" +
+             '<div class="ans">' + q.e + "</div></div>";
+    }).join("");
+    app.innerHTML =
+      "<h1>Seu resultado</h1>" +
+      '<div class="ident"><p class="quem">' + esc(nomeAluno) + "</p>" +
+      '<p class="quando">' + INFO.titulo + " · concluído em " + new Date().toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" }) + "</p>" +
+      '<p class="nota">' + total + " de " + N + " acertos</p></div>" +
+      '<p class="lead">' + veredito + "</p>" +
+      "<h2>Desempenho por tema</h2>" + '<ul class="temas">' + temas + "</ul>" +
+      (wrong.length ? '<h2>As questões que você errou</h2><div class="review">' + review + "</div>" : "") +
+      '<div class="nav"><button class="btn" id="again">Refazer com novas questões</button>' +
+      '<a class="btn ghost" href="index.html">Outros testes da disciplina</a>' +
+      '<a class="btn ghost" href="../index.html">Voltar às disciplinas</a></div>';
+    document.getElementById("again").addEventListener("click", start);
+    renderTally();
+    window.scrollTo({ top: 0 });
+  }
+  document.addEventListener("keydown", function (ev) {
+    if (!state.started || state.done) return;
+    if (ev.target && ev.target.tagName === "INPUT") return;
+    if (ev.key >= "1" && ev.key <= "4") {
+      var b = app.querySelectorAll(".opt")[parseInt(ev.key, 10) - 1];
+      if (b && !b.disabled) { ev.preventDefault(); b.click(); }
+    } else if (ev.key === "Enter" || ev.key === "ArrowRight") {
+      var nx = document.getElementById("next");
+      if (nx && state.answers[state.i] !== undefined) { ev.preventDefault(); nx.click(); }
+    }
+  });
+  renderIntro();
+})();
+</script>
+</body>
+</html>

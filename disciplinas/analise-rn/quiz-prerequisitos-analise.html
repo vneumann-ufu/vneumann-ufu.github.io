@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Quiz de pré-requisitos — Análise no Rⁿ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --board: #F7F9FB;
+  --board-2: #EEF2F6;
+  --ink: #1C2230;
+  --muted: #5B6577;
+  --rule: #D6DCE4;
+  --blue: #1F4FA8;
+  --red: #B9312C;
+  --green: #1F7A4D;
+  --blue-wash: #E3EBF8;
+  --red-wash: #F8E6E5;
+  --green-wash: #E2F2E9;
+  --empty: #C9D1DC;
+  color-scheme: light;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --board: #12161D;
+    --board-2: #1A2029;
+    --ink: #E6EAF0;
+    --muted: #9AA4B4;
+    --rule: #2A313C;
+    --blue: #8AB0F2;
+    --red: #F08C84;
+    --green: #7BCB9C;
+    --blue-wash: #1C2840;
+    --red-wash: #3A2222;
+    --green-wash: #1B3328;
+    --empty: #39414E;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --board: #12161D;
+  --board-2: #1A2029;
+  --ink: #E6EAF0;
+  --muted: #9AA4B4;
+  --rule: #2A313C;
+  --blue: #8AB0F2;
+  --red: #F08C84;
+  --green: #7BCB9C;
+  --blue-wash: #1C2840;
+  --red-wash: #3A2222;
+  --green-wash: #1B3328;
+  --empty: #39414E;
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: inherit; }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+body {
+  margin: 0;
+  background: var(--board);
+  color: var(--ink);
+  font-family: "Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto;
+  height: env(safe-area-inset-top, 0px);
+  z-index: 10;
+  background: var(--board);
+}
+
+/* ---------- régua de tracinhos ---------- */
+.tally {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 5;
+  background: var(--board);
+  border-bottom: 1px solid var(--rule);
+}
+.tally-inner {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: 0.75rem 1.25rem 0.7rem;
+  display: flex;
+  align-items: flex-end;
+  gap: 1.1rem;
+  overflow-x: auto;
+}
+.group { display: flex; flex-direction: column; gap: 0.3rem; flex: 0 0 auto; }
+.marks { display: flex; gap: 5px; align-items: flex-end; height: 26px; }
+.mark {
+  width: 6px;
+  height: 22px;
+  border-radius: 3px;
+  background: var(--empty);
+  transform: rotate(-6deg);
+  transition: background-color 0.25s ease, height 0.25s ease;
+}
+.mark.current { background: var(--blue); height: 26px; }
+.mark.right { background: var(--green); }
+.mark.wrong { background: var(--red); }
+.group-name { font-size: 0.72rem; color: var(--muted); white-space: nowrap; }
+.count { margin-left: auto; font-size: 0.85rem; color: var(--muted); white-space: nowrap; padding-bottom: 1.1rem; }
+
+/* ---------- conteúdo ---------- */
+main { max-width: 46rem; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+h1 {
+  font-family: "Source Serif 4", Georgia, "Times New Roman", serif;
+  font-weight: 600;
+  font-size: clamp(1.7rem, 4.5vw, 2.35rem);
+  line-height: 1.15;
+  margin: 0 0 0.75rem;
+}
+h2 {
+  font-family: "Source Serif 4", Georgia, serif;
+  font-weight: 600;
+  font-size: 1.35rem;
+  margin: 2rem 0 0.75rem;
+}
+.lead { font-size: 1.05rem; color: var(--muted); max-width: 38rem; margin: 0 0 1.5rem; }
+.serif { font-family: "Source Serif 4", Georgia, serif; }
+
+.topics { list-style: none; padding: 0; margin: 0 0 2rem; }
+.topics li {
+  display: flex;
+  gap: 0.75rem;
+  align-items: baseline;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+.topics li:last-child { border-bottom: 0; }
+.topics .t-name { font-weight: 700; flex: 1 1 auto; }
+.topics .t-dicas { color: var(--muted); font-size: 0.9rem; white-space: nowrap; }
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+.btn {
+  display: inline-block;
+  border: 2px solid var(--blue);
+  background: var(--blue);
+  color: var(--board);
+  font-weight: 700;
+  padding: 0.65rem 1.4rem;
+  border-radius: 999px;
+}
+.btn:hover { filter: brightness(1.08); }
+.btn.ghost { background: transparent; color: var(--blue); }
+a.btn { text-decoration: none; }
+.btn:focus-visible, .opt:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+
+/* ---------- questão ---------- */
+.q-topic { color: var(--blue); font-weight: 700; font-size: 0.95rem; margin: 0 0 0.5rem; }
+.q-text {
+  font-family: "Source Serif 4", Georgia, serif;
+  font-size: 1.15rem;
+  line-height: 1.6;
+  margin: 0 0 1.4rem;
+}
+.opts { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.25rem; }
+.opt {
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-start;
+  text-align: left;
+  width: 100%;
+  color: var(--ink);
+  background: var(--board-2);
+  border: 2px solid transparent;
+  border-radius: 12px;
+  padding: 0.8rem 1rem;
+  font-family: "Source Serif 4", Georgia, serif;
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+.opt:hover:not([disabled]) { border-color: var(--blue); }
+.opt .key {
+  flex: 0 0 auto;
+  font-family: "Atkinson Hyperlegible", system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--muted);
+  border: 1.5px solid var(--rule);
+  border-radius: 50%;
+  width: 1.7rem;
+  height: 1.7rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.1rem;
+}
+.opt[disabled] { cursor: default; }
+.opt.is-right { background: var(--green-wash); border-color: var(--green); }
+.opt.is-right .key { border-color: var(--green); color: var(--green); }
+.opt.is-wrong { background: var(--red-wash); border-color: var(--red); }
+.opt.is-wrong .key { border-color: var(--red); color: var(--red); }
+.opt.faded { opacity: 0.55; }
+
+.feedback {
+  border-left: 4px solid var(--blue);
+  padding: 0.25rem 0 0.25rem 1rem;
+  margin: 0 0 1.5rem;
+}
+.feedback.right { border-color: var(--green); }
+.feedback.wrong { border-color: var(--red); }
+.verdict { font-weight: 700; margin: 0 0 0.35rem; }
+.feedback.right .verdict { color: var(--green); }
+.feedback.wrong .verdict { color: var(--red); }
+.feedback .expl { font-family: "Source Serif 4", Georgia, serif; font-size: 1.02rem; line-height: 1.6; margin: 0 0 0.5rem; }
+.feedback .see { font-size: 0.9rem; color: var(--muted); margin: 0; }
+.nav { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
+.hint { font-size: 0.85rem; color: var(--muted); }
+
+/* ---------- resultado ---------- */
+.score {
+  font-family: "Source Serif 4", Georgia, serif;
+  font-size: clamp(2.6rem, 9vw, 3.6rem);
+  font-weight: 600;
+  line-height: 1;
+  margin: 0.25rem 0 0.5rem;
+}
+.score small { font-size: 0.45em; color: var(--muted); font-weight: 400; }
+.diag { list-style: none; padding: 0; margin: 1rem 0 2rem; }
+.diag li { padding: 1rem 0; border-bottom: 1px solid var(--rule); }
+.diag li:last-child { border-bottom: 0; }
+.diag-head { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+.diag-name { font-weight: 700; flex: 1 1 14rem; }
+.diag .marks { height: 24px; }
+.diag-verdict { margin: 0.4rem 0 0; font-size: 0.95rem; }
+.diag-verdict.ok { color: var(--green); }
+.diag-verdict.mid { color: var(--blue); }
+.diag-verdict.weak { color: var(--red); }
+.review { margin: 0 0 1.5rem; }
+.review-item { border-left: 4px solid var(--red); padding: 0.1rem 0 0.1rem 1rem; margin: 0 0 1.25rem; }
+.review-item .q-text { font-size: 1.02rem; margin-bottom: 0.5rem; }
+.review-item p { margin: 0 0 0.4rem; }
+.ans { font-family: "Source Serif 4", Georgia, serif; }
+.label-right { color: var(--green); font-weight: 700; }
+.label-wrong { color: var(--red); font-weight: 700; }
+
+mjx-container { color: inherit; }
+mjx-container[display="true"] { overflow-x: auto; overflow-y: hidden; max-width: 100%; }
+
+@media (prefers-reduced-motion: reduce) {
+  .mark { transition: none; }
+}
+@media (max-width: 520px) {
+  .tally-inner { gap: 0.8rem; padding: 0.6rem 1rem; }
+  .group-name { display: none; }
+  .count { padding-bottom: 0; }
+  main { padding-top: 1.5rem; }
+}
+</style>
+<style>
+.nome-box { margin: 0 0 1.5rem; max-width: 26rem; }
+.nome-box label { display: block; font-weight: 700; margin: 0 0 0.4rem; }
+.nome-box input {
+  width: 100%;
+  font: inherit;
+  color: var(--ink);
+  background: var(--board-2);
+  border: 2px solid var(--rule);
+  border-radius: 10px;
+  padding: 0.6rem 0.8rem;
+}
+.nome-box input:focus { outline: none; border-color: var(--blue); }
+.erro { color: var(--red); font-size: 0.9rem; min-height: 1.2rem; margin: 0.35rem 0 0; }
+.ident { margin: 0 0 1rem; }
+.ident .quem { font-weight: 700; font-size: 1.1rem; margin: 0; }
+.ident .quando { color: var(--muted); font-size: 0.9rem; margin: 0.15rem 0 0; }
+.parecer {
+  font-family: "Source Serif 4", Georgia, serif;
+  font-size: 1.08rem;
+  line-height: 1.65;
+  background: var(--blue-wash);
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  margin: 0 0 1.5rem;
+}
+.parecer p { margin: 0 0 0.6rem; }
+.parecer p:last-child { margin-bottom: 0; }
+</style>
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$']],
+      displayMath: [['\\[', '\\]']],
+      macros: {
+        R: '\\mathbb{R}', N: '\\mathbb{N}', Z: '\\mathbb{Z}', Q: '\\mathbb{Q}',
+        zero: '\\vec{0}', Lin: '\\mathcal{L}', GL: '\\mathrm{GL}',
+        vol: '\\operatorname{vol}', fr: '\\operatorname{fr}', inte: '\\operatorname{int}',
+        posto: '\\operatorname{posto}', sen: '\\operatorname{sen}', tr: '\\operatorname{tr}',
+        diam: '\\operatorname{diam}'
+      }
+    },
+    svg: { fontCache: 'global' },
+    startup: {
+      typeset: false,
+      ready: function () {
+        MathJax.startup.defaultReady();
+        MathJax.startup.promise.then(function () { window.__mjReady && window.__mjReady(); });
+      }
+    }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js" defer></script>
+</head>
+<body>
+
+<div class="tally" aria-hidden="true">
+  <div class="tally-inner" id="tally"></div>
+</div>
+
+<main id="app" aria-live="polite"></main>
+
+<script>
+var INFO = {"titulo": "Quiz de pré-requisitos", "lead": "Análise no $\\R^n$ · PMA005. São 20 questões de múltipla escolha, quatro por tema, sorteadas de um banco de 40 (a cada tentativa, questões diferentes), sobre os resultados de Análise na reta e de Álgebra Linear usados na disciplina. Cada resposta é corrigida na hora, com a explicação e a seção do resumo de pré-requisitos onde o assunto está. No final, você descobre se está bem preparado e o que vale rever antes das aulas.", "fraco": "Ponto fraco: vale rever este tema antes do início das aulas.", "abertura": ["você acertou todas as %N questões. Sua base está muito sólida.", "você acertou %T de %N questões: você está bem preparado para a disciplina.", "você acertou %T de %N questões: sua base é boa, mas há lacunas que vale preencher antes das aulas.", "você acertou %T de %N questões. Você vai precisar de uma revisão dos pré-requisitos para acompanhar a disciplina com tranquilidade.", "você acertou %T de %N questões. Recomendo uma revisão cuidadosa dos pré-requisitos antes do início das aulas."], "conselho": "O resumo de pré-requisitos indica onde estudar cada assunto.", "fecho": ["Pode começar a disciplina com tranquilidade.", "Uma revisão rápida dos pontos acima basta para começar bem.", "Reserve alguns dias para essa revisão: o curso de verão é intensivo e não sobra tempo para recuperar a base durante as aulas.", "Comece já: o curso de verão é intensivo, e a matéria nova se apoia diretamente nesses resultados. Depois, refaça o quiz.", "Comece pelos temas mais fracos, usando as referências do resumo, e refaça o quiz em seguida. Se preferir, converse com o professor antes do início das aulas."]};
+var TOPICS = [{"name": "Reais", "long": "Conjuntos e números reais", "low": "conjuntos e números reais", "ver": "seções 1 e 2 do resumo"}, {"name": "Sequências", "long": "Sequências e séries", "low": "sequências e séries", "ver": "seção 3 do resumo"}, {"name": "Derivadas", "long": "Continuidade e derivadas na reta", "low": "continuidade e derivadas na reta", "ver": "seções 4 e 5 do resumo"}, {"name": "Integral", "long": "Integral de Riemann na reta", "low": "integral de Riemann na reta", "ver": "seção 6 do resumo"}, {"name": "Álg. Linear", "long": "Álgebra Linear", "low": "Álgebra Linear", "ver": "seção 7 do resumo"}];
+var BANK = [
+ {
+  "t": 0,
+  "ref": "Seção 2 do resumo de pré-requisitos",
+  "q": "Seja $X=\\{1-1/n\\colon n\\in\\N\\}$. Então:",
+  "o": [
+   "$\\sup X=1$, e $X$ não tem elemento máximo.",
+   "$\\sup X=1$, e $1$ é o elemento máximo de $X$.",
+   "$\\sup X=0$, pois $1-1/n$ decresce.",
+   "$X$ não é limitado superiormente."
+  ],
+  "e": "Todo elemento satisfaz $1-1/n\\lt 1$, logo $1$ é cota superior e não pertence a $X$. Dado $\\varepsilon\\gt 0$, pela propriedade arquimediana existe $n$ com $1/n\\lt \\varepsilon$, isto é, $1-1/n\\gt 1-\\varepsilon$; logo nenhuma cota menor que $1$ serve, e $\\sup X=1$."
+ },
+ {
+  "t": 0,
+  "ref": "Seção 1 do resumo de pré-requisitos",
+  "q": "Qual dos conjuntos abaixo é enumerável?",
+  "o": [
+   "$\\Q\\times\\Q$.",
+   "O intervalo $(0,10^{-6})$.",
+   "$\\R\\setminus\\Q$.",
+   "O conjunto das sequências $(a_k)$ com $a_k\\in\\{0,1\\}$."
+  ],
+  "e": "O produto cartesiano de dois enumeráveis é enumerável. Os outros três não são: todo intervalo não degenerado é não enumerável; se $\\R\\setminus\\Q$ fosse enumerável, $\\R=\\Q\\cup(\\R\\setminus\\Q)$ também seria; e o argumento diagonal de Cantor mostra que as sequências de $0$ e $1$ não são enumeráveis."
+ },
+ {
+  "t": 0,
+  "ref": "Seção 1 do resumo de pré-requisitos",
+  "q": "Sejam $f\\colon X\\to Y$ uma função qualquer, $A,B\\subset Y$ e $C,D\\subset X$. Qual igualdade vale sempre?",
+  "o": [
+   "$f^{-1}(A\\cap B)=f^{-1}(A)\\cap f^{-1}(B)$.",
+   "$f(C\\cap D)=f(C)\\cap f(D)$.",
+   "$f(f^{-1}(A))=A$.",
+   "$f^{-1}(f(C))=C$."
+  ],
+  "e": "A imagem inversa preserva reuniões, interseções e complementares. As outras três podem falhar: se $f$ é constante e $C,D$ são disjuntos e não vazios, $f(C\\cap D)=\\emptyset\\neq f(C)\\cap f(D)$ e $f^{-1}(f(C))=X\\neq C$; e $f(f^{-1}(A))=A\\cap f(X)$, que difere de $A$ se $f$ não é sobrejetiva."
+ },
+ {
+  "t": 0,
+  "ref": "Seção 2 do resumo de pré-requisitos",
+  "q": "Sejam $X,Y\\subset\\R$ não vazios e limitados e $X+Y=\\{x+y\\colon x\\in X,\\ y\\in Y\\}$. Então $\\sup(X+Y)$ é igual a:",
+  "o": [
+   "$\\sup X+\\sup Y$.",
+   "um número menor ou igual a $\\sup X+\\sup Y$, podendo ser menor.",
+   "$\\max\\{\\sup X,\\sup Y\\}$.",
+   "$\\sup X\\cdot\\sup Y$."
+  ],
+  "e": "Como $x+y\\le\\sup X+\\sup Y$, este número é cota superior. Dado $\\varepsilon\\gt 0$, existem $x\\gt \\sup X-\\varepsilon/2$ e $y\\gt \\sup Y-\\varepsilon/2$, de modo que $x+y\\gt \\sup X+\\sup Y-\\varepsilon$. Logo nenhuma cota menor serve, e vale a igualdade."
+ },
+ {
+  "t": 1,
+  "ref": "Seção 3 do resumo de pré-requisitos",
+  "q": "Qual afirmação sobre sequências de números reais é verdadeira?",
+  "o": [
+   "Toda sequência limitada possui uma subsequência convergente.",
+   "Toda sequência limitada é convergente.",
+   "Toda sequência monótona é convergente.",
+   "Se $x_{k+1}-x_k\\to0$, então $(x_k)$ é de Cauchy."
+  ],
+  "e": "É o Teorema de Bolzano–Weierstrass. A sequência $(-1)^k$ é limitada e não converge; $x_k=k$ é monótona e não converge; e $x_k=\\sqrt k$ satisfaz $x_{k+1}-x_k\\to0$ sem ser de Cauchy (nem limitada)."
+ },
+ {
+  "t": 1,
+  "ref": "Seção 3 do resumo de pré-requisitos",
+  "q": "Para $p\\gt 0$, a série $\\sum_{k\\ge1}1/k^p$:",
+  "o": [
+   "converge se, e somente se, $p\\gt 1$.",
+   "converge se, e somente se, $p\\ge1$.",
+   "converge para todo $p\\gt 0$, pois $1/k^p\\to0$.",
+   "diverge para todo $p\\gt 0$."
+  ],
+  "e": "Para $p=1$ é a série harmônica, que diverge; para $p\\lt 1$ os termos são maiores, e ela também diverge. Para $p\\gt 1$ converge (compare com $\\int_1^\\infty t^{-p}dt$). A condição $a_k\\to0$ é necessária, mas não suficiente."
+ },
+ {
+  "t": 1,
+  "ref": "Seção 3 do resumo de pré-requisitos",
+  "q": "Quanto vale $\\sum_{k\\ge0}(2/3)^k$?",
+  "o": [
+   "$3$.",
+   "$2$.",
+   "$3/2$.",
+   "A série diverge."
+  ],
+  "e": "É uma série geométrica de razão $r=2/3$, com $|r|\\lt 1$; sua soma é $1/(1-r)=1/(1/3)=3$."
+ },
+ {
+  "t": 1,
+  "ref": "Seção 3 do resumo de pré-requisitos",
+  "q": "A série $\\sum_{k\\ge1}(-1)^{k+1}/k$ converge. Sobre as séries obtidas reordenando seus termos:",
+  "o": [
+   "Há reordenações com somas diferentes, porque a série não converge absolutamente.",
+   "Toda reordenação converge para a mesma soma, porque a série converge.",
+   "Nenhuma reordenação converge.",
+   "Toda reordenação converge, mas possivelmente para outra soma."
+  ],
+  "e": "Só as séries absolutamente convergentes têm a soma independente da ordem. Como $\\sum1/k$ diverge, pelo Teorema de Riemann a série pode ser reordenada para convergir a qualquer valor ou para divergir. Nas notas, usamos a independência da ordem apenas para somas de termos não negativos."
+ },
+ {
+  "t": 2,
+  "ref": "Seção 4 do resumo de pré-requisitos",
+  "q": "Seja $f\\colon(0,1]\\to\\R$, $f(x)=1/x$. Qual afirmação é verdadeira?",
+  "o": [
+   "$f$ é contínua, mas não é limitada nem uniformemente contínua.",
+   "$f$ é uniformemente contínua, pois é contínua num intervalo limitado.",
+   "$f$ atinge seu valor máximo, pelo Teorema de Weierstrass.",
+   "$f$ é limitada, pois seu domínio é limitado."
+  ],
+  "e": "Os teoremas de Weierstrass e da continuidade uniforme exigem um intervalo compacto $[a,b]$; aqui o domínio não é fechado. $f$ é ilimitada perto de $0$, e com $x_k=1/k$, $y_k=1/(k+1)$ temos $x_k-y_k\\to0$, mas $f(y_k)-f(x_k)=1$."
+ },
+ {
+  "t": 2,
+  "ref": "Seção 5 do resumo de pré-requisitos",
+  "q": "Para $f(x)=x^3$ em $[0,2]$, qual é o ponto $c\\in(0,2)$ dado pelo Teorema do Valor Médio?",
+  "o": [
+   "$c=2/\\sqrt3$.",
+   "$c=1$.",
+   "$c=4/3$.",
+   "$c=\\sqrt2$."
+  ],
+  "e": "Devemos ter $f'(c)=\\dfrac{f(2)-f(0)}{2}=4$, isto é, $3c^2=4$, logo $c=2/\\sqrt3\\approx1{,}15\\in(0,2)$."
+ },
+ {
+  "t": 2,
+  "ref": "Seção 5 do resumo de pré-requisitos",
+  "q": "Seja $f\\colon\\R\\to\\R$ derivável com $f'(x)\\gt 0$ para todo $x$. Então, necessariamente:",
+  "o": [
+   "$f$ é estritamente crescente.",
+   "$f$ é sobrejetiva.",
+   "$f$ é limitada inferiormente.",
+   "$f$ é convexa."
+  ],
+  "e": "Pelo Teorema do Valor Médio, se $x\\lt y$ então $f(y)-f(x)=f'(c)(y-x)\\gt 0$. As outras falham: $\\arctan$ não é sobrejetiva, $f(x)=x$ não é limitada inferiormente, e $f(x)=x^3+x$ não é convexa."
+ },
+ {
+  "t": 2,
+  "ref": "Seção 5 do resumo de pré-requisitos",
+  "q": "Seja $f$ de classe $C^3$ perto de $0$, com $f(0)=f'(0)=f''(0)=0$ e $f'''(0)=6$. Quanto vale $\\lim_{x\\to0}f(x)/x^3$?",
+  "o": [
+   "$1$.",
+   "$6$.",
+   "$0$.",
+   "$3$."
+  ],
+  "e": "Pela fórmula de Taylor com resto infinitesimal, $f(x)=\\frac{f'''(0)}{3!}x^3+r(x)=x^3+r(x)$, com $r(x)/x^3\\to0$. Logo o limite é $1$."
+ },
+ {
+  "t": 3,
+  "ref": "Seção 6 do resumo de pré-requisitos",
+  "q": "Seja $f\\colon[0,1]\\to\\R$ com $f(x)=1$ se $x\\in\\Q$ e $f(x)=0$ caso contrário. Então:",
+  "o": [
+   "a integral inferior é $0$, a superior é $1$, e $f$ não é integrável.",
+   "$f$ é integrável com integral $0$, pois $\\Q$ é enumerável.",
+   "$f$ é integrável com integral $1$.",
+   "as integrais inferior e superior valem $1/2$."
+  ],
+  "e": "Todo intervalo de uma partição contém racionais e irracionais, logo $m_i=0$ e $M_i=1$: toda soma inferior vale $0$ e toda soma superior vale $1$. Na Análise no $\\R^n$ veremos que o problema é que $f$ é descontínua em todos os pontos."
+ },
+ {
+  "t": 3,
+  "ref": "Seção 6 do resumo de pré-requisitos",
+  "q": "Seja $f\\colon[0,2]\\to\\R$ com $f=1$ em $[0,1)$, $f(1)=100$ e $f=3$ em $(1,2]$. Quanto vale $\\int_0^2f$?",
+  "o": [
+   "$4$.",
+   "$104$.",
+   "$2$.",
+   "$f$ não é integrável, pois é descontínua em $x=1$."
+  ],
+  "e": "Alterar a função num ponto não muda as integrais inferior e superior. Pela aditividade, $\\int_0^2f=\\int_0^11+\\int_1^23=1+3=4$."
+ },
+ {
+  "t": 3,
+  "ref": "Seção 6 do resumo de pré-requisitos",
+  "q": "Seja $F(x)=\\int_0^{x^2}\\cos t\\,dt$. Então $F'(x)$ é:",
+  "o": [
+   "$2x\\cos(x^2)$.",
+   "$\\cos(x^2)$.",
+   "$2x\\sen(x^2)$.",
+   "$\\cos(2x)$."
+  ],
+  "e": "Com $G(u)=\\int_0^u\\cos t\\,dt$, o Teorema Fundamental do Cálculo dá $G'(u)=\\cos u$. Como $F(x)=G(x^2)$, a Regra da Cadeia dá $F'(x)=G'(x^2)\\cdot2x=2x\\cos(x^2)$."
+ },
+ {
+  "t": 3,
+  "ref": "Seção 6 do resumo de pré-requisitos",
+  "q": "Quanto vale $\\int_0^1xe^x\\,dx$?",
+  "o": [
+   "$1$.",
+   "$e$.",
+   "$e-1$.",
+   "$1/2$."
+  ],
+  "e": "Integrando por partes, $\\int_0^1xe^x\\,dx=\\bigl[xe^x\\bigr]_0^1-\\int_0^1e^x\\,dx=e-(e-1)=1$."
+ },
+ {
+  "t": 4,
+  "ref": "Seção 7 do resumo de pré-requisitos",
+  "q": "Seja $T\\colon\\R^5\\to\\R^3$ linear e sobrejetiva. Qual é a dimensão de $\\ker T$?",
+  "o": [
+   "$2$.",
+   "$3$.",
+   "$0$.",
+   "$8$."
+  ],
+  "e": "Pelo teorema do núcleo e da imagem, $5=\\dim\\ker T+\\dim T(\\R^5)=\\dim\\ker T+3$."
+ },
+ {
+  "t": 4,
+  "ref": "Seção 7 do resumo de pré-requisitos",
+  "q": "Seja $A$ uma matriz $3\\times3$ com $\\det A=2$. Quanto vale $\\det(2A)$?",
+  "o": [
+   "$16$.",
+   "$4$.",
+   "$8$.",
+   "$2$."
+  ],
+  "e": "O determinante é linear em cada uma das $3$ colunas; multiplicar todas por $2$ multiplica o determinante por $2^3$. Logo $\\det(2A)=8\\cdot2=16$."
+ },
+ {
+  "t": 4,
+  "ref": "Seção 7 do resumo de pré-requisitos",
+  "q": "Qual é o posto da matriz $\\begin{bmatrix}1&2&3\\\\2&4&6\\\\1&0&1\\end{bmatrix}$?",
+  "o": [
+   "$2$.",
+   "$3$.",
+   "$1$.",
+   "Depende da base escolhida em $\\R^3$."
+  ],
+  "e": "A segunda linha é o dobro da primeira, logo $\\det=0$ e o posto é menor que $3$; a primeira e a terceira linhas são linearmente independentes, logo o posto é $2$. O posto de uma matriz não depende de escolhas."
+ },
+ {
+  "t": 4,
+  "ref": "Seção 7 do resumo de pré-requisitos",
+  "q": "Seja $A=\\begin{bmatrix}2&1\\\\1&2\\end{bmatrix}$. A forma quadrática $x\\mapsto\\langle Ax,x\\rangle$ em $\\R^2$:",
+  "o": [
+   "é positiva, pois os autovalores de $A$ são $1$ e $3$.",
+   "é indefinida, pois $\\langle Ax,x\\rangle\\lt 0$ para $x=(1,-1)$.",
+   "não é positiva, pois $\\langle Ax,x\\rangle=0$ para algum $x\\neq\\zero$.",
+   "é positiva apenas para $x$ no primeiro quadrante."
+  ],
+  "e": "O polinômio característico é $(2-\\lambda)^2-1$, com raízes $1$ e $3$; pelo Teorema Espectral a forma é positiva. De fato, $\\langle Ax,x\\rangle=2x_1^2+2x_1x_2+2x_2^2=x_1^2+x_2^2+(x_1+x_2)^2$; para $x=(1,-1)$ vale $2\\gt 0$."
+ },
+ {
+  "t": 0,
+  "ref": "Seção 2 do resumo de pré-requisitos",
+  "q": "Seja $X=\\{x+1/x\\colon x\\gt 0\\}$. Então $\\inf X$:",
+  "o": [
+   "vale $2$ e é o elemento mínimo de $X$.",
+   "vale $0$.",
+   "vale $2$, mas não pertence a $X$.",
+   "não existe, pois $X$ não é limitado inferiormente."
+  ],
+  "e": "Para $x\\gt 0$, $x+1/x-2=(\\sqrt x-1/\\sqrt x)^2\\ge0$, com igualdade se, e somente se, $x=1$. Logo $2$ é cota inferior e pertence a $X$."
+ },
+ {
+  "t": 0,
+  "ref": "Seção 2 do resumo de pré-requisitos",
+  "q": "Sejam $a\\lt b$ números reais. No intervalo $(a,b)$:",
+  "o": [
+   "há infinitos racionais e infinitos irracionais.",
+   "há infinitos racionais, mas pode não haver irracionais.",
+   "há pelo menos um racional, mas talvez só um número finito deles.",
+   "há infinitos irracionais, mas pode não haver racionais."
+  ],
+  "e": "$\\Q$ e $\\R\\setminus\\Q$ são densos em $\\R$: todo intervalo aberto não vazio contém um racional e um irracional. Aplicando isso a $(a,b)$, depois a $(a,r_1)$, a $(a,r_2)$, etc., obtém-se uma infinidade de cada tipo."
+ },
+ {
+  "t": 0,
+  "ref": "Seção 1 do resumo de pré-requisitos",
+  "q": "Para cada $k\\in\\N$, seja $A_k$ um conjunto enumerável. Então $\\bigcup_{k\\in\\N}A_k$:",
+  "o": [
+   "é enumerável.",
+   "pode não ser enumerável.",
+   "é finito.",
+   "é enumerável apenas se cada $A_k$ for finito."
+  ],
+  "e": "A reunião de uma família enumerável de conjuntos enumeráveis é enumerável: se $A_k=\\{a_{k1},a_{k2},\\dots\\}$, a aplicação $(k,j)\\mapsto a_{kj}$ é sobrejetiva a partir de $\\N\\times\\N$, que é enumerável. É o que se usa ao provar que a reunião enumerável de conjuntos de medida nula tem medida nula."
+ },
+ {
+  "t": 0,
+  "ref": "Seção 1 do resumo de pré-requisitos",
+  "q": "Sejam $f\\colon X\\to Y$ e $g\\colon Y\\to Z$ tais que $g\\circ f$ é injetiva. Então, necessariamente:",
+  "o": [
+   "$f$ é injetiva.",
+   "$g$ é injetiva.",
+   "$f$ e $g$ são injetivas.",
+   "$g$ é sobrejetiva."
+  ],
+  "e": "Se $f(x)=f(x')$, então $g(f(x))=g(f(x'))$, logo $x=x'$. Já $g$ pode não ser injetiva: com $X$ um ponto, $f$ qualquer e $g$ constante, $g\\circ f$ é injetiva."
+ },
+ {
+  "t": 1,
+  "ref": "Seção 3 do resumo de pré-requisitos",
+  "q": "Seja $x_1=1$ e $x_{k+1}=\\sqrt{2+x_k}$. Então:",
+  "o": [
+   "$(x_k)$ é crescente, limitada por $2$ e converge para $2$.",
+   "$(x_k)$ converge para $\\sqrt2$.",
+   "$(x_k)$ diverge.",
+   "$(x_k)$ converge para $1$."
+  ],
+  "e": "Por indução, $x_k\\lt 2$, e $x_{k+1}^2-x_k^2=2+x_k-x_k^2=(2-x_k)(1+x_k)\\gt 0$. Sendo monótona e limitada, converge para algum $L\\ge1$, que satisfaz $L=\\sqrt{2+L}$, isto é, $L=2$."
+ },
+ {
+  "t": 1,
+  "ref": "Seção 3 do resumo de pré-requisitos",
+  "q": "Uma sequência $(x_k)$ satisfaz $|x_{k+1}-x_k|\\le2^{-k}$ para todo $k$. Então:",
+  "o": [
+   "$(x_k)$ é de Cauchy e, portanto, converge.",
+   "$(x_k)$ pode divergir.",
+   "$(x_k)$ é monótona.",
+   "$(x_k)$ converge para $0$."
+  ],
+  "e": "Para $l\\gt k$, $|x_l-x_k|\\le\\sum_{j\\ge k}2^{-j}=2^{1-k}$, que tende a $0$. Pelo critério de Cauchy, converge; o limite pode ser qualquer número (por exemplo, se a sequência for constante)."
+ },
+ {
+  "t": 1,
+  "ref": "Seção 3 do resumo de pré-requisitos",
+  "q": "A série $\\sum_{k\\ge1}\\dfrac{k^2}{2^k}$:",
+  "o": [
+   "converge, pelo critério da razão.",
+   "diverge, pois $k^2\\to\\infty$.",
+   "converge, mas não absolutamente.",
+   "não pode ser estudada pelo critério da razão, que é inconclusivo aqui."
+  ],
+  "e": "$\\dfrac{(k+1)^2/2^{k+1}}{k^2/2^k}=\\dfrac12\\Bigl(1+\\dfrac1k\\Bigr)^2\\to\\dfrac12\\lt 1$. Como os termos são positivos, a convergência é absoluta."
+ },
+ {
+  "t": 1,
+  "ref": "Seção 3 do resumo de pré-requisitos",
+  "q": "Quais são os valores de aderência de $x_k=(-1)^k+1/k$?",
+  "o": [
+   "$1$ e $-1$.",
+   "Apenas $0$.",
+   "Apenas $1$.",
+   "Todos os pontos de $[-1,1]$."
+  ],
+  "e": "A subsequência dos índices pares tende a $1$ e a dos ímpares tende a $-1$. Toda subsequência convergente tem infinitos termos de um desses dois tipos, logo seu limite é $1$ ou $-1$."
+ },
+ {
+  "t": 2,
+  "ref": "Seção 4 do resumo de pré-requisitos",
+  "q": "Todo polinômio real de grau ímpar:",
+  "o": [
+   "tem pelo menos uma raiz real.",
+   "tem exatamente uma raiz real.",
+   "tem uma raiz no intervalo $[-1,1]$.",
+   "é sobrejetivo apenas se o coeficiente líder for positivo."
+  ],
+  "e": "Se o coeficiente líder é positivo, $p(x)\\to+\\infty$ quando $x\\to+\\infty$ e $p(x)\\to-\\infty$ quando $x\\to-\\infty$ (ao contrário, se negativo); pelo Teorema do Valor Intermediário, $p$ assume todos os valores reais, em particular $0$. O polinômio $x^3-x$ tem três raízes, e $x-5$ não tem raiz em $[-1,1]$."
+ },
+ {
+  "t": 2,
+  "ref": "Seção 5 do resumo de pré-requisitos",
+  "q": "Seja $f(x)=x^3+x$, que é crescente e bijetiva de $\\R$ em $\\R$. Quanto vale $(f^{-1})'(2)$?",
+  "o": [
+   "$1/4$.",
+   "$4$.",
+   "$1/2$.",
+   "$1/3$."
+  ],
+  "e": "$f(1)=2$ e $f'(x)=3x^2+1$, logo $f'(1)=4\\neq0$. Pela derivada da inversa, $(f^{-1})'(2)=1/f'(1)=1/4$."
+ },
+ {
+  "t": 2,
+  "ref": "Seção 5 do resumo de pré-requisitos",
+  "q": "Para $f(x)=x^3$, temos $f'(0)=0$. Então:",
+  "o": [
+   "$0$ não é máximo nem mínimo local: $f'(c)=0$ é necessário, mas não suficiente, para um extremo local.",
+   "$0$ é um ponto de mínimo local.",
+   "$0$ é um ponto de máximo local.",
+   "$f$ é constante numa vizinhança de $0$."
+  ],
+  "e": "$f$ assume valores negativos à esquerda de $0$ e positivos à direita. Num extremo local interior, a derivada se anula, mas a recíproca é falsa."
+ },
+ {
+  "t": 2,
+  "ref": "Seção 5 do resumo de pré-requisitos",
+  "q": "Aproximando $e^x$ por $1+x+x^2/2$ no intervalo $[0,1/10]$, o resto de Lagrange garante que o erro é no máximo:",
+  "o": [
+   "$e^{1/10}/6000$, que é menor que $0{,}0002$.",
+   "$1/1000$, mas não menos que isso.",
+   "$1/200$.",
+   "$e/6$."
+  ],
+  "e": "O resto é $\\dfrac{e^c}{3!}x^3$ com $0\\lt c\\lt x\\le1/10$, logo é no máximo $\\dfrac{e^{1/10}}{6}\\cdot\\dfrac1{1000}=\\dfrac{e^{1/10}}{6000}\\approx0{,}000184$."
+ },
+ {
+  "t": 3,
+  "ref": "Seção 6 do resumo de pré-requisitos",
+  "q": "Toda função monótona $f\\colon[a,b]\\to\\R$:",
+  "o": [
+   "é integrável.",
+   "é integrável apenas se for contínua.",
+   "é contínua.",
+   "tem no máximo um número finito de descontinuidades."
+  ],
+  "e": "Com a partição em $k$ intervalos iguais, se $f$ é não decrescente, $S(f;P)-s(f;P)=\\frac{b-a}k\\bigl(f(b)-f(a)\\bigr)\\to0$. Uma função monótona pode ter infinitos (enumeráveis) saltos e ainda assim ser integrável."
+ },
+ {
+  "t": 3,
+  "ref": "Seção 6 do resumo de pré-requisitos",
+  "q": "Seja $f\\colon[0,2]\\to\\R$ contínua com $\\int_0^2f=6$. Então, necessariamente:",
+  "o": [
+   "existe $c\\in[0,2]$ com $f(c)=3$.",
+   "$f(1)=3$.",
+   "$f(x)\\le3$ para todo $x$.",
+   "existe $c\\in[0,2]$ com $f(c)=6$."
+  ],
+  "e": "Pelo teorema do valor médio para integrais, existe $c$ com $\\int_0^2f=f(c)(2-0)$, isto é, $f(c)=3$. A função $f(x)=3x$ mostra que as outras afirmações podem falhar."
+ },
+ {
+  "t": 3,
+  "ref": "Seção 6 do resumo de pré-requisitos",
+  "q": "Quanto vale $\\int_0^{\\pi/2}\\sen x\\cos x\\,dx$?",
+  "o": [
+   "$1/2$.",
+   "$1$.",
+   "$0$.",
+   "$\\pi/4$."
+  ],
+  "e": "Com a mudança $u=\\sen x$, $du=\\cos x\\,dx$, a integral vira $\\int_0^1u\\,du=1/2$."
+ },
+ {
+  "t": 3,
+  "ref": "Seção 6 do resumo de pré-requisitos",
+  "q": "Qual das integrais impróprias converge?",
+  "o": [
+   "$\\int_1^\\infty dx/x^2$.",
+   "$\\int_1^\\infty dx/x$.",
+   "$\\int_1^\\infty dx/\\sqrt x$.",
+   "$\\int_0^\\infty dx$."
+  ],
+  "e": "$\\int_1^b dx/x^2=1-1/b\\to1$. Já $\\int_1^bdx/x=\\log b$ e $\\int_1^bdx/\\sqrt x=2\\sqrt b-2$ tendem a $\\infty$."
+ },
+ {
+  "t": 4,
+  "ref": "Seção 7 do resumo de pré-requisitos",
+  "q": "Seja $T\\colon\\R^n\\to\\R^n$ linear com $\\ker T=\\{\\zero\\}$. Então:",
+  "o": [
+   "$T$ é invertível.",
+   "$T$ é injetiva, mas pode não ser sobrejetiva.",
+   "$T$ é a identidade.",
+   "$\\det T=1$."
+  ],
+  "e": "Pelo teorema do núcleo e da imagem, $\\dim T(\\R^n)=n-0=n$, logo $T$ é sobrejetiva. Para operadores em dimensão finita, injetivo equivale a sobrejetivo."
+ },
+ {
+  "t": 4,
+  "ref": "Seção 7 do resumo de pré-requisitos",
+  "q": "Qual é a inversa de $\\begin{bmatrix}2&1\\\\5&3\\end{bmatrix}$?",
+  "o": [
+   "$\\begin{bmatrix}3&-1\\\\-5&2\\end{bmatrix}$.",
+   "$\\begin{bmatrix}3&1\\\\5&2\\end{bmatrix}$.",
+   "$\\begin{bmatrix}-3&1\\\\5&-2\\end{bmatrix}$.",
+   "$\\begin{bmatrix}2&-1\\\\-5&3\\end{bmatrix}$."
+  ],
+  "e": "O determinante é $2\\cdot3-1\\cdot5=1$, e pela regra de Cramer a inversa de $\\begin{bmatrix}a&b\\\\c&d\\end{bmatrix}$ é $\\frac1{ad-bc}\\begin{bmatrix}d&-b\\\\-c&a\\end{bmatrix}$."
+ },
+ {
+  "t": 4,
+  "ref": "Seção 7 do resumo de pré-requisitos",
+  "q": "Seja $E\\subset\\R^4$ um subespaço de dimensão $1$. Quantos subespaços $E'$ satisfazem $\\R^4=E\\oplus E'$?",
+  "o": [
+   "Infinitos, todos de dimensão $3$.",
+   "Exatamente um: o complemento ortogonal de $E$.",
+   "Nenhum, em geral.",
+   "Infinitos, de dimensões variadas."
+  ],
+  "e": "Completando uma base $\\{u\\}$ de $E$ com quaisquer três vetores $w_1,w_2,w_3$ que formem com $u$ uma base, $E'$ gerado pelos $w_i$ é complementar; há infinitas escolhas. Sempre $\\dim E'=4-1=3$. O complemento ortogonal é apenas um deles."
+ },
+ {
+  "t": 4,
+  "ref": "Seção 7 do resumo de pré-requisitos",
+  "q": "Quanto vale $\\det\\begin{bmatrix}1&2&0\\\\3&4&0\\\\5&6&2\\end{bmatrix}$?",
+  "o": [
+   "$-4$.",
+   "$4$.",
+   "$-2$.",
+   "$8$."
+  ],
+  "e": "A matriz é triangular por blocos, com blocos diagonais $\\begin{bmatrix}1&2\\\\3&4\\end{bmatrix}$ (determinante $-2$) e $[2]$. Logo o determinante é $(-2)\\cdot2=-4$."
+ }
+];
+var POR_TEMA = 4;
+</script>
+<script>
+(function () {
+  "use strict";
+
+  var state = { i: 0, answers: [], order: [] };
+  var app = document.getElementById("app");
+  var tally = document.getElementById("tally");
+  var KEYS = ["a", "b", "c", "d"];
+  var nomeAluno = "";
+
+  /* Sorteia POR_TEMA questões de cada tema do banco, na ordem dos temas */
+  function sortear() {
+    var sel = [];
+    TOPICS.forEach(function (tp, ti) {
+      var doTema = BANK.filter(function (q) { return q.t === ti; });
+      var ord = shuffle(doTema.length);
+      for (var k = 0; k < Math.min(POR_TEMA, doTema.length); k++) sel.push(doTema[ord[k]]);
+    });
+    return sel;
+  }
+  var QUESTIONS;
+
+  var mjResolve;
+  var mjReady = new Promise(function (res) { mjResolve = res; });
+  window.__mjReady = function () { mjResolve(); };
+  setTimeout(function () { mjResolve(); }, 8000);
+
+  function typeset(el) {
+    return mjReady.then(function () {
+      if (window.MathJax && MathJax.typesetPromise) {
+        return MathJax.typesetPromise([el]).catch(function () {});
+      }
+    });
+  }
+  function clearMath(el) {
+    if (window.MathJax && MathJax.typesetClear) { try { MathJax.typesetClear([el]); } catch (e) {} }
+  }
+  function esc(t) {
+    return String(t).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  function shuffle(n) {
+    var a = [];
+    for (var k = 0; k < n; k++) a.push(k);
+    for (var j = n - 1; j > 0; j--) {
+      var r = Math.floor(Math.random() * (j + 1));
+      var t = a[j]; a[j] = a[r]; a[r] = t;
+    }
+    return a;
+  }
+  function primeiroNome() { return esc(nomeAluno.split(/\s+/)[0]); }
+  function lista(xs) {
+    if (xs.length <= 1) return xs.join("");
+    return xs.slice(0, -1).join(", ") + " e " + xs[xs.length - 1];
+  }
+  function porTema() {
+    return TOPICS.map(function (tp, ti) {
+      var n = 0, right = 0;
+      QUESTIONS.forEach(function (q, qi) {
+        if (q.t !== ti) return;
+        n++;
+        if (state.answers[qi] === true) right++;
+      });
+      return { tp: tp, n: n, right: right };
+    });
+  }
+
+  /* ---------------- Régua de tracinhos ---------------- */
+  function renderTally() {
+    var html = "";
+    TOPICS.forEach(function (tp, ti) {
+      html += '<div class="group"><div class="marks">';
+      QUESTIONS.forEach(function (q, qi) {
+        if (q.t !== ti) return;
+        var cls = "mark";
+        var a = state.answers[qi];
+        if (a === true) cls += " right";
+        else if (a === false) cls += " wrong";
+        else if (qi === state.i && state.started && !state.done) cls += " current";
+        html += '<span class="' + cls + '"></span>';
+      });
+      html += '</div><span class="group-name">' + tp.name + "</span></div>";
+    });
+    var answered = state.answers.filter(function (x) { return x !== undefined; }).length;
+    html += '<span class="count">' + answered + " de " + QUESTIONS.length + "</span>";
+    tally.innerHTML = html;
+  }
+
+  /* ---------------- Telas ---------------- */
+  function renderIntro() {
+    clearMath(app);
+    var rows = TOPICS.map(function (tp) {
+      return '<li><span class="t-name">' + tp.long + '</span><span class="t-dicas">' + tp.ver + "</span></li>";
+    }).join("");
+    app.innerHTML =
+      "<h1>" + INFO.titulo + "</h1>" +
+      '<p class="lead">' + INFO.lead + "</p>" +
+      '<ul class="topics">' + rows + "</ul>" +
+      '<div class="nome-box"><label for="nome">Seu nome</label>' +
+      '<input id="nome" type="text" autocomplete="name" placeholder="Digite seu nome completo" value="' + esc(nomeAluno) + '">' +
+      '<p class="erro" id="nome-erro"></p></div>' +
+      '<div class="nav"><button class="btn" id="start">Começar o quiz</button>' +
+      '<span class="hint">Use as teclas 1 a 4 para responder e Enter para avançar.</span></div>';
+    var campo = document.getElementById("nome");
+    function comecar() {
+      var n = campo.value.trim().replace(/\s+/g, " ");
+      if (!n) {
+        document.getElementById("nome-erro").textContent = "Escreva seu nome para começar.";
+        campo.focus();
+        return;
+      }
+      nomeAluno = n;
+      start();
+    }
+    document.getElementById("start").addEventListener("click", comecar);
+    campo.addEventListener("keydown", function (ev) { if (ev.key === "Enter") { ev.preventDefault(); comecar(); } });
+    renderTally();
+    typeset(app);
+  }
+
+  function start() {
+    QUESTIONS = sortear();
+    state = { i: 0, answers: [], order: QUESTIONS.map(function (q) { return shuffle(q.o.length); }), started: true, done: false };
+    renderQuestion();
+  }
+
+  function renderQuestion() {
+    var qi = state.i, q = QUESTIONS[qi], order = state.order[qi];
+    clearMath(app);
+    var opts = order.map(function (oi, pos) {
+      return '<button class="opt" data-oi="' + oi + '"><span class="key">' + KEYS[pos] + "</span><span>" + q.o[oi] + "</span></button>";
+    }).join("");
+    app.innerHTML =
+      '<p class="q-topic">Questão ' + (qi + 1) + " de " + QUESTIONS.length + ": " + TOPICS[q.t].long + "</p>" +
+      '<div class="q-text">' + q.q + "</div>" +
+      '<div class="opts" role="group" aria-label="Alternativas">' + opts + "</div>" +
+      '<div id="fb"></div>';
+    Array.prototype.forEach.call(app.querySelectorAll(".opt"), function (b) {
+      b.addEventListener("click", function () { answer(parseInt(b.getAttribute("data-oi"), 10)); });
+    });
+    renderTally();
+    typeset(app).then(function () {
+      var first = app.querySelector(".opt");
+      if (first && !first.disabled) first.focus({ preventScroll: true });
+    });
+    window.scrollTo({ top: 0 });
+  }
+
+  function answer(oi) {
+    var qi = state.i;
+    if (state.answers[qi] !== undefined) return;
+    var q = QUESTIONS[qi];
+    var ok = oi === 0;
+    state.answers[qi] = ok;
+    Array.prototype.forEach.call(app.querySelectorAll(".opt"), function (b) {
+      var bo = parseInt(b.getAttribute("data-oi"), 10);
+      b.disabled = true;
+      if (bo === 0) b.classList.add("is-right");
+      else if (bo === oi) b.classList.add("is-wrong");
+      else b.classList.add("faded");
+    });
+    var last = qi === QUESTIONS.length - 1;
+    var fb = document.getElementById("fb");
+    fb.innerHTML =
+      '<div class="feedback ' + (ok ? "right" : "wrong") + '">' +
+      '<p class="verdict">' + (ok ? "Correto." : "Não é essa.") + "</p>" +
+      '<p class="expl">' + q.e + "</p>" +
+      '<p class="see">Para rever: ' + q.ref + ".</p></div>" +
+      '<div class="nav"><button class="btn" id="next">' + (last ? "Ver o diagnóstico" : "Próxima questão") + "</button></div>";
+    document.getElementById("next").addEventListener("click", next);
+    renderTally();
+    typeset(fb).then(function () {
+      var nb = document.getElementById("next");
+      if (nb) {
+        nb.focus({ preventScroll: true });
+        fb.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      }
+    });
+  }
+
+  function next() {
+    if (state.i < QUESTIONS.length - 1) { state.i++; renderQuestion(); }
+    else { state.done = true; renderResults(); }
+  }
+
+  function verdictFor(r) {
+    if (r.right === r.n) return { cls: "ok", txt: "Seguro neste tema." };
+    if (r.right === r.n - 1) return { cls: "mid", txt: "Quase lá: reveja a questão que errou." };
+    return { cls: "weak", txt: INFO.fraco };
+  }
+
+  /* Retorno personalizado */
+  function parecer(total, temas) {
+    var nome = primeiroNome();
+    var n = QUESTIONS.length;
+    var fortes = temas.filter(function (r) { return r.right === r.n; }).map(function (r) { return "<em>" + r.tp.low + "</em>"; });
+    var quase = temas.filter(function (r) { return r.right === r.n - 1; }).map(function (r) { return "<em>" + r.tp.low + "</em>"; });
+    var fracos = temas.filter(function (r) { return r.right < r.n - 1; });
+    var p = [];
+    var faixa;
+    if (total === n) faixa = 0;
+    else if (total >= 0.85 * n) faixa = 1;
+    else if (total >= 0.65 * n) faixa = 2;
+    else if (total >= 0.45 * n) faixa = 3;
+    else faixa = 4;
+    p.push(nome + ", " + INFO.abertura[faixa].replace("%T", total).replace("%N", n));
+    if (fortes.length && fortes.length < temas.length) {
+      p.push((fortes.length === 1 ? "Seu ponto forte foi " : "Seus pontos fortes foram ") + lista(fortes) + ".");
+    }
+    if (quase.length) {
+      p.push("Em " + lista(quase) + ", faltou pouco: releia as explicações das questões que errou.");
+    }
+    if (fracos.length) {
+      var itens = fracos.map(function (r) { return "<em>" + r.tp.low + "</em> (" + r.tp.ver + ")"; });
+      p.push((fracos.length === 1 ? "O tema que mais pede atenção é " : "Os temas que mais pedem atenção são ") +
+             lista(itens) + ". " + INFO.conselho);
+    }
+    p.push(INFO.fecho[faixa]);
+    return '<div class="parecer">' + p.map(function (x) { return "<p>" + x + "</p>"; }).join("") + "</div>";
+  }
+
+  function renderResults() {
+    clearMath(app);
+    var total = state.answers.filter(function (x) { return x === true; }).length;
+    var temas = porTema();
+    var diag = temas.map(function (r, ti) {
+      var marks = "";
+      QUESTIONS.forEach(function (q, qi) {
+        if (q.t !== ti) return;
+        marks += '<span class="mark ' + (state.answers[qi] ? "right" : "wrong") + '"></span>';
+      });
+      var v = verdictFor(r);
+      var extra = r.right < r.n ? " Para rever: " + r.tp.ver + "." : "";
+      return '<li><div class="diag-head"><span class="diag-name">' + r.tp.long + '</span><span class="marks">' + marks +
+             "</span><span>" + r.right + " de " + r.n + "</span></div>" +
+             '<p class="diag-verdict ' + v.cls + '">' + v.txt + extra + "</p></li>";
+    }).join("");
+
+    var wrong = [];
+    QUESTIONS.forEach(function (q, qi) { if (state.answers[qi] === false) wrong.push(qi); });
+    var review = wrong.map(function (qi) {
+      var q = QUESTIONS[qi];
+      return '<div class="review-item"><div class="q-text">' + (qi + 1) + ". " + q.q + "</div>" +
+             '<p class="ans"><span class="label-right">Resposta:</span> ' + q.o[0] + "</p>" +
+             '<p class="ans">' + q.e + "</p>" +
+             '<p class="see">Para rever: ' + q.ref + ".</p></div>";
+    }).join("");
+
+    var quando = new Date().toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" });
+    app.innerHTML =
+      "<h1>Seu diagnóstico</h1>" +
+      '<div class="ident"><p class="quem">' + esc(nomeAluno) + "</p>" +
+      '<p class="quando">' + INFO.titulo + " · concluído em " + quando + "</p></div>" +
+      '<p class="score">' + total + " <small>de " + QUESTIONS.length + " acertos</small></p>" +
+      parecer(total, temas) +
+      "<h2>Resultado por tema</h2>" +
+      '<ul class="diag">' + diag + "</ul>" +
+      (wrong.length ? "<h2>As questões que você errou</h2>" + '<div class="review">' + review + "</div>" : "") +
+      '<div class="nav"><button class="btn" id="again">Refazer o quiz</button>' +
+      '<a class="btn ghost" href="index.html">Outros testes da disciplina</a>' +
+      '<a class="btn ghost" href="../index.html">Voltar às disciplinas</a></div>';
+    document.getElementById("again").addEventListener("click", start);
+    renderTally();
+    typeset(app);
+    window.scrollTo({ top: 0 });
+  }
+
+  /* ---------------- Teclado ---------------- */
+  document.addEventListener("keydown", function (ev) {
+    if (!state.started || state.done) return;
+    if (ev.target && ev.target.tagName === "INPUT") return;
+    if (ev.key >= "1" && ev.key <= "4") {
+      var b = app.querySelectorAll(".opt")[parseInt(ev.key, 10) - 1];
+      if (b && !b.disabled) { ev.preventDefault(); b.click(); }
+    } else if (ev.key === "Enter" || ev.key === "ArrowRight") {
+      var nx = document.getElementById("next");
+      if (nx && state.answers[state.i] !== undefined) { ev.preventDefault(); nx.click(); }
+    }
+  });
+
+  QUESTIONS = sortear();
+  renderIntro();
+})();
+</script>
+</body>
+</html>

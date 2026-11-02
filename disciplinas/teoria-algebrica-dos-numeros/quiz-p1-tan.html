@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Quiz de preparação para a P1 — Teoria Algébrica dos Números</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --board: #F7F9FB;
+  --board-2: #EEF2F6;
+  --ink: #1C2230;
+  --muted: #5B6577;
+  --rule: #D6DCE4;
+  --blue: #1F4FA8;
+  --red: #B9312C;
+  --green: #1F7A4D;
+  --blue-wash: #E3EBF8;
+  --red-wash: #F8E6E5;
+  --green-wash: #E2F2E9;
+  --empty: #C9D1DC;
+  color-scheme: light;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --board: #12161D;
+    --board-2: #1A2029;
+    --ink: #E6EAF0;
+    --muted: #9AA4B4;
+    --rule: #2A313C;
+    --blue: #8AB0F2;
+    --red: #F08C84;
+    --green: #7BCB9C;
+    --blue-wash: #1C2840;
+    --red-wash: #3A2222;
+    --green-wash: #1B3328;
+    --empty: #39414E;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --board: #12161D;
+  --board-2: #1A2029;
+  --ink: #E6EAF0;
+  --muted: #9AA4B4;
+  --rule: #2A313C;
+  --blue: #8AB0F2;
+  --red: #F08C84;
+  --green: #7BCB9C;
+  --blue-wash: #1C2840;
+  --red-wash: #3A2222;
+  --green-wash: #1B3328;
+  --empty: #39414E;
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: inherit; }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+body {
+  margin: 0;
+  background: var(--board);
+  color: var(--ink);
+  font-family: "Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto;
+  height: env(safe-area-inset-top, 0px);
+  z-index: 10;
+  background: var(--board);
+}
+
+/* ---------- régua de tracinhos ---------- */
+.tally {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 5;
+  background: var(--board);
+  border-bottom: 1px solid var(--rule);
+}
+.tally-inner {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: 0.75rem 1.25rem 0.7rem;
+  display: flex;
+  align-items: flex-end;
+  gap: 1.1rem;
+  overflow-x: auto;
+}
+.group { display: flex; flex-direction: column; gap: 0.3rem; flex: 0 0 auto; }
+.marks { display: flex; gap: 5px; align-items: flex-end; height: 26px; }
+.mark {
+  width: 6px;
+  height: 22px;
+  border-radius: 3px;
+  background: var(--empty);
+  transform: rotate(-6deg);
+  transition: background-color 0.25s ease, height 0.25s ease;
+}
+.mark.current { background: var(--blue); height: 26px; }
+.mark.right { background: var(--green); }
+.mark.wrong { background: var(--red); }
+.group-name { font-size: 0.72rem; color: var(--muted); white-space: nowrap; }
+.count { margin-left: auto; font-size: 0.85rem; color: var(--muted); white-space: nowrap; padding-bottom: 1.1rem; }
+
+/* ---------- conteúdo ---------- */
+main { max-width: 46rem; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+h1 {
+  font-family: "Source Serif 4", Georgia, "Times New Roman", serif;
+  font-weight: 600;
+  font-size: clamp(1.7rem, 4.5vw, 2.35rem);
+  line-height: 1.15;
+  margin: 0 0 0.75rem;
+}
+h2 {
+  font-family: "Source Serif 4", Georgia, serif;
+  font-weight: 600;
+  font-size: 1.35rem;
+  margin: 2rem 0 0.75rem;
+}
+.lead { font-size: 1.05rem; color: var(--muted); max-width: 38rem; margin: 0 0 1.5rem; }
+.serif { font-family: "Source Serif 4", Georgia, serif; }
+
+.topics { list-style: none; padding: 0; margin: 0 0 2rem; }
+.topics li {
+  display: flex;
+  gap: 0.75rem;
+  align-items: baseline;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+.topics li:last-child { border-bottom: 0; }
+.topics .t-name { font-weight: 700; flex: 1 1 auto; }
+.topics .t-dicas { color: var(--muted); font-size: 0.9rem; white-space: nowrap; }
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+.btn {
+  display: inline-block;
+  border: 2px solid var(--blue);
+  background: var(--blue);
+  color: var(--board);
+  font-weight: 700;
+  padding: 0.65rem 1.4rem;
+  border-radius: 999px;
+}
+.btn:hover { filter: brightness(1.08); }
+.btn.ghost { background: transparent; color: var(--blue); }
+a.btn { text-decoration: none; }
+.btn:focus-visible, .opt:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+
+/* ---------- questão ---------- */
+.q-topic { color: var(--blue); font-weight: 700; font-size: 0.95rem; margin: 0 0 0.5rem; }
+.q-text {
+  font-family: "Source Serif 4", Georgia, serif;
+  font-size: 1.15rem;
+  line-height: 1.6;
+  margin: 0 0 1.4rem;
+}
+.opts { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.25rem; }
+.opt {
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-start;
+  text-align: left;
+  width: 100%;
+  color: var(--ink);
+  background: var(--board-2);
+  border: 2px solid transparent;
+  border-radius: 12px;
+  padding: 0.8rem 1rem;
+  font-family: "Source Serif 4", Georgia, serif;
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+.opt:hover:not([disabled]) { border-color: var(--blue); }
+.opt .key {
+  flex: 0 0 auto;
+  font-family: "Atkinson Hyperlegible", system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--muted);
+  border: 1.5px solid var(--rule);
+  border-radius: 50%;
+  width: 1.7rem;
+  height: 1.7rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.1rem;
+}
+.opt[disabled] { cursor: default; }
+.opt.is-right { background: var(--green-wash); border-color: var(--green); }
+.opt.is-right .key { border-color: var(--green); color: var(--green); }
+.opt.is-wrong { background: var(--red-wash); border-color: var(--red); }
+.opt.is-wrong .key { border-color: var(--red); color: var(--red); }
+.opt.faded { opacity: 0.55; }
+
+.feedback {
+  border-left: 4px solid var(--blue);
+  padding: 0.25rem 0 0.25rem 1rem;
+  margin: 0 0 1.5rem;
+}
+.feedback.right { border-color: var(--green); }
+.feedback.wrong { border-color: var(--red); }
+.verdict { font-weight: 700; margin: 0 0 0.35rem; }
+.feedback.right .verdict { color: var(--green); }
+.feedback.wrong .verdict { color: var(--red); }
+.feedback .expl { font-family: "Source Serif 4", Georgia, serif; font-size: 1.02rem; line-height: 1.6; margin: 0 0 0.5rem; }
+.feedback .see { font-size: 0.9rem; color: var(--muted); margin: 0; }
+.nav { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
+.hint { font-size: 0.85rem; color: var(--muted); }
+
+/* ---------- identificação ---------- */
+.nome-box { margin: 0 0 1.5rem; max-width: 26rem; }
+.nome-box label { display: block; font-weight: 700; margin-bottom: 0.4rem; }
+.nome-box input { width: 100%; font: inherit; padding: 0.6rem 0.8rem; border: 2px solid var(--rule); border-radius: 10px; background: var(--board); color: var(--ink); }
+.nome-box input:focus { outline: none; border-color: var(--blue); }
+.nome-box .erro { color: var(--red); font-size: 0.9rem; margin: 0.4rem 0 0; min-height: 1.2em; }
+.ident { border: 2px solid var(--blue); background: var(--blue-wash); border-radius: 14px; padding: 1rem 1.25rem; margin: 0.5rem 0 1.5rem; }
+.ident .quem { font-size: 1.4rem; font-weight: 700; margin: 0; }
+.ident .quando { color: var(--muted); margin: 0.2rem 0 0.6rem; }
+.ident .nota { font-family: "Source Serif 4", Georgia, serif; font-size: 2rem; font-weight: 600; margin: 0; }
+
+/* ---------- resultado ---------- */
+.score {
+  font-family: "Source Serif 4", Georgia, serif;
+  font-size: clamp(2.6rem, 9vw, 3.6rem);
+  font-weight: 600;
+  line-height: 1;
+  margin: 0.25rem 0 0.5rem;
+}
+.score small { font-size: 0.45em; color: var(--muted); font-weight: 400; }
+.diag { list-style: none; padding: 0; margin: 1rem 0 2rem; }
+.diag li { padding: 1rem 0; border-bottom: 1px solid var(--rule); }
+.diag li:last-child { border-bottom: 0; }
+.diag-head { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+.diag-name { font-weight: 700; flex: 1 1 14rem; }
+.diag .marks { height: 24px; }
+.diag-verdict { margin: 0.4rem 0 0; font-size: 0.95rem; }
+.diag-verdict.ok { color: var(--green); }
+.diag-verdict.mid { color: var(--blue); }
+.diag-verdict.weak { color: var(--red); }
+.review { margin: 0 0 1.5rem; }
+.review-item { border-left: 4px solid var(--red); padding: 0.1rem 0 0.1rem 1rem; margin: 0 0 1.25rem; }
+.review-item .q-text { font-size: 1.02rem; margin-bottom: 0.5rem; }
+.review-item p { margin: 0 0 0.4rem; }
+.ans { font-family: "Source Serif 4", Georgia, serif; }
+.label-right { color: var(--green); font-weight: 700; }
+.label-wrong { color: var(--red); font-weight: 700; }
+
+mjx-container { color: inherit; }
+mjx-container[display="true"] { overflow-x: auto; overflow-y: hidden; max-width: 100%; }
+
+@media (prefers-reduced-motion: reduce) {
+  .mark { transition: none; }
+}
+@media (max-width: 520px) {
+  .tally-inner { gap: 0.8rem; padding: 0.6rem 1rem; }
+  .group-name { display: none; }
+  .count { padding-bottom: 0; }
+  main { padding-top: 1.5rem; }
+}
+</style>
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$']],
+      displayMath: [['\\[', '\\]']],
+      macros: {
+        Z: '\\mathbb{Z}', Q: '\\mathbb{Q}', R: '\\mathbb{R}',
+        C: '\\mathbb{C}', F: '\\mathbb{F}', OK: '\\mathcal{O}_K',
+        N: '\\operatorname{N}', Tr: '\\operatorname{Tr}'
+      }
+    },
+    svg: { fontCache: 'global' },
+    startup: {
+      typeset: false,
+      ready: function () {
+        MathJax.startup.defaultReady();
+        MathJax.startup.promise.then(function () { window.__mjReady && window.__mjReady(); });
+      }
+    }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js" defer></script>
+</head>
+<body>
+
+<div class="tally" aria-hidden="true">
+  <div class="tally-inner" id="tally"></div>
+</div>
+
+<main id="app" aria-live="polite"></main>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ------------------------------------------------------------------
+     Temas e dicas correspondentes (numeração da lista de dicas da P1)
+  ------------------------------------------------------------------ */
+  var TOPICS = [
+    { name: "Monomorfismos", long: "Monomorfismos e conjugados", dicas: "dicas 1, 2 e 6 a 9" },
+    { name: "Norma e traço", long: "Norma, traço e polinômio característico", dicas: "dicas 3 a 5 e 18" },
+    { name: "Discriminante", long: "Discriminante e bases integrais", dicas: "dicas 10, 16 e 17" },
+    { name: "Inteiros", long: "Inteiros algébricos", dicas: "dicas 11 a 15 e 20" },
+    { name: "Fatoração", long: "Unidades, fatoração e domínios euclidianos", dicas: "dicas 21 a 29" }
+  ];
+
+  var BANK = [
+
+    // ---------- Tema 0: monomorfismos e conjugados
+    { t: 0, dica: "dica 9",
+      q: "Quantos monomorfismos $\\Q(\\sqrt[3]{5}) \\to \\C$ existem, e quantos deles têm imagem contida em $\\R$?",
+      o: ["Três, dos quais apenas um tem imagem contida em $\\R$.",
+          "Três, todos com imagem contida em $\\R$.",
+          "Apenas um, pois $\\sqrt[3]{5}$ é a única raiz cúbica real de $5$.",
+          "Seis, um para cada permutação das raízes de $x^3 - 5$."],
+      e: "Cada monomorfismo é determinado pela imagem de $\\sqrt[3]{5}$, que deve ser uma raiz de $x^3 - 5$: $\\sqrt[3]{5}$, $\\omega\\sqrt[3]{5}$ ou $\\omega^2\\sqrt[3]{5}$, com $\\omega = e^{2\\pi i/3}$. São três, e só o primeiro tem imagem real. Permutações das raízes descrevem automorfismos do corpo de decomposição, que tem grau $6$ — outra coisa." },
+    { t: 0, dica: "dica 6",
+      q: "Em $K = \\Q(\\sqrt[4]{2})$, de grau $4$, quais são os $K$-conjugados de $\\alpha = \\sqrt{2}$?",
+      o: ["$\\sqrt2,\\ -\\sqrt2,\\ \\sqrt2,\\ -\\sqrt2$: as raízes de $x^2 - 2$, cada uma repetida $[K:\\Q(\\sqrt2)] = 2$ vezes.",
+          "$\\sqrt2,\\ -\\sqrt2$, cada um uma única vez.",
+          "$\\sqrt2,\\ i\\sqrt2,\\ -\\sqrt2,\\ -i\\sqrt2$.",
+          "$\\sqrt2$ repetido quatro vezes, pois $\\sqrt2 \\in \\R$."],
+      e: "Os monomorfismos de $K$ levam $\\sqrt[4]{2}$ em $i^j\\sqrt[4]{2}$, $j = 0, 1, 2, 3$; elevando ao quadrado, $\\sqrt2 \\mapsto (-1)^j\\sqrt2$. São sempre $n$ conjugados, contados com repetição: cada raiz de $p_\\alpha$ aparece $\\ell = [K:\\Q(\\alpha)]$ vezes." },
+    { t: 0, dica: "dica 8",
+      q: "Seja $K = \\Q(\\sqrt2, \\sqrt3)$, de grau $4$, e $\\alpha = \\sqrt2 + \\sqrt3$. O que se pode concluir dos $K$-conjugados de $\\alpha$?",
+      o: ["São os quatro números $\\pm\\sqrt2 \\pm \\sqrt3$, todos distintos; logo $\\Q(\\alpha) = K$ e $f_\\alpha = p_\\alpha$.",
+          "São $\\pm(\\sqrt2 + \\sqrt3)$, cada um repetido duas vezes; logo $[K : \\Q(\\alpha)] = 2$.",
+          "São todos iguais a $\\sqrt2 + \\sqrt3$, pois $\\alpha$ é real.",
+          "São apenas $\\sqrt2 + \\sqrt3$ e $\\sqrt2 - \\sqrt3$."],
+      e: "Os monomorfismos trocam os sinais de $\\sqrt2$ e $\\sqrt3$ de forma independente, dando os quatro valores $\\pm\\sqrt2 \\pm\\sqrt3$, todos distintos. Isso equivale a $\\Q(\\alpha) = K$, e então $f_\\alpha = p_\\alpha = x^4 - 10x^2 + 1$. É a demonstração de que $\\sqrt2 + \\sqrt3$ é elemento primitivo." },
+
+    { t: 0, dica: "dica 7",
+      q: "Seja $K = \\Q(\\theta)$ de grau $n$, com monomorfismos $\\sigma_1, \\dots, \\sigma_n$, e seja $\\alpha \\in K$ com $\\sigma_1(\\alpha) = \\sigma_2(\\alpha) = \\cdots = \\sigma_n(\\alpha)$. Então:",
+      o: ["$\\alpha \\in \\Q$.",
+          "$\\alpha = \\theta$.",
+          "$\\alpha$ é um inteiro algébrico.",
+          "$\\Q(\\alpha) = K$."],
+      e: "Os $K$-conjugados de $\\alpha$ são as raízes de $p_\\alpha$, cada uma repetida $\\ell$ vezes. Se são todos iguais, $p_\\alpha$ tem uma única raiz; como é irredutível sobre $\\Q$, suas raízes são distintas, então $\\deg p_\\alpha = 1$ e $\\alpha \\in \\Q$. A conclusão $\\Q(\\alpha) = K$ é o oposto: ela corresponde a conjugados todos <em>distintos</em>." },
+
+    // ---------- Tema 1: norma, traço, polinômio característico
+    { t: 1, dica: "dica 5",
+      q: "Em $K = \\Q(\\sqrt[6]{2})$, de grau $6$, qual é o polinômio característico de $\\alpha = \\sqrt[3]{2}$?",
+      o: ["$(x^3 - 2)^2$", "$x^3 - 2$", "$x^6 - 2$", "$(x^2 - 2)^3$"],
+      e: "$\\alpha = (\\sqrt[6]{2})^2$ tem polinômio minimal $p_\\alpha = x^3 - 2$, e $\\ell = [K : \\Q(\\alpha)] = 6/3 = 2$. Pela dica 5, $f_\\alpha = p_\\alpha^{\\,\\ell} = (x^3 - 2)^2 = x^6 - 4x^3 + 4$. O polinômio característico tem sempre grau $n = [K:\\Q]$." },
+    { t: 1, dica: "dica 18",
+      q: "Seja $\\zeta = e^{2\\pi i/5}$ e $K = \\Q(\\zeta)$. Quanto vale $\\operatorname{Tr}(1 + 2\\zeta + 3\\zeta^2)$?",
+      o: ["$-1$", "$4$", "$6$", "$-6$"],
+      e: "Por linearidade, $\\operatorname{Tr}(1) = 4$ e $\\operatorname{Tr}(\\zeta) = \\operatorname{Tr}(\\zeta^2) = -1$, então o traço é $4 - 2 - 3 = -1$. É a fórmula $\\operatorname{Tr}\\bigl(\\sum a_i\\zeta^i\\bigr) = pa_0 - \\sum a_i$, com $p = 5$: $5 - 6 = -1$." },
+    { t: 1, dica: "dicas 4 e 5",
+      q: "Em $K = \\Q(\\sqrt[3]{2})$, quanto vale $\\operatorname{N}(1 + \\sqrt[3]{2})$?",
+      o: ["$3$", "$-3$", "$-1$", "$9$"],
+      e: "Seja $\\beta = 1 + \\sqrt[3]{2}$. Como $\\beta - 1 = \\sqrt[3]{2}$, $\\beta$ é raiz de $(x-1)^3 - 2 = x^3 - 3x^2 + 3x - 3$, que é irredutível (Eisenstein em $3$); como $\\Q(\\beta) = K$, esse é o polinômio característico de $\\beta$. Seu termo independente é $(-1)^3\\operatorname{N}(\\beta) = -\\operatorname{N}(\\beta)$, logo $\\operatorname{N}(\\beta) = 3$. Como a norma não é $\\pm1$, $\\beta$ não é unidade." },
+
+    { t: 1, dica: "dica 3",
+      q: "Sejam $\\theta_1, \\theta_2, \\theta_3$ as raízes de $x^3 - 3x + 1$. Quanto vale $\\theta_1^2 + \\theta_2^2 + \\theta_3^2$?",
+      o: ["$6$", "$0$", "$-6$", "$9$"],
+      e: "A expressão é simétrica, logo é um polinômio nas funções simétricas elementares, que são os coeficientes: $s_1 = 0$ e $s_2 = -3$. Então $\\sum \\theta_i^2 = s_1^2 - 2s_2 = 6$. É também o traço de $\\theta^2$ em $\\Q(\\theta)$ — por isso o resultado é racional sem que se conheçam as raízes." },
+
+    // ---------- Tema 2: discriminante
+    { t: 2, dica: "dica 10",
+      q: "Para $K = \\Q(\\sqrt{d})$, com $d$ livre de quadrados, quanto vale $\\Delta(1, \\sqrt d)$?",
+      o: ["$4d$", "$d$", "$2\\sqrt d$", "$-4d$"],
+      e: "$\\Delta(1,\\sqrt d) = \\det\\begin{pmatrix} 1 & \\sqrt d \\\\ 1 & -\\sqrt d\\end{pmatrix}^2 = (-2\\sqrt d)^2 = 4d$. Para $d \\equiv 1 \\pmod 4$, a base integral é $\\{1, \\frac{1+\\sqrt d}{2}\\}$, de discriminante $d$." },
+    { t: 2, dica: "dica 17",
+      q: "Em $K = \\Q(\\sqrt[3]{2})$, temos $\\Delta(1, \\sqrt[3]{2}, \\sqrt[3]{4}) = -108$. O que o critério “discriminante livre de quadrados implica base integral” permite concluir?",
+      o: ["Nada: $-108 = -2^2 \\cdot 3^3$ não é livre de quadrados, e o critério é só uma condição suficiente.",
+          "Que $\\{1, \\sqrt[3]{2}, \\sqrt[3]{4}\\}$ não é base integral.",
+          "Que $\\{1, \\sqrt[3]{2}, \\sqrt[3]{4}\\}$ é base integral.",
+          "Que $\\mathcal{O}_K \\neq \\Z[\\sqrt[3]{2}]$."],
+      e: "O critério só se aplica quando o discriminante é livre de quadrados; aqui não é, então ele não decide nada. De fato, $\\{1, \\sqrt[3]{2}, \\sqrt[3]{4}\\}$ é uma base integral, mas isso exige outro argumento. Confundir “suficiente” com “necessário” é o erro clássico aqui." },
+    { t: 2, dica: "dica 16",
+      q: "Em $K = \\Q(\\sqrt5)$, temos $\\Delta(1, \\sqrt5) = 20$ e $\\Delta\\bigl(1, \\frac{1+\\sqrt5}{2}\\bigr) = 5$. Por que $\\{1, \\sqrt5\\}$ não é base integral?",
+      o: ["Porque $\\sqrt5 = 2 \\cdot \\frac{1+\\sqrt5}{2} - 1$, a matriz de mudança de base tem determinante $2$, e $20 = 2^2 \\cdot 5$: o subanel $\\Z[\\sqrt5]$ tem índice $2$ em $\\mathcal{O}_K$.",
+          "Porque $\\sqrt5$ não é inteiro algébrico.",
+          "Porque $\\Delta(1, \\sqrt5)$ não é inteiro.",
+          "Porque $20$ não é livre de quadrados."],
+      e: "Mudando de base por uma matriz $M$, o discriminante é multiplicado por $\\det(M)^2$. Como $\\frac{1+\\sqrt5}{2}$ é inteiro algébrico (raiz de $x^2 - x - 1$) e não está em $\\Z[\\sqrt5]$, a base $\\{1,\\sqrt5\\}$ não gera $\\mathcal{O}_K$, e o fator $4 = 2^2$ no discriminante mede exatamente isso. Já “$20$ não é livre de quadrados” é verdade, mas não é a razão: o critério da dica 17 é só uma condição suficiente, e há bases integrais com discriminante não livre de quadrados, como $\\{1, \\sqrt[3]{2}, \\sqrt[3]{4}\\}$, com $\\Delta = -108$." },
+
+    { t: 2, dica: "dica 17",
+      q: "Seja $\\theta$ uma raiz de $x^3 + x + 1$ e $K = \\Q(\\theta)$. Sabendo que o discriminante de $x^3 + px + q$ é $-4p^3 - 27q^2$, o que se conclui?",
+      o: ["$\\Delta(1, \\theta, \\theta^2) = -31$ é livre de quadrados; logo $\\{1, \\theta, \\theta^2\\}$ é base integral e $\\mathcal{O}_K = \\Z[\\theta]$.",
+          "Como $\\Delta(1, \\theta, \\theta^2) < 0$, essa base não é integral.",
+          "Nada: o critério só se aplica a corpos quadráticos.",
+          "$\\mathcal{O}_K = \\Z[\\theta]$ só se $\\Delta(1, \\theta, \\theta^2)$ for um quadrado perfeito."],
+      e: "$\\Delta(1,\\theta,\\theta^2)$ é o discriminante de $p_\\theta$: $-4 - 27 = -31$. Como $-31$ é livre de quadrados, a dica 17 garante que $\\{1, \\theta, \\theta^2\\}$ é base integral. O sinal do discriminante só indica quantos mergulhos são reais." },
+
+    // ---------- Tema 3: inteiros algébricos
+    { t: 3, dica: "dica 15",
+      q: "Qual destes números é um inteiro algébrico?",
+      o: ["$\\frac{1+\\sqrt{-3}}{2}$", "$\\frac{1+\\sqrt{-5}}{2}$", "$\\frac{1+\\sqrt2}{2}$", "$\\frac{\\sqrt2}{2}$"],
+      e: "Basta olhar o polinômio minimal: $\\frac{1+\\sqrt{-3}}{2}$ é raiz de $x^2 - x + 1$, com coeficientes inteiros. Os outros têm polinômios minimais $x^2 - x + \\tfrac32$, $x^2 - x - \\tfrac14$ e $x^2 - \\tfrac12$. Por isso $\\mathcal{O}_K$ depende de $d \\bmod 4$." },
+    { t: 3, dica: "dica 14",
+      q: "Seja $\\alpha$ uma raiz de $3x^2 + 2x + 7$. Qual é o menor inteiro positivo $c$ tal que $c\\alpha$ é inteiro algébrico?",
+      o: ["$3$", "$1$", "$7$", "$21$"],
+      e: "Substituindo $x = y/3$ e multiplicando por $3$, obtemos $y^2 + 2y + 21 = 0$: então $3\\alpha$ é inteiro algébrico. Para $c = 1$ ou $2$, o polinômio minimal de $c\\alpha$ não tem coeficientes inteiros. Em geral, $c$ igual ao coeficiente líder do polinômio sempre funciona." },
+    { t: 3, dica: "dica 20",
+      q: "Por que $\\mathcal{O}_K$ é noetheriano?",
+      o: ["Porque todo ideal de $\\mathcal{O}_K$ é subgrupo de $\\mathcal{O}_K$, que é um $\\Z$-módulo livre de posto $n$; logo todo ideal é finitamente gerado como $\\Z$-módulo e, portanto, como ideal.",
+          "Porque $\\mathcal{O}_K$ é sempre um domínio de ideais principais.",
+          "Porque $\\mathcal{O}_K$ tem apenas um número finito de ideais.",
+          "Porque todo ideal de $\\mathcal{O}_K$ é gerado por um inteiro racional."],
+      e: "Subgrupos de um $\\Z$-módulo livre de posto $n$ são livres de posto no máximo $n$, logo finitamente gerados. Um conjunto de geradores sobre $\\Z$ também gera o ideal sobre $\\mathcal{O}_K$. Nem todo $\\mathcal{O}_K$ é DIP — $\\Z[\\sqrt{-5}]$ não é." },
+
+    { t: 3, dica: "dicas 12 e 13",
+      q: "Qual é o argumento usual para provar que a soma $\\alpha + \\beta$ de dois inteiros algébricos é um inteiro algébrico?",
+      o: ["$\\Z[\\alpha, \\beta]$ é um $\\Z$-módulo finitamente gerado e $(\\alpha+\\beta)\\,\\Z[\\alpha,\\beta] \\subseteq \\Z[\\alpha,\\beta]$; pelo critério dos módulos finitamente gerados, $\\alpha+\\beta$ é inteiro.",
+          "O polinômio minimal de $\\alpha + \\beta$ é o produto dos polinômios minimais de $\\alpha$ e $\\beta$.",
+          "$\\alpha + \\beta$ é raiz de $p_\\alpha + p_\\beta$, que é mônico.",
+          "A soma de raízes de dois polinômios mônicos de grau $n$ é raiz de um polinômio mônico de grau $n$."],
+      e: "Se $\\alpha$ e $\\beta$ têm graus $m$ e $n$, os monômios $\\alpha^i\\beta^j$ com $i < m$ e $j < n$ geram $\\Z[\\alpha,\\beta]$ como $\\Z$-módulo. Esse módulo é estável pela multiplicação por $\\alpha+\\beta$ (e por $\\alpha\\beta$), e o critério da dica 12 conclui. É assim que se prova que os inteiros algébricos formam um subanel." },
+
+    // ---------- Tema 4: unidades, fatoração, euclidianos
+    { t: 4, dica: "dica 28",
+      q: "Para $d < -3$, as únicas unidades de $\\mathcal{O}_K$, com $K = \\Q(\\sqrt d)$, são $\\pm1$. Quantas unidades tem o anel de inteiros de $\\Q(\\sqrt{-3})$?",
+      o: ["$6$", "$2$", "$4$", "Infinitas."],
+      e: "$\\mathcal{O}_K = \\Z\\bigl[\\frac{1+\\sqrt{-3}}{2}\\bigr]$, e $\\operatorname{N}\\bigl(\\frac{a+b\\sqrt{-3}}{2}\\bigr) = \\frac{a^2+3b^2}{4} = 1$ tem as soluções $(\\pm2, 0)$ e $(\\pm1, \\pm1)$: são as $6$ raízes sextas da unidade. Por isso a hipótese $d < -3$ é necessária." },
+    { t: 4, dica: "dica 22",
+      q: "Em $\\Z[\\sqrt{-14}]$, temos $15 = 3 \\cdot 5 = (1+\\sqrt{-14})(1-\\sqrt{-14})$. Por que $3$ é irredutível?",
+      o: ["Se $3 = xy$ com $x, y$ não unidades, então $\\operatorname{N}(x) = 3$, mas $a^2 + 14b^2 = 3$ não tem solução inteira.",
+          "Porque $3$ é primo em $\\Z$.",
+          "Porque $\\operatorname{N}(3) = 9$ é um quadrado perfeito.",
+          "Porque $3$ não divide $1 + \\sqrt{-14}$."],
+      e: "$\\operatorname{N}(x)\\operatorname{N}(y) = 9$ com fatores diferentes de $1$ força $\\operatorname{N}(x) = 3$, impossível. Ser primo em $\\Z$ não basta: $5 = (2+i)(2-i)$ em $\\Z[i]$. E “$3$ não divide $1+\\sqrt{-14}$” mostra que $3$ não é <em>primo</em> em $\\Z[\\sqrt{-14}]$ — que é outra coisa." },
+    { t: 4, dica: "dicas 24 e 26",
+      q: "Qual é o argumento-chave para provar que $\\Z[\\sqrt{-2}]$ é euclidiano em relação a $|\\operatorname{N}|$?",
+      o: ["Dado $\\varepsilon = x + y\\sqrt{-2} \\in K$, arredondando $x$ e $y$ ao inteiro mais próximo obtém-se $\\kappa \\in \\mathcal{O}_K$ com $|\\operatorname{N}(\\varepsilon - \\kappa)| \\le \\frac14 + 2 \\cdot \\frac14 = \\frac34 < 1$.",
+          "$\\Z[\\sqrt{-2}]$ é um domínio de ideais principais, e todo DIP é euclidiano.",
+          "A norma $a^2 + 2b^2$ é sempre par.",
+          "As únicas unidades de $\\Z[\\sqrt{-2}]$ são $\\pm 1$."],
+      e: "Pela dica 24, basta aproximar cada $\\varepsilon \\in K$ por um inteiro a uma norma menor que $1$. Para $\\sqrt{-5}$ a mesma conta dá $\\frac14 + \\frac54 = \\frac32 > 1$, e de fato $\\Z[\\sqrt{-5}]$ nem é DFU. E há DIPs que não são euclidianos, como o anel de inteiros de $\\Q(\\sqrt{-19})$." },
+    { t: 4, dica: "dica 29",
+      q: "Em $\\Z[\\sqrt2]$, quantos elementos tem o quociente $\\Z[\\sqrt2]/\\langle 3 + \\sqrt2 \\rangle$?",
+      o: ["$7$", "$11$", "$9$", "$49$"],
+      e: "Pela dica 29, $|\\mathcal{O}_K/\\langle a + b\\sqrt d\\rangle| = |a^2 - db^2|$, isto é, o valor absoluto da norma: $|9 - 2| = 7$. O sinal de menos vem de $d = 2 > 0$; somar os quadrados, como em $\\Z[i]$, daria $11$." },
+
+    // ================= questões novas do banco =================
+    // ---------- Tema 0: monomorfismos e conjugados
+    { t: 0, dica: "dica 1",
+      q: "Para $K = \\Q(\\theta)$, define-se $\\sigma_j(f(\\theta)) = f(\\theta_j)$ para $f \\in \\Q[x]$. Por que $\\sigma_j$ está bem definida?",
+      o: ["Se $f(\\theta) = g(\\theta)$, então $p_\\theta$ divide $f - g$; como $p_\\theta(\\theta_j) = 0$, segue que $f(\\theta_j) = g(\\theta_j)$.",
+          "Porque $\\theta$ e $\\theta_j$ são iguais.",
+          "Porque todo $f \\in \\Q[x]$ tem grau menor que $n$.",
+          "Porque $\\sigma_j$ é injetora."],
+      e: "Um mesmo elemento de $K$ se escreve como $f(\\theta)$ de muitas maneiras. Se $f(\\theta) = g(\\theta)$, então $\\theta$ é raiz de $f - g$, que é portanto múltiplo de $p_\\theta$; e todo múltiplo de $p_\\theta$ se anula em $\\theta_j$. A injetividade vem depois e não ajuda na boa definição." },
+    { t: 0, dica: "dica 9",
+      q: "Quantos monomorfismos $\\Q(\\sqrt{-3}) \\to \\C$ têm imagem contida em $\\R$?",
+      o: ["Nenhum.", "Um.", "Dois.", "Depende da escolha de $\\sqrt{-3}$."],
+      e: "Os dois monomorfismos levam $\\sqrt{-3}$ em $\\pm\\sqrt{-3}$, ambos não reais. Por isso $\\Q(\\sqrt{-3})$ é totalmente complexo: $s = 0$ e $t = 1$. Escolher a outra raiz quadrada apenas troca os nomes dos dois monomorfismos." },
+    { t: 0, dica: "dicas 2 e 9",
+      q: "Seja $K = \\Q(\\sqrt[3]{2}) \\subseteq \\R$. Quantos monomorfismos $\\sigma \\colon K \\to \\C$ satisfazem $\\sigma(K) = K$?",
+      o: ["Apenas um, a identidade.", "Três.", "Dois.", "Nenhum."],
+      e: "Como $K \\subseteq \\R$, se $\\sigma(K) = K$ então $\\sigma(\\sqrt[3]{2})$ é real; a única raiz real de $x^3 - 2$ é $\\sqrt[3]{2}$, logo $\\sigma$ é a identidade. Os outros dois monomorfismos têm imagem fora de $\\R$ — por isso $K \\mid \\Q$ não é uma extensão de Galois." },
+    { t: 0, dica: "dicas 6 e 8",
+      q: "Em $K = \\Q(\\sqrt2, i)$, de grau $4$, quais são os $K$-conjugados de $\\alpha = i\\sqrt2$?",
+      o: ["$i\\sqrt2$ e $-i\\sqrt2$, cada um duas vezes; logo $\\Q(\\alpha) \\neq K$.",
+          "Os quatro números $\\pm\\sqrt2 \\pm i$, todos distintos.",
+          "$i\\sqrt2$, repetido quatro vezes.",
+          "$i\\sqrt2,\\ -i\\sqrt2,\\ \\sqrt2,\\ -\\sqrt2$."],
+      e: "Os monomorfismos trocam os sinais de $\\sqrt2$ e $i$ independentemente, e $i\\sqrt2 \\mapsto (\\pm i)(\\pm\\sqrt2)$ só assume os valores $\\pm i\\sqrt2$, cada um duas vezes. São as raízes de $x^2 + 2$ repetidas $\\ell = 2$ vezes, e conjugados repetidos significam $\\Q(\\alpha) \\neq K$: de fato $\\Q(i\\sqrt2) = \\Q(\\sqrt{-2})$ tem grau $2$." },
+
+    // ---------- Tema 1: norma, traço, polinômio característico
+    { t: 1, dica: "dica 4",
+      q: "Em $K = \\Q(\\sqrt5)$, qual é o polinômio característico de $\\alpha = 3 + \\sqrt5$?",
+      o: ["$x^2 - 6x + 4$", "$x^2 - 6x + 14$", "$x^2 + 6x + 4$", "$x^2 - 3x - 5$"],
+      e: "$f_\\alpha = (x - 3 - \\sqrt5)(x - 3 + \\sqrt5) = (x-3)^2 - 5 = x^2 - 6x + 4$. Daí $\\operatorname{Tr}(\\alpha) = 6$ e $\\operatorname{N}(\\alpha) = 4$, e os coeficientes são racionais, como garante a dica 4." },
+    { t: 1, dica: "dica 5",
+      q: "Seja $K$ um corpo de grau $n$ e $a \\in \\Q$. Quanto valem $\\operatorname{N}(a)$ e $\\operatorname{Tr}(a)$?",
+      o: ["$\\operatorname{N}(a) = a^n$ e $\\operatorname{Tr}(a) = na$.",
+          "$\\operatorname{N}(a) = a$ e $\\operatorname{Tr}(a) = a$.",
+          "$\\operatorname{N}(a) = na$ e $\\operatorname{Tr}(a) = a^n$.",
+          "$\\operatorname{N}(a) = a^2$ e $\\operatorname{Tr}(a) = 2a$."],
+      e: "Para $a \\in \\Q$, $p_a = x - a$ e $\\ell = [K : \\Q(a)] = n$, então $f_a = (x - a)^n$. Todos os $n$ conjugados valem $a$: o produto é $a^n$ e a soma é $na$. A norma e o traço dependem do corpo em que se calculam." },
+    { t: 1, dica: "dica 5",
+      q: "Em $\\Z[i]$, quanto vale $\\operatorname{N}\\bigl((2+i)(1-3i)\\bigr)$?",
+      o: ["$50$", "$15$", "$25$", "$100$"],
+      e: "A norma é multiplicativa: $\\operatorname{N}(2+i)\\operatorname{N}(1-3i) = 5 \\cdot 10 = 50$. Conferindo diretamente: $(2+i)(1-3i) = 5 - 5i$, e $\\operatorname{N}(5-5i) = 25 + 25 = 50$." },
+    { t: 1, dica: "dica 3",
+      q: "Sejam $\\theta_1, \\theta_2, \\theta_3$ as raízes de $x^3 - 2x + 5$. Quanto vale $\\frac{1}{\\theta_1} + \\frac{1}{\\theta_2} + \\frac{1}{\\theta_3}$?",
+      o: ["$\\tfrac25$", "$-\\tfrac25$", "$\\tfrac52$", "$-2$"],
+      e: "A soma é $\\dfrac{\\theta_1\\theta_2 + \\theta_1\\theta_3 + \\theta_2\\theta_3}{\\theta_1\\theta_2\\theta_3} = \\dfrac{s_2}{s_3}$. Pelas relações de Girard, $s_2 = -2$ e $s_3 = -5$, logo o valor é $\\frac25$. Uma função simétrica das raízes é sempre racional, mesmo sem conhecer as raízes." },
+
+    // ---------- Tema 2: discriminante
+    { t: 2, dica: "dica 10",
+      q: "Para $d \\equiv 1 \\pmod 4$ livre de quadrados, quanto vale $\\Delta\\bigl(1, \\frac{1+\\sqrt d}{2}\\bigr)$?",
+      o: ["$d$", "$4d$", "$\\frac d4$", "$\\frac{1+d}{4}$"],
+      e: "$\\det\\begin{pmatrix} 1 & \\frac{1+\\sqrt d}{2} \\\\ 1 & \\frac{1-\\sqrt d}{2}\\end{pmatrix} = -\\sqrt d$, cujo quadrado é $d$. Comparando com $\\Delta(1, \\sqrt d) = 4d$: o índice de $\\Z[\\sqrt d]$ em $\\mathcal{O}_K$ é $2$ quando $d \\equiv 1 \\pmod 4$." },
+    { t: 2, dica: "dica 16",
+      q: "Por que o discriminante $\\Delta(\\alpha_1, \\dots, \\alpha_n)$ de uma base de $K$ sobre $\\Q$ é diferente de zero?",
+      o: ["Porque $\\Delta = \\det\\bigl(\\operatorname{Tr}(\\alpha_i\\alpha_j)\\bigr)$, e a forma traço $(x, y) \\mapsto \\operatorname{Tr}(xy)$ é não degenerada.",
+          "Porque os $\\alpha_i$ são inteiros algébricos.",
+          "Porque o discriminante é sempre positivo.",
+          "Porque $n \\ge 2$."],
+      e: "Se a forma traço fosse degenerada, haveria $x \\neq 0$ com $\\operatorname{Tr}(xy) = 0$ para todo $y$; tomando $y = x^{-1}$, viria $\\operatorname{Tr}(1) = n = 0$, absurdo. Ser inteiro garante que $\\Delta \\in \\Z$, não que $\\Delta \\neq 0$; e o discriminante pode ser negativo, como $-4$ em $\\Q(i)$." },
+    { t: 2, dica: "dica 16",
+      q: "Se $\\{\\alpha_1, \\alpha_2\\}$ é uma base integral de $K$ e $\\beta_1 = \\alpha_1 + \\alpha_2$, $\\beta_2 = \\alpha_1 - \\alpha_2$, então $\\Delta(\\beta_1, \\beta_2)$ é:",
+      o: ["$4\\,\\Delta(\\alpha_1, \\alpha_2)$", "$\\Delta(\\alpha_1, \\alpha_2)$", "$2\\,\\Delta(\\alpha_1, \\alpha_2)$", "$-2\\,\\Delta(\\alpha_1, \\alpha_2)$"],
+      e: "A matriz de mudança de base é $\\begin{pmatrix} 1 & 1 \\\\ 1 & -1 \\end{pmatrix}$, de determinante $-2$, e o discriminante é multiplicado por $\\det^2 = 4$. Em particular, $\\{\\beta_1, \\beta_2\\}$ gera um subanel de índice $2$ e não é base integral." },
+    { t: 2, dica: "dicas 16 e 17",
+      q: "Se $\\alpha_1, \\dots, \\alpha_n \\in \\mathcal{O}_K$ formam uma base de $K$ e $\\Delta(\\alpha_1, \\dots, \\alpha_n) = m^2\\,\\Delta_K$, o que é $m$?",
+      o: ["O índice de $\\Z\\alpha_1 + \\cdots + \\Z\\alpha_n$ em $\\mathcal{O}_K$.",
+          "O número de classes de $K$.",
+          "O grau $n = [K:\\Q]$.",
+          "A norma de $\\alpha_1 \\cdots \\alpha_n$."],
+      e: "A mudança de uma base integral para $\\{\\alpha_i\\}$ tem matriz inteira $M$, e $|\\det M|$ é o índice. Como $\\Delta(\\alpha) = (\\det M)^2\\Delta_K$, se $\\Delta(\\alpha)$ é livre de quadrados o índice só pode ser $1$ — é a dica 17." },
+
+    // ---------- Tema 3: inteiros algébricos
+    { t: 3, dica: "dica 15",
+      q: "Qual é o anel de inteiros de $K = \\Q(\\sqrt{-7})$?",
+      o: ["$\\Z\\bigl[\\frac{1+\\sqrt{-7}}{2}\\bigr]$", "$\\Z[\\sqrt{-7}]$", "$\\Z\\bigl[\\frac{1+\\sqrt{-7}}{4}\\bigr]$", "$\\Z[\\sqrt7, i]$"],
+      e: "$\\frac{1+\\sqrt{-7}}{2}$ é raiz de $x^2 - x + 2$, com coeficientes inteiros, e não está em $\\Z[\\sqrt{-7}]$. Como $-7 \\equiv 1 \\pmod 4$, $\\mathcal{O}_K = \\Z\\bigl[\\frac{1+\\sqrt{-7}}{2}\\bigr]$. O anel $\\Z[\\sqrt7, i]$ nem está contido em $K$." },
+    { t: 3, dica: "dica 15",
+      q: "Quais números racionais são inteiros algébricos?",
+      o: ["Apenas os inteiros.",
+          "Todos os racionais.",
+          "Os racionais de denominador ímpar.",
+          "Nenhum além de $0$ e $1$."],
+      e: "O polinômio minimal de $\\frac ab$ (fração irredutível) é $x - \\frac ab$, que tem coeficientes inteiros só quando $b = \\pm 1$. Por isso $\\mathcal{O}_K \\cap \\Q = \\Z$, e os inteiros algébricos generalizam $\\Z$ sem acrescentar frações." },
+    { t: 3, dica: "dica 15",
+      q: "Qual dos números abaixo é raiz de um polinômio mônico com coeficientes inteiros?",
+      o: ["$\\frac{\\sqrt2 + \\sqrt6}{2}$", "$\\frac{1 + \\sqrt3}{2}$", "$\\frac{\\sqrt2 + \\sqrt3}{2}$", "$\\frac{\\sqrt3}{2}$"],
+      e: "Para $x = \\frac{\\sqrt2+\\sqrt6}{2}$: $x^2 = 2 + \\sqrt3$, logo $(x^2 - 2)^2 = 3$ e $x$ é raiz de $x^4 - 4x^2 + 1$. O denominador $2$ não impede a integralidade! Os outros têm polinômios minimais $x^2 - x - \\frac12$, $x^4 - \\frac52 x^2 + \\frac1{16}$ e $x^2 - \\frac34$." },
+    { t: 3, dica: "dica 15",
+      q: "Em $\\Q(\\sqrt d)$, o número $\\alpha = a + b\\sqrt d$, com $a, b \\in \\Q$ e $b \\neq 0$, é inteiro algébrico se, e somente se:",
+      o: ["$2a \\in \\Z$ e $a^2 - db^2 \\in \\Z$.",
+          "$a, b \\in \\Z$.",
+          "$a^2 + b^2 \\in \\Z$.",
+          "$2a \\in \\Z$ e $2b \\in \\Z$."],
+      e: "O polinômio minimal é $x^2 - \\operatorname{Tr}(\\alpha)\\,x + \\operatorname{N}(\\alpha) = x^2 - 2a\\,x + (a^2 - db^2)$, e $\\alpha$ é inteiro exatamente quando esses coeficientes são inteiros. A condição $2a, 2b \\in \\Z$ é necessária, mas não suficiente: $\\frac{1+\\sqrt3}{2}$ a satisfaz e não é inteiro." },
+
+    // ---------- Tema 4: unidades, fatoração, euclidianos
+    { t: 4, dica: "dica 23",
+      q: "Em $\\Z[\\sqrt{10}]$, temos $6 = 2 \\cdot 3 = (4+\\sqrt{10})(4-\\sqrt{10})$. Por que $2$ é irredutível?",
+      o: ["Um fator próprio teria norma $\\pm2$, e $a^2 - 10b^2 = \\pm 2$ não tem solução, pois $\\pm2$ não é quadrado módulo $5$.",
+          "Um fator próprio teria norma $2$, e $a^2 + 10b^2 = 2$ não tem solução.",
+          "Porque $2$ é primo em $\\Z$.",
+          "Porque as únicas unidades de $\\Z[\\sqrt{10}]$ são $\\pm1$."],
+      e: "Em corpo real a norma é $a^2 - 10b^2$ e pode ser negativa, então é preciso excluir $\\pm 2$. Reduzindo módulo $5$: $a^2 \\equiv \\pm2$, impossível, pois os quadrados módulo $5$ são $0, 1, 4$. E $\\Z[\\sqrt{10}]$ tem infinitas unidades, como $3 + \\sqrt{10}$." },
+    { t: 4, dica: "dica 21",
+      q: "Quantas unidades tem $\\Z[\\sqrt{10}]$?",
+      o: ["Infinitas.", "Duas: $\\pm 1$.", "Quatro.", "Seis."],
+      e: "$\\operatorname{N}(3 + \\sqrt{10}) = 9 - 10 = -1$, então $3 + \\sqrt{10}$ é unidade, e como é maior que $1$ suas potências são todas distintas. Em corpos quadráticos imaginários há no máximo $6$ unidades; nos reais, sempre infinitas." },
+    { t: 4, dica: "dica 28",
+      q: "Para mostrar que $\\mathcal{O}_K$ ($d < -3$) não é euclidiano, toma-se $\\alpha$ não nulo, não unidade, com $\\varphi(\\alpha)$ mínimo. Por que $|\\mathcal{O}_K/\\langle\\alpha\\rangle| \\le 3$?",
+      o: ["Porque todo elemento de $\\mathcal{O}_K/\\langle \\alpha \\rangle$ é representado por $0$ ou por uma unidade, e as únicas unidades são $\\pm1$.",
+          "Porque $\\alpha$ tem norma no máximo $3$.",
+          "Porque $\\mathcal{O}_K/\\langle \\alpha \\rangle$ é um corpo.",
+          "Porque $\\alpha$ divide $3$."],
+      e: "Dividindo qualquer $\\beta$ por $\\alpha$, o resto $\\delta$ tem $\\varphi(\\delta) < \\varphi(\\alpha)$, logo é $0$ ou unidade, pela minimalidade. Com unidades $\\pm 1$, sobram as classes de $0$, $1$ e $-1$. Depois mostra-se que nenhum $\\alpha$ tem quociente tão pequeno." },
+    { t: 4, dica: "dica 29",
+      q: "Em $\\Z[\\sqrt{-5}]$, quantos elementos tem o quociente $\\Z[\\sqrt{-5}]/\\langle 2 + \\sqrt{-5} \\rangle$?",
+      o: ["$9$", "$1$", "$7$", "$3$"],
+      e: "Pela dica 29, o quociente tem $|a^2 - db^2| = |4 - (-5)\\cdot 1| = 9$ elementos. Esquecer o sinal de $d$ dá $|4 - 5| = 1$, o que diria que $2 + \\sqrt{-5}$ é unidade — e não é." }
+  ];
+
+  /* ------------------------------------------------------------------
+     Sorteio: a cada tentativa, 4 questões de cada tema, escolhidas
+     entre as 40 do banco. Dá preferência às menos vistas neste navegador.
+  ------------------------------------------------------------------ */
+  var PER_TOPIC = 4;
+  var SEEN_KEY = "quiz-p1-tan:vistas:v1";
+  function shuffleArr(a) {
+    a = a.slice();
+    for (var j = a.length - 1; j > 0; j--) {
+      var r = Math.floor(Math.random() * (j + 1));
+      var t = a[j]; a[j] = a[r]; a[r] = t;
+    }
+    return a;
+  }
+  function loadSeen() {
+    try { var v = JSON.parse(localStorage.getItem(SEEN_KEY)); return (v && typeof v === "object") ? v : {}; }
+    catch (e) { return {}; }
+  }
+  function saveSeen(v) { try { localStorage.setItem(SEEN_KEY, JSON.stringify(v)); } catch (e) {} }
+  var seen = loadSeen();
+  function draw() {
+    var sel = [];
+    TOPICS.forEach(function (tp, ti) {
+      var pool = [];
+      BANK.forEach(function (q, bi) { if (q.t === ti) pool.push(bi); });
+      pool = shuffleArr(pool);
+      pool.sort(function (a, b) { return (seen[a] || 0) - (seen[b] || 0); });
+      pool.slice(0, PER_TOPIC).forEach(function (bi) { sel.push(bi); });
+    });
+    sel.forEach(function (bi) { seen[bi] = (seen[bi] || 0) + 1; });
+    saveSeen(seen);
+    return sel.map(function (bi) { return BANK[bi]; });
+  }
+  var QUESTIONS = (function () {
+    var out = [];
+    TOPICS.forEach(function (tp, ti) {
+      BANK.filter(function (q) { return q.t === ti; }).slice(0, PER_TOPIC).forEach(function (q) { out.push(q); });
+    });
+    return out;
+  })();
+
+
+  /* ------------------------------------------------------------------
+     Estado
+  ------------------------------------------------------------------ */
+  var state = { i: 0, answers: [], order: [] };
+  var app = document.getElementById("app");
+  var tally = document.getElementById("tally");
+  var KEYS = ["a", "b", "c", "d"];
+
+  var mjResolve;
+  var mjReady = new Promise(function (res) { mjResolve = res; });
+  window.__mjReady = function () { mjResolve(); };
+  setTimeout(function () { mjResolve(); }, 8000);
+
+  function typeset(el) {
+    return mjReady.then(function () {
+      if (window.MathJax && MathJax.typesetPromise) {
+        return MathJax.typesetPromise([el]).catch(function () {});
+      }
+    });
+  }
+  function clearMath(el) {
+    if (window.MathJax && MathJax.typesetClear) { try { MathJax.typesetClear([el]); } catch (e) {} }
+  }
+  function shuffle(n) {
+    var a = [];
+    for (var k = 0; k < n; k++) a.push(k);
+    for (var j = n - 1; j > 0; j--) {
+      var r = Math.floor(Math.random() * (j + 1));
+      var t = a[j]; a[j] = a[r]; a[r] = t;
+    }
+    return a;
+  }
+
+  /* ------------------------------------------------------------------
+     Régua de tracinhos
+  ------------------------------------------------------------------ */
+  function renderTally() {
+    var html = "";
+    TOPICS.forEach(function (tp, ti) {
+      html += '<div class="group"><div class="marks">';
+      QUESTIONS.forEach(function (q, qi) {
+        if (q.t !== ti) return;
+        var cls = "mark";
+        var a = state.answers[qi];
+        if (a === true) cls += " right";
+        else if (a === false) cls += " wrong";
+        else if (qi === state.i && state.started && !state.done) cls += " current";
+        html += '<span class="' + cls + '"></span>';
+      });
+      html += '</div><span class="group-name">' + tp.name + "</span></div>";
+    });
+    var answered = state.answers.filter(function (x) { return x !== undefined; }).length;
+    html += '<span class="count">' + answered + " de " + QUESTIONS.length + "</span>";
+    tally.innerHTML = html;
+  }
+
+  /* ------------------------------------------------------------------
+     Telas
+  ------------------------------------------------------------------ */
+  var nomeAluno = "";
+  function esc(t) { return String(t).replace(/[&<>"']/g, function (c) { return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+
+  function renderIntro() {
+    clearMath(app);
+    var rows = TOPICS.map(function (tp) {
+      return '<li><span class="t-name">' + tp.long + '</span><span class="t-dicas">' + tp.dicas + "</span></li>";
+    }).join("");
+    app.innerHTML =
+      "<h1>Quiz de preparação para a P1</h1>" +
+      '<p class="lead">Teoria Algébrica dos Números. São 20 questões de múltipla escolha, quatro por tema, sorteadas a cada tentativa de um banco de 40 — oito por tema. Ao refazer o quiz, você recebe de preferência questões que ainda não viu. ' +
+      "Cada resposta é corrigida na hora, com a justificativa e a dica da lista que trata do assunto. " +
+      "No final, você vê em quais temas está seguro e quais precisa rever.</p>" +
+      '<ul class="topics">' + rows + "</ul>" +
+      '<div class="nome-box"><label for="nome">Seu nome</label>' +
+      '<input id="nome" type="text" autocomplete="name" placeholder="Digite seu nome completo" value="' + esc(nomeAluno) + '">' +
+      '<p class="erro" id="nome-erro"></p></div>' +
+      '<div class="nav"><button class="btn" id="start">Começar o quiz</button>' +
+      '<span class="hint">Use as teclas 1 a 4 para responder e Enter para avançar.</span></div>';
+    var campo = document.getElementById("nome");
+    function comecar() {
+      var n = campo.value.trim();
+      if (!n) { document.getElementById("nome-erro").textContent = "Escreva seu nome para começar."; campo.focus(); return; }
+      nomeAluno = n;
+      start();
+    }
+    document.getElementById("start").addEventListener("click", comecar);
+    campo.addEventListener("keydown", function (ev) { if (ev.key === "Enter") { ev.preventDefault(); comecar(); } });
+    renderTally();
+  }
+
+  function start() {
+    QUESTIONS = draw();
+    state = { i: 0, answers: [], order: QUESTIONS.map(function (q) { return shuffle(q.o.length); }), started: true, done: false };
+    renderQuestion();
+  }
+
+  function renderQuestion() {
+    var qi = state.i, q = QUESTIONS[qi], order = state.order[qi];
+    clearMath(app);
+    var opts = order.map(function (oi, pos) {
+      return '<button class="opt" data-oi="' + oi + '"><span class="key">' + KEYS[pos] + "</span><span>" + q.o[oi] + "</span></button>";
+    }).join("");
+    app.innerHTML =
+      '<p class="q-topic">Questão ' + (qi + 1) + " de " + QUESTIONS.length + ": " + TOPICS[q.t].long + "</p>" +
+      '<div class="q-text">' + q.q + "</div>" +
+      '<div class="opts" role="group" aria-label="Alternativas">' + opts + "</div>" +
+      '<div id="fb"></div>';
+    Array.prototype.forEach.call(app.querySelectorAll(".opt"), function (b) {
+      b.addEventListener("click", function () { answer(parseInt(b.getAttribute("data-oi"), 10)); });
+    });
+    renderTally();
+    typeset(app).then(function () {
+      var first = app.querySelector(".opt");
+      if (first) first.focus({ preventScroll: true });
+    });
+    window.scrollTo({ top: 0 });
+  }
+
+  function answer(oi) {
+    var qi = state.i;
+    if (state.answers[qi] !== undefined) return;
+    var q = QUESTIONS[qi];
+    var ok = oi === 0;
+    state.answers[qi] = ok;
+    Array.prototype.forEach.call(app.querySelectorAll(".opt"), function (b) {
+      var bo = parseInt(b.getAttribute("data-oi"), 10);
+      b.disabled = true;
+      if (bo === 0) b.classList.add("is-right");
+      else if (bo === oi) b.classList.add("is-wrong");
+      else b.classList.add("faded");
+    });
+    var last = qi === QUESTIONS.length - 1;
+    var fb = document.getElementById("fb");
+    fb.innerHTML =
+      '<div class="feedback ' + (ok ? "right" : "wrong") + '">' +
+      '<p class="verdict">' + (ok ? "Correto." : "Não é essa.") + "</p>" +
+      '<p class="expl">' + q.e + "</p>" +
+      '<p class="see">Para rever: ' + q.dica + " da lista de dicas.</p></div>" +
+      '<div class="nav"><button class="btn" id="next">' + (last ? "Ver o diagnóstico" : "Próxima questão") + "</button></div>";
+    document.getElementById("next").addEventListener("click", next);
+    renderTally();
+    typeset(fb).then(function () {
+      document.getElementById("next").focus({ preventScroll: true });
+      fb.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    });
+  }
+
+  function next() {
+    if (state.i < QUESTIONS.length - 1) { state.i++; renderQuestion(); }
+    else { state.done = true; renderResults(); }
+  }
+
+  function verdictFor(n) {
+    if (n === 4) return { cls: "ok", txt: "Seguro neste tema." };
+    if (n === 3) return { cls: "mid", txt: "Quase lá: reveja a questão que errou." };
+    return { cls: "weak", txt: "Ponto fraco: vale estudar este tema antes da prova." };
+  }
+
+  function renderResults() {
+    clearMath(app);
+    var total = state.answers.filter(function (x) { return x === true; }).length;
+    var diag = TOPICS.map(function (tp, ti) {
+      var marks = "", right = 0;
+      QUESTIONS.forEach(function (q, qi) {
+        if (q.t !== ti) return;
+        var a = state.answers[qi];
+        if (a) right++;
+        marks += '<span class="mark ' + (a ? "right" : "wrong") + '"></span>';
+      });
+      var v = verdictFor(right);
+      var extra = right < 4 ? " Revise as " + tp.dicas + "." : "";
+      return '<li><div class="diag-head"><span class="diag-name">' + tp.long + '</span><span class="marks">' + marks +
+             '</span><span>' + right + " de 4</span></div>" +
+             '<p class="diag-verdict ' + v.cls + '">' + v.txt + extra + "</p></li>";
+    }).join("");
+
+    var wrong = [];
+    QUESTIONS.forEach(function (q, qi) { if (state.answers[qi] === false) wrong.push(qi); });
+    var review = wrong.length === 0
+      ? "<p>Você acertou todas. Ainda assim, vale escrever à mão as demonstrações das dicas: na prova, as questões pedem provas completas.</p>"
+      : wrong.map(function (qi) {
+          var q = QUESTIONS[qi];
+          return '<div class="review-item"><div class="q-text">' + (qi + 1) + ". " + q.q + "</div>" +
+                 '<p class="ans"><span class="label-right">Resposta:</span> ' + q.o[0] + "</p>" +
+                 '<p class="ans">' + q.e + "</p>" +
+                 '<p class="see">Para rever: ' + q.dica + ".</p></div>";
+        }).join("");
+
+    app.innerHTML =
+      "<h1>Seu diagnóstico</h1>" +
+      '<div class="ident"><p class="quem">' + esc(nomeAluno) + '</p>' +
+      '<p class="quando">Concluído em ' + new Date().toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" }) + '</p>' +
+      '<p class="nota">' + total + " de " + QUESTIONS.length + " acertos</p></div>" +
+      '<p class="lead">Cada linha mostra um tema da prova. Os temas em vermelho são os que pedem mais estudo; ' +
+      "a numeração das dicas é a da lista distribuída para a P1.</p>" +
+      '<ul class="diag">' + diag + "</ul>" +
+      (wrong.length ? "<h2>As questões que você errou</h2>" : "<h2>Resultado</h2>") +
+      '<div class="review">' + review + "</div>" +
+      '<div class="nav"><button class="btn" id="again">Refazer o quiz</button>' +
+      '<a class="btn ghost" href="index.html">Outros testes da disciplina</a>' +
+      '<a class="btn ghost" href="../index.html">Voltar às disciplinas</a></div>';
+    document.getElementById("again").addEventListener("click", start);
+    renderTally();
+    typeset(app);
+    window.scrollTo({ top: 0 });
+  }
+
+  /* ------------------------------------------------------------------
+     Teclado
+  ------------------------------------------------------------------ */
+  document.addEventListener("keydown", function (ev) {
+    if (!state.started || state.done) return;
+    if (ev.key >= "1" && ev.key <= "4") {
+      var b = app.querySelectorAll(".opt")[parseInt(ev.key, 10) - 1];
+      if (b && !b.disabled) { ev.preventDefault(); b.click(); }
+    } else if (ev.key === "Enter" || ev.key === "ArrowRight") {
+      var n = document.getElementById("next");
+      if (n && state.answers[state.i] !== undefined) { ev.preventDefault(); n.click(); }
+    }
+  });
+
+  renderIntro();
+})();
+</script>
+</body>
+</html>

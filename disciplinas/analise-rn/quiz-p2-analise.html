@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Quiz de preparação para a P2 — Análise no Rⁿ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --board: #F7F9FB;
+  --board-2: #EEF2F6;
+  --ink: #1C2230;
+  --muted: #5B6577;
+  --rule: #D6DCE4;
+  --blue: #1F4FA8;
+  --red: #B9312C;
+  --green: #1F7A4D;
+  --blue-wash: #E3EBF8;
+  --red-wash: #F8E6E5;
+  --green-wash: #E2F2E9;
+  --empty: #C9D1DC;
+  color-scheme: light;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --board: #12161D;
+    --board-2: #1A2029;
+    --ink: #E6EAF0;
+    --muted: #9AA4B4;
+    --rule: #2A313C;
+    --blue: #8AB0F2;
+    --red: #F08C84;
+    --green: #7BCB9C;
+    --blue-wash: #1C2840;
+    --red-wash: #3A2222;
+    --green-wash: #1B3328;
+    --empty: #39414E;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --board: #12161D;
+  --board-2: #1A2029;
+  --ink: #E6EAF0;
+  --muted: #9AA4B4;
+  --rule: #2A313C;
+  --blue: #8AB0F2;
+  --red: #F08C84;
+  --green: #7BCB9C;
+  --blue-wash: #1C2840;
+  --red-wash: #3A2222;
+  --green-wash: #1B3328;
+  --empty: #39414E;
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: inherit; }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+body {
+  margin: 0;
+  background: var(--board);
+  color: var(--ink);
+  font-family: "Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto;
+  height: env(safe-area-inset-top, 0px);
+  z-index: 10;
+  background: var(--board);
+}
+
+/* ---------- régua de tracinhos ---------- */
+.tally {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 5;
+  background: var(--board);
+  border-bottom: 1px solid var(--rule);
+}
+.tally-inner {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: 0.75rem 1.25rem 0.7rem;
+  display: flex;
+  align-items: flex-end;
+  gap: 1.1rem;
+  overflow-x: auto;
+}
+.group { display: flex; flex-direction: column; gap: 0.3rem; flex: 0 0 auto; }
+.marks { display: flex; gap: 5px; align-items: flex-end; height: 26px; }
+.mark {
+  width: 6px;
+  height: 22px;
+  border-radius: 3px;
+  background: var(--empty);
+  transform: rotate(-6deg);
+  transition: background-color 0.25s ease, height 0.25s ease;
+}
+.mark.current { background: var(--blue); height: 26px; }
+.mark.right { background: var(--green); }
+.mark.wrong { background: var(--red); }
+.group-name { font-size: 0.72rem; color: var(--muted); white-space: nowrap; }
+.count { margin-left: auto; font-size: 0.85rem; color: var(--muted); white-space: nowrap; padding-bottom: 1.1rem; }
+
+/* ---------- conteúdo ---------- */
+main { max-width: 46rem; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+h1 {
+  font-family: "Source Serif 4", Georgia, "Times New Roman", serif;
+  font-weight: 600;
+  font-size: clamp(1.7rem, 4.5vw, 2.35rem);
+  line-height: 1.15;
+  margin: 0 0 0.75rem;
+}
+h2 {
+  font-family: "Source Serif 4", Georgia, serif;
+  font-weight: 600;
+  font-size: 1.35rem;
+  margin: 2rem 0 0.75rem;
+}
+.lead { font-size: 1.05rem; color: var(--muted); max-width: 38rem; margin: 0 0 1.5rem; }
+.serif { font-family: "Source Serif 4", Georgia, serif; }
+
+.topics { list-style: none; padding: 0; margin: 0 0 2rem; }
+.topics li {
+  display: flex;
+  gap: 0.75rem;
+  align-items: baseline;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+.topics li:last-child { border-bottom: 0; }
+.topics .t-name { font-weight: 700; flex: 1 1 auto; }
+.topics .t-dicas { color: var(--muted); font-size: 0.9rem; white-space: nowrap; }
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+.btn {
+  display: inline-block;
+  border: 2px solid var(--blue);
+  background: var(--blue);
+  color: var(--board);
+  font-weight: 700;
+  padding: 0.65rem 1.4rem;
+  border-radius: 999px;
+}
+.btn:hover { filter: brightness(1.08); }
+.btn.ghost { background: transparent; color: var(--blue); }
+a.btn { text-decoration: none; }
+.btn:focus-visible, .opt:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+
+/* ---------- questão ---------- */
+.q-topic { color: var(--blue); font-weight: 700; font-size: 0.95rem; margin: 0 0 0.5rem; }
+.q-text {
+  font-family: "Source Serif 4", Georgia, serif;
+  font-size: 1.15rem;
+  line-height: 1.6;
+  margin: 0 0 1.4rem;
+}
+.opts { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.25rem; }
+.opt {
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-start;
+  text-align: left;
+  width: 100%;
+  color: var(--ink);
+  background: var(--board-2);
+  border: 2px solid transparent;
+  border-radius: 12px;
+  padding: 0.8rem 1rem;
+  font-family: "Source Serif 4", Georgia, serif;
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+.opt:hover:not([disabled]) { border-color: var(--blue); }
+.opt .key {
+  flex: 0 0 auto;
+  font-family: "Atkinson Hyperlegible", system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--muted);
+  border: 1.5px solid var(--rule);
+  border-radius: 50%;
+  width: 1.7rem;
+  height: 1.7rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.1rem;
+}
+.opt[disabled] { cursor: default; }
+.opt.is-right { background: var(--green-wash); border-color: var(--green); }
+.opt.is-right .key { border-color: var(--green); color: var(--green); }
+.opt.is-wrong { background: var(--red-wash); border-color: var(--red); }
+.opt.is-wrong .key { border-color: var(--red); color: var(--red); }
+.opt.faded { opacity: 0.55; }
+
+.feedback {
+  border-left: 4px solid var(--blue);
+  padding: 0.25rem 0 0.25rem 1rem;
+  margin: 0 0 1.5rem;
+}
+.feedback.right { border-color: var(--green); }
+.feedback.wrong { border-color: var(--red); }
+.verdict { font-weight: 700; margin: 0 0 0.35rem; }
+.feedback.right .verdict { color: var(--green); }
+.feedback.wrong .verdict { color: var(--red); }
+.feedback .expl { font-family: "Source Serif 4", Georgia, serif; font-size: 1.02rem; line-height: 1.6; margin: 0 0 0.5rem; }
+.feedback .see { font-size: 0.9rem; color: var(--muted); margin: 0; }
+.nav { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
+.hint { font-size: 0.85rem; color: var(--muted); }
+
+/* ---------- resultado ---------- */
+.score {
+  font-family: "Source Serif 4", Georgia, serif;
+  font-size: clamp(2.6rem, 9vw, 3.6rem);
+  font-weight: 600;
+  line-height: 1;
+  margin: 0.25rem 0 0.5rem;
+}
+.score small { font-size: 0.45em; color: var(--muted); font-weight: 400; }
+.diag { list-style: none; padding: 0; margin: 1rem 0 2rem; }
+.diag li { padding: 1rem 0; border-bottom: 1px solid var(--rule); }
+.diag li:last-child { border-bottom: 0; }
+.diag-head { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+.diag-name { font-weight: 700; flex: 1 1 14rem; }
+.diag .marks { height: 24px; }
+.diag-verdict { margin: 0.4rem 0 0; font-size: 0.95rem; }
+.diag-verdict.ok { color: var(--green); }
+.diag-verdict.mid { color: var(--blue); }
+.diag-verdict.weak { color: var(--red); }
+.review { margin: 0 0 1.5rem; }
+.review-item { border-left: 4px solid var(--red); padding: 0.1rem 0 0.1rem 1rem; margin: 0 0 1.25rem; }
+.review-item .q-text { font-size: 1.02rem; margin-bottom: 0.5rem; }
+.review-item p { margin: 0 0 0.4rem; }
+.ans { font-family: "Source Serif 4", Georgia, serif; }
+.label-right { color: var(--green); font-weight: 700; }
+.label-wrong { color: var(--red); font-weight: 700; }
+
+mjx-container { color: inherit; }
+mjx-container[display="true"] { overflow-x: auto; overflow-y: hidden; max-width: 100%; }
+
+@media (prefers-reduced-motion: reduce) {
+  .mark { transition: none; }
+}
+@media (max-width: 520px) {
+  .tally-inner { gap: 0.8rem; padding: 0.6rem 1rem; }
+  .group-name { display: none; }
+  .count { padding-bottom: 0; }
+  main { padding-top: 1.5rem; }
+}
+</style>
+<style>
+.nome-box { margin: 0 0 1.5rem; max-width: 26rem; }
+.nome-box label { display: block; font-weight: 700; margin: 0 0 0.4rem; }
+.nome-box input {
+  width: 100%;
+  font: inherit;
+  color: var(--ink);
+  background: var(--board-2);
+  border: 2px solid var(--rule);
+  border-radius: 10px;
+  padding: 0.6rem 0.8rem;
+}
+.nome-box input:focus { outline: none; border-color: var(--blue); }
+.erro { color: var(--red); font-size: 0.9rem; min-height: 1.2rem; margin: 0.35rem 0 0; }
+.ident { margin: 0 0 1rem; }
+.ident .quem { font-weight: 700; font-size: 1.1rem; margin: 0; }
+.ident .quando { color: var(--muted); font-size: 0.9rem; margin: 0.15rem 0 0; }
+.parecer {
+  font-family: "Source Serif 4", Georgia, serif;
+  font-size: 1.08rem;
+  line-height: 1.65;
+  background: var(--blue-wash);
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  margin: 0 0 1.5rem;
+}
+.parecer p { margin: 0 0 0.6rem; }
+.parecer p:last-child { margin-bottom: 0; }
+</style>
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$']],
+      displayMath: [['\\[', '\\]']],
+      macros: {
+        R: '\\mathbb{R}', N: '\\mathbb{N}', Z: '\\mathbb{Z}', Q: '\\mathbb{Q}',
+        zero: '\\vec{0}', Lin: '\\mathcal{L}', GL: '\\mathrm{GL}',
+        vol: '\\operatorname{vol}', fr: '\\operatorname{fr}', inte: '\\operatorname{int}',
+        posto: '\\operatorname{posto}', sen: '\\operatorname{sen}', tr: '\\operatorname{tr}',
+        diam: '\\operatorname{diam}'
+      }
+    },
+    svg: { fontCache: 'global' },
+    startup: {
+      typeset: false,
+      ready: function () {
+        MathJax.startup.defaultReady();
+        MathJax.startup.promise.then(function () { window.__mjReady && window.__mjReady(); });
+      }
+    }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js" defer></script>
+</head>
+<body>
+
+<div class="tally" aria-hidden="true">
+  <div class="tally-inner" id="tally"></div>
+</div>
+
+<main id="app" aria-live="polite"></main>
+
+<script>
+var INFO = {"titulo": "Quiz de preparação para a P2", "lead": "Análise no $\\R^n$ · PMA005. São 20 questões de múltipla escolha, quatro por tema, sorteadas de um banco de 40 (a cada tentativa, questões diferentes), sobre a matéria da P2 (capítulos 4 e 5 das notas de aula). Cada resposta é corrigida na hora, com a explicação e a seção das notas que trata do assunto. No final, você recebe um diagnóstico por tema e um retorno sobre o seu resultado.", "fraco": "Ponto fraco: vale estudar este tema antes da prova.", "abertura": ["você acertou todas as %N questões. Excelente!", "você acertou %T de %N questões: um ótimo resultado.", "você acertou %T de %N questões: um bom resultado, mas ainda há pontos a ajustar.", "você acertou %T de %N questões. A base existe, mas vários pontos precisam ser revistos antes da prova.", "você acertou %T de %N questões. Este resultado mostra que ainda há bastante a estudar para a prova."], "conselho": "Releia essas seções das notas de aula e refaça os exercícios correspondentes.", "fecho": ["O próximo passo é escrever as demonstrações por extenso: na prova elas são cobradas completas, e o quiz não avalia isso.", "Você está bem encaminhado para a prova. Use o tempo que resta para treinar a redação das demonstrações.", "Depois de rever esses temas, refaça o quiz: a cada tentativa são sorteadas outras questões.", "Organize o estudo pelos temas acima e refaça o quiz em seguida. Se a dúvida persistir, traga-a para a aula ou para o atendimento.", "Não deixe para a véspera: comece pelos temas mais fracos, refaça os exemplos das notas e procure o professor no atendimento."]};
+var TOPICS = [{"name": "Derivada", "long": "Derivada e Regra da Cadeia", "low": "derivada e Regra da Cadeia", "ver": "seções 4.1 a 4.3"}, {"name": "Valor médio", "long": "Valor médio e classe $C^1$", "low": "valor médio e classe $C^1$", "ver": "seções 4.4 e 4.5"}, {"name": "Taylor", "long": "Ordem superior, Taylor e analíticas", "low": "derivadas de ordem superior, Taylor e aplicações analíticas", "ver": "seções 4.6 a 4.8"}, {"name": "Inversa", "long": "Aplicação inversa e função implícita", "low": "aplicação inversa e função implícita", "ver": "seções 5.1 a 5.4"}, {"name": "Posto", "long": "Imersões, submersões e posto", "low": "imersões, submersões e posto", "ver": "seção 5.5"}];
+var BANK = [
+ {
+  "t": 0,
+  "ref": "Seção 4.1 das notas",
+  "q": "Seja $f(x,y)=\\dfrac{x^2y}{x^4+y^2}$ para $(x,y)\\neq\\zero$ e $f(\\zero)=0$. Na origem:",
+  "o": [
+   "todas as derivadas direcionais existem, mas $f$ não é diferenciável (nem contínua).",
+   "$f$ é diferenciável, pois todas as derivadas direcionais existem.",
+   "nenhuma derivada direcional existe.",
+   "$f$ é contínua, mas não diferenciável."
+  ],
+  "e": "Para $v=(\\alpha,\\beta)$, $f(tv)/t=\\alpha^2\\beta/(t^2\\alpha^4+\\beta^2)$ tem limite ($\\alpha^2/\\beta$ se $\\beta\\neq0$; $0$ se $\\beta=0$). Mas $f(t,t^2)=1/2$, logo $f$ não é contínua em $\\zero$, e muito menos diferenciável."
+ },
+ {
+  "t": 0,
+  "ref": "Seção 4.2 das notas",
+  "q": "Para $f\\colon\\R^n\\to\\R$, $f(x)=|x|^2$, qual é $f'(a)\\cdot h$?",
+  "o": [
+   "$2\\langle a,h\\rangle$.",
+   "$2|a|\\,|h|$.",
+   "$\\langle a,h\\rangle$.",
+   "$2|h|^2$."
+  ],
+  "e": "$f(a+h)=|a|^2+2\\langle a,h\\rangle+|h|^2$, e o resto $|h|^2$ satisfaz $|h|^2/|h|\\to0$. Logo $f'(a)\\cdot h=2\\langle a,h\\rangle$; em particular $\\nabla f(a)=2a$."
+ },
+ {
+  "t": 0,
+  "ref": "Seção 4.2 das notas",
+  "q": "Seja $\\iota\\colon\\GL(\\R^n)\\to\\Lin(\\R^n)$, $\\iota(X)=X^{-1}$. Quanto vale $\\iota'(I)\\cdot H$?",
+  "o": [
+   "$-H$.",
+   "$H$.",
+   "$-H^2$.",
+   "$H^{-1}$."
+  ],
+  "e": "Nas notas, $\\iota'(X)\\cdot H=-X^{-1}HX^{-1}$; em $X=I$ obtemos $-H$. É o análogo de $(1/x)'=-1/x^2$ e da série $(I+H)^{-1}=I-H+H^2-\\cdots$."
+ },
+ {
+  "t": 0,
+  "ref": "Seção 4.3 das notas",
+  "q": "Seja $g\\colon\\R^2\\to\\R$ diferenciável com $\\nabla g(1,0)=(3,4)$, e $f(t)=g(\\cos t,\\sen t)$. Quanto vale $f'(0)$?",
+  "o": [
+   "$4$.",
+   "$3$.",
+   "$7$.",
+   "$5$."
+  ],
+  "e": "Pela Regra da Cadeia, $f'(0)=\\langle\\nabla g(1,0),\\lambda'(0)\\rangle$, onde $\\lambda(t)=(\\cos t,\\sen t)$ e $\\lambda'(0)=(0,1)$. Logo $f'(0)=\\langle(3,4),(0,1)\\rangle=4$."
+ },
+ {
+  "t": 1,
+  "ref": "Seção 4.4 das notas",
+  "q": "Seja $\\lambda\\colon[0,2\\pi]\\to\\R^2$, $\\lambda(t)=(\\cos t,\\sen t)$.",
+  "o": [
+   "Não existe $c$ com $\\lambda(2\\pi)-\\lambda(0)=2\\pi\\,\\lambda'(c)$, mas vale $|\\lambda(2\\pi)-\\lambda(0)|\\le2\\pi\\sup|\\lambda'|$.",
+   "Existe $c$ com $\\lambda(2\\pi)-\\lambda(0)=2\\pi\\,\\lambda'(c)$, pelo Teorema do Valor Médio em cada coordenada.",
+   "A Desigualdade do Valor Médio falha para $\\lambda$.",
+   "$\\lambda'$ se anula em algum ponto de $(0,2\\pi)$."
+  ],
+  "e": "$\\lambda(2\\pi)-\\lambda(0)=\\zero$, mas $|\\lambda'(t)|=1$ para todo $t$. O Teorema do Valor Médio em cada coordenada dá pontos $c$ diferentes para cada coordenada; para aplicações com valores em $\\R^n$ só vale a desigualdade."
+ },
+ {
+  "t": 1,
+  "ref": "Seção 4.4 das notas",
+  "q": "Sejam $U=\\R^2\\setminus\\{(x,0)\\colon x\\in\\R\\}$ e $f\\colon U\\to\\R$ diferenciável com $f'(x)=0$ para todo $x\\in U$. Então:",
+  "o": [
+   "$f$ é constante em cada um dos dois semiplanos, possivelmente com valores diferentes.",
+   "$f$ é constante em $U$.",
+   "$f$ é linear, mas não necessariamente constante.",
+   "nada se pode afirmar, pois $U$ não é convexo."
+  ],
+  "e": "Derivada nula implica constância em abertos conexos. $U$ tem duas componentes conexas, os semiplanos $y\\gt 0$ e $y\\lt 0$; $f$ pode valer $1$ num e $0$ no outro."
+ },
+ {
+  "t": 1,
+  "ref": "Seção 4.5 das notas",
+  "q": "Seja $f\\colon\\R\\to\\R$, $f(t)=t^2\\sen(1/t)$ para $t\\neq0$ e $f(0)=0$.",
+  "o": [
+   "$f$ é diferenciável em $\\R$, mas $f'$ não é contínua em $0$.",
+   "$f$ não é diferenciável em $0$.",
+   "$f$ é de classe $C^1$.",
+   "$f'(0)$ não existe, pois $\\sen(1/t)$ oscila."
+  ],
+  "e": "$f'(0)=\\lim_{t\\to0}t\\sen(1/t)=0$. Para $t\\neq0$, $f'(t)=2t\\sen(1/t)-\\cos(1/t)$, que não tem limite em $0$. Diferenciável não implica de classe $C^1$."
+ },
+ {
+  "t": 1,
+  "ref": "Seção 4.4 das notas",
+  "q": "Seja $U\\subset\\R^m$ aberto e convexo e $f\\colon U\\to\\R^n$ diferenciável com $|f'(x)|\\le3$ para todo $x\\in U$. Então:",
+  "o": [
+   "$|f(x)-f(y)|\\le3|x-y|$ para quaisquer $x,y\\in U$.",
+   "$f(x)-f(y)=f'(c)\\cdot(x-y)$ para algum $c\\in[x,y]$.",
+   "$|f(x)-f(y)|\\le3$ para quaisquer $x,y\\in U$.",
+   "$|f(x)-f(y)|\\le3|x-y|$, mas só quando $n=1$."
+  ],
+  "e": "É a Desigualdade do Valor Médio aplicada ao segmento $[x,y]\\subset U$, válida para qualquer $n$. A igualdade com um único ponto $c$ pode falhar quando $n\\ge2$."
+ },
+ {
+  "t": 2,
+  "ref": "Seção 4.6 das notas",
+  "q": "Para $f(x,y)=\\dfrac{xy(x^2-y^2)}{x^2+y^2}$, $f(\\zero)=0$, vale $\\dfrac{\\partial^2f}{\\partial x\\partial y}(\\zero)\\neq\\dfrac{\\partial^2f}{\\partial y\\partial x}(\\zero)$. Isso:",
+  "o": [
+   "não contradiz o Teorema de Schwarz, pois $f$ não é de classe $C^2$ numa vizinhança de $\\zero$.",
+   "contradiz o Teorema de Schwarz.",
+   "ocorre porque $f$ não é de classe $C^1$.",
+   "é impossível, pois as derivadas mistas nem existem em $\\zero$."
+  ],
+  "e": "$f$ é de classe $C^1$ e suas derivadas de segunda ordem existem em todo ponto, mas as mistas não são contínuas na origem. O Teorema de Schwarz exige $f$ de classe $C^2$."
+ },
+ {
+  "t": 2,
+  "ref": "Seção 4.6 das notas",
+  "q": "Para $f(x,y)=x^2y$, $a=(1,2)$ e $v=(1,1)$, quanto vale $f''(a)\\cdot(v,v)$?",
+  "o": [
+   "$8$.",
+   "$6$.",
+   "$4$.",
+   "$10$."
+  ],
+  "e": "$\\frac{\\partial^2f}{\\partial x^2}=2y=4$, $\\frac{\\partial^2f}{\\partial x\\partial y}=2x=2$ e $\\frac{\\partial^2f}{\\partial y^2}=0$ em $a$. Logo $f''(a)\\cdot(v,v)=4\\cdot1+2\\cdot2\\cdot1\\cdot1+0=8$."
+ },
+ {
+  "t": 2,
+  "ref": "Seção 4.7 das notas",
+  "q": "Seja $f$ de classe $C^k$ num aberto que contém $a$. O resto $r(v)$ da fórmula de Taylor de ordem $k$ em $a$ satisfaz:",
+  "o": [
+   "$r(v)/|v|^k\\to0$ quando $v\\to\\zero$.",
+   "$r(v)/|v|^{k+1}\\to0$ quando $v\\to\\zero$.",
+   "$|r(v)|\\le|v|^k$ para todo $v$.",
+   "$r(v)=0$ para $v$ suficientemente pequeno."
+  ],
+  "e": "É a fórmula de Taylor infinitesimal. Uma estimativa da ordem de $|v|^{k+1}$ exigiria $f$ de classe $C^{k+1}$, e $r$ só se anula perto de $a$ em casos especiais (polinômios de grau $\\le k$)."
+ },
+ {
+  "t": 2,
+  "ref": "Seção 4.8 das notas",
+  "q": "Seja $g(t)=e^{-1/t^2}$ para $t\\neq0$ e $g(0)=0$.",
+  "o": [
+   "$g$ é de classe $C^\\infty$, todas as suas derivadas em $0$ são nulas e $g$ não é analítica.",
+   "$g$ é analítica, por ser composta de funções analíticas.",
+   "$g$ não é de classe $C^\\infty$ em $0$.",
+   "$g$ coincide com sua série de Taylor numa vizinhança de $0$."
+  ],
+  "e": "A série de Taylor de $g$ em $0$ é nula, mas $g(t)\\gt 0$ para $t\\neq0$. A expressão $-1/t^2$ não está definida em $0$, de modo que $g$ não é composta de analíticas numa vizinhança de $0$."
+ },
+ {
+  "t": 3,
+  "ref": "Seção 5.1 das notas",
+  "q": "Seja $f\\colon\\R\\to\\R$, $f(x)=x^3$.",
+  "o": [
+   "$f$ é um homeomorfismo de classe $C^\\infty$, mas não é difeomorfismo, pois $f'(0)=0$.",
+   "$f$ é um difeomorfismo, por ser bijetiva e de classe $C^\\infty$.",
+   "$f$ não é um homeomorfismo.",
+   "$f^{-1}$ é diferenciável em $0$, com derivada $0$."
+  ],
+  "e": "Se $f^{-1}$ fosse diferenciável em $0$, a Regra da Cadeia daria $(f^{-1})'(0)\\cdot f'(0)=1$, impossível. De fato, $f^{-1}(y)=y^{1/3}$ não é diferenciável em $0$."
+ },
+ {
+  "t": 3,
+  "ref": "Seção 5.3 das notas",
+  "q": "Seja $f\\colon\\R^2\\to\\R^2$, $f(x,y)=(e^x\\cos y,e^x\\sen y)$.",
+  "o": [
+   "$f$ é um difeomorfismo local em todo ponto, mas não é injetiva.",
+   "$f$ é um difeomorfismo de $\\R^2$ sobre $\\R^2\\setminus\\{\\zero\\}$.",
+   "$f$ não é difeomorfismo local em $(0,0)$.",
+   "$f$ não é uma aplicação aberta."
+  ],
+  "e": "$\\det Jf(x,y)=e^{2x}\\neq0$, logo $f$ é um difeomorfismo local em cada ponto e, por isso, aberta. Mas $f(x,y+2\\pi)=f(x,y)$: o Teorema da Aplicação Inversa é local."
+ },
+ {
+  "t": 3,
+  "ref": "Seção 5.4 das notas",
+  "q": "Considere a equação $x^2+y^2=1$ perto do ponto $(1,0)$.",
+  "o": [
+   "Não se pode escrever $y$ como função de $x$, mas pode-se escrever $x$ como função de classe $C^\\infty$ de $y$.",
+   "Pode-se escrever $y$ como função de $x$, mas não $x$ como função de $y$.",
+   "Pode-se escrever tanto $y$ como função de $x$ quanto $x$ como função de $y$.",
+   "Não se pode escrever nenhuma das variáveis como função da outra."
+  ],
+  "e": "Em $(1,0)$, $\\partial f/\\partial y=2y=0$, e de fato para $x\\lt 1$ próximo de $1$ há dois valores de $y$. Já $\\partial f/\\partial x=2\\neq0$, e $x=\\sqrt{1-y^2}$ perto de $y=0$."
+ },
+ {
+  "t": 3,
+  "ref": "Seção 5.4 das notas",
+  "q": "A equação $z+xe^z+y^2=0$ define, perto da origem, $z=\\xi(x,y)$ com $\\xi(0,0)=0$. Quanto vale $\\dfrac{\\partial\\xi}{\\partial x}(0,0)$?",
+  "o": [
+   "$-1$.",
+   "$1$.",
+   "$0$.",
+   "$-e$."
+  ],
+  "e": "Com $F(x,y,z)=z+xe^z+y^2$, temos $\\partial F/\\partial z=1+xe^z=1$ e $\\partial F/\\partial x=e^z=1$ na origem. Pela fórmula da derivada da função implícita, $\\partial\\xi/\\partial x=-(\\partial F/\\partial x)/(\\partial F/\\partial z)=-1$."
+ },
+ {
+  "t": 4,
+  "ref": "Seção 5.5 das notas",
+  "q": "Seja $\\gamma\\colon\\R\\to\\R^2$, $\\gamma(t)=(t^2,t^3)$.",
+  "o": [
+   "$\\gamma$ não é imersão em $t=0$, pois $\\gamma'(0)=\\zero$.",
+   "$\\gamma$ é imersão em todo ponto, pois é injetiva.",
+   "$\\gamma$ é uma submersão.",
+   "$\\gamma$ é imersão em $0$, por ser de classe $C^\\infty$."
+  ],
+  "e": "Ser imersão em $t$ significa $\\gamma'(t)\\neq\\zero$. Aqui $\\gamma'(0)=(0,0)$, e a imagem tem um bico na origem, embora $\\gamma$ seja injetiva e de classe $C^\\infty$."
+ },
+ {
+  "t": 4,
+  "ref": "Seção 5.5 das notas",
+  "q": "Seja $f\\colon\\R^3\\setminus\\{\\zero\\}\\to\\R$, $f(x)=|x|^2$.",
+  "o": [
+   "$f$ é submersão, e cada conjunto de nível $f^{-1}(c)$, $c\\gt 0$, é localmente levado por um difeomorfismo num pedaço de plano.",
+   "$f$ é imersão.",
+   "$f$ não é submersão nos pontos com $x_3=0$.",
+   "$f$ é submersão também na origem, se a incluirmos no domínio."
+  ],
+  "e": "$f'(x)\\cdot h=2\\langle x,h\\rangle$ é sobrejetiva sobre $\\R$ sempre que $x\\neq\\zero$. Pela forma local das submersões, as esferas $f^{-1}(c)$ são localmente ``achatadas'' em pedaços de subespaços de dimensão $3-1=2$. Na origem, $f'=0$."
+ },
+ {
+  "t": 4,
+  "ref": "Seção 5.5 das notas",
+  "q": "Seja $f\\colon\\R^2\\to\\R^2$, $f(x,y)=(x+y,(x+y)^2)$.",
+  "o": [
+   "$f'$ tem posto $1$ em todo ponto, e o Teorema do Posto dá coordenadas nas quais $f$ se escreve $(u,v)\\mapsto(u,0)$.",
+   "$f'$ tem posto $2$, exceto na reta $x+y=0$.",
+   "$f'$ tem posto $1$ em todo ponto, mas o Teorema do Posto não se aplica, pois $f$ não é imersão nem submersão.",
+   "$f'$ tem posto $0$ na origem."
+  ],
+  "e": "$Jf=\\begin{bmatrix}1&1\\\\2(x+y)&2(x+y)\\end{bmatrix}$ tem colunas iguais e não nulas, logo posto $1$ em todo ponto. O Teorema do Posto exige apenas posto constante."
+ },
+ {
+  "t": 4,
+  "ref": "Seção 5.5 das notas",
+  "q": "Seja $f\\colon U\\to\\R^n$ de classe $C^1$, $U\\subset\\R^m$ aberto, com $f'(a)$ injetiva. Então:",
+  "o": [
+   "$f$ é injetiva numa vizinhança de $a$, mas pode não ser injetiva em $U$.",
+   "$f$ é injetiva em $U$.",
+   "$f(U)$ é aberto em $\\R^n$.",
+   "$m\\ge n$."
+  ],
+  "e": "Pela forma local das imersões, $h(f(x))=(x,\\zero)$ perto de $a$, o que dá a injetividade local. Globalmente pode falhar: $t\\mapsto(\\cos t,\\sen t)$ é imersão de $\\R$ em $\\R^2$. Imersões têm $m\\le n$, e para $m\\lt n$ a imagem nunca é aberta."
+ },
+ {
+  "t": 0,
+  "ref": "Seção 4.2 das notas",
+  "q": "Seja $f(x,y)=(x^2y,\\,3x+y)$. Qual é a matriz jacobiana $Jf(1,2)$?",
+  "o": [
+   "$\\begin{bmatrix}4&1\\\\3&1\\end{bmatrix}$.",
+   "$\\begin{bmatrix}4&3\\\\1&1\\end{bmatrix}$.",
+   "$\\begin{bmatrix}2&1\\\\3&1\\end{bmatrix}$.",
+   "$\\begin{bmatrix}4&2\\\\3&1\\end{bmatrix}$."
+  ],
+  "e": "A linha $i$ traz as derivadas parciais da coordenada $f_i$: $\\bigl(2xy,\\,x^2\\bigr)=(4,1)$ e $(3,1)$. A segunda alternativa é a transposta."
+ },
+ {
+  "t": 0,
+  "ref": "Seção 4.2 das notas",
+  "q": "Se $f\\colon U\\to\\R^n$ é diferenciável no ponto $a$, então, necessariamente:",
+  "o": [
+   "$f$ é contínua em $a$ e todas as derivadas direcionais de $f$ existem em $a$.",
+   "as derivadas parciais de $f$ são contínuas em $a$.",
+   "$f$ é de classe $C^1$ numa vizinhança de $a$.",
+   "$f'(a)$ é invertível."
+  ],
+  "e": "Da definição, $|f(a+v)-f(a)|\\le|f'(a)||v|+|r(v)|\\to0$, e $\\frac{\\partial f}{\\partial v}(a)=f'(a)\\cdot v$. A função $t^2\\sen(1/t)$ é diferenciável em $0$ sem ser $C^1$ perto de $0$, e uma constante tem derivada nula."
+ },
+ {
+  "t": 0,
+  "ref": "Seção 4.2 das notas",
+  "q": "Para $\\varphi\\colon\\R^n\\times\\R^n\\to\\R$, $\\varphi(x,y)=\\langle x,y\\rangle$, quanto vale $\\varphi'(a,b)\\cdot(h,k)$?",
+  "o": [
+   "$\\langle h,b\\rangle+\\langle a,k\\rangle$.",
+   "$\\langle h,k\\rangle$.",
+   "$\\langle a,b\\rangle+\\langle h,k\\rangle$.",
+   "$2\\langle a,h\\rangle$."
+  ],
+  "e": "$\\varphi(a+h,b+k)=\\langle a,b\\rangle+\\langle h,b\\rangle+\\langle a,k\\rangle+\\langle h,k\\rangle$, e $|\\langle h,k\\rangle|\\le|(h,k)|^2$. É a fórmula geral $\\varphi'(a,b)\\cdot(h,k)=\\varphi(h,b)+\\varphi(a,k)$ das aplicações bilineares."
+ },
+ {
+  "t": 0,
+  "ref": "Seção 4.2 das notas",
+  "q": "Seja $f(x,y)=x^2+3y$. Entre os vetores unitários $u$, qual é o maior valor de $\\dfrac{\\partial f}{\\partial u}(1,1)$, e em que direção?",
+  "o": [
+   "$\\sqrt{13}$, na direção $(2,3)/\\sqrt{13}$.",
+   "$5$, na direção $(1,1)/\\sqrt2$.",
+   "$13$, na direção $(2,3)$.",
+   "$\\sqrt{13}$, na direção $(3,2)/\\sqrt{13}$."
+  ],
+  "e": "$\\frac{\\partial f}{\\partial u}(a)=\\langle\\nabla f(a),u\\rangle$ e $\\nabla f(1,1)=(2,3)$. Por Cauchy–Schwarz, o máximo é $|\\nabla f(1,1)|=\\sqrt{13}$, atingido para $u=\\nabla f/|\\nabla f|$."
+ },
+ {
+  "t": 1,
+  "ref": "Seção 4.5 das notas",
+  "q": "Se as derivadas parciais de $f\\colon U\\to\\R$ existem e são contínuas em todo o aberto $U$, então:",
+  "o": [
+   "$f$ é diferenciável em $U$, e de classe $C^1$.",
+   "$f$ é contínua, mas pode não ser diferenciável.",
+   "$f$ é de classe $C^2$.",
+   "$f$ é diferenciável apenas se $U$ for convexo."
+  ],
+  "e": "É o critério de classe $C^1$ (Teorema 4.15): a diferenciabilidade sai do Teorema do Valor Médio aplicado ao longo de segmentos paralelos aos eixos, dentro de uma bola."
+ },
+ {
+  "t": 1,
+  "ref": "Seção 4.4 das notas",
+  "q": "Seja $f\\colon\\R^2\\to\\R^2$, $f(x,y)=(\\sen x,\\sen y)$. Qual constante de Lipschitz a Desigualdade do Valor Médio fornece para $f$?",
+  "o": [
+   "$1$.",
+   "$\\sqrt2$.",
+   "$2$.",
+   "$1/2$."
+  ],
+  "e": "$f'(x,y)$ tem matriz diagonal com entradas $\\cos x$ e $\\cos y$, cuja norma é $\\max\\{|\\cos x|,|\\cos y|\\}\\le1$. Como $\\R^2$ é convexo, $|f(p)-f(q)|\\le|p-q|$."
+ },
+ {
+  "t": 1,
+  "ref": "Seção 4.4 das notas",
+  "q": "Seja $f$ de classe $C^1$ no aberto $U$, $[a,a+v]\\subset U$ e $r(v)=f(a+v)-f(a)-f'(a)\\cdot v$. Qual estimativa vale?",
+  "o": [
+   "$|r(v)|\\le\\sup_{x\\in[a,a+v]}|f'(x)-f'(a)|\\cdot|v|$.",
+   "$|r(v)|\\le|f'(a)|\\,|v|^2$.",
+   "$r(v)=\\zero$.",
+   "$|r(v)|\\le|v|^2$."
+  ],
+  "e": "Aplique a Desigualdade do Valor Médio a $g(x)=f(x)-f'(a)\\cdot x$, cuja derivada é $f'(x)-f'(a)$. Pela continuidade de $f'$, o supremo tende a $0$ com $v$; essa estimativa do resto é usada na demonstração do Teorema da Aplicação Inversa."
+ },
+ {
+  "t": 1,
+  "ref": "Seção 4.5 das notas",
+  "q": "A função $f(x,y)=\\dfrac{xy}{x^2+y^2}$, $f(\\zero)=0$, tem derivadas parciais em todos os pontos de $\\R^2$, mas não é contínua na origem. Isso mostra que:",
+  "o": [
+   "a existência das derivadas parciais não garante a diferenciabilidade; é preciso, por exemplo, que elas sejam contínuas.",
+   "$f$ é de classe $C^1$ em $\\R^2$.",
+   "as derivadas parciais de $f$ não existem na origem.",
+   "$f$ é diferenciável na origem."
+  ],
+  "e": "Diferenciável implica contínua, logo $f$ não é diferenciável em $\\zero$. As derivadas parciais existem, mas não são contínuas na origem, e o critério de classe $C^1$ não se aplica."
+ },
+ {
+  "t": 2,
+  "ref": "Seção 4.6 das notas",
+  "q": "Seja $f(x,y)=x^3+xy^2$. Qual é a matriz hessiana $Hf(1,1)$?",
+  "o": [
+   "$\\begin{bmatrix}6&2\\\\2&2\\end{bmatrix}$.",
+   "$\\begin{bmatrix}6&1\\\\1&2\\end{bmatrix}$.",
+   "$\\begin{bmatrix}3&2\\\\2&1\\end{bmatrix}$.",
+   "$\\begin{bmatrix}6&2\\\\2&0\\end{bmatrix}$."
+  ],
+  "e": "$\\frac{\\partial^2f}{\\partial x^2}=6x=6$, $\\frac{\\partial^2f}{\\partial x\\partial y}=2y=2$ e $\\frac{\\partial^2f}{\\partial y^2}=2x=2$ no ponto $(1,1)$."
+ },
+ {
+  "t": 2,
+  "ref": "Seção 4.7 das notas",
+  "q": "Qual é o polinômio de Taylor de ordem $2$ de $f(x,y)=e^{x+y}$ em $(0,0)$?",
+  "o": [
+   "$1+(x+y)+\\frac12(x+y)^2$.",
+   "$1+x+y+\\frac12(x^2+y^2)$.",
+   "$1+x+y+xy$.",
+   "$1+(x+y)+(x+y)^2$."
+  ],
+  "e": "Todas as derivadas parciais de ordem $j$ valem $1$ na origem, logo $f^{(j)}(0)\\cdot v^j=(v_1+v_2)^j$, e o termo de ordem $2$ é $\\frac12(x+y)^2$. Equivale a substituir $t=x+y$ em $1+t+t^2/2$."
+ },
+ {
+  "t": 2,
+  "ref": "Seção 4.6 das notas",
+  "q": "Se $f$ é de classe $C^3$, então $f'''(a)$:",
+  "o": [
+   "é uma aplicação trilinear simétrica.",
+   "é simétrica apenas nas duas primeiras variáveis.",
+   "é linear.",
+   "pode não ser simétrica."
+  ],
+  "e": "Pelo corolário do Teorema de Schwarz, se $f$ é de classe $C^k$ então $f^{(k)}(a)$ é $k$-linear simétrica: a ordem das derivações não importa."
+ },
+ {
+  "t": 2,
+  "ref": "Seção 4.8 das notas",
+  "q": "Sejam $U$ aberto e conexo, $f,g\\colon U\\to\\R$ analíticas, com $f=g$ numa bola $B\\subset U$. Então:",
+  "o": [
+   "$f=g$ em todo $U$.",
+   "$f=g$ apenas em $B$.",
+   "$f=g$ apenas em $\\overline B$.",
+   "$f-g$ é constante em $U$, mas pode não ser nula."
+  ],
+  "e": "É o Princípio da Identidade aplicado a $f-g$, que é analítica e tem todas as derivadas nulas num ponto de $B$. Para funções apenas $C^\\infty$ isso é falso."
+ },
+ {
+  "t": 3,
+  "ref": "Seção 5.2 das notas",
+  "q": "Seja $F\\subset\\R^n$ fechado e não vazio e $\\varphi\\colon F\\to F$ uma contração. Então:",
+  "o": [
+   "$\\varphi$ tem um único ponto fixo, que é o limite das iteradas $\\varphi^k(x_0)$ para qualquer $x_0\\in F$.",
+   "$\\varphi$ tem ponto fixo apenas se $F$ for compacto.",
+   "$\\varphi$ pode ter vários pontos fixos.",
+   "as iteradas convergem, mas o limite pode não estar em $F$."
+  ],
+  "e": "As iteradas formam uma sequência de Cauchy ($|x_{k+1}-x_k|\\le\\lambda^k|x_1-x_0|$), o limite está em $F$ por ser fechado e é ponto fixo por continuidade. Dois pontos fixos $a,b$ dariam $|a-b|\\le\\lambda|a-b|$, logo $a=b$."
+ },
+ {
+  "t": 3,
+  "ref": "Seção 5.3 das notas",
+  "q": "Seja $P(r,\\theta)=(r\\cos\\theta,r\\sen\\theta)$, definida em $\\R^2$.",
+  "o": [
+   "$P$ é difeomorfismo local em cada ponto com $r\\neq0$.",
+   "$P$ é difeomorfismo local também nos pontos com $r=0$.",
+   "$P$ é injetiva em $\\{r\\gt 0\\}$.",
+   "$P$ tem jacobiano constante."
+  ],
+  "e": "$\\det JP(r,\\theta)=r$. Onde $r\\neq0$, o Teorema da Aplicação Inversa se aplica. Em $r=0$, toda a reta $\\{0\\}\\times\\R$ vai na origem, e $P$ não é injetiva perto desses pontos; em $\\{r\\gt 0\\}$, $P(r,\\theta+2\\pi)=P(r,\\theta)$."
+ },
+ {
+  "t": 3,
+  "ref": "Seção 5.1 das notas",
+  "q": "Seja $f(x,y)=(2x+y^2,\\,x+y)$, com $f(\\zero)=\\zero$. Pelo Teorema da Aplicação Inversa, qual é a matriz de $(f^{-1})'(\\zero)$?",
+  "o": [
+   "$\\begin{bmatrix}1/2&0\\\\-1/2&1\\end{bmatrix}$.",
+   "$\\begin{bmatrix}2&0\\\\1&1\\end{bmatrix}$.",
+   "$\\begin{bmatrix}1/2&0\\\\1/2&1\\end{bmatrix}$.",
+   "$\\begin{bmatrix}1&0\\\\-1&2\\end{bmatrix}$."
+  ],
+  "e": "$Jf(\\zero)=\\begin{bmatrix}2&0\\\\1&1\\end{bmatrix}$, invertível, e $(f^{-1})'(\\zero)=f'(\\zero)^{-1}$. Confira: $\\begin{bmatrix}2&0\\\\1&1\\end{bmatrix}\\begin{bmatrix}1/2&0\\\\-1/2&1\\end{bmatrix}=I$."
+ },
+ {
+  "t": 3,
+  "ref": "Seção 5.4 das notas",
+  "q": "O sistema $x^2+y^2+z^2=3$, $x+y+z=3$ define $(y,z)$ como função de $x$ perto de $(1,1,1)$?",
+  "o": [
+   "Não: a matriz das derivadas em relação a $(y,z)$ é singular em $(1,1,1)$; de fato, o plano tangencia a esfera e o conjunto das soluções é só esse ponto.",
+   "Sim, pelo Teorema da Função Implícita.",
+   "Sim, mas apenas para $x\\gt 1$.",
+   "Não, porque há mais incógnitas que equações."
+  ],
+  "e": "A matriz é $\\begin{bmatrix}2y&2z\\\\1&1\\end{bmatrix}=\\begin{bmatrix}2&2\\\\1&1\\end{bmatrix}$, singular. A distância da origem ao plano é $3/\\sqrt3=\\sqrt3$, o raio da esfera: a interseção é um único ponto. Ter mais incógnitas que equações é justamente a situação do teorema."
+ },
+ {
+  "t": 4,
+  "ref": "Seção 5.5 das notas",
+  "q": "Seja $f\\colon\\R^3\\to\\R^2$, $f(x,y,z)=(x,\\,y^2+z)$.",
+  "o": [
+   "$f$ é uma submersão em todo ponto.",
+   "$f$ não é submersão nos pontos com $y=0$.",
+   "$f$ é uma imersão.",
+   "$f'$ tem posto $1$ nos pontos com $y=0$."
+  ],
+  "e": "$Jf=\\begin{bmatrix}1&0&0\\\\0&2y&1\\end{bmatrix}$ tem as colunas $1$ e $3$ independentes, logo posto $2$ em todo ponto. Uma imersão de $\\R^3$ em $\\R^2$ é impossível."
+ },
+ {
+  "t": 4,
+  "ref": "Seção 5.5 das notas",
+  "q": "Toda submersão $f\\colon U\\to\\R^n$ de classe $C^1$, $U\\subset\\R^m$ aberto:",
+  "o": [
+   "é uma aplicação aberta.",
+   "é injetiva.",
+   "tem imagem fechada.",
+   "é um difeomorfismo local."
+  ],
+  "e": "Pela forma local, $f$ é, perto de cada ponto, a projeção $(y,z)\\mapsto y$ composta com um difeomorfismo, e a projeção é aberta. Só é difeomorfismo local quando $m=n$; $(x,y)\\mapsto x$ não é injetiva."
+ },
+ {
+  "t": 4,
+  "ref": "Seção 5.5 das notas",
+  "q": "Seja $f\\colon\\R\\to\\R$, $f(x)=x^2$.",
+  "o": [
+   "O posto de $f'(x)$ é $1$ se $x\\neq0$ e $0$ se $x=0$; o Teorema do Posto não se aplica em vizinhanças de $0$.",
+   "O posto de $f'(x)$ é constante igual a $1$.",
+   "O posto de $f'(x)$ é constante igual a $0$.",
+   "O posto de $f'(x)$ é $2$."
+  ],
+  "e": "O posto não é constante em nenhuma vizinhança de $0$. E não pode haver forma local $x\\mapsto x$ ou $x\\mapsto0$ perto de $0$: $f$ não é injetiva nem constante em vizinhança alguma de $0$."
+ },
+ {
+  "t": 4,
+  "ref": "Seção 5.5 das notas",
+  "q": "Seja $\\gamma\\colon\\R\\to\\R^3$, $\\gamma(t)=(\\cos t,\\sen t,t)$ (uma hélice).",
+  "o": [
+   "$\\gamma$ é uma imersão injetiva.",
+   "$\\gamma$ não é imersão em $t=0$.",
+   "$\\gamma$ é uma submersão.",
+   "$\\gamma$ não é injetiva."
+  ],
+  "e": "$\\gamma'(t)=(-\\sen t,\\cos t,1)\\neq\\zero$ para todo $t$, e a terceira coordenada mostra que $\\gamma$ é injetiva."
+ }
+];
+var POR_TEMA = 4;
+</script>
+<script>
+(function () {
+  "use strict";
+
+  var state = { i: 0, answers: [], order: [] };
+  var app = document.getElementById("app");
+  var tally = document.getElementById("tally");
+  var KEYS = ["a", "b", "c", "d"];
+  var nomeAluno = "";
+
+  /* Sorteia POR_TEMA questões de cada tema do banco, na ordem dos temas */
+  function sortear() {
+    var sel = [];
+    TOPICS.forEach(function (tp, ti) {
+      var doTema = BANK.filter(function (q) { return q.t === ti; });
+      var ord = shuffle(doTema.length);
+      for (var k = 0; k < Math.min(POR_TEMA, doTema.length); k++) sel.push(doTema[ord[k]]);
+    });
+    return sel;
+  }
+  var QUESTIONS;
+
+  var mjResolve;
+  var mjReady = new Promise(function (res) { mjResolve = res; });
+  window.__mjReady = function () { mjResolve(); };
+  setTimeout(function () { mjResolve(); }, 8000);
+
+  function typeset(el) {
+    return mjReady.then(function () {
+      if (window.MathJax && MathJax.typesetPromise) {
+        return MathJax.typesetPromise([el]).catch(function () {});
+      }
+    });
+  }
+  function clearMath(el) {
+    if (window.MathJax && MathJax.typesetClear) { try { MathJax.typesetClear([el]); } catch (e) {} }
+  }
+  function esc(t) {
+    return String(t).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  function shuffle(n) {
+    var a = [];
+    for (var k = 0; k < n; k++) a.push(k);
+    for (var j = n - 1; j > 0; j--) {
+      var r = Math.floor(Math.random() * (j + 1));
+      var t = a[j]; a[j] = a[r]; a[r] = t;
+    }
+    return a;
+  }
+  function primeiroNome() { return esc(nomeAluno.split(/\s+/)[0]); }
+  function lista(xs) {
+    if (xs.length <= 1) return xs.join("");
+    return xs.slice(0, -1).join(", ") + " e " + xs[xs.length - 1];
+  }
+  function porTema() {
+    return TOPICS.map(function (tp, ti) {
+      var n = 0, right = 0;
+      QUESTIONS.forEach(function (q, qi) {
+        if (q.t !== ti) return;
+        n++;
+        if (state.answers[qi] === true) right++;
+      });
+      return { tp: tp, n: n, right: right };
+    });
+  }
+
+  /* ---------------- Régua de tracinhos ---------------- */
+  function renderTally() {
+    var html = "";
+    TOPICS.forEach(function (tp, ti) {
+      html += '<div class="group"><div class="marks">';
+      QUESTIONS.forEach(function (q, qi) {
+        if (q.t !== ti) return;
+        var cls = "mark";
+        var a = state.answers[qi];
+        if (a === true) cls += " right";
+        else if (a === false) cls += " wrong";
+        else if (qi === state.i && state.started && !state.done) cls += " current";
+        html += '<span class="' + cls + '"></span>';
+      });
+      html += '</div><span class="group-name">' + tp.name + "</span></div>";
+    });
+    var answered = state.answers.filter(function (x) { return x !== undefined; }).length;
+    html += '<span class="count">' + answered + " de " + QUESTIONS.length + "</span>";
+    tally.innerHTML = html;
+  }
+
+  /* ---------------- Telas ---------------- */
+  function renderIntro() {
+    clearMath(app);
+    var rows = TOPICS.map(function (tp) {
+      return '<li><span class="t-name">' + tp.long + '</span><span class="t-dicas">' + tp.ver + "</span></li>";
+    }).join("");
+    app.innerHTML =
+      "<h1>" + INFO.titulo + "</h1>" +
+      '<p class="lead">' + INFO.lead + "</p>" +
+      '<ul class="topics">' + rows + "</ul>" +
+      '<div class="nome-box"><label for="nome">Seu nome</label>' +
+      '<input id="nome" type="text" autocomplete="name" placeholder="Digite seu nome completo" value="' + esc(nomeAluno) + '">' +
+      '<p class="erro" id="nome-erro"></p></div>' +
+      '<div class="nav"><button class="btn" id="start">Começar o quiz</button>' +
+      '<span class="hint">Use as teclas 1 a 4 para responder e Enter para avançar.</span></div>';
+    var campo = document.getElementById("nome");
+    function comecar() {
+      var n = campo.value.trim().replace(/\s+/g, " ");
+      if (!n) {
+        document.getElementById("nome-erro").textContent = "Escreva seu nome para começar.";
+        campo.focus();
+        return;
+      }
+      nomeAluno = n;
+      start();
+    }
+    document.getElementById("start").addEventListener("click", comecar);
+    campo.addEventListener("keydown", function (ev) { if (ev.key === "Enter") { ev.preventDefault(); comecar(); } });
+    renderTally();
+    typeset(app);
+  }
+
+  function start() {
+    QUESTIONS = sortear();
+    state = { i: 0, answers: [], order: QUESTIONS.map(function (q) { return shuffle(q.o.length); }), started: true, done: false };
+    renderQuestion();
+  }
+
+  function renderQuestion() {
+    var qi = state.i, q = QUESTIONS[qi], order = state.order[qi];
+    clearMath(app);
+    var opts = order.map(function (oi, pos) {
+      return '<button class="opt" data-oi="' + oi + '"><span class="key">' + KEYS[pos] + "</span><span>" + q.o[oi] + "</span></button>";
+    }).join("");
+    app.innerHTML =
+      '<p class="q-topic">Questão ' + (qi + 1) + " de " + QUESTIONS.length + ": " + TOPICS[q.t].long + "</p>" +
+      '<div class="q-text">' + q.q + "</div>" +
+      '<div class="opts" role="group" aria-label="Alternativas">' + opts + "</div>" +
+      '<div id="fb"></div>';
+    Array.prototype.forEach.call(app.querySelectorAll(".opt"), function (b) {
+      b.addEventListener("click", function () { answer(parseInt(b.getAttribute("data-oi"), 10)); });
+    });
+    renderTally();
+    typeset(app).then(function () {
+      var first = app.querySelector(".opt");
+      if (first && !first.disabled) first.focus({ preventScroll: true });
+    });
+    window.scrollTo({ top: 0 });
+  }
+
+  function answer(oi) {
+    var qi = state.i;
+    if (state.answers[qi] !== undefined) return;
+    var q = QUESTIONS[qi];
+    var ok = oi === 0;
+    state.answers[qi] = ok;
+    Array.prototype.forEach.call(app.querySelectorAll(".opt"), function (b) {
+      var bo = parseInt(b.getAttribute("data-oi"), 10);
+      b.disabled = true;
+      if (bo === 0) b.classList.add("is-right");
+      else if (bo === oi) b.classList.add("is-wrong");
+      else b.classList.add("faded");
+    });
+    var last = qi === QUESTIONS.length - 1;
+    var fb = document.getElementById("fb");
+    fb.innerHTML =
+      '<div class="feedback ' + (ok ? "right" : "wrong") + '">' +
+      '<p class="verdict">' + (ok ? "Correto." : "Não é essa.") + "</p>" +
+      '<p class="expl">' + q.e + "</p>" +
+      '<p class="see">Para rever: ' + q.ref + ".</p></div>" +
+      '<div class="nav"><button class="btn" id="next">' + (last ? "Ver o diagnóstico" : "Próxima questão") + "</button></div>";
+    document.getElementById("next").addEventListener("click", next);
+    renderTally();
+    typeset(fb).then(function () {
+      var nb = document.getElementById("next");
+      if (nb) {
+        nb.focus({ preventScroll: true });
+        fb.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      }
+    });
+  }
+
+  function next() {
+    if (state.i < QUESTIONS.length - 1) { state.i++; renderQuestion(); }
+    else { state.done = true; renderResults(); }
+  }
+
+  function verdictFor(r) {
+    if (r.right === r.n) return { cls: "ok", txt: "Seguro neste tema." };
+    if (r.right === r.n - 1) return { cls: "mid", txt: "Quase lá: reveja a questão que errou." };
+    return { cls: "weak", txt: INFO.fraco };
+  }
+
+  /* Retorno personalizado */
+  function parecer(total, temas) {
+    var nome = primeiroNome();
+    var n = QUESTIONS.length;
+    var fortes = temas.filter(function (r) { return r.right === r.n; }).map(function (r) { return "<em>" + r.tp.low + "</em>"; });
+    var quase = temas.filter(function (r) { return r.right === r.n - 1; }).map(function (r) { return "<em>" + r.tp.low + "</em>"; });
+    var fracos = temas.filter(function (r) { return r.right < r.n - 1; });
+    var p = [];
+    var faixa;
+    if (total === n) faixa = 0;
+    else if (total >= 0.85 * n) faixa = 1;
+    else if (total >= 0.65 * n) faixa = 2;
+    else if (total >= 0.45 * n) faixa = 3;
+    else faixa = 4;
+    p.push(nome + ", " + INFO.abertura[faixa].replace("%T", total).replace("%N", n));
+    if (fortes.length && fortes.length < temas.length) {
+      p.push((fortes.length === 1 ? "Seu ponto forte foi " : "Seus pontos fortes foram ") + lista(fortes) + ".");
+    }
+    if (quase.length) {
+      p.push("Em " + lista(quase) + ", faltou pouco: releia as explicações das questões que errou.");
+    }
+    if (fracos.length) {
+      var itens = fracos.map(function (r) { return "<em>" + r.tp.low + "</em> (" + r.tp.ver + ")"; });
+      p.push((fracos.length === 1 ? "O tema que mais pede atenção é " : "Os temas que mais pedem atenção são ") +
+             lista(itens) + ". " + INFO.conselho);
+    }
+    p.push(INFO.fecho[faixa]);
+    return '<div class="parecer">' + p.map(function (x) { return "<p>" + x + "</p>"; }).join("") + "</div>";
+  }
+
+  function renderResults() {
+    clearMath(app);
+    var total = state.answers.filter(function (x) { return x === true; }).length;
+    var temas = porTema();
+    var diag = temas.map(function (r, ti) {
+      var marks = "";
+      QUESTIONS.forEach(function (q, qi) {
+        if (q.t !== ti) return;
+        marks += '<span class="mark ' + (state.answers[qi] ? "right" : "wrong") + '"></span>';
+      });
+      var v = verdictFor(r);
+      var extra = r.right < r.n ? " Para rever: " + r.tp.ver + "." : "";
+      return '<li><div class="diag-head"><span class="diag-name">' + r.tp.long + '</span><span class="marks">' + marks +
+             "</span><span>" + r.right + " de " + r.n + "</span></div>" +
+             '<p class="diag-verdict ' + v.cls + '">' + v.txt + extra + "</p></li>";
+    }).join("");
+
+    var wrong = [];
+    QUESTIONS.forEach(function (q, qi) { if (state.answers[qi] === false) wrong.push(qi); });
+    var review = wrong.map(function (qi) {
+      var q = QUESTIONS[qi];
+      return '<div class="review-item"><div class="q-text">' + (qi + 1) + ". " + q.q + "</div>" +
+             '<p class="ans"><span class="label-right">Resposta:</span> ' + q.o[0] + "</p>" +
+             '<p class="ans">' + q.e + "</p>" +
+             '<p class="see">Para rever: ' + q.ref + ".</p></div>";
+    }).join("");
+
+    var quando = new Date().toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" });
+    app.innerHTML =
+      "<h1>Seu diagnóstico</h1>" +
+      '<div class="ident"><p class="quem">' + esc(nomeAluno) + "</p>" +
+      '<p class="quando">' + INFO.titulo + " · concluído em " + quando + "</p></div>" +
+      '<p class="score">' + total + " <small>de " + QUESTIONS.length + " acertos</small></p>" +
+      parecer(total, temas) +
+      "<h2>Resultado por tema</h2>" +
+      '<ul class="diag">' + diag + "</ul>" +
+      (wrong.length ? "<h2>As questões que você errou</h2>" + '<div class="review">' + review + "</div>" : "") +
+      '<div class="nav"><button class="btn" id="again">Refazer o quiz</button>' +
+      '<a class="btn ghost" href="index.html">Outros testes da disciplina</a>' +
+      '<a class="btn ghost" href="../index.html">Voltar às disciplinas</a></div>';
+    document.getElementById("again").addEventListener("click", start);
+    renderTally();
+    typeset(app);
+    window.scrollTo({ top: 0 });
+  }
+
+  /* ---------------- Teclado ---------------- */
+  document.addEventListener("keydown", function (ev) {
+    if (!state.started || state.done) return;
+    if (ev.target && ev.target.tagName === "INPUT") return;
+    if (ev.key >= "1" && ev.key <= "4") {
+      var b = app.querySelectorAll(".opt")[parseInt(ev.key, 10) - 1];
+      if (b && !b.disabled) { ev.preventDefault(); b.click(); }
+    } else if (ev.key === "Enter" || ev.key === "ArrowRight") {
+      var nx = document.getElementById("next");
+      if (nx && state.answers[state.i] !== undefined) { ev.preventDefault(); nx.click(); }
+    }
+  });
+
+  QUESTIONS = sortear();
+  renderIntro();
+})();
+</script>
+</body>
+</html>

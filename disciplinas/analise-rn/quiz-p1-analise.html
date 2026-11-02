@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Quiz de preparação para a P1 — Análise no Rⁿ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --board: #F7F9FB;
+  --board-2: #EEF2F6;
+  --ink: #1C2230;
+  --muted: #5B6577;
+  --rule: #D6DCE4;
+  --blue: #1F4FA8;
+  --red: #B9312C;
+  --green: #1F7A4D;
+  --blue-wash: #E3EBF8;
+  --red-wash: #F8E6E5;
+  --green-wash: #E2F2E9;
+  --empty: #C9D1DC;
+  color-scheme: light;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --board: #12161D;
+    --board-2: #1A2029;
+    --ink: #E6EAF0;
+    --muted: #9AA4B4;
+    --rule: #2A313C;
+    --blue: #8AB0F2;
+    --red: #F08C84;
+    --green: #7BCB9C;
+    --blue-wash: #1C2840;
+    --red-wash: #3A2222;
+    --green-wash: #1B3328;
+    --empty: #39414E;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --board: #12161D;
+  --board-2: #1A2029;
+  --ink: #E6EAF0;
+  --muted: #9AA4B4;
+  --rule: #2A313C;
+  --blue: #8AB0F2;
+  --red: #F08C84;
+  --green: #7BCB9C;
+  --blue-wash: #1C2840;
+  --red-wash: #3A2222;
+  --green-wash: #1B3328;
+  --empty: #39414E;
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: inherit; }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+body {
+  margin: 0;
+  background: var(--board);
+  color: var(--ink);
+  font-family: "Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto;
+  height: env(safe-area-inset-top, 0px);
+  z-index: 10;
+  background: var(--board);
+}
+
+/* ---------- régua de tracinhos ---------- */
+.tally {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 5;
+  background: var(--board);
+  border-bottom: 1px solid var(--rule);
+}
+.tally-inner {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: 0.75rem 1.25rem 0.7rem;
+  display: flex;
+  align-items: flex-end;
+  gap: 1.1rem;
+  overflow-x: auto;
+}
+.group { display: flex; flex-direction: column; gap: 0.3rem; flex: 0 0 auto; }
+.marks { display: flex; gap: 5px; align-items: flex-end; height: 26px; }
+.mark {
+  width: 6px;
+  height: 22px;
+  border-radius: 3px;
+  background: var(--empty);
+  transform: rotate(-6deg);
+  transition: background-color 0.25s ease, height 0.25s ease;
+}
+.mark.current { background: var(--blue); height: 26px; }
+.mark.right { background: var(--green); }
+.mark.wrong { background: var(--red); }
+.group-name { font-size: 0.72rem; color: var(--muted); white-space: nowrap; }
+.count { margin-left: auto; font-size: 0.85rem; color: var(--muted); white-space: nowrap; padding-bottom: 1.1rem; }
+
+/* ---------- conteúdo ---------- */
+main { max-width: 46rem; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+h1 {
+  font-family: "Source Serif 4", Georgia, "Times New Roman", serif;
+  font-weight: 600;
+  font-size: clamp(1.7rem, 4.5vw, 2.35rem);
+  line-height: 1.15;
+  margin: 0 0 0.75rem;
+}
+h2 {
+  font-family: "Source Serif 4", Georgia, serif;
+  font-weight: 600;
+  font-size: 1.35rem;
+  margin: 2rem 0 0.75rem;
+}
+.lead { font-size: 1.05rem; color: var(--muted); max-width: 38rem; margin: 0 0 1.5rem; }
+.serif { font-family: "Source Serif 4", Georgia, serif; }
+
+.topics { list-style: none; padding: 0; margin: 0 0 2rem; }
+.topics li {
+  display: flex;
+  gap: 0.75rem;
+  align-items: baseline;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+.topics li:last-child { border-bottom: 0; }
+.topics .t-name { font-weight: 700; flex: 1 1 auto; }
+.topics .t-dicas { color: var(--muted); font-size: 0.9rem; white-space: nowrap; }
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+.btn {
+  display: inline-block;
+  border: 2px solid var(--blue);
+  background: var(--blue);
+  color: var(--board);
+  font-weight: 700;
+  padding: 0.65rem 1.4rem;
+  border-radius: 999px;
+}
+.btn:hover { filter: brightness(1.08); }
+.btn.ghost { background: transparent; color: var(--blue); }
+a.btn { text-decoration: none; }
+.btn:focus-visible, .opt:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+
+/* ---------- questão ---------- */
+.q-topic { color: var(--blue); font-weight: 700; font-size: 0.95rem; margin: 0 0 0.5rem; }
+.q-text {
+  font-family: "Source Serif 4", Georgia, serif;
+  font-size: 1.15rem;
+  line-height: 1.6;
+  margin: 0 0 1.4rem;
+}
+.opts { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.25rem; }
+.opt {
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-start;
+  text-align: left;
+  width: 100%;
+  color: var(--ink);
+  background: var(--board-2);
+  border: 2px solid transparent;
+  border-radius: 12px;
+  padding: 0.8rem 1rem;
+  font-family: "Source Serif 4", Georgia, serif;
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+.opt:hover:not([disabled]) { border-color: var(--blue); }
+.opt .key {
+  flex: 0 0 auto;
+  font-family: "Atkinson Hyperlegible", system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--muted);
+  border: 1.5px solid var(--rule);
+  border-radius: 50%;
+  width: 1.7rem;
+  height: 1.7rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.1rem;
+}
+.opt[disabled] { cursor: default; }
+.opt.is-right { background: var(--green-wash); border-color: var(--green); }
+.opt.is-right .key { border-color: var(--green); color: var(--green); }
+.opt.is-wrong { background: var(--red-wash); border-color: var(--red); }
+.opt.is-wrong .key { border-color: var(--red); color: var(--red); }
+.opt.faded { opacity: 0.55; }
+
+.feedback {
+  border-left: 4px solid var(--blue);
+  padding: 0.25rem 0 0.25rem 1rem;
+  margin: 0 0 1.5rem;
+}
+.feedback.right { border-color: var(--green); }
+.feedback.wrong { border-color: var(--red); }
+.verdict { font-weight: 700; margin: 0 0 0.35rem; }
+.feedback.right .verdict { color: var(--green); }
+.feedback.wrong .verdict { color: var(--red); }
+.feedback .expl { font-family: "Source Serif 4", Georgia, serif; font-size: 1.02rem; line-height: 1.6; margin: 0 0 0.5rem; }
+.feedback .see { font-size: 0.9rem; color: var(--muted); margin: 0; }
+.nav { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
+.hint { font-size: 0.85rem; color: var(--muted); }
+
+/* ---------- resultado ---------- */
+.score {
+  font-family: "Source Serif 4", Georgia, serif;
+  font-size: clamp(2.6rem, 9vw, 3.6rem);
+  font-weight: 600;
+  line-height: 1;
+  margin: 0.25rem 0 0.5rem;
+}
+.score small { font-size: 0.45em; color: var(--muted); font-weight: 400; }
+.diag { list-style: none; padding: 0; margin: 1rem 0 2rem; }
+.diag li { padding: 1rem 0; border-bottom: 1px solid var(--rule); }
+.diag li:last-child { border-bottom: 0; }
+.diag-head { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+.diag-name { font-weight: 700; flex: 1 1 14rem; }
+.diag .marks { height: 24px; }
+.diag-verdict { margin: 0.4rem 0 0; font-size: 0.95rem; }
+.diag-verdict.ok { color: var(--green); }
+.diag-verdict.mid { color: var(--blue); }
+.diag-verdict.weak { color: var(--red); }
+.review { margin: 0 0 1.5rem; }
+.review-item { border-left: 4px solid var(--red); padding: 0.1rem 0 0.1rem 1rem; margin: 0 0 1.25rem; }
+.review-item .q-text { font-size: 1.02rem; margin-bottom: 0.5rem; }
+.review-item p { margin: 0 0 0.4rem; }
+.ans { font-family: "Source Serif 4", Georgia, serif; }
+.label-right { color: var(--green); font-weight: 700; }
+.label-wrong { color: var(--red); font-weight: 700; }
+
+mjx-container { color: inherit; }
+mjx-container[display="true"] { overflow-x: auto; overflow-y: hidden; max-width: 100%; }
+
+@media (prefers-reduced-motion: reduce) {
+  .mark { transition: none; }
+}
+@media (max-width: 520px) {
+  .tally-inner { gap: 0.8rem; padding: 0.6rem 1rem; }
+  .group-name { display: none; }
+  .count { padding-bottom: 0; }
+  main { padding-top: 1.5rem; }
+}
+</style>
+<style>
+.nome-box { margin: 0 0 1.5rem; max-width: 26rem; }
+.nome-box label { display: block; font-weight: 700; margin: 0 0 0.4rem; }
+.nome-box input {
+  width: 100%;
+  font: inherit;
+  color: var(--ink);
+  background: var(--board-2);
+  border: 2px solid var(--rule);
+  border-radius: 10px;
+  padding: 0.6rem 0.8rem;
+}
+.nome-box input:focus { outline: none; border-color: var(--blue); }
+.erro { color: var(--red); font-size: 0.9rem; min-height: 1.2rem; margin: 0.35rem 0 0; }
+.ident { margin: 0 0 1rem; }
+.ident .quem { font-weight: 700; font-size: 1.1rem; margin: 0; }
+.ident .quando { color: var(--muted); font-size: 0.9rem; margin: 0.15rem 0 0; }
+.parecer {
+  font-family: "Source Serif 4", Georgia, serif;
+  font-size: 1.08rem;
+  line-height: 1.65;
+  background: var(--blue-wash);
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  margin: 0 0 1.5rem;
+}
+.parecer p { margin: 0 0 0.6rem; }
+.parecer p:last-child { margin-bottom: 0; }
+</style>
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$']],
+      displayMath: [['\\[', '\\]']],
+      macros: {
+        R: '\\mathbb{R}', N: '\\mathbb{N}', Z: '\\mathbb{Z}', Q: '\\mathbb{Q}',
+        zero: '\\vec{0}', Lin: '\\mathcal{L}', GL: '\\mathrm{GL}',
+        vol: '\\operatorname{vol}', fr: '\\operatorname{fr}', inte: '\\operatorname{int}',
+        posto: '\\operatorname{posto}', sen: '\\operatorname{sen}', tr: '\\operatorname{tr}',
+        diam: '\\operatorname{diam}'
+      }
+    },
+    svg: { fontCache: 'global' },
+    startup: {
+      typeset: false,
+      ready: function () {
+        MathJax.startup.defaultReady();
+        MathJax.startup.promise.then(function () { window.__mjReady && window.__mjReady(); });
+      }
+    }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js" defer></script>
+</head>
+<body>
+
+<div class="tally" aria-hidden="true">
+  <div class="tally-inner" id="tally"></div>
+</div>
+
+<main id="app" aria-live="polite"></main>
+
+<script>
+var INFO = {"titulo": "Quiz de preparação para a P1", "lead": "Análise no $\\R^n$ · PMA005. São 20 questões de múltipla escolha, quatro por tema, sorteadas de um banco de 40 (a cada tentativa, questões diferentes), sobre a matéria da P1 (capítulos 1 a 3 das notas de aula). Cada resposta é corrigida na hora, com a explicação e a seção das notas que trata do assunto. No final, você recebe um diagnóstico por tema e um retorno sobre o seu resultado.", "fraco": "Ponto fraco: vale estudar este tema antes da prova.", "abertura": ["você acertou todas as %N questões. Excelente!", "você acertou %T de %N questões: um ótimo resultado.", "você acertou %T de %N questões: um bom resultado, mas ainda há pontos a ajustar.", "você acertou %T de %N questões. A base existe, mas vários pontos precisam ser revistos antes da prova.", "você acertou %T de %N questões. Este resultado mostra que ainda há bastante a estudar para a prova."], "conselho": "Releia essas seções das notas de aula e refaça os exercícios correspondentes.", "fecho": ["O próximo passo é escrever as demonstrações por extenso: na prova elas são cobradas completas, e o quiz não avalia isso.", "Você está bem encaminhado para a prova. Use o tempo que resta para treinar a redação das demonstrações.", "Depois de rever esses temas, refaça o quiz: a cada tentativa são sorteadas outras questões.", "Organize o estudo pelos temas acima e refaça o quiz em seguida. Se a dúvida persistir, traga-a para a aula ou para o atendimento.", "Não deixe para a véspera: comece pelos temas mais fracos, refaça os exemplos das notas e procure o professor no atendimento."]};
+var TOPICS = [{"name": "Normas", "long": "Normas e aplicações lineares", "low": "normas e aplicações lineares", "ver": "seções 1.3 a 1.6"}, {"name": "Abertos", "long": "Abertos e fechados", "low": "abertos e fechados", "ver": "seções 2.1 a 2.3"}, {"name": "Compactos", "long": "Compacidade", "low": "compacidade", "ver": "seções 2.4, 2.5 e 3.4"}, {"name": "Continuidade", "long": "Limites e continuidade", "low": "limites e continuidade", "ver": "seções 3.1 a 3.3"}, {"name": "Conexos", "long": "Conexidade", "low": "conexidade", "ver": "seção 3.5"}];
+var BANK = [
+ {
+  "t": 0,
+  "ref": "Seção 1.3 das notas",
+  "q": "Para todo $x\\in\\R^n$, qual cadeia de desigualdades é verdadeira?",
+  "o": [
+   "$|x|_M\\le|x|\\le|x|_S\\le n|x|_M$.",
+   "$|x|_S\\le|x|\\le|x|_M\\le n|x|_S$.",
+   "$|x|\\le|x|_M\\le|x|_S\\le n|x|$.",
+   "$|x|_M\\le|x|_S\\le|x|\\le n|x|_M$."
+  ],
+  "e": "Se $|x|_M=|x_k|$, então $x_k^2\\le\\sum x_i^2$; depois $\\sum x_i^2\\le(\\sum|x_i|)^2$; e cada $|x_i|\\le|x|_M$. Para $x=(1,1)$, por exemplo, $|x|_M=1$, $|x|=\\sqrt2$ e $|x|_S=2$."
+ },
+ {
+  "t": 0,
+  "ref": "Seção 1.3 das notas",
+  "q": "Qual das normas em $\\R^2$ abaixo provém de um produto interno?",
+  "o": [
+   "$\\|(x,y)\\|=\\sqrt{x^2+4y^2}$.",
+   "$\\|(x,y)\\|=|x|+|y|$.",
+   "$\\|(x,y)\\|=\\max\\{|x|,|y|\\}$.",
+   "$\\|(x,y)\\|=|x|+2|y|$."
+  ],
+  "e": "$\\sqrt{x^2+4y^2}$ provém do produto interno $\\langle(x,y),(x',y')\\rangle=xx'+4yy'$. As outras violam a lei do paralelogramo: com $u=e_1$, $v=e_2$, a norma da soma dá $\\|u+v\\|^2+\\|u-v\\|^2=8\\neq4=2\\|u\\|^2+2\\|v\\|^2$, e a do máximo dá $2\\neq4$."
+ },
+ {
+  "t": 0,
+  "ref": "Seção 1.5 das notas",
+  "q": "Seja $\\|\\cdot\\|$ uma norma qualquer em $\\R^n$. Qual afirmação é sempre verdadeira?",
+  "o": [
+   "Uma sequência converge na norma $\\|\\cdot\\|$ se, e somente se, converge na norma euclidiana.",
+   "$\\|x\\|\\le|x|$ para todo $x$.",
+   "A bola unitária de $\\|\\cdot\\|$ coincide com a da norma euclidiana.",
+   "Existem conjuntos limitados para $\\|\\cdot\\|$ que não são limitados na norma euclidiana."
+  ],
+  "e": "Todas as normas em $\\R^n$ são equivalentes: existem $a,b\\gt 0$ com $\\|x\\|\\le a|x|$ e $|x|\\le b\\|x\\|$. Por isso convergência e limitação não dependem da norma. As constantes, porém, não precisam ser $1$ (pense em $2|x|$), e as bolas mudam de forma."
+ },
+ {
+  "t": 0,
+  "ref": "Seção 1.6 das notas",
+  "q": "Seja $A\\in\\Lin(\\R^2)$ com matriz $\\begin{bmatrix}3&0\\\\0&-5\\end{bmatrix}$. Com a norma euclidiana, quanto vale $|A|$?",
+  "o": [
+   "$5$.",
+   "$3$.",
+   "$8$.",
+   "$\\sqrt{34}$."
+  ],
+  "e": "$|A(x,y)|^2=9x^2+25y^2\\le25(x^2+y^2)$, logo $|A|\\le5$, e $|Ae_2|=5$. Note que $\\sqrt{34}$ é a norma euclidiana das entradas, que é apenas uma cota superior para $|A|$."
+ },
+ {
+  "t": 1,
+  "ref": "Seção 2.1 das notas",
+  "q": "Qual dos subconjuntos de $\\R^2$ é aberto?",
+  "o": [
+   "$\\{(x,y)\\colon x^2+y^2\\lt 1\\}\\setminus\\{(x,0)\\colon x\\in\\R\\}$.",
+   "$\\{(x,y)\\colon x\\gt 0,\\ y\\ge0\\}$.",
+   "$\\{(x,y)\\colon x^2+y^2\\le1\\}$.",
+   "$\\Q\\times\\R$."
+  ],
+  "e": "É a interseção do disco aberto com o complementar da reta $y=0$, que é aberto por ser complementar de um fechado. Nos demais, há pontos não interiores: $(1,0)$ no segundo, $(1,0)$ no terceiro e qualquer ponto no último (toda bola contém pontos com primeira coordenada irracional)."
+ },
+ {
+  "t": 1,
+  "ref": "Seção 2.2 das notas",
+  "q": "Para $X=\\Q^2\\subset\\R^2$, quais são o interior, o fecho e a fronteira de $X$?",
+  "o": [
+   "$\\inte X=\\emptyset$, $\\overline X=\\R^2$ e $\\fr X=\\R^2$.",
+   "$\\inte X=\\Q^2$, $\\overline X=\\Q^2$ e $\\fr X=\\emptyset$.",
+   "$\\inte X=\\emptyset$, $\\overline X=\\Q^2$ e $\\fr X=\\Q^2$.",
+   "$\\inte X=\\emptyset$, $\\overline X=\\R^2$ e $\\fr X=\\R^2\\setminus\\Q^2$."
+  ],
+  "e": "Toda bola de $\\R^2$ contém pontos de $\\Q^2$ e pontos fora dele. Logo nenhum ponto é interior a $X$ nem a seu complementar, todo ponto é aderente a $X$ e todo ponto está na fronteira."
+ },
+ {
+  "t": 1,
+  "ref": "Seção 2.1 das notas",
+  "q": "Qual é o conjunto $\\bigcap_{k\\in\\N}B(\\zero;1+1/k)\\subset\\R^n$?",
+  "o": [
+   "A bola fechada $B[\\zero;1]$, que não é aberta.",
+   "A bola aberta $B(\\zero;1)$.",
+   "A bola fechada $B[\\zero;1]$, que é aberta por ser interseção de abertos.",
+   "O conjunto vazio."
+  ],
+  "e": "Se $|x|\\le1$, então $|x|\\lt 1+1/k$ para todo $k$; se $|x|\\gt 1$, então $|x|\\ge1+1/k$ para $k$ grande. A interseção de infinitos abertos não precisa ser aberta: aqui ela é $B[\\zero;1]$."
+ },
+ {
+  "t": 1,
+  "ref": "Seção 2.3 das notas",
+  "q": "Seja $X=[0,1)\\subset\\R$. Qual subconjunto de $X$ é aberto em $X$?",
+  "o": [
+   "$[0,1/2)$.",
+   "$[0,1/2]$.",
+   "$\\{0\\}$.",
+   "$[1/4,1/2)$."
+  ],
+  "e": "$[0,1/2)=(-1,1/2)\\cap X$, interseção de $X$ com um aberto de $\\R$. Nos demais há pontos sem vizinhança relativa contida no conjunto: $1/2$ no segundo, $0$ no terceiro e $1/4$ no último."
+ },
+ {
+  "t": 2,
+  "ref": "Seção 2.4 das notas",
+  "q": "Qual dos subconjuntos de $\\R^2$ é compacto?",
+  "o": [
+   "$\\{(x,y)\\colon x^2+y^4=1\\}$.",
+   "$\\{(x,y)\\colon xy=1\\}$.",
+   "$\\{(x,y)\\colon x^2+y^2\\lt 1\\}$.",
+   "$\\{(1/k,0)\\colon k\\in\\N\\}$."
+  ],
+  "e": "É fechado (imagem inversa de $\\{1\\}$ por uma função contínua) e limitado ($|x|,|y|\\le1$). A hipérbole é fechada, mas ilimitada; o disco aberto não é fechado; e o último conjunto não contém seu ponto de acumulação $\\zero$."
+ },
+ {
+  "t": 2,
+  "ref": "Seção 2.4 das notas",
+  "q": "Seja $X\\subset\\R^n$ tal que toda sequência em $X$ possui uma subsequência convergente (para algum ponto de $\\R^n$). Então:",
+  "o": [
+   "$X$ é limitado, mas pode não ser fechado.",
+   "$X$ é compacto.",
+   "$X$ é fechado, mas pode não ser limitado.",
+   "$X$ é finito."
+  ],
+  "e": "Se $X$ fosse ilimitado, haveria $x_k\\in X$ com $|x_k|\\gt k$, sem subsequência convergente. Mas o limite não precisa estar em $X$: $X=(0,1)$ tem a propriedade e não é fechado. A compacidade exige que o limite pertença a $X$."
+ },
+ {
+  "t": 2,
+  "ref": "Seção 2.4 das notas",
+  "q": "Considere a cobertura do intervalo $(0,1)$ pelos abertos $A_k=(1/k,1)$, $k\\ge2$.",
+  "o": [
+   "Ela não admite subcobertura finita, o que mostra que $(0,1)$ não é compacto.",
+   "Ela admite subcobertura finita, pois $(0,1)$ é limitado.",
+   "Ela não é uma cobertura de $(0,1)$.",
+   "Os abertos $A_2$ e $A_3$ já cobrem $(0,1)$."
+  ],
+  "e": "Todo $x\\in(0,1)$ está em $A_k$ para $k\\gt 1/x$, logo é uma cobertura. Uma quantidade finita $A_{k_1},\\dots,A_{k_r}$ tem reunião $A_k$ com $k=\\max k_i$, que não contém $1/(2k)$. Pelo Teorema de Borel–Lebesgue, $(0,1)$ não é compacto."
+ },
+ {
+  "t": 2,
+  "ref": "Seção 2.5 das notas",
+  "q": "Sejam $X=\\{(x,0)\\colon x\\in\\R\\}$ e $Y=\\{(x,1/x)\\colon x\\gt 0\\}$, fechados e disjuntos. Então $d(X,Y)$:",
+  "o": [
+   "vale $0$ e não é atingida, o que não contradiz as notas, pois nenhum dos conjuntos é compacto.",
+   "vale $1$.",
+   "é positiva, pois $X$ e $Y$ são fechados e disjuntos.",
+   "vale $0$ e é atingida em algum par $(x,y)\\in X\\times Y$."
+  ],
+  "e": "$|(k,0)-(k,1/k)|=1/k\\to0$, e como $X\\cap Y=\\emptyset$ nenhum par realiza a distância $0$. A distância entre fechados disjuntos é positiva quando um deles é compacto."
+ },
+ {
+  "t": 3,
+  "ref": "Seção 3.2 das notas",
+  "q": "Seja $f(x,y)=\\dfrac{xy}{x^2+y^2}$ para $(x,y)\\neq\\zero$ e $f(\\zero)=0$.",
+  "o": [
+   "$f$ é contínua em $\\R^2\\setminus\\{\\zero\\}$, mas não em $\\zero$: ao longo da reta $y=x$, $f$ vale $1/2$.",
+   "$f$ é contínua em $\\R^2$, pois $f(x,0)=f(0,y)=0$.",
+   "$f$ é contínua em $\\zero$, pois $|f|\\le1/2$.",
+   "$f$ é descontínua em todos os pontos dos eixos."
+  ],
+  "e": "Fora da origem, $f$ é quociente de polinômios com denominador não nulo. Na origem, $f(t,t)=1/2\\not\\to0$. A continuidade ao longo dos eixos (ou de qualquer família particular de curvas) não basta."
+ },
+ {
+  "t": 3,
+  "ref": "Seção 3.3 das notas",
+  "q": "Qual das funções é uniformemente contínua no domínio indicado?",
+  "o": [
+   "$f(x)=\\sqrt{|x|}$ em $\\R$.",
+   "$f(x,y)=xy$ em $\\R^2$.",
+   "$f(x)=x^2$ em $\\R$.",
+   "$f(x)=\\sen(x^2)$ em $\\R$."
+  ],
+  "e": "Vale $\\bigl|\\sqrt{|x|}-\\sqrt{|y|}\\bigr|\\le\\sqrt{|x-y|}$, logo basta tomar $\\delta=\\varepsilon^2$. Para as outras há pares $x_k,y_k$ com $x_k-y_k\\to0$ e $f(x_k)-f(y_k)\\not\\to0$: $(k,1/k)$ e $(k,0)$; $k+1/k$ e $k$; $\\sqrt{k\\pi+\\pi/2}$ e $\\sqrt{k\\pi}$."
+ },
+ {
+  "t": 3,
+  "ref": "Seção 3.4 das notas",
+  "q": "Seja $f\\colon\\R^n\\to\\R$ contínua tal que $f(x)\\to+\\infty$ quando $|x|\\to\\infty$. Então:",
+  "o": [
+   "$f$ atinge um valor mínimo em $\\R^n$.",
+   "$f$ atinge um valor máximo em $\\R^n$.",
+   "$f$ é uniformemente contínua.",
+   "$f$ é limitada inferiormente, mas pode não atingir o ínfimo."
+  ],
+  "e": "Existe $r$ com $f(x)\\gt f(\\zero)$ para $|x|\\gt r$. No compacto $B[\\zero;r]$, $f$ atinge um mínimo $f(x_0)\\le f(\\zero)$, que é menor que os valores fora da bola. Já $f(x)=|x|^2$ mostra que não há máximo nem continuidade uniforme."
+ },
+ {
+  "t": 3,
+  "ref": "Seção 3.4 das notas",
+  "q": "Seja $f\\colon[0,2\\pi)\\to S^1$, $f(t)=(\\cos t,\\sen t)$.",
+  "o": [
+   "$f$ é uma bijeção contínua, mas sua inversa não é contínua em $(1,0)$.",
+   "$f$ é um homeomorfismo, por ser bijeção contínua definida num compacto.",
+   "$f$ não é injetiva.",
+   "$f$ não é contínua em $t=0$."
+  ],
+  "e": "$[0,2\\pi)$ não é compacto, e o teorema sobre bijeções contínuas não se aplica. Os pontos $f(2\\pi-1/k)\\to(1,0)=f(0)$, mas $f^{-1}$ desses pontos tende a $2\\pi$, e não a $0$."
+ },
+ {
+  "t": 4,
+  "ref": "Seção 3.5 das notas",
+  "q": "Qual dos conjuntos é conexo?",
+  "o": [
+   "$\\R^2\\setminus\\{\\zero\\}$.",
+   "$\\R\\setminus\\{0\\}$.",
+   "$\\{(x,y)\\in\\R^2\\colon xy\\neq0\\}$.",
+   "$\\GL(\\R^2)$."
+  ],
+  "e": "$\\R^2\\setminus\\{\\zero\\}$ é conexo por caminhos: dois pontos podem ser ligados por um caminho poligonal que evita a origem. Os outros se dividem em abertos disjuntos: as semirretas, os quatro quadrantes e $\\{\\det\\gt 0\\}\\cup\\{\\det\\lt 0\\}$."
+ },
+ {
+  "t": 4,
+  "ref": "Seção 3.5 das notas",
+  "q": "Seja $f\\colon[0,1]\\to[0,1]$ contínua. Então, necessariamente:",
+  "o": [
+   "existe $x\\in[0,1]$ com $f(x)=x$.",
+   "$f$ é sobrejetiva.",
+   "$f$ tem exatamente um ponto fixo.",
+   "$f$ é monótona."
+  ],
+  "e": "$g(x)=f(x)-x$ é contínua, com $g(0)\\ge0$ e $g(1)\\le0$; pelo Teorema do Valor Intermediário, $g$ se anula. As funções constantes e a identidade mostram que as outras afirmações podem falhar."
+ },
+ {
+  "t": 4,
+  "ref": "Seção 3.5 das notas",
+  "q": "Sobre conexidade e conexidade por caminhos em $\\R^n$:",
+  "o": [
+   "para abertos as duas noções coincidem; em geral, conexo não implica conexo por caminhos.",
+   "as duas noções coincidem para todo subconjunto de $\\R^n$.",
+   "conexo por caminhos não implica conexo.",
+   "as duas noções coincidem apenas para compactos."
+  ],
+  "e": "Todo conexo por caminhos é conexo, e um aberto conexo é até conexo por caminhos poligonais. O espaço pente das notas é conexo e não é conexo por caminhos (e seu fecho, que é compacto, é conexo por caminhos)."
+ },
+ {
+  "t": 4,
+  "ref": "Seção 3.5 das notas",
+  "q": "Sejam $X\\subset\\R^n$ e $C\\subset\\R^n$ conexo, contendo um ponto de $X$ e um ponto de $\\R^n\\setminus X$. Então:",
+  "o": [
+   "$C$ contém algum ponto de $\\fr X$.",
+   "$C\\subset X$.",
+   "$C\\cap\\fr X=\\emptyset$ quando $X$ é aberto.",
+   "$C$ não é limitado."
+  ],
+  "e": "É o Teorema da Alfândega: se $C$ não encontrasse $\\fr X$, os conjuntos $C\\cap\\inte X$ e $C\\cap\\inte(\\R^n\\setminus X)$ formariam uma cisão não trivial de $C$."
+ },
+ {
+  "t": 0,
+  "ref": "Seção 1.2 das notas",
+  "q": "Para $x,y\\in\\R^n$, vale $|\\langle x,y\\rangle|=|x|\\,|y|$ se, e somente se:",
+  "o": [
+   "$x$ e $y$ são linearmente dependentes.",
+   "$x\\perp y$.",
+   "$x=y$.",
+   "$|x|=|y|$."
+  ],
+  "e": "É o caso de igualdade na desigualdade de Cauchy–Schwarz: na demonstração, a igualdade ocorre exatamente quando a componente de $x$ ortogonal a $y$ é nula. Se $x\\perp y$ e ambos são não nulos, o lado esquerdo é $0$."
+ },
+ {
+  "t": 0,
+  "ref": "Seção 1.4 das notas",
+  "q": "Seja $x_k=\\bigl(1/k,(-1)^k\\bigr)\\in\\R^2$. Então:",
+  "o": [
+   "$(x_k)$ tem exatamente dois valores de aderência, $(0,1)$ e $(0,-1)$, e não converge.",
+   "$(x_k)$ converge para $(0,0)$.",
+   "$(x_k)$ converge para $(0,1)$.",
+   "$(x_k)$ não tem valor de aderência."
+  ],
+  "e": "Uma sequência em $\\R^n$ converge se, e somente se, cada coordenada converge; a segunda coordenada oscila. As subsequências de índices pares e ímpares convergem para $(0,1)$ e $(0,-1)$."
+ },
+ {
+  "t": 0,
+  "ref": "Seção 1.3 das notas",
+  "q": "Qual é a menor constante $a$ tal que $|x|_S\\le a|x|$ para todo $x\\in\\R^n$?",
+  "o": [
+   "$\\sqrt n$.",
+   "$n$.",
+   "$1$.",
+   "$n^2$."
+  ],
+  "e": "$|x|_S=\\sum|x_i|=\\langle(\\pm1,\\dots,\\pm1),x\\rangle\\le\\sqrt n\\,|x|$ por Cauchy–Schwarz, com igualdade para $x=(1,\\dots,1)$."
+ },
+ {
+  "t": 0,
+  "ref": "Seção 1.7 das notas",
+  "q": "Seja $\\varphi\\colon\\R^m\\times\\R^p\\to\\R^n$ bilinear. Qual afirmação é sempre verdadeira?",
+  "o": [
+   "Existe $c\\ge0$ com $|\\varphi(x,y)|\\le c\\,|x|\\,|y|$ para quaisquer $x,y$.",
+   "$\\varphi$ é linear como aplicação de $\\R^{m+p}$ em $\\R^n$.",
+   "Existe $c\\ge0$ com $|\\varphi(x,y)|\\le c\\,(|x|+|y|)$ para quaisquer $x,y$.",
+   "$\\varphi(x,y)=\\varphi(y,x)$ quando $m=p$."
+  ],
+  "e": "É a estimativa da Seção 1.7. Como $\\varphi(tx,ty)=t^2\\varphi(x,y)$, uma aplicação bilinear não nula não é linear nem satisfaz a terceira estimativa; e o determinante de matrizes $2\\times2$, visto nas duas colunas, não é simétrico."
+ },
+ {
+  "t": 1,
+  "ref": "Seção 2.2 das notas",
+  "q": "Qual dos subconjuntos de $\\R^2$ é fechado?",
+  "o": [
+   "$\\{(x,y)\\colon xy\\ge1\\}$.",
+   "$\\{(x,y)\\colon x^2+y^2\\lt 1\\}$.",
+   "$\\{(1/k,0)\\colon k\\in\\N\\}$.",
+   "$\\Q\\times\\{0\\}$."
+  ],
+  "e": "É a imagem inversa do fechado $[1,\\infty)$ pela função contínua $(x,y)\\mapsto xy$. O disco aberto não contém os pontos do círculo; o terceiro não contém $\\zero$; o último não contém os pontos $(t,0)$ com $t$ irracional, que são aderentes a ele."
+ },
+ {
+  "t": 1,
+  "ref": "Seção 2.2 das notas",
+  "q": "Para $X=[1,2)\\cup\\{3\\}\\subset\\R$, qual é o derivado $X'$?",
+  "o": [
+   "$[1,2]$.",
+   "$[1,2)\\cup\\{3\\}$.",
+   "$[1,2]\\cup\\{3\\}$.",
+   "$(1,2)$."
+  ],
+  "e": "Todo ponto de $[1,2]$ é limite de pontos de $X$ diferentes dele. O ponto $3$ é isolado: $B(3;1/2)\\cap X=\\{3\\}$."
+ },
+ {
+  "t": 1,
+  "ref": "Seção 2.1 das notas",
+  "q": "Sejam $A=[0,1]$ e $B=[1,2]$ em $\\R$. Então $\\inte(A\\cup B)$:",
+  "o": [
+   "é $(0,2)$, estritamente maior que $\\inte A\\cup\\inte B$.",
+   "é $(0,1)\\cup(1,2)$.",
+   "é $[0,2]$.",
+   "é $(0,2)$, igual a $\\inte A\\cup\\inte B$."
+  ],
+  "e": "$A\\cup B=[0,2]$, cujo interior é $(0,2)$. Já $\\inte A\\cup\\inte B=(0,1)\\cup(1,2)$ não contém $1$. Em geral, só vale $\\inte A\\cup\\inte B\\subset\\inte(A\\cup B)$."
+ },
+ {
+  "t": 1,
+  "ref": "Seção 2.3 das notas",
+  "q": "Seja $X=(0,1]\\subset\\R$. O conjunto $F=(0,1/2]$ é:",
+  "o": [
+   "fechado em $X$, embora não seja fechado em $\\R$.",
+   "aberto em $X$.",
+   "nem aberto nem fechado em $X$.",
+   "fechado em $\\R$."
+  ],
+  "e": "$F=[0,1/2]\\cap X$, interseção de $X$ com um fechado de $\\R$. Não é aberto em $X$, pois toda bola de centro $1/2$ contém pontos de $X$ maiores que $1/2$; e não é fechado em $\\R$, pois $0\\in\\overline F\\setminus F$."
+ },
+ {
+  "t": 2,
+  "ref": "Seção 2.4 das notas",
+  "q": "Os conjuntos $K_k=[k,\\infty)$, $k\\in\\N$, são fechados, não vazios, encaixados e têm interseção vazia. Isso:",
+  "o": [
+   "não contradiz o Teorema de Cantor, pois os $K_k$ não são compactos.",
+   "contradiz o Teorema de Cantor.",
+   "não ocorre: a interseção contém pontos arbitrariamente grandes.",
+   "mostra que conjuntos encaixados nunca têm interseção não vazia."
+  ],
+  "e": "O Teorema de Cantor exige compactos; aqui os $K_k$ são ilimitados. Para cada $x$, $x\\notin K_k$ quando $k\\gt x$."
+ },
+ {
+  "t": 2,
+  "ref": "Seção 2.4 das notas",
+  "q": "Sejam $K\\subset\\R^m$ e $L\\subset\\R^n$ compactos. Então $K\\times L\\subset\\R^{m+n}$:",
+  "o": [
+   "é compacto.",
+   "é fechado, mas pode ser ilimitado.",
+   "é limitado, mas pode não ser fechado.",
+   "só é compacto quando $m=n$."
+  ],
+  "e": "Dada uma sequência $(x_k,y_k)$ em $K\\times L$, extraia uma subsequência com $x_k$ convergente em $K$ e, dela, outra com $y_k$ convergente em $L$; use a caracterização sequencial."
+ },
+ {
+  "t": 2,
+  "ref": "Seção 2.4 das notas",
+  "q": "Considere a cobertura de $[0,1]$ pelos abertos $(-1,1/2)$ e $(1/3,2)$. Qual número é um número de Lebesgue dessa cobertura?",
+  "o": [
+   "$1/6$.",
+   "$1/4$.",
+   "$1/2$.",
+   "$1$."
+  ],
+  "e": "Se $Y\\subset[0,1]$ tem diâmetro menor que $1/6$ e contém um ponto $\\le1/3$, todos os seus pontos são menores que $1/3+1/6=1/2$; caso contrário, todos são maiores que $1/3$. Com $1/4$ falha: $\\{0{,}3;\\,0{,}54\\}$ tem diâmetro $0{,}24$ e não está em nenhum dos dois."
+ },
+ {
+  "t": 2,
+  "ref": "Seção 2.5 das notas",
+  "q": "Sejam $K\\subset U\\subset\\R^n$, com $K$ compacto e $U$ aberto. Então:",
+  "o": [
+   "existe $\\varepsilon\\gt 0$ com $B(x;\\varepsilon)\\subset U$ para todo $x\\in K$.",
+   "$U$ é limitado.",
+   "existe $\\varepsilon\\gt 0$ com $B(x;\\varepsilon)\\subset U$ para todo $x\\in U$.",
+   "$\\overline U$ é compacto."
+  ],
+  "e": "Tome $\\varepsilon=d(K,\\R^n\\setminus U)$, positiva porque $K$ é compacto e $\\R^n\\setminus U$ é fechado e disjunto de $K$. Para $U=(0,1)$ não há $\\varepsilon$ uniforme em todo $U$, e $U=\\R^n$ mostra que $U$ pode ser ilimitado."
+ },
+ {
+  "t": 3,
+  "ref": "Seção 3.1 das notas",
+  "q": "Quanto vale $\\displaystyle\\lim_{(x,y)\\to\\zero}\\frac{x^3}{x^2+y^2}$?",
+  "o": [
+   "$0$.",
+   "$1$.",
+   "O limite não existe.",
+   "$1/2$."
+  ],
+  "e": "$\\Bigl|\\dfrac{x^3}{x^2+y^2}\\Bigr|=|x|\\dfrac{x^2}{x^2+y^2}\\le|x|\\to0$."
+ },
+ {
+  "t": 3,
+  "ref": "Seção 3.2 das notas",
+  "q": "Seja $f\\colon\\R^n\\to\\R$ contínua. Qual dos conjuntos é sempre fechado?",
+  "o": [
+   "$\\{x\\colon f(x)=0\\}$.",
+   "$\\{x\\colon f(x)\\gt 0\\}$.",
+   "$f(\\R^n)$.",
+   "$f(B(\\zero;1))$."
+  ],
+  "e": "É a imagem inversa do fechado $\\{0\\}$. O segundo é aberto (e pode não ser fechado). A imagem de um fechado pode não ser fechada: $\\arctan(\\R)=(-\\pi/2,\\pi/2)$, e $f(x)=|x|^2$ leva a bola aberta em $[0,1)$."
+ },
+ {
+  "t": 3,
+  "ref": "Seção 3.2 das notas",
+  "q": "Toda aplicação linear $A\\in\\Lin(\\R^m;\\R^n)$ é:",
+  "o": [
+   "lipschitziana, com constante $|A|$.",
+   "contínua, mas não necessariamente uniformemente contínua.",
+   "limitada em $\\R^m$.",
+   "uma aplicação aberta."
+  ],
+  "e": "$|Ax-Ay|=|A(x-y)|\\le|A|\\,|x-y|$. A aplicação nula não é aberta, e uma aplicação linear não nula é ilimitada."
+ },
+ {
+  "t": 3,
+  "ref": "Seção 3.3 das notas",
+  "q": "Seja $f\\colon(0,1)\\to\\R$ uniformemente contínua. Então:",
+  "o": [
+   "$f$ é limitada e se estende continuamente a $[0,1]$.",
+   "$f$ é constante.",
+   "$f$ é lipschitziana.",
+   "$f$ pode não ser limitada."
+  ],
+  "e": "Uma aplicação uniformemente contínua leva sequências de Cauchy em sequências de Cauchy, e isso permite estendê-la ao fecho; a extensão é contínua no compacto $[0,1]$, logo limitada. A função $\\sqrt x$ é uniformemente contínua e não é lipschitziana."
+ },
+ {
+  "t": 4,
+  "ref": "Seção 3.5 das notas",
+  "q": "Seja $f\\colon\\R\\to\\R$ contínua com $f(\\R)\\subset\\Q$. Então:",
+  "o": [
+   "$f$ é constante.",
+   "tal $f$ não existe.",
+   "$f$ é injetiva.",
+   "$f$ pode assumir exatamente dois valores."
+  ],
+  "e": "$f(\\R)$ é conexo, por ser imagem contínua de conexo; um subconjunto de $\\Q$ com mais de um ponto é desconexo. Logo $f(\\R)$ é um único ponto."
+ },
+ {
+  "t": 4,
+  "ref": "Seção 3.5 das notas",
+  "q": "Seja $X=\\{(x,\\sen(1/x))\\colon x\\gt 0\\}$ e $Y=X\\cup\\bigl(\\{0\\}\\times[-1,1]\\bigr)$. Então $Y$:",
+  "o": [
+   "é conexo.",
+   "é desconexo, pois não é conexo por caminhos.",
+   "é conexo por caminhos.",
+   "não está entre $X$ e $\\overline X$."
+  ],
+  "e": "$X$ é conexo (imagem contínua de $(0,\\infty)$) e $X\\subset Y\\subset\\overline X$, logo $Y$ é conexo. Como no espaço pente, não há caminho ligando um ponto do segmento a um ponto de $X$."
+ },
+ {
+  "t": 4,
+  "ref": "Seção 3.5 das notas",
+  "q": "Qual destes conjuntos é conexo?",
+  "o": [
+   "$S^1\\times[0,1]\\subset\\R^3$ (um cilindro).",
+   "$\\{-1,1\\}\\times\\R\\subset\\R^2$.",
+   "A hipérbole $\\{(x,y)\\colon x^2-y^2=1\\}$.",
+   "$\\Z\\times\\R\\subset\\R^2$."
+  ],
+  "e": "Produto de conexos é conexo. Os outros se decompõem em partes disjuntas abertas no conjunto: duas retas, os dois ramos da hipérbole ($x\\gt 0$ e $x\\lt 0$) e infinitas retas."
+ },
+ {
+  "t": 4,
+  "ref": "Seção 3.5 das notas",
+  "q": "Todo subconjunto convexo de $\\R^n$:",
+  "o": [
+   "é conexo por caminhos.",
+   "é compacto.",
+   "é aberto ou fechado.",
+   "é conexo, mas pode não ser conexo por caminhos."
+  ],
+  "e": "Dois pontos $x,y$ de um convexo são ligados pelo caminho $t\\mapsto(1-t)x+ty$, contido no conjunto. Um intervalo $[0,1)$ é convexo e não é compacto, nem aberto, nem fechado."
+ }
+];
+var POR_TEMA = 4;
+</script>
+<script>
+(function () {
+  "use strict";
+
+  var state = { i: 0, answers: [], order: [] };
+  var app = document.getElementById("app");
+  var tally = document.getElementById("tally");
+  var KEYS = ["a", "b", "c", "d"];
+  var nomeAluno = "";
+
+  /* Sorteia POR_TEMA questões de cada tema do banco, na ordem dos temas */
+  function sortear() {
+    var sel = [];
+    TOPICS.forEach(function (tp, ti) {
+      var doTema = BANK.filter(function (q) { return q.t === ti; });
+      var ord = shuffle(doTema.length);
+      for (var k = 0; k < Math.min(POR_TEMA, doTema.length); k++) sel.push(doTema[ord[k]]);
+    });
+    return sel;
+  }
+  var QUESTIONS;
+
+  var mjResolve;
+  var mjReady = new Promise(function (res) { mjResolve = res; });
+  window.__mjReady = function () { mjResolve(); };
+  setTimeout(function () { mjResolve(); }, 8000);
+
+  function typeset(el) {
+    return mjReady.then(function () {
+      if (window.MathJax && MathJax.typesetPromise) {
+        return MathJax.typesetPromise([el]).catch(function () {});
+      }
+    });
+  }
+  function clearMath(el) {
+    if (window.MathJax && MathJax.typesetClear) { try { MathJax.typesetClear([el]); } catch (e) {} }
+  }
+  function esc(t) {
+    return String(t).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  function shuffle(n) {
+    var a = [];
+    for (var k = 0; k < n; k++) a.push(k);
+    for (var j = n - 1; j > 0; j--) {
+      var r = Math.floor(Math.random() * (j + 1));
+      var t = a[j]; a[j] = a[r]; a[r] = t;
+    }
+    return a;
+  }
+  function primeiroNome() { return esc(nomeAluno.split(/\s+/)[0]); }
+  function lista(xs) {
+    if (xs.length <= 1) return xs.join("");
+    return xs.slice(0, -1).join(", ") + " e " + xs[xs.length - 1];
+  }
+  function porTema() {
+    return TOPICS.map(function (tp, ti) {
+      var n = 0, right = 0;
+      QUESTIONS.forEach(function (q, qi) {
+        if (q.t !== ti) return;
+        n++;
+        if (state.answers[qi] === true) right++;
+      });
+      return { tp: tp, n: n, right: right };
+    });
+  }
+
+  /* ---------------- Régua de tracinhos ---------------- */
+  function renderTally() {
+    var html = "";
+    TOPICS.forEach(function (tp, ti) {
+      html += '<div class="group"><div class="marks">';
+      QUESTIONS.forEach(function (q, qi) {
+        if (q.t !== ti) return;
+        var cls = "mark";
+        var a = state.answers[qi];
+        if (a === true) cls += " right";
+        else if (a === false) cls += " wrong";
+        else if (qi === state.i && state.started && !state.done) cls += " current";
+        html += '<span class="' + cls + '"></span>';
+      });
+      html += '</div><span class="group-name">' + tp.name + "</span></div>";
+    });
+    var answered = state.answers.filter(function (x) { return x !== undefined; }).length;
+    html += '<span class="count">' + answered + " de " + QUESTIONS.length + "</span>";
+    tally.innerHTML = html;
+  }
+
+  /* ---------------- Telas ---------------- */
+  function renderIntro() {
+    clearMath(app);
+    var rows = TOPICS.map(function (tp) {
+      return '<li><span class="t-name">' + tp.long + '</span><span class="t-dicas">' + tp.ver + "</span></li>";
+    }).join("");
+    app.innerHTML =
+      "<h1>" + INFO.titulo + "</h1>" +
+      '<p class="lead">' + INFO.lead + "</p>" +
+      '<ul class="topics">' + rows + "</ul>" +
+      '<div class="nome-box"><label for="nome">Seu nome</label>' +
+      '<input id="nome" type="text" autocomplete="name" placeholder="Digite seu nome completo" value="' + esc(nomeAluno) + '">' +
+      '<p class="erro" id="nome-erro"></p></div>' +
+      '<div class="nav"><button class="btn" id="start">Começar o quiz</button>' +
+      '<span class="hint">Use as teclas 1 a 4 para responder e Enter para avançar.</span></div>';
+    var campo = document.getElementById("nome");
+    function comecar() {
+      var n = campo.value.trim().replace(/\s+/g, " ");
+      if (!n) {
+        document.getElementById("nome-erro").textContent = "Escreva seu nome para começar.";
+        campo.focus();
+        return;
+      }
+      nomeAluno = n;
+      start();
+    }
+    document.getElementById("start").addEventListener("click", comecar);
+    campo.addEventListener("keydown", function (ev) { if (ev.key === "Enter") { ev.preventDefault(); comecar(); } });
+    renderTally();
+    typeset(app);
+  }
+
+  function start() {
+    QUESTIONS = sortear();
+    state = { i: 0, answers: [], order: QUESTIONS.map(function (q) { return shuffle(q.o.length); }), started: true, done: false };
+    renderQuestion();
+  }
+
+  function renderQuestion() {
+    var qi = state.i, q = QUESTIONS[qi], order = state.order[qi];
+    clearMath(app);
+    var opts = order.map(function (oi, pos) {
+      return '<button class="opt" data-oi="' + oi + '"><span class="key">' + KEYS[pos] + "</span><span>" + q.o[oi] + "</span></button>";
+    }).join("");
+    app.innerHTML =
+      '<p class="q-topic">Questão ' + (qi + 1) + " de " + QUESTIONS.length + ": " + TOPICS[q.t].long + "</p>" +
+      '<div class="q-text">' + q.q + "</div>" +
+      '<div class="opts" role="group" aria-label="Alternativas">' + opts + "</div>" +
+      '<div id="fb"></div>';
+    Array.prototype.forEach.call(app.querySelectorAll(".opt"), function (b) {
+      b.addEventListener("click", function () { answer(parseInt(b.getAttribute("data-oi"), 10)); });
+    });
+    renderTally();
+    typeset(app).then(function () {
+      var first = app.querySelector(".opt");
+      if (first && !first.disabled) first.focus({ preventScroll: true });
+    });
+    window.scrollTo({ top: 0 });
+  }
+
+  function answer(oi) {
+    var qi = state.i;
+    if (state.answers[qi] !== undefined) return;
+    var q = QUESTIONS[qi];
+    var ok = oi === 0;
+    state.answers[qi] = ok;
+    Array.prototype.forEach.call(app.querySelectorAll(".opt"), function (b) {
+      var bo = parseInt(b.getAttribute("data-oi"), 10);
+      b.disabled = true;
+      if (bo === 0) b.classList.add("is-right");
+      else if (bo === oi) b.classList.add("is-wrong");
+      else b.classList.add("faded");
+    });
+    var last = qi === QUESTIONS.length - 1;
+    var fb = document.getElementById("fb");
+    fb.innerHTML =
+      '<div class="feedback ' + (ok ? "right" : "wrong") + '">' +
+      '<p class="verdict">' + (ok ? "Correto." : "Não é essa.") + "</p>" +
+      '<p class="expl">' + q.e + "</p>" +
+      '<p class="see">Para rever: ' + q.ref + ".</p></div>" +
+      '<div class="nav"><button class="btn" id="next">' + (last ? "Ver o diagnóstico" : "Próxima questão") + "</button></div>";
+    document.getElementById("next").addEventListener("click", next);
+    renderTally();
+    typeset(fb).then(function () {
+      var nb = document.getElementById("next");
+      if (nb) {
+        nb.focus({ preventScroll: true });
+        fb.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      }
+    });
+  }
+
+  function next() {
+    if (state.i < QUESTIONS.length - 1) { state.i++; renderQuestion(); }
+    else { state.done = true; renderResults(); }
+  }
+
+  function verdictFor(r) {
+    if (r.right === r.n) return { cls: "ok", txt: "Seguro neste tema." };
+    if (r.right === r.n - 1) return { cls: "mid", txt: "Quase lá: reveja a questão que errou." };
+    return { cls: "weak", txt: INFO.fraco };
+  }
+
+  /* Retorno personalizado */
+  function parecer(total, temas) {
+    var nome = primeiroNome();
+    var n = QUESTIONS.length;
+    var fortes = temas.filter(function (r) { return r.right === r.n; }).map(function (r) { return "<em>" + r.tp.low + "</em>"; });
+    var quase = temas.filter(function (r) { return r.right === r.n - 1; }).map(function (r) { return "<em>" + r.tp.low + "</em>"; });
+    var fracos = temas.filter(function (r) { return r.right < r.n - 1; });
+    var p = [];
+    var faixa;
+    if (total === n) faixa = 0;
+    else if (total >= 0.85 * n) faixa = 1;
+    else if (total >= 0.65 * n) faixa = 2;
+    else if (total >= 0.45 * n) faixa = 3;
+    else faixa = 4;
+    p.push(nome + ", " + INFO.abertura[faixa].replace("%T", total).replace("%N", n));
+    if (fortes.length && fortes.length < temas.length) {
+      p.push((fortes.length === 1 ? "Seu ponto forte foi " : "Seus pontos fortes foram ") + lista(fortes) + ".");
+    }
+    if (quase.length) {
+      p.push("Em " + lista(quase) + ", faltou pouco: releia as explicações das questões que errou.");
+    }
+    if (fracos.length) {
+      var itens = fracos.map(function (r) { return "<em>" + r.tp.low + "</em> (" + r.tp.ver + ")"; });
+      p.push((fracos.length === 1 ? "O tema que mais pede atenção é " : "Os temas que mais pedem atenção são ") +
+             lista(itens) + ". " + INFO.conselho);
+    }
+    p.push(INFO.fecho[faixa]);
+    return '<div class="parecer">' + p.map(function (x) { return "<p>" + x + "</p>"; }).join("") + "</div>";
+  }
+
+  function renderResults() {
+    clearMath(app);
+    var total = state.answers.filter(function (x) { return x === true; }).length;
+    var temas = porTema();
+    var diag = temas.map(function (r, ti) {
+      var marks = "";
+      QUESTIONS.forEach(function (q, qi) {
+        if (q.t !== ti) return;
+        marks += '<span class="mark ' + (state.answers[qi] ? "right" : "wrong") + '"></span>';
+      });
+      var v = verdictFor(r);
+      var extra = r.right < r.n ? " Para rever: " + r.tp.ver + "." : "";
+      return '<li><div class="diag-head"><span class="diag-name">' + r.tp.long + '</span><span class="marks">' + marks +
+             "</span><span>" + r.right + " de " + r.n + "</span></div>" +
+             '<p class="diag-verdict ' + v.cls + '">' + v.txt + extra + "</p></li>";
+    }).join("");
+
+    var wrong = [];
+    QUESTIONS.forEach(function (q, qi) { if (state.answers[qi] === false) wrong.push(qi); });
+    var review = wrong.map(function (qi) {
+      var q = QUESTIONS[qi];
+      return '<div class="review-item"><div class="q-text">' + (qi + 1) + ". " + q.q + "</div>" +
+             '<p class="ans"><span class="label-right">Resposta:</span> ' + q.o[0] + "</p>" +
+             '<p class="ans">' + q.e + "</p>" +
+             '<p class="see">Para rever: ' + q.ref + ".</p></div>";
+    }).join("");
+
+    var quando = new Date().toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" });
+    app.innerHTML =
+      "<h1>Seu diagnóstico</h1>" +
+      '<div class="ident"><p class="quem">' + esc(nomeAluno) + "</p>" +
+      '<p class="quando">' + INFO.titulo + " · concluído em " + quando + "</p></div>" +
+      '<p class="score">' + total + " <small>de " + QUESTIONS.length + " acertos</small></p>" +
+      parecer(total, temas) +
+      "<h2>Resultado por tema</h2>" +
+      '<ul class="diag">' + diag + "</ul>" +
+      (wrong.length ? "<h2>As questões que você errou</h2>" + '<div class="review">' + review + "</div>" : "") +
+      '<div class="nav"><button class="btn" id="again">Refazer o quiz</button>' +
+      '<a class="btn ghost" href="index.html">Outros testes da disciplina</a>' +
+      '<a class="btn ghost" href="../index.html">Voltar às disciplinas</a></div>';
+    document.getElementById("again").addEventListener("click", start);
+    renderTally();
+    typeset(app);
+    window.scrollTo({ top: 0 });
+  }
+
+  /* ---------------- Teclado ---------------- */
+  document.addEventListener("keydown", function (ev) {
+    if (!state.started || state.done) return;
+    if (ev.target && ev.target.tagName === "INPUT") return;
+    if (ev.key >= "1" && ev.key <= "4") {
+      var b = app.querySelectorAll(".opt")[parseInt(ev.key, 10) - 1];
+      if (b && !b.disabled) { ev.preventDefault(); b.click(); }
+    } else if (ev.key === "Enter" || ev.key === "ArrowRight") {
+      var nx = document.getElementById("next");
+      if (nx && state.answers[state.i] !== undefined) { ev.preventDefault(); nx.click(); }
+    }
+  });
+
+  QUESTIONS = sortear();
+  renderIntro();
+})();
+</script>
+</body>
+</html>
