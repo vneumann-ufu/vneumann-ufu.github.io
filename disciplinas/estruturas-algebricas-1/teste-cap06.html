@@ -103,7 +103,7 @@ a.btn { text-decoration: none; }
 <main id="app" aria-live="polite"></main>
 <script>
 var INFO = {"titulo": "Teste de revisão – Capítulo 6", "capitulo": "Capítulo 6: Classes laterais e teorema de Lagrange", "curto": "Capítulo 6"};
-var TEMAS = [{"nome": "Classes laterais", "n": 3}, {"nome": "Teorema de Lagrange e índice", "n": 3}, {"nome": "Teoremas de Fermat e de Euler", "n": 2}];
+var TEMAS = [{"nome": "Classes laterais", "n": 4}, {"nome": "Teorema de Lagrange e índice", "n": 3}, {"nome": "Teoremas de Fermat e de Euler", "n": 3}];
 var BANCO = [
  {
   "t": 0,
@@ -183,6 +183,72 @@ var BANCO = [
   "e": "(1 2)(1 3) = (1 3 2), aplicando primeiro (1 3). A opção {(1 2), (1 2 3)} é a classe à direita H(1 2)."
  },
  {
+  "t": 0,
+  "q": "Em S<sub>3</sub>, seja H = {I, (1 3)}. Qual é a classe lateral à direita H(1 2)?",
+  "o": [
+   "{(1 2), (1 2 3)}",
+   "{(1 2), (1 3 2)}",
+   "{(1 2), (2 3)}",
+   "{I, (1 2)}"
+  ],
+  "e": "H(1 2) = {(1 2), (1 3)(1 2)}. Em (1 3)(1 2) aplica-se primeiro (1 2): 1 → 2 → 2, 2 → 1 → 3, 3 → 3 → 1, isto é, (1 2 3). A classe à esquerda é (1 2)H = {(1 2), (1 3 2)}, diferente."
+ },
+ {
+  "t": 0,
+  "q": "Em ℤ<sub>24</sub>, seja H = {<span style=\"text-decoration:overline\">0</span>, <span style=\"text-decoration:overline\">6</span>, <span style=\"text-decoration:overline\">12</span>, <span style=\"text-decoration:overline\">18</span>}. Qual é a classe lateral <span style=\"text-decoration:overline\">5</span> + H?",
+  "o": [
+   "{<span style=\"text-decoration:overline\">5</span>, <span style=\"text-decoration:overline\">11</span>, <span style=\"text-decoration:overline\">17</span>, <span style=\"text-decoration:overline\">23</span>}",
+   "{<span style=\"text-decoration:overline\">5</span>, <span style=\"text-decoration:overline\">6</span>, <span style=\"text-decoration:overline\">12</span>, <span style=\"text-decoration:overline\">18</span>}",
+   "{<span style=\"text-decoration:overline\">0</span>, <span style=\"text-decoration:overline\">5</span>, <span style=\"text-decoration:overline\">10</span>, <span style=\"text-decoration:overline\">15</span>}",
+   "{<span style=\"text-decoration:overline\">0</span>, <span style=\"text-decoration:overline\">6</span>, <span style=\"text-decoration:overline\">12</span>, <span style=\"text-decoration:overline\">18</span>}"
+  ],
+  "e": "<span style=\"text-decoration:overline\">5</span> + H = {<span style=\"text-decoration:overline\">5</span> + h : h ∈ H}: soma-se <span style=\"text-decoration:overline\">5</span> a cada elemento de H. Como <span style=\"text-decoration:overline\">5</span> ∉ H, a classe é diferente de H."
+ },
+ {
+  "t": 0,
+  "q": "Considerando ℤ como subgrupo de (ℚ, +), qual é a classe lateral ℤ + 1/2?",
+  "o": [
+   "{k + 1/2 : k ∈ ℤ} = {…, −1/2, 1/2, 3/2, …}",
+   "{k/2 : k ∈ ℤ}",
+   "ℤ",
+   "{1/2}"
+  ],
+  "e": "ℤ + 1/2 = {k + 1/2 : k ∈ ℤ}. Ela não contém os inteiros, então não é ℤ nem {k/2 : k ∈ ℤ}. Já ℤ + (−1) = ℤ, pois −1 ∈ ℤ."
+ },
+ {
+  "t": 0,
+  "q": "Seja H um subgrupo de G e a ∈ G. A classe lateral aH é um subgrupo de G se, e somente se:",
+  "o": [
+   "a ∈ H",
+   "G é abeliano",
+   "aH = Ha",
+   "|aH| = |H|"
+  ],
+  "e": "Se aH é subgrupo, então 1 ∈ aH, logo aH = 1H = H e a ∈ H. Se a ∈ H, então aH = H. A igualdade |aH| = |H| vale sempre (para H finito)."
+ },
+ {
+  "t": 0,
+  "q": "Em D<sub>4</sub>, seja H = {e, s}. Qual é a classe lateral à direita Hr?",
+  "o": [
+   "{r, r³s}",
+   "{r, rs}",
+   "{r, r³}",
+   "{e, rs}"
+  ],
+  "e": "Hr = {r, sr} e sr = r<sup>0−1</sup>s = r<sup>−1</sup>s = r³s. A classe à esquerda é rH = {r, rs}: como rH ≠ Hr, H não é normal em D<sub>4</sub>."
+ },
+ {
+  "t": 0,
+  "q": "Sejam H e K subgrupos de G e a, b ∈ G com aH = bK. O que se pode concluir?",
+  "o": [
+   "H = K",
+   "a = b",
+   "a ∈ K",
+   "H ∩ K = {1}"
+  ],
+  "e": "b ∈ bK = aH, então bH = aH = bK. Multiplicando à esquerda por b<sup>-1</sup>, obtemos H = K. Não se pode concluir a = b: em ℤ, 1 + 2ℤ = 3 + 2ℤ."
+ },
+ {
   "t": 1,
   "q": "Seja G um grupo de ordem 24 e H um subgrupo de ordem 6. Quantas classes laterais à esquerda distintas H tem em G?",
   "o": [
@@ -260,6 +326,61 @@ var BANCO = [
   "e": "|H| deve ser múltiplo de 42 (Lagrange em H) e divisor de 420 (Lagrange em G), diferente de 42 e de 420: as opções são 84 e 210. 60 não é múltiplo de 42 e 126 não divide 420."
  },
  {
+  "t": 1,
+  "q": "Seja G um grupo de ordem p<sup>n</sup>, com p primo e n ≥ 1. A ordem de cada elemento de G é:",
+  "o": [
+   "uma potência de p",
+   "sempre p",
+   "sempre p<sup>n</sup>",
+   "um divisor de p − 1"
+  ],
+  "e": "Pelo teorema de Lagrange, a ordem de cada elemento divide p<sup>n</sup>, e os divisores de p<sup>n</sup> são 1, p, …, p<sup>n</sup>. O neutro tem ordem 1 = p⁰."
+ },
+ {
+  "t": 1,
+  "q": "Seja G um grupo de ordem 25. O que se pode afirmar?",
+  "o": [
+   "G é cíclico ou a⁵ = 1 para todo a ∈ G.",
+   "G é sempre cíclico.",
+   "G tem um elemento de ordem 10.",
+   "Todo elemento diferente de 1 tem ordem 25."
+  ],
+  "e": "As ordens possíveis são 1, 5 e 25. Se algum elemento tem ordem 25, G é cíclico; senão, todo elemento tem ordem 1 ou 5, e a⁵ = 1. O grupo ℤ<sub>5</sub> × ℤ<sub>5</sub> mostra que G pode não ser cíclico."
+ },
+ {
+  "t": 1,
+  "q": "Seja G de ordem 100 com um subgrupo H de ordem 25, e seja a ∈ G de ordem 5. O que se pode concluir?",
+  "o": [
+   "a ∈ H",
+   "a ∉ H",
+   "⟨a⟩ ∩ H = {1}",
+   "G é cíclico"
+  ],
+  "e": "⟨a⟩ ∩ H é subgrupo de ⟨a⟩, então tem ordem 1 ou 5. Se fosse {1}, os produtos a<sup>i</sup>h (0 ≤ i ≤ 4, h ∈ H) seriam 5 · 25 = 125 elementos distintos de G, mais que 100. Logo ⟨a⟩ ⊆ H."
+ },
+ {
+  "t": 1,
+  "q": "Seja G = ⟨a⟩ cíclico de ordem 30. Quantas classes laterais distintas tem ⟨a⁴⟩ em G?",
+  "o": [
+   "2",
+   "4",
+   "7",
+   "15"
+  ],
+  "e": "|a⁴| = 30/mdc(30, 4) = 15, então |G : ⟨a⁴⟩| = 30/15 = 2. As classes são ⟨a⁴⟩ e a⟨a⁴⟩. O número 15 é a ordem do subgrupo, não o índice."
+ },
+ {
+  "t": 1,
+  "q": "Pelo teorema de Lagrange, quais são as ordens possíveis dos elementos de ℤ<sub>7</sub><sup>*</sup>?",
+  "o": [
+   "1, 2, 3 e 6",
+   "1, 2, 3, 6 e 7",
+   "1 e 7",
+   "1, 2, 3, 4, 5 e 6"
+  ],
+  "e": "|ℤ<sub>7</sub><sup>*</sup>| = φ(7) = 6, e a ordem de cada elemento divide 6. De fato, <span style=\"text-decoration:overline\">6</span> tem ordem 2, <span style=\"text-decoration:overline\">2</span> tem ordem 3 e <span style=\"text-decoration:overline\">3</span> tem ordem 6."
+ },
+ {
   "t": 2,
   "q": "Qual é o resto da divisão de 2<sup>50</sup> por 7?",
   "o": [
@@ -313,6 +434,61 @@ var BANCO = [
    "a<sup>p</sup> ≡ p (mod a)"
   ],
   "e": "Se p ∤ a, então a<sup>p−1</sup> ≡ 1 (mod p), pois ℤ<sub>p</sub><sup>*</sup> tem p − 1 elementos; multiplicando por a, a<sup>p</sup> ≡ a. Se p | a, os dois lados são ≡ 0."
+ },
+ {
+  "t": 2,
+  "q": "Qual é o resto da divisão de 2<sup>50</sup> por 13?",
+  "o": [
+   "4",
+   "1",
+   "2",
+   "12"
+  ],
+  "e": "Pelo pequeno teorema de Fermat, 2<sup>12</sup> ≡ 1 (mod 13). Como 50 = 12 · 4 + 2, 2<sup>50</sup> ≡ 2² = 4 (mod 13)."
+ },
+ {
+  "t": 2,
+  "q": "Qual é o resto da divisão de 2<sup>100</sup> por 15?",
+  "o": [
+   "1",
+   "2",
+   "4",
+   "8"
+  ],
+  "e": "mdc(2, 15) = 1 e φ(15) = 8, então 2⁸ ≡ 1 (mod 15) pelo teorema de Euler–Fermat. Como 100 = 8 · 12 + 4, 2<sup>100</sup> ≡ 2⁴ = 16 ≡ 1 (mod 15)."
+ },
+ {
+  "t": 2,
+  "q": "O teorema de Euler–Fermat afirma que, se n ≥ 2 e mdc(a, n) = 1, então:",
+  "o": [
+   "a<sup>φ(n)</sup> ≡ 1 (mod n)",
+   "a<sup>n−1</sup> ≡ 1 (mod n)",
+   "a<sup>n</sup> ≡ a (mod n)",
+   "a<sup>φ(n)</sup> ≡ 0 (mod n)"
+  ],
+  "e": "Como <span style=\"text-decoration:overline\">a</span> ∈ ℤ<sub>n</sub><sup>*</sup>, grupo de ordem φ(n), temos <span style=\"text-decoration:overline\">a</span><sup>φ(n)</sup> = <span style=\"text-decoration:overline\">1</span>. O expoente n − 1 só funciona, em geral, quando n é primo: 2³ = 8 ≢ 1 (mod 4)."
+ },
+ {
+  "t": 2,
+  "q": "Para achar a ordem de um elemento de ℤ<sub>10</sub><sup>*</sup> (que tem 4 elementos), quais potências basta calcular?",
+  "o": [
+   "As potências 1 e 2: se nenhuma dá <span style=\"text-decoration:overline\">1</span>, a ordem é 4.",
+   "Todas as potências de 1 a 10.",
+   "Apenas a potência 4.",
+   "As potências 1, 2, 3 e 4."
+  ],
+  "e": "Pelo teorema de Lagrange, as ordens possíveis são 1, 2 e 4. Calcular só a potência 4 não decide nada, pois x⁴ = <span style=\"text-decoration:overline\">1</span> para todo x ∈ ℤ<sub>10</sub><sup>*</sup>."
+ },
+ {
+  "t": 2,
+  "q": "Um aluno quis calcular 2<sup>100</sup> mod 15 usando 2<sup>14</sup> ≡ 1 (mod 15). Qual é o erro?",
+  "o": [
+   "15 não é primo; o correto é usar Euler–Fermat: 2<sup>φ(15)</sup> = 2⁸ ≡ 1 (mod 15).",
+   "Não há erro: 2<sup>14</sup> ≡ 1 (mod 15).",
+   "O erro é que mdc(2, 15) ≠ 1.",
+   "O correto seria usar 2<sup>15</sup> ≡ 1 (mod 15)."
+  ],
+  "e": "O pequeno teorema de Fermat vale para módulo primo. Na verdade, 2<sup>14</sup> = 16384 ≡ 4 (mod 15). Com φ(15) = 8 o cálculo funciona."
  }
 ];
 </script>

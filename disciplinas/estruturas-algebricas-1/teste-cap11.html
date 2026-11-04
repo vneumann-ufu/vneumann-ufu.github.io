@@ -103,7 +103,7 @@ a.btn { text-decoration: none; }
 <main id="app" aria-live="polite"></main>
 <script>
 var INFO = {"titulo": "Teste de revisão – Capítulo 11", "capitulo": "Capítulo 11: Ideais e anéis quocientes", "curto": "Capítulo 11"};
-var TEMAS = [{"nome": "Ideais", "n": 3}, {"nome": "Anéis quocientes", "n": 2}, {"nome": "Ideais primos e maximais", "n": 3}];
+var TEMAS = [{"nome": "Ideais", "n": 4}, {"nome": "Anéis quocientes", "n": 3}, {"nome": "Ideais primos e maximais", "n": 3}];
 var BANCO = [
  {
   "t": 0,
@@ -183,6 +183,72 @@ var BANCO = [
   "e": "ker ψ é subgrupo aditivo, e se ψ(x) = 0 então ψ(ax) = ψ(a)ψ(x) = 0 e ψ(xa) = 0."
  },
  {
+  "t": 0,
+  "q": "O subconjunto {<span style=\"text-decoration:overline\">0</span>, <span style=\"text-decoration:overline\">2</span>, <span style=\"text-decoration:overline\">4</span>} de ℤ<sub>6</sub> é:",
+  "o": [
+   "subanel e ideal.",
+   "subanel, mas não ideal.",
+   "ideal, mas não subanel.",
+   "nem subanel nem ideal."
+  ],
+  "e": "É subgrupo aditivo e, para todo <span style=\"text-decoration:overline\">a</span> ∈ ℤ<sub>6</sub>, <span style=\"text-decoration:overline\">a</span> · <span style=\"text-decoration:overline\">2k</span> = <span style=\"text-decoration:overline\">2ak</span> volta a ser um múltiplo de <span style=\"text-decoration:overline\">2</span>: é o ideal ⟨<span style=\"text-decoration:overline\">2</span>⟩. Todo ideal é subanel."
+ },
+ {
+  "t": 0,
+  "q": "O subconjunto ℤ ⊕ {0} de ℤ ⊕ ℤ é:",
+  "o": [
+   "um ideal (e, portanto, subanel).",
+   "subanel, mas não ideal.",
+   "nem subanel nem ideal.",
+   "não é ideal, pois (0, 1)(1, 0) não está em ℤ ⊕ {0}."
+  ],
+  "e": "(a, b)(x, 0) = (ax, 0) ∈ ℤ ⊕ {0}. Note que (0, 1)(1, 0) = (0, 0), que está no conjunto."
+ },
+ {
+  "t": 0,
+  "q": "O subconjunto {x ∈ ℤ : mdc(x, 5) = 1} de ℤ é:",
+  "o": [
+   "nem subanel nem ideal, pois não contém 0.",
+   "um ideal.",
+   "um subanel, mas não ideal.",
+   "um ideal, mas não subanel."
+  ],
+  "e": "mdc(0, 5) = 5, então 0 não está no conjunto. Além disso, 1 + 4 = 5 também fica de fora: não é fechado para a soma."
+ },
+ {
+  "t": 0,
+  "q": "Em ℤ[i], o ideal I = {a + bi : 2 | a + b} é igual a:",
+  "o": [
+   "⟨1 + i⟩",
+   "⟨2⟩",
+   "⟨i⟩",
+   "⟨1⟩"
+  ],
+  "e": "(x + yi)(1 + i) = (x − y) + (x + y)i e (x − y) + (x + y) = 2x é par. Reciprocamente, se a + b é par, a + bi = (x + yi)(1 + i) com x = (a + b)/2 e y = (b − a)/2. Já ⟨2⟩ ⊊ I, pois 1 + i ∉ ⟨2⟩; e ⟨i⟩ = ⟨1⟩ = ℤ[i]."
+ },
+ {
+  "t": 0,
+  "q": "Qual dos pares de ideais de ℤ tem união que NÃO é ideal?",
+  "o": [
+   "2ℤ e 3ℤ",
+   "2ℤ e 4ℤ",
+   "{0} e ℤ",
+   "6ℤ e 3ℤ"
+  ],
+  "e": "2 e 3 estão em 2ℤ ∪ 3ℤ, mas 2 + 3 = 5 não está. Nos outros casos um ideal contém o outro, e a união é o maior deles."
+ },
+ {
+  "t": 0,
+  "q": "Sejam I e J ideais de um anel A com I ∩ J = {0}. Para x ∈ I e y ∈ J, temos:",
+  "o": [
+   "xy = 0",
+   "x = y",
+   "x + y = 0",
+   "x = 0 ou y = 0"
+  ],
+  "e": "xy ∈ I porque x ∈ I, e xy ∈ J porque y ∈ J. Logo xy ∈ I ∩ J = {0}. Em ℤ ⊕ ℤ, com I = ℤ ⊕ {0} e J = {0} ⊕ ℤ, x = (1, 0) e y = (0, 1) não são nulos."
+ },
+ {
   "t": 1,
   "q": "O anel quociente ℤ[i]/⟨1 + i⟩ é isomorfo a:",
   "o": [
@@ -236,6 +302,61 @@ var BANCO = [
    "A/I não tem unidade"
   ],
   "e": "(1 + I)(a + I) = a + I = (a + I)(1 + I). Como I ≠ A, 1 + I ≠ 0 + I."
+ },
+ {
+  "t": 1,
+  "q": "No anel ℤ/⟨6⟩, quanto vale (4 + ⟨6⟩)(5 + ⟨6⟩)?",
+  "o": [
+   "2 + ⟨6⟩",
+   "3 + ⟨6⟩",
+   "0 + ⟨6⟩",
+   "4 + ⟨6⟩"
+  ],
+  "e": "(4 + ⟨6⟩)(5 + ⟨6⟩) = 20 + ⟨6⟩ = 2 + ⟨6⟩, pois 20 − 2 = 18 ∈ ⟨6⟩. Somar 4 + 5 = 9 daria a classe 3 + ⟨6⟩."
+ },
+ {
+  "t": 1,
+  "q": "Seja 𝒞(ℝ) o anel das funções contínuas de ℝ em ℝ e I<sub>a</sub> = {f : f(a) = 0}. O anel 𝒞(ℝ)/I<sub>a</sub> é isomorfo a:",
+  "o": [
+   "ℝ",
+   "𝒞(ℝ)",
+   "{0}",
+   "ℤ"
+  ],
+  "e": "ψ(f) = f(a) é um homomorfismo de anéis sobrejetor (as funções constantes já dão todos os reais) com núcleo I<sub>a</sub>. Pelo teorema fundamental, 𝒞(ℝ)/I<sub>a</sub> ≅ ℝ."
+ },
+ {
+  "t": 1,
+  "q": "Por que o produto (a + I)(b + I) = ab + I está bem definido quando I é ideal?",
+  "o": [
+   "Se a' = a + x e b' = b + y com x, y ∈ I, então a'b' − ab = ay + xb + xy ∈ I, porque I é ideal.",
+   "Porque I é um subanel.",
+   "Porque A é comutativo.",
+   "Porque (A, +) é abeliano."
+  ],
+  "e": "É preciso que ay e xb estejam em I, e isso usa a propriedade de absorção do ideal. Um subanel não basta: ℤ é subanel de ℚ e 0 + ℤ = 1 + ℤ, mas (1/2 + ℤ)(0 + ℤ) daria 0 + ℤ e (1/2 + ℤ)(1 + ℤ) daria 1/2 + ℤ, que são classes diferentes."
+ },
+ {
+  "t": 1,
+  "q": "Seja p primo. O anel ℚ<sub>(p)</sub>/pℚ<sub>(p)</sub> é isomorfo a:",
+  "o": [
+   "ℤ<sub>p</sub>",
+   "ℚ",
+   "ℤ",
+   "{0}"
+  ],
+  "e": "f: ℤ → ℚ<sub>(p)</sub>/pℚ<sub>(p)</sub>, f(n) = n + pℚ<sub>(p)</sub>, é sobrejetor (se p ∤ b, b é invertível módulo p) e tem núcleo pℤ. Logo o quociente é ℤ/pℤ = ℤ<sub>p</sub>."
+ },
+ {
+  "t": 1,
+  "q": "Se ψ: A → B é um homomorfismo de anéis, o teorema fundamental dos homomorfismos de anéis afirma que:",
+  "o": [
+   "A/ker ψ ≅ im ψ",
+   "A/im ψ ≅ ker ψ",
+   "A ≅ B",
+   "A/ker ψ ≅ B, sempre"
+  ],
+  "e": "O isomorfismo é a + ker ψ ↦ ψ(a). Ele chega em B só quando ψ é sobrejetor."
  },
  {
   "t": 2,
@@ -313,6 +434,61 @@ var BANCO = [
    "finito"
   ],
   "e": "Se M é maximal, A/M é corpo, logo anel de integridade, e então M é primo."
+ },
+ {
+  "t": 2,
+  "q": "Quais são os ideais de ℤ que contêm 3ℤ?",
+  "o": [
+   "3ℤ e ℤ",
+   "3ℤ, 6ℤ, 9ℤ, …",
+   "Apenas 3ℤ",
+   "ℤ, 3ℤ e {0}"
+  ],
+  "e": "Todo ideal de ℤ é mℤ, e 3ℤ ⊆ mℤ ⟺ m | 3, isto é, m = 1 ou m = 3. Os ideais 6ℤ, 9ℤ, … estão contidos em 3ℤ, e não o contrário."
+ },
+ {
+  "t": 2,
+  "q": "O ideal ℤ ⊕ {0} de ℤ ⊕ ℤ é:",
+  "o": [
+   "primo, mas não maximal.",
+   "maximal.",
+   "nem primo nem maximal.",
+   "não é um ideal."
+  ],
+  "e": "ψ(x, y) = y é um homomorfismo sobrejetor de ℤ ⊕ ℤ em ℤ com núcleo ℤ ⊕ {0}. Logo o quociente é ≅ ℤ, que é domínio de integridade mas não é corpo."
+ },
+ {
+  "t": 2,
+  "q": "No anel ℤ[i], o ideal ⟨1 + i⟩ é:",
+  "o": [
+   "maximal, pois ℤ[i]/⟨1 + i⟩ ≅ ℤ<sub>2</sub> é um corpo.",
+   "primo, mas não maximal.",
+   "não é primo, pois (1 + i)(1 − i) = 2.",
+   "igual a ℤ[i]."
+  ],
+  "e": "Pelo teorema sobre quocientes, M é maximal ⟺ A/M é corpo. Todo maximal é primo. O fato de 2 = (1 + i)(1 − i) não contradiz nada: 1 + i ∈ ⟨1 + i⟩."
+ },
+ {
+  "t": 2,
+  "q": "No anel ℤ<sub>12</sub>, o ideal ⟨<span style=\"text-decoration:overline\">4</span>⟩ = {<span style=\"text-decoration:overline\">0</span>, <span style=\"text-decoration:overline\">4</span>, <span style=\"text-decoration:overline\">8</span>} é primo?",
+  "o": [
+   "Não: <span style=\"text-decoration:overline\">2</span> · <span style=\"text-decoration:overline\">2</span> = <span style=\"text-decoration:overline\">4</span> está no ideal, mas <span style=\"text-decoration:overline\">2</span> não está.",
+   "Sim, pois é um ideal próprio.",
+   "Sim, pois o quociente tem 4 elementos.",
+   "Não, pois não é ideal."
+  ],
+  "e": "Para ser primo, ab ∈ P deveria implicar a ∈ P ou b ∈ P. O quociente ℤ<sub>12</sub>/⟨<span style=\"text-decoration:overline\">4</span>⟩ ≅ ℤ<sub>4</sub> tem o divisor de zero <span style=\"text-decoration:overline\">2</span>."
+ },
+ {
+  "t": 2,
+  "q": "Em ℤ, quais ideais maximais contêm 6ℤ?",
+  "o": [
+   "2ℤ e 3ℤ",
+   "Apenas 6ℤ",
+   "12ℤ e 18ℤ",
+   "2ℤ, 3ℤ e 6ℤ"
+  ],
+  "e": "Os ideais que contêm 6ℤ são mℤ com m | 6: ℤ, 2ℤ, 3ℤ e 6ℤ. Os maximais são pℤ com p primo: 2ℤ e 3ℤ. O próprio 6ℤ não é maximal (nem primo)."
  }
 ];
 </script>

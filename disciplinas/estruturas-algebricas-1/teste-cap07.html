@@ -103,7 +103,7 @@ a.btn { text-decoration: none; }
 <main id="app" aria-live="polite"></main>
 <script>
 var INFO = {"titulo": "Teste de revisão – Capítulo 7", "capitulo": "Capítulo 7: Subgrupos normais e grupos quocientes", "curto": "Capítulo 7"};
-var TEMAS = [{"nome": "Subgrupos normais", "n": 4}, {"nome": "Grupo quociente", "n": 4}];
+var TEMAS = [{"nome": "Subgrupos normais", "n": 5}, {"nome": "Grupo quociente", "n": 5}];
 var BANCO = [
  {
   "t": 0,
@@ -205,6 +205,83 @@ var BANCO = [
   "e": "(n₁k₁)(n₂k₂) = n₁(k₁n₂k₁<sup>-1</sup>)k₁k₂ ∈ NK, pois k₁n₂k₁<sup>-1</sup> ∈ N; e (nk)<sup>-1</sup> = (k<sup>-1</sup>n<sup>-1</sup>k)k<sup>-1</sup> ∈ NK."
  },
  {
+  "t": 0,
+  "q": "Em D<sub>4</sub>, qual conta mostra que H = {e, s} não é normal?",
+  "o": [
+   "r s r<sup>-1</sup> = r²s ∉ H",
+   "r s r<sup>-1</sup> = s ∈ H",
+   "s r s = r³ ∉ H",
+   "r s r<sup>-1</sup> = r² ∉ H"
+  ],
+  "e": "r s r<sup>-1</sup> = r(s r³) = r(r<sup>−3</sup>s) = r<sup>−2</sup>s = r²s, que não está em H. O conjugado de uma reflexão é uma reflexão, nunca uma rotação. (A conta s r s = r³ é verdadeira, mas não diz nada sobre H.)"
+ },
+ {
+  "t": 0,
+  "q": "Todo subgrupo de um grupo abeliano é:",
+  "o": [
+   "normal",
+   "cíclico",
+   "de índice 2",
+   "igual ao grupo"
+  ],
+  "e": "Se G é abeliano, a h a<sup>-1</sup> = h a a<sup>-1</sup> = h ∈ H para todos a ∈ G e h ∈ H. Mas nem todo subgrupo de um grupo abeliano é cíclico: ℤ<sub>8</sub><sup>*</sup> é abeliano e não é cíclico."
+ },
+ {
+  "t": 0,
+  "q": "Por que A<sub>3</sub> = ⟨(1 2 3)⟩ é normal em S<sub>3</sub>?",
+  "o": [
+   "Porque é o único subgrupo de ordem 3 de S<sub>3</sub> (e também porque tem índice 2).",
+   "Porque A<sub>3</sub> é abeliano.",
+   "Porque (1 2 3) comuta com todos os elementos de S<sub>3</sub>.",
+   "Porque S<sub>3</sub> é abeliano."
+  ],
+  "e": "Os únicos elementos de ordem 3 de S<sub>3</sub> são (1 2 3) e (1 3 2), então há um só subgrupo de ordem 3; cada aHa<sup>-1</sup> é subgrupo da mesma ordem, logo é igual a H. Ser abeliano não basta: {I, (1 2)} é abeliano e não é normal."
+ },
+ {
+  "t": 0,
+  "q": "Em D<sub>8</sub>, sejam N = {e, r⁴} e K = {e, s}. O que é NK?",
+  "o": [
+   "O subgrupo {e, s, r⁴, r⁴s}.",
+   "O conjunto {e, r⁴, s}.",
+   "Não é subgrupo, pois K não é normal.",
+   "O conjunto {e, r⁴s}."
+  ],
+  "e": "NK = {nk : n ∈ N, k ∈ K} = {e, s, r⁴, r⁴s}. Como N é normal (s r⁴ s = r<sup>−4</sup> = r⁴), NK é subgrupo; basta que um dos dois seja normal."
+ },
+ {
+  "t": 0,
+  "q": "Sejam M e N subgrupos normais de G. Então M ∩ N é:",
+  "o": [
+   "um subgrupo normal de G",
+   "um subgrupo de G que pode não ser normal",
+   "sempre igual a {1}",
+   "um subconjunto que pode não ser subgrupo"
+  ],
+  "e": "M ∩ N é subgrupo. Se h ∈ M ∩ N e x ∈ G, então x h x<sup>-1</sup> ∈ M (pois M ◁ G) e x h x<sup>-1</sup> ∈ N (pois N ◁ G)."
+ },
+ {
+  "t": 0,
+  "q": "Sejam M, N ◁ G com M ∩ N = {1}. O que se pode concluir?",
+  "o": [
+   "mn = nm para todos m ∈ M e n ∈ N.",
+   "G é abeliano.",
+   "M = N.",
+   "MN = {1}."
+  ],
+  "e": "O elemento m n m<sup>-1</sup> n<sup>-1</sup> = (m n m<sup>-1</sup>) n<sup>-1</sup> está em N, e = m (n m<sup>-1</sup> n<sup>-1</sup>) está em M. Logo está em M ∩ N = {1}, isto é, mn = nm. Os outros elementos de G não precisam comutar."
+ },
+ {
+  "t": 0,
+  "q": "O subgrupo H = {I, (1 2)(3 4)} é normal em A<sub>4</sub>?",
+  "o": [
+   "Não: (1 2 3)(1 2)(3 4)(1 3 2) = (1 4)(2 3) ∉ H.",
+   "Sim, pois tem índice 2 em A<sub>4</sub>.",
+   "Sim, pois A<sub>4</sub> é abeliano.",
+   "Sim, pois (1 2)(3 4) tem ordem 2."
+  ],
+  "e": "Com x = (1 2 3) e x<sup>-1</sup> = (1 3 2), o produto x h x<sup>-1</sup> (aplicando da direita para a esquerda) dá (1 4)(2 3), que não está em H. O índice de H em A<sub>4</sub> é 12/2 = 6, e A<sub>4</sub> não é abeliano."
+ },
+ {
   "t": 1,
   "q": "Quantos elementos tem o grupo quociente ℤ<sub>18</sub>/⟨<span style=\"text-decoration:overline\">6</span>⟩?",
   "o": [
@@ -302,6 +379,94 @@ var BANCO = [
    "isomorfo a G"
   ],
   "e": "Se G = ⟨a⟩, toda classe é gN = a<sup>k</sup>N = (aN)<sup>k</sup>, logo G/N = ⟨aN⟩."
+ },
+ {
+  "t": 1,
+  "q": "Qual é a ordem de 8 + 18ℤ no grupo quociente ℤ/18ℤ?",
+  "o": [
+   "9",
+   "8",
+   "2",
+   "18"
+  ],
+  "e": "É a ordem de <span style=\"text-decoration:overline\">8</span> em ℤ<sub>18</sub>: 18/mdc(18, 8) = 18/2 = 9. De fato, 9 · 8 = 72 = 4 · 18."
+ },
+ {
+  "t": 1,
+  "q": "Seja N ◁ G com |G/N| = m. Para todo g ∈ G, temos:",
+  "o": [
+   "g<sup>m</sup> ∈ N",
+   "g<sup>m</sup> = 1",
+   "g<sup>m</sup> ∉ N",
+   "g ∈ N"
+  ],
+  "e": "Pelo teorema de Lagrange em G/N, (gN)<sup>m</sup> = N, isto é, g<sup>m</sup>N = N, ou seja, g<sup>m</sup> ∈ N. Não precisa valer g<sup>m</sup> = 1: com G = ℤ e N = 2ℤ (m = 2), temos 2 · 1 = 2 ∈ N, mas 2 ≠ 0."
+ },
+ {
+  "t": 1,
+  "q": "Em ℤ<sub>18</sub>/N, com N = ⟨<span style=\"text-decoration:overline\">6</span>⟩ = {<span style=\"text-decoration:overline\">0</span>, <span style=\"text-decoration:overline\">6</span>, <span style=\"text-decoration:overline\">12</span>}, quanto vale (<span style=\"text-decoration:overline\">4</span> + N) + (<span style=\"text-decoration:overline\">5</span> + N)?",
+  "o": [
+   "<span style=\"text-decoration:overline\">3</span> + N",
+   "<span style=\"text-decoration:overline\">0</span> + N",
+   "<span style=\"text-decoration:overline\">1</span> + N",
+   "<span style=\"text-decoration:overline\">5</span> + N"
+  ],
+  "e": "(<span style=\"text-decoration:overline\">4</span> + N) + (<span style=\"text-decoration:overline\">5</span> + N) = <span style=\"text-decoration:overline\">9</span> + N, e <span style=\"text-decoration:overline\">9</span> + N = <span style=\"text-decoration:overline\">3</span> + N porque <span style=\"text-decoration:overline\">9</span> − <span style=\"text-decoration:overline\">3</span> = <span style=\"text-decoration:overline\">6</span> ∈ N."
+ },
+ {
+  "t": 1,
+  "q": "Seja G = ⟨a⟩ cíclico de ordem 40 e H = ⟨a<sup>16</sup>⟩. Quantos elementos tem G/H?",
+  "o": [
+   "8",
+   "5",
+   "16",
+   "24"
+  ],
+  "e": "|a<sup>16</sup>| = 40/mdc(40, 16) = 40/8 = 5, então |G/H| = 40/5 = 8. Note que ⟨a<sup>16</sup>⟩ = ⟨a⁸⟩."
+ },
+ {
+  "t": 1,
+  "q": "Seja H = {<span style=\"text-decoration:overline\">1</span>, <span style=\"text-decoration:overline\">17</span>} ≤ ℤ<sub>32</sub><sup>*</sup>. Quantos elementos tem ℤ<sub>32</sub><sup>*</sup>/H?",
+  "o": [
+   "8",
+   "16",
+   "2",
+   "15"
+  ],
+  "e": "|ℤ<sub>32</sub><sup>*</sup>| = φ(32) = 16 e |H| = 2, logo |ℤ<sub>32</sub><sup>*</sup>/H| = 16/2 = 8. Cada classe tem 2 elementos, por exemplo <span style=\"text-decoration:overline\">3</span>H = {<span style=\"text-decoration:overline\">3</span>, <span style=\"text-decoration:overline\">19</span>}."
+ },
+ {
+  "t": 1,
+  "q": "Seja G finito, H ◁ G e g ∈ G. Como se comparam a ordem de gH em G/H e a ordem de g em G?",
+  "o": [
+   "A ordem de gH divide a ordem de g.",
+   "São sempre iguais.",
+   "A ordem de gH é sempre maior.",
+   "A ordem de gH é múltipla da ordem de g."
+  ],
+  "e": "Se |g| = n, então (gH)<sup>n</sup> = g<sup>n</sup>H = H, logo |gH| divide n. Podem ser diferentes: se g ∈ H, gH = H tem ordem 1."
+ },
+ {
+  "t": 1,
+  "q": "Quantos elementos tem o grupo quociente D<sub>n</sub>/R<sub>n</sub>?",
+  "o": [
+   "2",
+   "n",
+   "2n",
+   "n/2"
+  ],
+  "e": "|D<sub>n</sub>/R<sub>n</sub>| = 2n/n = 2: as classes são R<sub>n</sub> (as rotações) e sR<sub>n</sub> (as reflexões)."
+ },
+ {
+  "t": 1,
+  "q": "Seja G abeliano finito e p um primo que divide |G|. O teorema de Cauchy (caso abeliano) garante que:",
+  "o": [
+   "G tem um elemento de ordem p.",
+   "Todo elemento de G tem ordem p.",
+   "G tem um subgrupo de ordem p².",
+   "G é cíclico."
+  ],
+  "e": "A prova é por indução na ordem de G, passando ao grupo quociente G/⟨a⟩. ℤ<sub>8</sub><sup>*</sup> tem ordem 4, divisível por 2, tem elementos de ordem 2 e não é cíclico."
  }
 ];
 </script>

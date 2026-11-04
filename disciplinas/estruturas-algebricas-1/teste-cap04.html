@@ -103,7 +103,7 @@ a.btn { text-decoration: none; }
 <main id="app" aria-live="polite"></main>
 <script>
 var INFO = {"titulo": "Teste de revisão – Capítulo 4", "capitulo": "Capítulo 4: Grupos diedrais", "curto": "Capítulo 4"};
-var TEMAS = [{"nome": "Elementos de D<sub>n</sub> e funções em ℤ<sub>n</sub>", "n": 2}, {"nome": "Cálculos com as regras de multiplicação", "n": 3}, {"nome": "Ordens, subgrupos e propriedades", "n": 3}];
+var TEMAS = [{"nome": "Elementos de D<sub>n</sub> e funções em ℤ<sub>n</sub>", "n": 2}, {"nome": "Cálculos com as regras de multiplicação", "n": 4}, {"nome": "Ordens, subgrupos e propriedades", "n": 4}];
 var BANCO = [
  {
   "t": 0,
@@ -159,6 +159,61 @@ var BANCO = [
    "1"
   ],
   "e": "D<sub>n</sub> tem n rotações (e, r, …, r<sup>n−1</sup>) e n reflexões (s, rs, …, r<sup>n−1</sup>s)."
+ },
+ {
+  "t": 0,
+  "q": "Em D<sub>5</sub>, qual vértice é fixado pela reflexão r³s?",
+  "o": [
+   "<span style=\"text-decoration:overline\">4</span>",
+   "<span style=\"text-decoration:overline\">3</span>",
+   "<span style=\"text-decoration:overline\">1</span>",
+   "Nenhum"
+  ],
+  "e": "r³s(x) = −x + <span style=\"text-decoration:overline\">3</span>. Queremos −x + <span style=\"text-decoration:overline\">3</span> = x, isto é, <span style=\"text-decoration:overline\">2</span>x = <span style=\"text-decoration:overline\">3</span> em ℤ<sub>5</sub>. Como <span style=\"text-decoration:overline\">2</span><sup>-1</sup> = <span style=\"text-decoration:overline\">3</span>, x = <span style=\"text-decoration:overline\">9</span> = <span style=\"text-decoration:overline\">4</span>. Conferindo: −<span style=\"text-decoration:overline\">4</span> + <span style=\"text-decoration:overline\">3</span> = <span style=\"text-decoration:overline\">−1</span> = <span style=\"text-decoration:overline\">4</span>."
+ },
+ {
+  "t": 0,
+  "q": "Em D<sub>4</sub>, a reflexão rs tem como eixo:",
+  "o": [
+   "a reta que faz ângulo de 45° com o eixo x",
+   "o eixo x",
+   "o eixo y",
+   "a reta que faz ângulo de 22,5° com o eixo x"
+  ],
+  "e": "r<sup>k</sup>s é a reflexão cujo eixo faz ângulo k · 180°/n com o eixo x; com k = 1 e n = 4, são 45°. De fato, rs(x) = −x + <span style=\"text-decoration:overline\">1</span> troca os vértices <span style=\"text-decoration:overline\">0</span> e <span style=\"text-decoration:overline\">1</span> e troca <span style=\"text-decoration:overline\">2</span> com <span style=\"text-decoration:overline\">3</span>. O eixo x corresponde a s."
+ },
+ {
+  "t": 0,
+  "q": "Em D<sub>6</sub>, a rotação r² é a rotação de quantos graus no sentido anti-horário?",
+  "o": [
+   "120°",
+   "60°",
+   "30°",
+   "240°"
+  ],
+  "e": "r é a rotação de 360°/6 = 60°, então r² é a rotação de 2 · 60° = 120°. A rotação de 240° é r⁴."
+ },
+ {
+  "t": 0,
+  "q": "Por que uma isometria f ∈ D<sub>n</sub> fica determinada por f(<span style=\"text-decoration:overline\">0</span>) e f(<span style=\"text-decoration:overline\">1</span>)?",
+  "o": [
+   "Porque f leva vértices vizinhos em vértices vizinhos; sabendo onde vão <span style=\"text-decoration:overline\">0</span> e <span style=\"text-decoration:overline\">1</span>, os demais vértices ficam determinados.",
+   "Porque toda f ∈ D<sub>n</sub> é uma rotação.",
+   "Porque toda função de ℤ<sub>n</sub> em ℤ<sub>n</sub> é determinada por dois valores.",
+   "Porque f(<span style=\"text-decoration:overline\">0</span>) = <span style=\"text-decoration:overline\">0</span> para toda f ∈ D<sub>n</sub>."
+  ],
+  "e": "f(<span style=\"text-decoration:overline\">2</span>) é o vizinho de f(<span style=\"text-decoration:overline\">1</span>) diferente de f(<span style=\"text-decoration:overline\">0</span>), e assim por diante. Isso dá no máximo n · 2 = 2n isometrias. As reflexões, por exemplo, não fixam <span style=\"text-decoration:overline\">0</span> em geral."
+ },
+ {
+  "t": 0,
+  "q": "Em D<sub>3</sub>, vendo os elementos como funções de ℤ<sub>3</sub> em ℤ<sub>3</sub>, qual função é sr?",
+  "o": [
+   "x ↦ −x + <span style=\"text-decoration:overline\">2</span>",
+   "x ↦ −x + <span style=\"text-decoration:overline\">1</span>",
+   "x ↦ x + <span style=\"text-decoration:overline\">2</span>",
+   "x ↦ −x"
+  ],
+  "e": "Compondo da direita para a esquerda, aplica-se primeiro r: sr(x) = s(x + <span style=\"text-decoration:overline\">1</span>) = −x − <span style=\"text-decoration:overline\">1</span> = −x + <span style=\"text-decoration:overline\">2</span>. A função −x + <span style=\"text-decoration:overline\">1</span> é rs; como rs ≠ sr, D<sub>3</sub> não é abeliano."
  },
  {
   "t": 1,
@@ -238,6 +293,72 @@ var BANCO = [
   "e": "(s r)s = (r<sup>−1</sup>s)s = r<sup>−1</sup> = r⁷: conjugar uma rotação por s inverte o sentido da rotação."
  },
  {
+  "t": 1,
+  "q": "Em D<sub>4</sub>, escreva (rs)r³ na forma r<sup>k</sup> ou r<sup>k</sup>s, com 0 ≤ k ≤ 3.",
+  "o": [
+   "r²s",
+   "s",
+   "r²",
+   "rs"
+  ],
+  "e": "(r<sup>i</sup>s)r<sup>j</sup> = r<sup>i−j</sup>s, então (rs)r³ = r<sup>1−3</sup>s = r<sup>−2</sup>s = r²s. Somar os expoentes (1 + 3 = 4) daria s, o que está errado."
+ },
+ {
+  "t": 1,
+  "q": "Em D<sub>15</sub>, sejam a = r<sup>11</sup>, b = r⁵s e c = r⁷s. Escreva baca²b na forma r<sup>k</sup> ou r<sup>k</sup>s, com 0 ≤ k ≤ 14.",
+  "o": [
+   "r<sup>14</sup>s",
+   "r<sup>14</sup>",
+   "r⁶s",
+   "r⁹s"
+  ],
+  "e": "ba = (r⁵s)r<sup>11</sup> = r<sup>−6</sup>s = r⁹s; (r⁹s)c = (r⁹s)(r⁷s) = r²; r²a² = r<sup>24</sup> = r⁹; r⁹b = r⁹(r⁵s) = r<sup>14</sup>s. O resultado é uma reflexão."
+ },
+ {
+  "t": 1,
+  "q": "Em D<sub>6</sub>, escreva (r²s)(r⁵s)(rs) na forma r<sup>k</sup> ou r<sup>k</sup>s, com 0 ≤ k ≤ 5.",
+  "o": [
+   "r⁴s",
+   "r⁴",
+   "r²s",
+   "s"
+  ],
+  "e": "(r²s)(r⁵s) = r<sup>2−5</sup> = r<sup>−3</sup> = r³ e r³(rs) = r⁴s. Um produto com um número ímpar de reflexões é sempre uma reflexão."
+ },
+ {
+  "t": 1,
+  "q": "Em D<sub>7</sub>, qual é o inverso de r³s?",
+  "o": [
+   "r³s",
+   "r⁴s",
+   "r⁴",
+   "s"
+  ],
+  "e": "(r³s)(r³s) = r<sup>3−3</sup> = r⁰ = e, então r³s é o próprio inverso: toda reflexão tem ordem 2. O inverso de r³ é que é r⁴."
+ },
+ {
+  "t": 1,
+  "q": "Em D<sub>8</sub>, quanto vale r s r?",
+  "o": [
+   "s",
+   "r²s",
+   "e",
+   "r²"
+  ],
+  "e": "(rs)r = r<sup>1−1</sup>s = s. Equivalentemente, sr = r<sup>-1</sup>s, e então r(sr) = r r<sup>-1</sup>s = s."
+ },
+ {
+  "t": 1,
+  "q": "Em D<sub>n</sub> (n ≥ 3), qual igualdade é sempre verdadeira?",
+  "o": [
+   "sr = r<sup>-1</sup>s",
+   "sr = rs",
+   "sr = s",
+   "sr = r<sup>-1</sup>"
+  ],
+  "e": "Pela regra (r<sup>i</sup>s)r<sup>j</sup> = r<sup>i−j</sup>s com i = 0 e j = 1: sr = r<sup>−1</sup>s = r<sup>n−1</sup>s. Como r<sup>-1</sup> ≠ r para n ≥ 3, sr ≠ rs."
+ },
+ {
   "t": 2,
   "q": "Para n ≥ 3, o grupo D<sub>n</sub> é abeliano?",
   "o": [
@@ -313,6 +434,72 @@ var BANCO = [
    "s"
   ],
   "e": "⟨r<sup>k</sup>⟩ = R<sub>6</sub> se, e somente se, mdc(6, k) = 1. Entre 2, 3 e 5, só mdc(6, 5) = 1."
+ },
+ {
+  "t": 2,
+  "q": "Quantos elementos de ordem 2 há em D<sub>5</sub>?",
+  "o": [
+   "5",
+   "6",
+   "1",
+   "10"
+  ],
+  "e": "As 5 reflexões têm ordem 2. Uma rotação r<sup>k</sup> tem ordem 5/mdc(5, k), que nunca é 2: como 5 é ímpar, não existe a rotação “de meia volta” r<sup>n/2</sup>."
+ },
+ {
+  "t": 2,
+  "q": "Quantos elementos de ordem 2 há em D<sub>12</sub>?",
+  "o": [
+   "13",
+   "12",
+   "1",
+   "7"
+  ],
+  "e": "São as 12 reflexões r<sup>k</sup>s e a rotação r⁶, que é a única rotação de ordem 2 (pois 12/mdc(12, k) = 2 só para k = 6)."
+ },
+ {
+  "t": 2,
+  "q": "Qual é a ordem de r⁸ em D<sub>12</sub>?",
+  "o": [
+   "3",
+   "8",
+   "4",
+   "12"
+  ],
+  "e": "|r<sup>k</sup>| = n/mdc(n, k) = 12/mdc(12, 8) = 12/4 = 3. De fato, (r⁸)³ = r<sup>24</sup> = e."
+ },
+ {
+  "t": 2,
+  "q": "O subconjunto H = {e, r³, r⁶, r²s, r⁵s, r⁸s} de D<sub>9</sub> é um subgrupo?",
+  "o": [
+   "Sim: H é finito e fechado; por exemplo, (r²s)(r⁵s) = r⁶ e r³(r²s) = r⁵s.",
+   "Não: (r²s)(r⁵s) = r⁷s não está em H.",
+   "Não: H não contém s.",
+   "Não: 6 não divide 18."
+  ],
+  "e": "As rotações de H formam ⟨r³⟩, e as reflexões são r<sup>k</sup>s com k ≡ 2 (mod 3). Com as regras r<sup>i</sup>(r<sup>j</sup>s) = r<sup>i+j</sup>s e (r<sup>i</sup>s)(r<sup>j</sup>s) = r<sup>i−j</sup>, todos os produtos caem em H. Um subgrupo não precisa conter s, e 6 divide 18."
+ },
+ {
+  "t": 2,
+  "q": "Quantos elementos de ordem 6 há em D<sub>12</sub>?",
+  "o": [
+   "2",
+   "1",
+   "4",
+   "6"
+  ],
+  "e": "As reflexões têm ordem 2, então só rotações podem ter ordem 6. |r<sup>k</sup>| = 12/mdc(12, k) = 6 ⟺ mdc(12, k) = 2, isto é, k = 2 ou k = 10: são φ(6) = 2 elementos, r² e r<sup>10</sup>."
+ },
+ {
+  "t": 2,
+  "q": "Em D<sub>12</sub>, o subconjunto H = {e, r⁶, rs, r⁷s} é:",
+  "o": [
+   "um subgrupo de ordem 4 em que todo elemento diferente de e tem ordem 2.",
+   "um subgrupo cíclico de ordem 4.",
+   "não é subgrupo: (rs)(r⁷s) = r⁸ não está em H.",
+   "não é subgrupo, pois não contém s."
+  ],
+  "e": "r⁶(rs) = r⁷s, (rs)(r⁷s) = r<sup>1−7</sup> = r<sup>−6</sup> = r⁶ e todos os elementos ≠ e têm ordem 2. É um grupo de Klein, que não é cíclico. Somar os expoentes em (rs)(r⁷s) é o erro mais comum."
  }
 ];
 </script>

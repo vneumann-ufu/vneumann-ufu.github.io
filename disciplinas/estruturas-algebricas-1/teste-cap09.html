@@ -103,7 +103,7 @@ a.btn { text-decoration: none; }
 <main id="app" aria-live="polite"></main>
 <script>
 var INFO = {"titulo": "Teste de revisão – Capítulo 9", "capitulo": "Capítulo 9: Anéis", "curto": "Capítulo 9"};
-var TEMAS = [{"nome": "Definição, exemplos e propriedades", "n": 3}, {"nome": "Divisores de zero, domínios e corpos", "n": 3}, {"nome": "Característica", "n": 2}];
+var TEMAS = [{"nome": "Definição, exemplos e propriedades", "n": 4}, {"nome": "Divisores de zero, domínios e corpos", "n": 4}, {"nome": "Característica", "n": 2}];
 var BANCO = [
  {
   "t": 0,
@@ -183,6 +183,72 @@ var BANCO = [
   "e": "(a, b) é invertível se, e somente se, a e b são invertíveis em ℤ, isto é, a, b ∈ {1, −1}."
  },
  {
+  "t": 0,
+  "q": "Sejam a, b elementos de um anel A qualquer. Quanto vale (a + b)²?",
+  "o": [
+   "a² + ab + ba + b²",
+   "a² + 2ab + b²",
+   "a² + b²",
+   "a² + 2ba + b²"
+  ],
+  "e": "Pela distributividade, (a + b)(a + b) = a² + ab + ba + b². Só podemos juntar ab + ba = 2ab quando ab = ba; em M<sub>2</sub>(ℝ) isso pode falhar."
+ },
+ {
+  "t": 0,
+  "q": "Quais são as soluções de x² = <span style=\"text-decoration:overline\">2</span> no anel ℤ<sub>14</sub>?",
+  "o": [
+   "<span style=\"text-decoration:overline\">4</span> e <span style=\"text-decoration:overline\">10</span>",
+   "Não há soluções.",
+   "Apenas <span style=\"text-decoration:overline\">4</span>",
+   "<span style=\"text-decoration:overline\">1</span> e <span style=\"text-decoration:overline\">13</span>"
+  ],
+  "e": "<span style=\"text-decoration:overline\">4</span>² = <span style=\"text-decoration:overline\">16</span> = <span style=\"text-decoration:overline\">2</span> e <span style=\"text-decoration:overline\">10</span>² = <span style=\"text-decoration:overline\">100</span> = <span style=\"text-decoration:overline\">2</span> (100 = 7 · 14 + 2). Testando os 14 elementos, não há outras. Note que <span style=\"text-decoration:overline\">10</span> = −<span style=\"text-decoration:overline\">4</span>."
+ },
+ {
+  "t": 0,
+  "q": "O conjunto {x ∈ ℚ : x ∉ ℤ}, com as operações de ℚ, é um anel?",
+  "o": [
+   "Não: não contém 0, e 1/2 + 1/2 = 1 está fora do conjunto.",
+   "Sim, pois ℚ é um anel.",
+   "Sim, mas sem unidade.",
+   "Não, pois o produto não é comutativo."
+  ],
+  "e": "Um subconjunto de um anel só é anel com as mesmas operações se for fechado para a soma e o produto e contiver o 0. Aqui falham as duas coisas."
+ },
+ {
+  "t": 0,
+  "q": "Seja A um anel em que x² = x para todo x ∈ A. O que se pode concluir?",
+  "o": [
+   "x = −x para todo x ∈ A, e A é comutativo.",
+   "A = {0, 1}.",
+   "A é um corpo.",
+   "A não pode ter unidade."
+  ],
+  "e": "De (x + x)² = x + x obtemos 4x = 2x, isto é, 2x = 0. De (x + y)² = x + y obtemos xy + yx = 0, logo xy = −yx = yx. O anel ℤ<sub>2</sub> ⊕ ℤ<sub>2</sub> satisfaz x² = x, tem unidade e não é {0, 1} nem corpo."
+ },
+ {
+  "t": 0,
+  "q": "Quais são os elementos invertíveis do anel ℤ<sub>2</sub> ⊕ ℤ<sub>2</sub>?",
+  "o": [
+   "Apenas (<span style=\"text-decoration:overline\">1</span>, <span style=\"text-decoration:overline\">1</span>)",
+   "(<span style=\"text-decoration:overline\">1</span>, <span style=\"text-decoration:overline\">0</span>), (<span style=\"text-decoration:overline\">0</span>, <span style=\"text-decoration:overline\">1</span>) e (<span style=\"text-decoration:overline\">1</span>, <span style=\"text-decoration:overline\">1</span>)",
+   "Nenhum",
+   "Todos os elementos não nulos"
+  ],
+  "e": "(A ⊕ B)* = A* × B*, e ℤ<sub>2</sub><sup>*</sup> = {<span style=\"text-decoration:overline\">1</span>}. Por exemplo, (<span style=\"text-decoration:overline\">1</span>, <span style=\"text-decoration:overline\">0</span>) não é invertível, pois (<span style=\"text-decoration:overline\">1</span>, <span style=\"text-decoration:overline\">0</span>)(x, y) = (x, <span style=\"text-decoration:overline\">0</span>) ≠ (<span style=\"text-decoration:overline\">1</span>, <span style=\"text-decoration:overline\">1</span>)."
+ },
+ {
+  "t": 0,
+  "q": "Quais são os elementos invertíveis do anel ℝ[x]?",
+  "o": [
+   "Os polinômios constantes não nulos.",
+   "Todos os polinômios não nulos.",
+   "Apenas 1 e −1.",
+   "Os polinômios de grau 1."
+  ],
+  "e": "Se f g = 1, então grau f + grau g = grau 1 = 0, logo f e g são constantes, e não nulas. Em ℤ[x], pela mesma razão, os invertíveis são só 1 e −1."
+ },
+ {
   "t": 1,
   "q": "Qual elemento de ℤ<sub>12</sub> é divisor de zero?",
   "o": [
@@ -260,6 +326,72 @@ var BANCO = [
   "e": "3·5 = 15 ≡ 1 (mod 7)."
  },
  {
+  "t": 1,
+  "q": "Quantos divisores de zero tem o anel ℤ<sub>20</sub>?",
+  "o": [
+   "11",
+   "12",
+   "8",
+   "19"
+  ],
+  "e": "Em ℤ<sub>n</sub>, todo elemento não nulo é invertível ou divisor de zero: se mdc(a, n) = d &gt; 1, então <span style=\"text-decoration:overline\">a</span> · <span style=\"text-decoration:overline\">n/d</span> = <span style=\"text-decoration:overline\">0</span>. Há φ(20) = 8 invertíveis, então os divisores de zero são 20 − 1 − 8 = 11 (o <span style=\"text-decoration:overline\">0</span> não conta)."
+ },
+ {
+  "t": 1,
+  "q": "Seja A um domínio de integridade e a ∈ A com a² = a. Então:",
+  "o": [
+   "a = 0 ou a = 1",
+   "a = 1",
+   "a = 0, a = 1 ou a = −1",
+   "a pode ser qualquer elemento"
+  ],
+  "e": "a² = a dá a(a − 1) = 0 e, sem divisores de zero, a = 0 ou a − 1 = 0. Em ℤ<sub>6</sub>, que tem divisores de zero, <span style=\"text-decoration:overline\">3</span>² = <span style=\"text-decoration:overline\">3</span>."
+ },
+ {
+  "t": 1,
+  "q": "Qual dos anéis é um anel de integridade que NÃO é domínio de integridade?",
+  "o": [
+   "2ℤ",
+   "ℤ<sub>6</sub>",
+   "ℤ",
+   "ℤ ⊕ ℤ"
+  ],
+  "e": "2ℤ é comutativo e não tem divisores de zero, mas não tem unidade. ℤ é domínio; ℤ<sub>6</sub> e ℤ ⊕ ℤ têm divisores de zero."
+ },
+ {
+  "t": 1,
+  "q": "Seja A um anel de integridade e a, b ∈ A com a³ = b³ e a⁵ = b⁵. O que se pode concluir?",
+  "o": [
+   "a = b",
+   "a = −b",
+   "a = b ou a = −b",
+   "Nada se pode concluir."
+  ],
+  "e": "Se a = 0, então b³ = 0 e, sem divisores de zero, b = 0. Se a ≠ 0, então b³ = a³ ≠ 0 e b ≠ 0. De a²b³ = a²a³ = a⁵ = b⁵ = b²b³ vem (a² − b²)b³ = 0, logo a² = b². Então ab² = a · a² = a³ = b³ = b · b², isto é, (a − b)b² = 0, e a = b."
+ },
+ {
+  "t": 1,
+  "q": "Qual é a diferença entre anel de integridade e domínio de integridade?",
+  "o": [
+   "O domínio exige, além disso, unidade 1 ≠ 0.",
+   "O domínio é finito.",
+   "O anel de integridade pode ter divisores de zero.",
+   "Não há diferença."
+  ],
+  "e": "Os dois são comutativos e sem divisores de zero. O domínio de integridade tem também unidade 1 ≠ 0. Por exemplo, 2ℤ é anel de integridade e não é domínio."
+ },
+ {
+  "t": 1,
+  "q": "No anel ℤ<sub>8</sub>, o elemento <span style=\"text-decoration:overline\">4</span> é:",
+  "o": [
+   "um divisor de zero, pois <span style=\"text-decoration:overline\">4</span> · <span style=\"text-decoration:overline\">2</span> = <span style=\"text-decoration:overline\">0</span>.",
+   "invertível.",
+   "o zero do anel.",
+   "nem invertível nem divisor de zero."
+  ],
+  "e": "4 · 2 = 8 ≡ 0 (mod 8) com <span style=\"text-decoration:overline\">4</span> ≠ <span style=\"text-decoration:overline\">0</span> e <span style=\"text-decoration:overline\">2</span> ≠ <span style=\"text-decoration:overline\">0</span>. Como mdc(4, 8) = 4 ≠ 1, <span style=\"text-decoration:overline\">4</span> não é invertível."
+ },
+ {
   "t": 2,
   "q": "Qual dos números abaixo NÃO pode ser a característica de um anel de integridade?",
   "o": [
@@ -313,6 +445,50 @@ var BANCO = [
    "2"
   ],
   "e": "A característica p é um primo e p·1 = 0, então 1 tem ordem p no grupo aditivo, que tem 9 elementos. Por Lagrange, p | 9, logo p = 3."
+ },
+ {
+  "t": 2,
+  "q": "Qual dos anéis é um anel de integridade infinito de característica 3?",
+  "o": [
+   "ℤ<sub>3</sub>[x]",
+   "ℤ<sub>3</sub>",
+   "ℤ",
+   "ℤ<sub>9</sub>"
+  ],
+  "e": "ℤ<sub>3</sub>[x] é infinito, não tem divisores de zero (o grau do produto é a soma dos graus) e 3 · 1 = 0. ℤ<sub>3</sub> é finito, ℤ tem característica 0 e ℤ<sub>9</sub> tem divisores de zero (<span style=\"text-decoration:overline\">3</span> · <span style=\"text-decoration:overline\">3</span> = <span style=\"text-decoration:overline\">0</span>)."
+ },
+ {
+  "t": 2,
+  "q": "Seja A um anel de integridade de característica p &gt; 0. Para quais b ∈ A vale pb = 0?",
+  "o": [
+   "Para todo b ∈ A.",
+   "Apenas para b = 1.",
+   "Apenas para o elemento a usado na definição.",
+   "Para nenhum b ≠ 0."
+  ],
+  "e": "Se a ≠ 0 e pa = 0, então a(pb) = (pa)b = 0 para todo b, e como a ≠ 0, pb = 0."
+ },
+ {
+  "t": 2,
+  "q": "Por que a característica de um anel de integridade, quando positiva, é um número primo?",
+  "o": [
+   "Se p = mn com 1 &lt; m, n &lt; p, então (ma)(na) = (pa)a = 0, e um dos fatores seria 0, contra a minimalidade de p.",
+   "Porque todo anel de integridade finito é ℤ<sub>p</sub>.",
+   "Porque p divide o número de elementos do anel.",
+   "Porque pa = 0 para todo a."
+  ],
+  "e": "A ausência de divisores de zero é o ponto principal: em ℤ<sub>6</sub>, que tem divisores de zero, 6 · <span style=\"text-decoration:overline\">1</span> = <span style=\"text-decoration:overline\">0</span> e 6 não é primo."
+ },
+ {
+  "t": 2,
+  "q": "Qual é a característica do anel ℤ[i] dos inteiros de Gauss?",
+  "o": [
+   "0",
+   "2",
+   "1",
+   "4"
+  ],
+  "e": "Para m &gt; 0 e a = 1, m · 1 = m ≠ 0. Como ℤ[i] está contido em ℂ, nenhum m &gt; 0 anula um elemento não nulo. O fato de i⁴ = 1 não tem relação com a característica."
  }
 ];
 </script>

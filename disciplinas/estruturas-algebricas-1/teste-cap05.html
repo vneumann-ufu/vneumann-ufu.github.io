@@ -103,7 +103,7 @@ a.btn { text-decoration: none; }
 <main id="app" aria-live="polite"></main>
 <script>
 var INFO = {"titulo": "Teste de revisão – Capítulo 5", "capitulo": "Capítulo 5: Grupos de permutações", "curto": "Capítulo 5"};
-var TEMAS = [{"nome": "Ciclos e produtos", "n": 3}, {"nome": "Ordem de permutações", "n": 2}, {"nome": "Paridade e grupo alternado", "n": 3}];
+var TEMAS = [{"nome": "Ciclos e produtos", "n": 4}, {"nome": "Ordem de permutações", "n": 3}, {"nome": "Paridade e grupo alternado", "n": 3}];
 var BANCO = [
  {
   "t": 0,
@@ -183,6 +183,61 @@ var BANCO = [
   "e": "Ciclos disjuntos movem elementos diferentes, então comutam. A ordem do produto é mmc(|σ|, |τ|)."
  },
  {
+  "t": 0,
+  "q": "Escreva (1 2 3 5)(4 1 3) como produto de ciclos disjuntos (primeiro aplica-se o ciclo da direita).",
+  "o": [
+   "(1 5)(2 3 4)",
+   "(1 2 4)(3 5)",
+   "(1 2 3 5 4)",
+   "(1 5 2 3 4)"
+  ],
+  "e": "Aplicando (4 1 3) e depois (1 2 3 5): 1 → 3 → 5, 5 → 5 → 1, 2 → 2 → 3, 3 → 4 → 4 e 4 → 1 → 2. Resultado: (1 5)(2 3 4). Compondo da esquerda para a direita, obteríamos (1 2 4)(3 5)."
+ },
+ {
+  "t": 0,
+  "q": "A permutação α de S<sub>8</sub> com α(1) = 2, α(2) = 3, α(3) = 4, α(4) = 5, α(5) = 1, α(6) = 7, α(7) = 8 e α(8) = 6 é:",
+  "o": [
+   "(1 2 3 4 5)(6 7 8)",
+   "(1 2 3 4 5 6 7 8)",
+   "(1 5 4 3 2)(6 8 7)",
+   "(1 2)(3 4)(5 6)(7 8)"
+  ],
+  "e": "Seguindo o 1: 1 → 2 → 3 → 4 → 5 → 1. O primeiro número que ainda não apareceu é o 6: 6 → 7 → 8 → 6. A opção (1 5 4 3 2)(6 8 7) é α<sup>-1</sup>."
+ },
+ {
+  "t": 0,
+  "q": "Seja β = (1 2 3)(1 4 5) ∈ S<sub>6</sub>. Quanto vale β<sup>99</sup>?",
+  "o": [
+   "(1 3 2 5 4)",
+   "I",
+   "(1 4 5 2 3)",
+   "(1 5 3 4 2)"
+  ],
+  "e": "Primeiro calculamos β = (1 4 5 2 3), um 5-ciclo, de ordem 5. Como 99 = 5 · 19 + 4, β<sup>99</sup> = β⁴ = β<sup>-1</sup> = (1 3 2 5 4). Elevar cada 3-ciclo a 99 separadamente (o que daria I) está errado, pois os ciclos não são disjuntos."
+ },
+ {
+  "t": 0,
+  "q": "Escreva (1 2)(1 3)(2 3)(1 4 2) como produto de ciclos disjuntos (primeiro aplica-se o ciclo da direita).",
+  "o": [
+   "(1 4 2 3)",
+   "(1 2 3 4)",
+   "(1 3 2 4)",
+   "(1 4)(2 3)"
+  ],
+  "e": "Seguindo cada número da direita para a esquerda: 1 → 4 → 4 → 4 → 4, 4 → 2 → 3 → 1 → 2, 2 → 1 → 1 → 3 → 3 e 3 → 3 → 2 → 2 → 1. Logo o produto é (1 4 2 3)."
+ },
+ {
+  "t": 0,
+  "q": "Quanto vale (1 2)(1 2 3) em S<sub>3</sub> (primeiro aplica-se o ciclo da direita)?",
+  "o": [
+   "(2 3)",
+   "(1 3)",
+   "(1 2 3)",
+   "(1 3 2)"
+  ],
+  "e": "Aplicando (1 2 3) e depois (1 2): 1 → 2 → 1, 2 → 3 → 3 e 3 → 1 → 2. Resultado: (2 3). Já (1 2 3)(1 2) = (1 3): ciclos com elementos em comum podem não comutar."
+ },
+ {
   "t": 1,
   "q": "Qual é a ordem de (1 2 3)(4 5 6 7) em S<sub>7</sub>?",
   "o": [
@@ -247,6 +302,61 @@ var BANCO = [
    "6"
   ],
   "e": "Os ciclos têm o 1 em comum, então primeiro calculamos o produto: β = (1 4 5 2 3), um 5-ciclo."
+ },
+ {
+  "t": 1,
+  "q": "Seja α = στ a escrita de α como produto de ciclos disjuntos, com σ um 4-ciclo e τ um 6-ciclo. Qual é a ordem de α?",
+  "o": [
+   "12",
+   "24",
+   "10",
+   "6"
+  ],
+  "e": "Para ciclos disjuntos, |α| = mmc(|σ|, |τ|) = mmc(4, 6) = 12. Nem a soma (10) nem o produto (24) dos comprimentos dá a ordem."
+ },
+ {
+  "t": 1,
+  "q": "Quantos elementos de ordem 5 há em S<sub>5</sub>?",
+  "o": [
+   "24",
+   "5",
+   "12",
+   "120"
+  ],
+  "e": "Em S<sub>5</sub>, ordem 5 só ocorre para 5-ciclos. Fixando o 1 na primeira posição, (1 a b c d), há 4! = 24 maneiras de ordenar os outros quatro números."
+ },
+ {
+  "t": 1,
+  "q": "Quantos elementos de ordem 6 há em S<sub>5</sub>?",
+  "o": [
+   "20",
+   "0, pois S<sub>5</sub> não tem 6-ciclos",
+   "10",
+   "120"
+  ],
+  "e": "Ordem 6 em S<sub>5</sub> vem de um 3-ciclo e uma transposição disjuntos: mmc(3, 2) = 6. Há 10 escolhas para os 3 números do 3-ciclo, 2 três-ciclos com esses números, e a transposição fica determinada: 10 · 2 = 20."
+ },
+ {
+  "t": 1,
+  "q": "Qual é a ordem de (3 4 5)(2 4 5) em S<sub>5</sub>?",
+  "o": [
+   "2",
+   "3",
+   "9",
+   "6"
+  ],
+  "e": "Os ciclos não são disjuntos, então primeiro calculamos o produto: 2 → 4 → 5, 5 → 2 → 2, 3 → 3 → 4 e 4 → 5 → 3. O produto é (2 5)(3 4), de ordem 2. O mmc(3, 3) = 3 não vale aqui."
+ },
+ {
+  "t": 1,
+  "q": "Seja α = (1 3 5 7 9)(2 4 6)(8 10). Para quais m a potência α<sup>m</sup> é um 5-ciclo?",
+  "o": [
+   "Quando 6 divide m e 5 não divide m.",
+   "Quando 5 divide m.",
+   "Somente para m = 5.",
+   "Quando 30 divide m."
+  ],
+  "e": "α<sup>m</sup> = (1 3 5 7 9)<sup>m</sup>(2 4 6)<sup>m</sup>(8 10)<sup>m</sup>. Para sobrar só um 5-ciclo, os dois últimos fatores devem ser I (3 | m e 2 | m) e o primeiro não pode ser I (5 ∤ m)."
  },
  {
   "t": 2,
@@ -324,6 +434,72 @@ var BANCO = [
    "sempre a identidade"
   ],
   "e": "Se α e β usam r e s transposições, com r e s ímpares, então αβ usa r + s transposições, e r + s é par."
+ },
+ {
+  "t": 2,
+  "q": "Quantos elementos de ordem 5 há em A<sub>6</sub>?",
+  "o": [
+   "144",
+   "72",
+   "24",
+   "120"
+  ],
+  "e": "Em S<sub>6</sub>, ordem 5 só ocorre para 5-ciclos: há 6 escolhas do número fixo e 4! = 24 ciclos com os outros cinco, total 144. Todo 5-ciclo é par, então todos estão em A<sub>6</sub>; não se divide por 2."
+ },
+ {
+  "t": 2,
+  "q": "Quantos elementos de ordem 2 há em A<sub>5</sub>?",
+  "o": [
+   "15",
+   "10",
+   "25",
+   "30"
+  ],
+  "e": "Em A<sub>5</sub>, ordem 2 vem de produtos de duas transposições disjuntas, como (1 2)(3 4): há 5 escolhas do número fixo e 3 maneiras de dividir os outros quatro em pares, total 15. As 10 transposições são ímpares e não estão em A<sub>5</sub>."
+ },
+ {
+  "t": 2,
+  "q": "Qual das permutações é ímpar?",
+  "o": [
+   "(1 2 3 4)",
+   "(1 2 3)",
+   "(1 2)(3 4)",
+   "(1 2 3 4 5)"
+  ],
+  "e": "Um k-ciclo é produto de k − 1 transposições. (1 2 3 4) usa 3 (ímpar); (1 2 3) usa 2, (1 2)(3 4) usa 2 e (1 2 3 4 5) usa 4."
+ },
+ {
+  "t": 2,
+  "q": "Qual das igualdades escreve (1 2 3 4 5) como produto de transposições (compondo da direita para a esquerda)?",
+  "o": [
+   "(1 2 3 4 5) = (1 5)(1 4)(1 3)(1 2)",
+   "(1 2 3 4 5) = (1 2)(1 3)(1 4)(1 5)",
+   "(1 2 3 4 5) = (1 2)(1 3)(1 4)",
+   "(1 2 3 4 5) = (1 5)(2 4)"
+  ],
+  "e": "(a<sub>1</sub> a<sub>2</sub> ⋯ a<sub>k</sub>) = (a<sub>1</sub> a<sub>k</sub>)(a<sub>1</sub> a<sub>k−1</sub>) ⋯ (a<sub>1</sub> a<sub>2</sub>). Na ordem contrária, (1 2)(1 3)(1 4)(1 5) = (1 5 4 3 2), que é o inverso. Um 5-ciclo precisa de um número par de transposições."
+ },
+ {
+  "t": 2,
+  "q": "Por que |A<sub>n</sub>| = n!/2 para n ≥ 2?",
+  "o": [
+   "Porque α ↦ α(1 2) é uma bijeção entre as permutações pares e as ímpares.",
+   "Porque metade dos ciclos tem comprimento par.",
+   "Porque toda permutação é produto de duas transposições.",
+   "Porque A<sub>n</sub> tem índice n em S<sub>n</sub>."
+  ],
+  "e": "A função é injetora pelo cancelamento e sobrejetora, pois se γ é ímpar, γ(1 2) é par e é levado em γ. Assim pares e ímpares são em mesmo número, e S<sub>n</sub> é a união disjunta deles."
+ },
+ {
+  "t": 2,
+  "q": "Qual das permutações é um elemento de ordem 15 de A<sub>8</sub>?",
+  "o": [
+   "(1 2 3)(4 5 6 7 8)",
+   "(1 2 3 4 5 6 7 8)",
+   "(1 2 3)(4 5)(6 7 8)",
+   "(1 2 3 4 5)(6 7)"
+  ],
+  "e": "(1 2 3)(4 5 6 7 8) tem ordem mmc(3, 5) = 15 e usa 2 + 4 = 6 transposições, logo é par. As outras têm ordens 8, 6 e 10, e a primeira e a última são ímpares."
  }
 ];
 </script>

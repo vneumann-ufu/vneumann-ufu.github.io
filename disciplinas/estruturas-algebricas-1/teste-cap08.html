@@ -103,7 +103,7 @@ a.btn { text-decoration: none; }
 <main id="app" aria-live="polite"></main>
 <script>
 var INFO = {"titulo": "Teste de revisão – Capítulo 8", "capitulo": "Capítulo 8: Homomorfismos de grupos", "curto": "Capítulo 8"};
-var TEMAS = [{"nome": "Homomorfismos, núcleo e imagem", "n": 4}, {"nome": "Isomorfismos e teoremas", "n": 4}];
+var TEMAS = [{"nome": "Homomorfismos, núcleo e imagem", "n": 5}, {"nome": "Isomorfismos e teoremas", "n": 5}];
 var BANCO = [
  {
   "t": 0,
@@ -205,6 +205,83 @@ var BANCO = [
   "e": "f(a)⁶ = f(a⁶) = f(1) = 1, então |f(a)| divide 6."
  },
  {
+  "t": 0,
+  "q": "Seja f: ℤ × ℤ → ℤ, f(x, y) = 4x + 6y (grupos aditivos). Qual é a imagem de f?",
+  "o": [
+   "2ℤ",
+   "12ℤ",
+   "10ℤ",
+   "ℤ"
+  ],
+  "e": "Todo 4x + 6y é par, e 2 = 4 · 2 + 6 · (−1) está na imagem; como a imagem é subgrupo de ℤ, ela é ⟨2⟩ = 2ℤ (o mdc de 4 e 6, não o mmc)."
+ },
+ {
+  "t": 0,
+  "q": "Seja f: ℤ → ℂ*, f(n) = i<sup>n</sup>. Quem é f(3ℤ)?",
+  "o": [
+   "{1, −1, i, −i}",
+   "{1, −i}",
+   "{1, −1}",
+   "{−i}"
+  ],
+  "e": "f(3k) = (i³)<sup>k</sup> = (−i)<sup>k</sup>, e as potências de −i são −i, −1, i, 1. Como mdc(3, 4) = 1, f(3ℤ) é toda a imagem de f."
+ },
+ {
+  "t": 0,
+  "q": "A função h: ℂ* → ℂ*, h(z) = −z, é um homomorfismo?",
+  "o": [
+   "Não: h(1) = −1, e um homomorfismo leva o neutro no neutro.",
+   "Sim, pois h(zw) = −zw.",
+   "Sim, pois h é bijetora.",
+   "Não, pois h não é injetora."
+  ],
+  "e": "h(zw) = −zw, mas h(z)h(w) = (−z)(−w) = zw. O teste mais rápido é o neutro: h(1) = −1 ≠ 1. Ser bijetora não torna uma função homomorfismo."
+ },
+ {
+  "t": 0,
+  "q": "A função f: S<sub>4</sub> → A<sub>4</sub>, f(σ) = σ², é um homomorfismo?",
+  "o": [
+   "Não: com σ = (1 2) e τ = (1 3), (στ)² = (1 2 3), mas σ²τ² = I.",
+   "Sim, pois σ² é sempre par.",
+   "Sim, pois (στ)² = σ²τ².",
+   "Não, pois a imagem não está contida em A<sub>4</sub>."
+  ],
+  "e": "στ = (1 2)(1 3) = (1 3 2) e (1 3 2)² = (1 2 3). A igualdade (στ)² = σ²τ² vale em grupos abelianos, e S<sub>4</sub> não é abeliano. A imagem está em A<sub>4</sub>: todo quadrado é par."
+ },
+ {
+  "t": 0,
+  "q": "A regra γ(<span style=\"text-decoration:overline\">n</span>) = <span style=\"text-decoration:overline\">5n</span> define uma função de ℤ<sub>160</sub> em ℤ<sub>120</sub>?",
+  "o": [
+   "Não: <span style=\"text-decoration:overline\">0</span> = <span style=\"text-decoration:overline\">160</span> em ℤ<sub>160</sub>, mas <span style=\"text-decoration:overline\">0</span> ≠ <span style=\"text-decoration:overline\">800</span> = <span style=\"text-decoration:overline\">80</span> em ℤ<sub>120</sub>.",
+   "Sim, e é um homomorfismo.",
+   "Sim, mas não é homomorfismo.",
+   "Não, porque 5 não divide 120."
+  ],
+  "e": "Para estar bem definida, a imagem não pode depender do representante. Como 800 = 6 · 120 + 80, dois representantes da mesma classe têm imagens diferentes. (E 5 divide 120.)"
+ },
+ {
+  "t": 0,
+  "q": "Seja α: ℤ<sub>n</sub> → D<sub>n</sub>, α(<span style=\"text-decoration:overline\">a</span>) = r<sup>a</sup>. Qual é a imagem de α?",
+  "o": [
+   "R<sub>n</sub> = ⟨r⟩",
+   "D<sub>n</sub>",
+   "{e, s}",
+   "{e}"
+  ],
+  "e": "α está bem definida porque r<sup>n</sup> = e, é homomorfismo porque r<sup>a+b</sup> = r<sup>a</sup>r<sup>b</sup>, e sua imagem é o conjunto das rotações. Como ker α = {<span style=\"text-decoration:overline\">0</span>}, α é injetor."
+ },
+ {
+  "t": 0,
+  "q": "Seja f: G → H um homomorfismo e a ∈ G com f(a) = b. O conjunto f<sup>-1</sup>(b) = {x ∈ G : f(x) = b} é:",
+  "o": [
+   "a ker f",
+   "{a}",
+   "ker f",
+   "b ker f"
+  ],
+  "e": "f(x) = f(a) ⟺ f(a<sup>-1</sup>x) = 1<sub>H</sub> ⟺ a<sup>-1</sup>x ∈ ker f ⟺ x ∈ a ker f. Só é {a} quando f é injetor; e b está em H, então b ker f nem faz sentido."
+ },
+ {
   "t": 1,
   "q": "Pelo primeiro teorema do isomorfismo, usando f(z) = zⁿ, o grupo ℂ*/U<sub>n</sub> é isomorfo a:",
   "o": [
@@ -302,6 +379,105 @@ var BANCO = [
    "12"
   ],
   "e": "Pelo primeiro teorema do isomorfismo, |im f| = |ℤ<sub>12</sub>|/|ker f| = 12/3 = 4 (e 4 divide 8, como deve)."
+ },
+ {
+  "t": 1,
+  "q": "Seja f: ℤ → ℤ<sub>7</sub><sup>*</sup>, f(n) = <span style=\"text-decoration:overline\">3</span><sup>n</sup>. O que dá o primeiro teorema do isomorfismo?",
+  "o": [
+   "ℤ<sub>6</sub> ≅ ℤ<sub>7</sub><sup>*</sup>",
+   "ℤ<sub>7</sub> ≅ ℤ<sub>7</sub><sup>*</sup>",
+   "ℤ<sub>3</sub> ≅ ℤ<sub>7</sub><sup>*</sup>",
+   "ℤ ≅ ℤ<sub>7</sub><sup>*</sup>"
+  ],
+  "e": "As potências de <span style=\"text-decoration:overline\">3</span> são <span style=\"text-decoration:overline\">3</span>, <span style=\"text-decoration:overline\">2</span>, <span style=\"text-decoration:overline\">6</span>, <span style=\"text-decoration:overline\">4</span>, <span style=\"text-decoration:overline\">5</span>, <span style=\"text-decoration:overline\">1</span>: |<span style=\"text-decoration:overline\">3</span>| = 6, ker f = 6ℤ e im f = ℤ<sub>7</sub><sup>*</sup>. Logo ℤ/6ℤ = ℤ<sub>6</sub> ≅ ℤ<sub>7</sub><sup>*</sup>."
+ },
+ {
+  "t": 1,
+  "q": "Seja f: ℤ → ℤ<sub>30</sub>, f(n) = <span style=\"text-decoration:overline\">12n</span>. Qual é ker f?",
+  "o": [
+   "5ℤ",
+   "30ℤ",
+   "12ℤ",
+   "6ℤ"
+  ],
+  "e": "30 | 12n ⟺ 5 | 2n ⟺ 5 | n. Logo ker f = 5ℤ, e im f = ⟨<span style=\"text-decoration:overline\">12</span>⟩ = ⟨<span style=\"text-decoration:overline\">6</span>⟩ tem 5 elementos, como manda ℤ/5ℤ ≅ im f."
+ },
+ {
+  "t": 1,
+  "q": "Sejam d, n inteiros positivos com d | n. O grupo ℤ<sub>n</sub>/⟨<span style=\"text-decoration:overline\">d</span>⟩ é isomorfo a:",
+  "o": [
+   "ℤ<sub>d</sub>",
+   "ℤ<sub>n/d</sub>",
+   "ℤ<sub>n</sub>",
+   "ℤ<sub>n−d</sub>"
+  ],
+  "e": "⟨<span style=\"text-decoration:overline\">d</span>⟩ tem n/d elementos, então o quociente tem d elementos. A função <span style=\"text-decoration:overline\">a</span> ↦ <span style=\"text-decoration:overline\">a</span> de ℤ<sub>n</sub> em ℤ<sub>d</sub> está bem definida (pois d | n), é sobrejetora e tem núcleo ⟨<span style=\"text-decoration:overline\">d</span>⟩."
+ },
+ {
+  "t": 1,
+  "q": "Seja f: G → H um homomorfismo entre grupos finitos. Então |im f| divide:",
+  "o": [
+   "|G| e |H|",
+   "apenas |H|",
+   "|ker f|",
+   "|G| − |H|"
+  ],
+  "e": "|im f| = |G|/|ker f| divide |G|, pelo primeiro teorema do isomorfismo; e im f é subgrupo de H, então |im f| divide |H| por Lagrange."
+ },
+ {
+  "t": 1,
+  "q": "Existe um homomorfismo sobrejetor de ℤ<sub>12</sub> em ℤ<sub>5</sub>?",
+  "o": [
+   "Não: |im f| teria de dividir 12, e 5 não divide 12.",
+   "Sim: f(<span style=\"text-decoration:overline\">n</span>) = <span style=\"text-decoration:overline\">n</span>.",
+   "Sim, pois 12 &gt; 5.",
+   "Não, pois ℤ<sub>5</sub> não é cíclico."
+  ],
+  "e": "Se f fosse sobrejetor, teríamos 5 = |im f|, que divide |ℤ<sub>12</sub>| = 12. A regra f(<span style=\"text-decoration:overline\">n</span>) = <span style=\"text-decoration:overline\">n</span> nem está bem definida de ℤ<sub>12</sub> em ℤ<sub>5</sub>, pois 5 ∤ 12."
+ },
+ {
+  "t": 1,
+  "q": "O grupo Aut(ℤ) é isomorfo a:",
+  "o": [
+   "{1, −1}",
+   "ℤ",
+   "{1}",
+   "ℤ<sub>4</sub>"
+  ],
+  "e": "Um automorfismo de ℤ leva o gerador 1 em um gerador: f(1) = 1 ou f(1) = −1. Assim Aut(ℤ) = {I, x ↦ −x}, que tem 2 elementos."
+ },
+ {
+  "t": 1,
+  "q": "Seja G de ordem 42 e H ≤ G com |H| = 7. Por que H ◁ G?",
+  "o": [
+   "O índice de H é 6 e 42 não divide 6! = 720; então H contém um subgrupo normal ≠ {1} de G, que só pode ser H.",
+   "Porque H tem índice 2.",
+   "Porque G é abeliano.",
+   "Porque todo subgrupo de ordem prima é normal."
+  ],
+  "e": "É a consequência do teorema de Cayley com as classes laterais de H: o núcleo de G → S<sub>A</sub> está contido em H e não é trivial. Como |H| = 7 é primo, esse núcleo é H. Subgrupos de ordem prima nem sempre são normais: {I, (1 2)} em S<sub>3</sub>."
+ },
+ {
+  "t": 1,
+  "q": "Um grupo G de ordem 36 com um subgrupo H de ordem 9 pode ser simples?",
+  "o": [
+   "Não: |G : H| = 4 e 36 não divide 4! = 24.",
+   "Sim, todo grupo de ordem 36 é simples.",
+   "Não, apenas porque 9 divide 36.",
+   "Sim, porque 36 não divide 24."
+  ],
+  "e": "Pela consequência do teorema de Cayley, H contém um subgrupo normal de G diferente de {1}, e H ≠ G. Logo G tem um subgrupo normal não trivial."
+ },
+ {
+  "t": 1,
+  "q": "Qual subgrupo de S<sub>4</sub> é isomorfo a ℤ<sub>8</sub><sup>*</sup>?",
+  "o": [
+   "{I, (1 2)(3 4), (1 3)(2 4), (1 4)(2 3)}",
+   "⟨(1 2 3 4)⟩",
+   "A<sub>4</sub>",
+   "{I, (1 2), (1 3), (1 4)}"
+  ],
+  "e": "ℤ<sub>8</sub><sup>*</sup> é um grupo de Klein: 4 elementos e x² = <span style=\"text-decoration:overline\">1</span> para todo x. O subgrupo da primeira opção também (o produto de dois dos elementos ≠ I é o terceiro). ⟨(1 2 3 4)⟩ é cíclico, e {I, (1 2), (1 3), (1 4)} nem é subgrupo."
  }
 ];
 </script>

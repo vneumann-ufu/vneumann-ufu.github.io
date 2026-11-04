@@ -103,7 +103,7 @@ a.btn { text-decoration: none; }
 <main id="app" aria-live="polite"></main>
 <script>
 var INFO = {"titulo": "Teste de revisão – Capítulo 1", "capitulo": "Capítulo 1: Relações de equivalência", "curto": "Capítulo 1"};
-var TEMAS = [{"nome": "É ou não relação de equivalência?", "n": 4}, {"nome": "Teoria", "n": 2}, {"nome": "Classes de equivalência e conjunto quociente", "n": 2}];
+var TEMAS = [{"nome": "É ou não relação de equivalência?", "n": 4}, {"nome": "Teoria", "n": 3}, {"nome": "Classes de equivalência e conjunto quociente", "n": 3}];
 var BANCO = [
  {
   "t": 0,
@@ -205,6 +205,39 @@ var BANCO = [
   "e": "Nenhuma potência 2<sup>n</sup> é zero, então a relação não é reflexiva (a transitividade também falha)."
  },
  {
+  "t": 0,
+  "q": "Em ℝ, defina x ∼ y ⟺ xy &gt; 0. Qual propriedade de relação de equivalência falha?",
+  "o": [
+   "Reflexiva",
+   "Transitiva",
+   "Simétrica",
+   "Nenhuma: ∼ é de equivalência"
+  ],
+  "e": "0 · 0 = 0 não é positivo, logo 0 ≁ 0. A simetria vale (xy = yx) e a transitividade também: se xy &gt; 0 e yz &gt; 0, então x, y, z são não nulos e têm o mesmo sinal, logo xz &gt; 0."
+ },
+ {
+  "t": 0,
+  "q": "Em ℤ, defina x ∼ y ⟺ x − y é ímpar. Qual afirmação é verdadeira?",
+  "o": [
+   "Não é de equivalência: x − x = 0 é par, então x ≁ x.",
+   "É de equivalência, como a relação “x − y é par”.",
+   "Não é de equivalência, pois não é simétrica.",
+   "É reflexiva e simétrica, mas não é transitiva."
+  ],
+  "e": "A reflexividade falha para todo x, pois 0 é par. A simetria vale (se x − y é ímpar, y − x também é). A transitividade também falha: 1 ∼ 2 e 2 ∼ 3, mas 1 − 3 = −2 é par."
+ },
+ {
+  "t": 0,
+  "q": "Em ℤ × (ℤ ∖ {0}), defina (x<sub>1</sub>, y<sub>1</sub>) ∼ (x<sub>2</sub>, y<sub>2</sub>) ⟺ x<sub>1</sub>y<sub>2</sub> = x<sub>2</sub>y<sub>1</sub>. Essa relação é de equivalência?",
+  "o": [
+   "Sim.",
+   "Não: falha a transitiva.",
+   "Não: falha a reflexiva.",
+   "Não: falha a simétrica."
+  ],
+  "e": "Reflexiva: xy = xy. Simétrica: basta ler a igualdade ao contrário. Transitiva: de x<sub>1</sub>y<sub>2</sub> = x<sub>2</sub>y<sub>1</sub> e x<sub>2</sub>y<sub>3</sub> = x<sub>3</sub>y<sub>2</sub> obtemos y<sub>2</sub>(x<sub>1</sub>y<sub>3</sub>) = y<sub>2</sub>(x<sub>3</sub>y<sub>1</sub>), e como y<sub>2</sub> ≠ 0 podemos cancelar. É aqui que se usa que a segunda coordenada não é zero."
+ },
+ {
   "t": 1,
   "q": "Seja ∼ uma relação de equivalência em A e a, b ∈ A. O que se pode afirmar sobre as classes <span style=\"text-decoration:overline\">a</span> e <span style=\"text-decoration:overline\">b</span>?",
   "o": [
@@ -260,6 +293,61 @@ var BANCO = [
   "e": "<span style=\"text-decoration:overline\">a</span> = {b ∈ A : a ∼ b}, e a ∼ a pela reflexividade."
  },
  {
+  "t": 1,
+  "q": "Sejam A e B conjuntos não vazios. Uma relação de A em B é:",
+  "o": [
+   "um subconjunto não vazio de A × B.",
+   "uma função de A em B.",
+   "um elemento de A × B.",
+   "um subconjunto de A ∪ B."
+  ],
+  "e": "Por definição, uma relação é um subconjunto não vazio ℛ ⊆ A × B, e a ℛ b significa (a, b) ∈ ℛ. Toda função define uma relação, mas uma relação não precisa ser função: em x² + y² = 25, o 3 se relaciona com 4 e com −4."
+ },
+ {
+  "t": 1,
+  "q": "Para provar que uma relação ∼ em A é transitiva, é preciso:",
+  "o": [
+   "supor a ∼ b e b ∼ c, com a, b, c quaisquer, e concluir que a ∼ c.",
+   "verificar que a ∼ c para três elementos particulares a, b, c.",
+   "supor a ∼ c e concluir que a ∼ b e b ∼ c.",
+   "mostrar que a ∼ b implica b ∼ a."
+  ],
+  "e": "A propriedade deve valer para todos os elementos, então a prova começa com a, b, c quaisquer satisfazendo a hipótese. Testar exemplos não prova nada; e “a ∼ b implica b ∼ a” é a simetria."
+ },
+ {
+  "t": 1,
+  "q": "Qual condição NÃO faz parte da definição de partição 𝒫 de um conjunto A?",
+  "o": [
+   "Todos os blocos têm o mesmo número de elementos.",
+   "Nenhum bloco é vazio.",
+   "Blocos distintos são disjuntos.",
+   "A união dos blocos é A."
+  ],
+  "e": "Uma partição exige blocos não vazios, disjuntos dois a dois, cuja união é A. Os blocos podem ter tamanhos diferentes: {{0}, ℤ ∖ {0}} é uma partição de ℤ."
+ },
+ {
+  "t": 1,
+  "q": "Seja 𝒫 uma partição de A e defina a ∼ b quando a e b estão no mesmo bloco de 𝒫. Então:",
+  "o": [
+   "∼ é uma relação de equivalência e A/∼ = 𝒫.",
+   "∼ é de equivalência, mas A/∼ pode ser diferente de 𝒫.",
+   "∼ é reflexiva e simétrica, mas pode não ser transitiva.",
+   "∼ só é de equivalência se os blocos têm o mesmo número de elementos."
+  ],
+  "e": "Cada a está em algum bloco (reflexiva); a definição é simétrica; e se a, b estão no bloco B<sub>1</sub> e b, c no bloco B<sub>2</sub>, então b ∈ B<sub>1</sub> ∩ B<sub>2</sub>, logo B<sub>1</sub> = B<sub>2</sub> (transitiva). A classe de a é o bloco que contém a."
+ },
+ {
+  "t": 1,
+  "q": "Seja ∼ uma relação de equivalência em A. A projeção canônica π: A → A/∼ é definida por:",
+  "o": [
+   "π(a) = <span style=\"text-decoration:overline\">a</span>",
+   "π(<span style=\"text-decoration:overline\">a</span>) = a",
+   "π(a) = a",
+   "π(a) = A ∖ <span style=\"text-decoration:overline\">a</span>"
+  ],
+  "e": "π leva cada elemento na sua classe. Pela proposição das classes, π(a) = π(b) ⟺ <span style=\"text-decoration:overline\">a</span> = <span style=\"text-decoration:overline\">b</span> ⟺ a ∼ b. A regra “π(<span style=\"text-decoration:overline\">a</span>) = a” nem define uma função, pois uma classe tem vários representantes."
+ },
+ {
   "t": 2,
   "q": "Na congruência módulo 5, qual é a classe de equivalência de 3?",
   "o": [
@@ -313,6 +401,61 @@ var BANCO = [
    "a nenhuma"
   ],
   "e": "−1 − 2 = −3 é múltiplo de 3, então −1 ∈ <span style=\"text-decoration:overline\">2</span> = {…, −4, −1, 2, 5, …}."
+ },
+ {
+  "t": 2,
+  "q": "Em ℤ, defina x ∼ y ⟺ x ≡ y (mod 9). Quantos elementos tem o conjunto quociente ℤ/∼?",
+  "o": [
+   "9",
+   "8",
+   "10",
+   "Infinitos"
+  ],
+  "e": "As classes são <span style=\"text-decoration:overline\">0</span>, <span style=\"text-decoration:overline\">1</span>, …, <span style=\"text-decoration:overline\">8</span>, uma para cada resto possível na divisão por 9. Cada classe é infinita, mas o conjunto quociente tem só 9 elementos."
+ },
+ {
+  "t": 2,
+  "q": "Em ℤ, defina n ∼ m ⟺ 5 | n² − m². Quantos elementos tem ℤ/∼?",
+  "o": [
+   "3",
+   "5",
+   "2",
+   "4"
+  ],
+  "e": "Módulo 5, os quadrados de 0, 1, 2, 3, 4 são 0, 1, 4, 4, 1. Assim n ∼ m quando n² e m² têm o mesmo resto, e as classes são: n ≡ 0, n ≡ ±1 e n ≡ ±2 (mod 5)."
+ },
+ {
+  "t": 2,
+  "q": "No plano, defina P<sub>1</sub> ∼ P<sub>2</sub> ⟺ d(P<sub>1</sub>, O) = d(P<sub>2</sub>, O), em que O é a origem. Para P ≠ O, a classe de equivalência de P é:",
+  "o": [
+   "a circunferência de centro O que passa por P",
+   "a reta que passa por O e por P",
+   "o disco de centro O e raio d(P, O)",
+   "o conjunto {P}"
+  ],
+  "e": "Q está na classe de P quando d(Q, O) = d(P, O), isto é, quando Q está na circunferência de centro O e raio d(P, O). A classe de O é {O}."
+ },
+ {
+  "t": 2,
+  "q": "Em ℤ × (ℤ ∖ {0}), com (x<sub>1</sub>, y<sub>1</sub>) ∼ (x<sub>2</sub>, y<sub>2</sub>) ⟺ x<sub>1</sub>y<sub>2</sub> = x<sub>2</sub>y<sub>1</sub>, qual par está na classe de (2, 3)?",
+  "o": [
+   "(−4, −6)",
+   "(3, 2)",
+   "(4, 5)",
+   "(2, −3)"
+  ],
+  "e": "2 · (−6) = −12 = 3 · (−4). Já (3, 2) dá 2 · 2 ≠ 3 · 3, (4, 5) dá 2 · 5 ≠ 3 · 4 e (2, −3) dá 2 · (−3) ≠ 3 · 2. A classe de (x, y) reúne os pares que representam a fração x/y."
+ },
+ {
+  "t": 2,
+  "q": "Em ℤ<sub>5</sub>, qual das igualdades é FALSA?",
+  "o": [
+   "<span style=\"text-decoration:overline\">−3</span> = <span style=\"text-decoration:overline\">3</span>",
+   "<span style=\"text-decoration:overline\">7</span> = <span style=\"text-decoration:overline\">2</span>",
+   "<span style=\"text-decoration:overline\">−1</span> = <span style=\"text-decoration:overline\">4</span>",
+   "<span style=\"text-decoration:overline\">10</span> = <span style=\"text-decoration:overline\">0</span>"
+  ],
+  "e": "−3 − 3 = −6 não é múltiplo de 5, então <span style=\"text-decoration:overline\">−3</span> ≠ <span style=\"text-decoration:overline\">3</span>; na verdade <span style=\"text-decoration:overline\">−3</span> = <span style=\"text-decoration:overline\">2</span>. As outras valem porque 7 − 2 = 5, −1 − 4 = −5 e 10 − 0 = 10 são múltiplos de 5."
  }
 ];
 </script>

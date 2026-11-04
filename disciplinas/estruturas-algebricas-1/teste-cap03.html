@@ -103,7 +103,7 @@ a.btn { text-decoration: none; }
 <main id="app" aria-live="polite"></main>
 <script>
 var INFO = {"titulo": "Teste de revisão – Capítulo 3", "capitulo": "Capítulo 3: Subgrupos e grupos cíclicos", "curto": "Capítulo 3"};
-var TEMAS = [{"nome": "Subgrupos", "n": 2}, {"nome": "Ordem de elementos", "n": 3}, {"nome": "Grupos cíclicos e geradores", "n": 3}];
+var TEMAS = [{"nome": "Subgrupos", "n": 2}, {"nome": "Ordem de elementos", "n": 4}, {"nome": "Grupos cíclicos e geradores", "n": 4}];
 var BANCO = [
  {
   "t": 0,
@@ -159,6 +159,61 @@ var BANCO = [
    "{<span style=\"text-decoration:overline\">0</span>, <span style=\"text-decoration:overline\">5</span>}"
   ],
   "e": "{<span style=\"text-decoration:overline\">0</span>, <span style=\"text-decoration:overline\">4</span>, <span style=\"text-decoration:overline\">8</span>} = ⟨<span style=\"text-decoration:overline\">4</span>⟩. Os outros não são fechados ou não contêm <span style=\"text-decoration:overline\">0</span>: <span style=\"text-decoration:overline\">1</span> + <span style=\"text-decoration:overline\">2</span> = <span style=\"text-decoration:overline\">3</span>, <span style=\"text-decoration:overline\">5</span> + <span style=\"text-decoration:overline\">5</span> = <span style=\"text-decoration:overline\">10</span>."
+ },
+ {
+  "t": 0,
+  "q": "O conjunto H = {<span style=\"text-decoration:overline\">0</span>, <span style=\"text-decoration:overline\">3</span>, <span style=\"text-decoration:overline\">6</span>, …, <span style=\"text-decoration:overline\">21</span>} dos múltiplos de <span style=\"text-decoration:overline\">3</span> é subgrupo de ℤ<sub>24</sub>?",
+  "o": [
+   "Sim: H = ⟨<span style=\"text-decoration:overline\">3</span>⟩, que tem 8 elementos.",
+   "Não: <span style=\"text-decoration:overline\">21</span> + <span style=\"text-decoration:overline\">6</span> = <span style=\"text-decoration:overline\">27</span> não está em H.",
+   "Não: <span style=\"text-decoration:overline\">3</span> não tem oposto em H.",
+   "Não: um subgrupo de ℤ<sub>24</sub> deve conter <span style=\"text-decoration:overline\">1</span>."
+  ],
+  "e": "H é o subgrupo cíclico gerado por <span style=\"text-decoration:overline\">3</span>. Em ℤ<sub>24</sub>, <span style=\"text-decoration:overline\">27</span> = <span style=\"text-decoration:overline\">3</span> ∈ H, e o oposto de <span style=\"text-decoration:overline\">3</span> é <span style=\"text-decoration:overline\">21</span> ∈ H. O neutro de ℤ<sub>24</sub> é <span style=\"text-decoration:overline\">0</span>, não <span style=\"text-decoration:overline\">1</span>."
+ },
+ {
+  "t": 0,
+  "q": "Sejam A um conjunto e x ∈ A. O conjunto H(x) = {f ∈ S<sub>A</sub> : f(x) = x} é:",
+  "o": [
+   "um subgrupo de S<sub>A</sub>.",
+   "um subgrupo de S<sub>A</sub> só quando A é finito.",
+   "um subconjunto que não contém a identidade.",
+   "um subconjunto que não é fechado para a composição."
+  ],
+  "e": "I(x) = x, então I ∈ H(x). Se f, g ∈ H(x), então g<sup>-1</sup>(x) = x e (f ∘ g<sup>-1</sup>)(x) = f(x) = x. Pelo critério de subgrupo, H(x) ≤ S<sub>A</sub>, qualquer que seja A."
+ },
+ {
+  "t": 0,
+  "q": "Seja H um subconjunto finito e não vazio de um grupo G, fechado para o produto. O que se pode concluir?",
+  "o": [
+   "H é subgrupo de G, sem precisar verificar os inversos.",
+   "H pode não conter o neutro 1.",
+   "H é subgrupo de G só quando G é abeliano.",
+   "H só é subgrupo se verificarmos à parte que a<sup>-1</sup> ∈ H para todo a ∈ H."
+  ],
+  "e": "Se a ∈ H, as potências a, a², a³, … estão em H, que é finito; então a<sup>i</sup> = a<sup>j</sup> com i &lt; j, e a<sup>j−i</sup> = 1. Daí 1 ∈ H e a<sup>-1</sup> = a<sup>j−i−1</sup> ∈ H. Para H infinito isso falha: ℕ ∖ {0} é fechado para a soma em ℤ e não é subgrupo."
+ },
+ {
+  "t": 0,
+  "q": "O conjunto H = {a + b√2 : a, b ∈ ℚ, a + b√2 ≠ 0} é subgrupo de (ℝ*, ·)?",
+  "o": [
+   "Sim: H é fechado para o produto e (a + b√2)<sup>-1</sup> = (a − b√2)/(a² − 2b²) está em H.",
+   "Não: o inverso de 1 + √2 não está em H.",
+   "Não: o produto de dois elementos de H pode ser 0.",
+   "Não: H não contém o neutro 1."
+  ],
+  "e": "Como √2 é irracional, a² − 2b² ≠ 0 quando a + b√2 ≠ 0, e o inverso tem coeficientes racionais. Por exemplo, (1 + √2)<sup>-1</sup> = −1 + √2 ∈ H. O produto de reais não nulos é não nulo, e 1 = 1 + 0√2 ∈ H."
+ },
+ {
+  "t": 0,
+  "q": "Qual dos conjuntos é subgrupo de (ℝ*, ·)?",
+  "o": [
+   "ℝ₊* = {x ∈ ℝ : x &gt; 0}",
+   "{x ∈ ℝ : x &lt; 0}",
+   "ℤ ∖ {0}",
+   "{1, 2}"
+  ],
+  "e": "O produto de positivos é positivo e o inverso de um positivo é positivo. Já (−1)(−1) = 1 não é negativo; 2 não tem inverso em ℤ ∖ {0}; e 2 · 2 = 4 ∉ {1, 2}."
  },
  {
   "t": 1,
@@ -238,6 +293,61 @@ var BANCO = [
   "e": "n·1 = n ≠ 0 para todo n ≥ 1, então não existe n positivo com n·1 = 0."
  },
  {
+  "t": 1,
+  "q": "Seja a um elemento de ordem 100 em um grupo G. Qual é a ordem de a<sup>98</sup>?",
+  "o": [
+   "50",
+   "2",
+   "98",
+   "100"
+  ],
+  "e": "|a<sup>k</sup>| = n/mdc(n, k). Aqui mdc(100, 98) = 2, então |a<sup>98</sup>| = 100/2 = 50. O número 2 é o mdc, não a ordem."
+ },
+ {
+  "t": 1,
+  "q": "Qual é a ordem de <span style=\"text-decoration:overline\">3</span> no grupo ℤ<sub>20</sub><sup>*</sup>?",
+  "o": [
+   "4",
+   "8",
+   "20",
+   "2"
+  ],
+  "e": "<span style=\"text-decoration:overline\">3</span>² = <span style=\"text-decoration:overline\">9</span>, <span style=\"text-decoration:overline\">3</span>³ = <span style=\"text-decoration:overline\">27</span> = <span style=\"text-decoration:overline\">7</span> e <span style=\"text-decoration:overline\">3</span>⁴ = <span style=\"text-decoration:overline\">21</span> = <span style=\"text-decoration:overline\">1</span>. O número 8 = φ(20) é a ordem do grupo, não a do elemento."
+ },
+ {
+  "t": 1,
+  "q": "Qual é a ordem de <span style=\"text-decoration:overline\">11</span> no grupo ℤ<sub>12</sub><sup>*</sup>?",
+  "o": [
+   "2",
+   "11",
+   "12",
+   "4"
+  ],
+  "e": "<span style=\"text-decoration:overline\">11</span>² = <span style=\"text-decoration:overline\">121</span> = <span style=\"text-decoration:overline\">1</span>, pois 121 = 10 · 12 + 1, e <span style=\"text-decoration:overline\">11</span> ≠ <span style=\"text-decoration:overline\">1</span>. A ordem não é o representante 11."
+ },
+ {
+  "t": 1,
+  "q": "Por que <span style=\"text-decoration:overline\">2</span> e <span style=\"text-decoration:overline\">8</span> têm a mesma ordem em ℤ<sub>15</sub><sup>*</sup>?",
+  "o": [
+   "Porque <span style=\"text-decoration:overline\">8</span> = <span style=\"text-decoration:overline\">2</span>³ e mdc(|<span style=\"text-decoration:overline\">2</span>|, 3) = mdc(4, 3) = 1.",
+   "Porque <span style=\"text-decoration:overline\">8</span> = <span style=\"text-decoration:overline\">2</span> · <span style=\"text-decoration:overline\">4</span>.",
+   "Porque 2 e 8 são pares.",
+   "Porque 2 divide 8."
+  ],
+  "e": "Em ℤ<sub>15</sub><sup>*</sup>, as potências de <span style=\"text-decoration:overline\">2</span> são <span style=\"text-decoration:overline\">2</span>, <span style=\"text-decoration:overline\">4</span>, <span style=\"text-decoration:overline\">8</span>, <span style=\"text-decoration:overline\">1</span>, então |<span style=\"text-decoration:overline\">2</span>| = 4 e |<span style=\"text-decoration:overline\">2</span>³| = 4/mdc(4, 3) = 4. Outra forma: <span style=\"text-decoration:overline\">2</span> · <span style=\"text-decoration:overline\">8</span> = <span style=\"text-decoration:overline\">16</span> = <span style=\"text-decoration:overline\">1</span>, logo <span style=\"text-decoration:overline\">8</span> = <span style=\"text-decoration:overline\">2</span><sup>-1</sup>, e um elemento e seu inverso têm a mesma ordem."
+ },
+ {
+  "t": 1,
+  "q": "Seja a ≠ 1 um elemento de um grupo G. Então |a| = 2 se, e somente se:",
+  "o": [
+   "a = a<sup>-1</sup>",
+   "a² = a",
+   "a<sup>-1</sup> = 1",
+   "a⁴ = 1"
+  ],
+  "e": "|a| = 2 significa a² = 1 com a ≠ 1, e a² = 1 ⟺ a = a<sup>-1</sup>. A condição a² = a daria a = 1; e a⁴ = 1 também vale para elementos de ordem 4."
+ },
+ {
   "t": 2,
   "q": "Quais são os geradores de ℤ<sub>8</sub>?",
   "o": [
@@ -313,6 +423,61 @@ var BANCO = [
    "S<sub>3</sub>"
   ],
   "e": "ℤ<sub>10</sub><sup>*</sup> = ⟨<span style=\"text-decoration:overline\">3</span>⟩. Em ℤ<sub>8</sub><sup>*</sup> e ℤ<sub>12</sub><sup>*</sup> todo elemento tem quadrado <span style=\"text-decoration:overline\">1</span>; S<sub>3</sub> não é abeliano."
+ },
+ {
+  "t": 2,
+  "q": "Quais são os elementos de ordem 8 em ℤ<sub>24</sub>?",
+  "o": [
+   "<span style=\"text-decoration:overline\">3</span>, <span style=\"text-decoration:overline\">9</span>, <span style=\"text-decoration:overline\">15</span> e <span style=\"text-decoration:overline\">21</span>",
+   "<span style=\"text-decoration:overline\">8</span> e <span style=\"text-decoration:overline\">16</span>",
+   "Os múltiplos de <span style=\"text-decoration:overline\">3</span>: <span style=\"text-decoration:overline\">3</span>, <span style=\"text-decoration:overline\">6</span>, …, <span style=\"text-decoration:overline\">21</span>",
+   "<span style=\"text-decoration:overline\">1</span>, <span style=\"text-decoration:overline\">3</span>, <span style=\"text-decoration:overline\">5</span> e <span style=\"text-decoration:overline\">7</span>"
+  ],
+  "e": "|<span style=\"text-decoration:overline\">k</span>| = 24/mdc(24, k) = 8 ⟺ mdc(24, k) = 3. Os elementos de ordem 8 são os φ(8) = 4 geradores do único subgrupo de ordem 8, ⟨<span style=\"text-decoration:overline\">3</span>⟩. Já <span style=\"text-decoration:overline\">8</span> tem ordem 3."
+ },
+ {
+  "t": 2,
+  "q": "Seja G = ⟨a⟩ um grupo cíclico de ordem 150. Qual é o único subgrupo de G de ordem 25?",
+  "o": [
+   "⟨a⁶⟩",
+   "⟨a<sup>25</sup>⟩",
+   "⟨a<sup>125</sup>⟩",
+   "⟨a⁵⟩"
+  ],
+  "e": "O subgrupo de ordem d é ⟨a<sup>n/d</sup>⟩, e 150/25 = 6. Já ⟨a<sup>25</sup>⟩ tem ordem 150/25 = 6 e ⟨a⁵⟩ tem ordem 30."
+ },
+ {
+  "t": 2,
+  "q": "Quantos subgrupos tem o grupo ℤ<sub>12</sub>?",
+  "o": [
+   "6",
+   "4",
+   "12",
+   "5"
+  ],
+  "e": "Há exatamente um subgrupo para cada divisor positivo de 12: 1, 2, 3, 4, 6, 12. Eles são ⟨<span style=\"text-decoration:overline\">0</span>⟩, ⟨<span style=\"text-decoration:overline\">6</span>⟩, ⟨<span style=\"text-decoration:overline\">4</span>⟩, ⟨<span style=\"text-decoration:overline\">3</span>⟩, ⟨<span style=\"text-decoration:overline\">2</span>⟩ e ℤ<sub>12</sub>. O número 4 = φ(12) conta os geradores."
+ },
+ {
+  "t": 2,
+  "q": "Seja G um grupo cíclico de ordem 20 e a ∈ G com a<sup>10</sup> ≠ 1 e a⁴ ≠ 1. O que se pode concluir?",
+  "o": [
+   "a é um gerador de G.",
+   "a tem ordem 5.",
+   "a tem ordem 2.",
+   "Nada se pode concluir sobre a ordem de a."
+  ],
+  "e": "|a| divide 20: pode ser 1, 2, 4, 5, 10 ou 20. Como a<sup>10</sup> ≠ 1, |a| não divide 10 (exclui 1, 2, 5, 10); como a⁴ ≠ 1, |a| não divide 4 (exclui 4). Sobra |a| = 20."
+ },
+ {
+  "t": 2,
+  "q": "Quantos elementos de ordem 4 tem o grupo ℤ<sub>12</sub>?",
+  "o": [
+   "2",
+   "4",
+   "3",
+   "1"
+  ],
+  "e": "Os elementos de ordem 4 são os geradores do único subgrupo de ordem 4, ⟨<span style=\"text-decoration:overline\">3</span>⟩ = {<span style=\"text-decoration:overline\">0</span>, <span style=\"text-decoration:overline\">3</span>, <span style=\"text-decoration:overline\">6</span>, <span style=\"text-decoration:overline\">9</span>}: são <span style=\"text-decoration:overline\">3</span> e <span style=\"text-decoration:overline\">9</span>, isto é, φ(4) = 2 elementos."
  }
 ];
 </script>

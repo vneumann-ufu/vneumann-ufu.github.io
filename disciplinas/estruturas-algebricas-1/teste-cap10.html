@@ -103,7 +103,7 @@ a.btn { text-decoration: none; }
 <main id="app" aria-live="polite"></main>
 <script>
 var INFO = {"titulo": "Teste de revisão – Capítulo 10", "capitulo": "Capítulo 10: Subanéis, subcorpos e homomorfismos de anéis", "curto": "Capítulo 10"};
-var TEMAS = [{"nome": "Subanéis e subcorpos", "n": 4}, {"nome": "Homomorfismos de anéis", "n": 4}];
+var TEMAS = [{"nome": "Subanéis e subcorpos", "n": 5}, {"nome": "Homomorfismos de anéis", "n": 5}];
 var BANCO = [
  {
   "t": 0,
@@ -205,6 +205,83 @@ var BANCO = [
   "e": "e·e = e = e·1 e, cancelando e ≠ 0 no domínio A, e = 1. Em ℤ<sub>6</sub> (que não é domínio) isso falha: {<span style=\"text-decoration:overline\">0</span>, <span style=\"text-decoration:overline\">2</span>, <span style=\"text-decoration:overline\">4</span>} tem unidade <span style=\"text-decoration:overline\">4</span>."
  },
  {
+  "t": 0,
+  "q": "Seja B = {(a, b, c) ∈ ℤ ⊕ ℤ ⊕ ℤ : a + b = c}. B é subanel de ℤ ⊕ ℤ ⊕ ℤ?",
+  "o": [
+   "Não: (1, 0, 1)(0, 1, 1) = (0, 0, 1) não está em B.",
+   "Sim, é subanel comutativo com unidade.",
+   "Sim, pois é subgrupo aditivo.",
+   "Não: B não é subgrupo aditivo."
+  ],
+  "e": "B é subgrupo aditivo (a condição a + b = c se preserva na diferença), mas não é fechado para o produto. Ser subgrupo aditivo é só metade do critério de subanel."
+ },
+ {
+  "t": 0,
+  "q": "Em M<sub>2</sub>(ℝ), o conjunto das matrizes triangulares superiores, de linhas (a, b) e (0, c), é:",
+  "o": [
+   "um subanel com unidade, não comutativo.",
+   "um subanel comutativo.",
+   "não é subanel: o produto não é triangular superior.",
+   "um subanel sem unidade."
+  ],
+  "e": "O produto de triangulares superiores é triangular superior, e a identidade está no conjunto. Mas, com E de linhas (1, 1), (0, 0) e F de linhas (0, 0), (0, 1), EF tem linhas (0, 1), (0, 0) e FE = 0."
+ },
+ {
+  "t": 0,
+  "q": "O conjunto {a + b∛2 : a, b ∈ ℚ} é subcorpo de ℝ?",
+  "o": [
+   "Não: (∛2)² = ∛4 não é da forma a + b∛2.",
+   "Sim, como ℚ[√2].",
+   "Sim, pois contém 1.",
+   "Não, pois não contém 0."
+  ],
+  "e": "O conjunto nem é subanel, pois não é fechado para o produto. A diferença com ℚ[√2] é que (√2)² = 2 é racional, enquanto (∛2)² não é combinação de 1 e ∛2 com coeficientes racionais."
+ },
+ {
+  "t": 0,
+  "q": "Seja p primo e ℚ<sub>(p)</sub> = {a/b ∈ ℚ : a, b ∈ ℤ, p ∤ b}. Então ℚ<sub>(p)</sub> é:",
+  "o": [
+   "um subanel de ℚ que é domínio de integridade, mas não é corpo.",
+   "um subcorpo de ℚ.",
+   "não é subanel: a soma pode ter denominador múltiplo de p.",
+   "igual a ℤ."
+  ],
+  "e": "a/b ± c/d = (ad ± bc)/(bd) e (a/b)(c/d) = ac/(bd), com p ∤ bd porque p é primo. Contém 1 e está em ℚ, logo é domínio. Mas p ∈ ℚ<sub>(p)</sub> e 1/p ∉ ℚ<sub>(p)</sub>."
+ },
+ {
+  "t": 0,
+  "q": "Verdadeiro ou falso: se B é subanel de um anel com unidade A, então B tem unidade.",
+  "o": [
+   "Falso: 2ℤ é subanel de ℤ e não tem unidade.",
+   "Verdadeiro: a unidade de B é a de A.",
+   "Verdadeiro, mas a unidade de B pode ser diferente da de A.",
+   "Falso, mas só quando A não é comutativo."
+  ],
+  "e": "Um subanel pode não ter unidade (2ℤ) ou ter outra unidade: {<span style=\"text-decoration:overline\">0</span>, <span style=\"text-decoration:overline\">2</span>, <span style=\"text-decoration:overline\">4</span>} tem unidade <span style=\"text-decoration:overline\">4</span> em ℤ<sub>6</sub>."
+ },
+ {
+  "t": 0,
+  "q": "Verdadeiro ou falso: se B é um subanel comutativo de A, então A é comutativo.",
+  "o": [
+   "Falso: as matrizes diagonais formam um subanel comutativo de M<sub>2</sub>(ℝ), que não é comutativo.",
+   "Verdadeiro: B “herda” a comutatividade de A e vice-versa.",
+   "Verdadeiro, se B tiver unidade.",
+   "Falso, mas só para anéis finitos."
+  ],
+  "e": "A recíproca é que vale: se A é comutativo, todo subanel de A é comutativo. As diagonais têm a unidade I<sub>2</sub>, então ter unidade não salva a afirmação."
+ },
+ {
+  "t": 0,
+  "q": "O conjunto ℚ[√3] = {a + b√3 : a, b ∈ ℚ} é subcorpo de ℝ?",
+  "o": [
+   "Sim: se a + b√3 ≠ 0, então (a + b√3)<sup>-1</sup> = (a − b√3)/(a² − 3b²) ∈ ℚ[√3].",
+   "Não: o inverso de √3 não está em ℚ[√3].",
+   "Não: a² − 3b² pode ser 0 com a, b racionais não ambos nulos.",
+   "Sim, mas só porque contém ℚ."
+  ],
+  "e": "Como √3 é irracional, a² − 3b² ≠ 0 quando (a, b) ≠ (0, 0). Por exemplo, 1/√3 = (1/3)√3 ∈ ℚ[√3]. Além disso, 1 ∈ ℚ[√3] e o conjunto é fechado para diferenças."
+ },
+ {
   "t": 1,
   "q": "Qual das funções f: ℤ → ℤ é um homomorfismo de anéis?",
   "o": [
@@ -302,6 +379,83 @@ var BANCO = [
    "{0}"
   ],
   "e": "f(n) = <span style=\"text-decoration:overline\">0</span> ⟺ 12 | 4n ⟺ 3 | n."
+ },
+ {
+  "t": 1,
+  "q": "A função f: ℤ → ℤ, f(x) = 2x, é um homomorfismo de anéis?",
+  "o": [
+   "Não: f(1 · 1) = 2, mas f(1)f(1) = 4.",
+   "Sim, pois f(x + y) = f(x) + f(y).",
+   "Sim, com núcleo {0}.",
+   "Não, pois não é sobrejetora."
+  ],
+  "e": "f preserva a soma, mas não o produto. Um homomorfismo de anéis precisa preservar as duas operações; ser sobrejetor não faz parte da definição."
+ },
+ {
+  "t": 1,
+  "q": "A função f: ℤ ⊕ ℤ → ℤ ⊕ ℤ, f(x, y) = (y, x), é:",
+  "o": [
+   "um isomorfismo de anéis.",
+   "uma função que não preserva o produto.",
+   "um homomorfismo com núcleo ℤ ⊕ {0}.",
+   "não é homomorfismo, pois troca as coordenadas."
+  ],
+  "e": "f((x, y) + (x', y')) = (y + y', x + x') e f((x, y)(x', y')) = (yy', xx') = (y, x)(y', x'). Além disso f ∘ f = I, então f é bijetora."
+ },
+ {
+  "t": 1,
+  "q": "A função f: ℤ → ℤ ⊕ ℤ, f(x) = (0, x), é:",
+  "o": [
+   "um homomorfismo injetor de anéis que não leva 1 na unidade (1, 1).",
+   "não é homomorfismo, pois f(1) ≠ (1, 1).",
+   "um isomorfismo de anéis.",
+   "não é homomorfismo, pois (0, x)(0, y) ≠ (0, xy)."
+  ],
+  "e": "(0, x) + (0, y) = (0, x + y) e (0, x)(0, y) = (0, xy). O núcleo é {0}. A definição de homomorfismo de anéis das notas não exige f(1) = 1."
+ },
+ {
+  "t": 1,
+  "q": "A função f: ℤ → ℤ<sub>24</sub>, f(n) = <span style=\"text-decoration:overline\">5n</span>, é um homomorfismo de anéis?",
+  "o": [
+   "Não: f(1) = <span style=\"text-decoration:overline\">5</span>, mas f(1)f(1) = <span style=\"text-decoration:overline\">25</span> = <span style=\"text-decoration:overline\">1</span> ≠ <span style=\"text-decoration:overline\">5</span>.",
+   "Sim, com núcleo 24ℤ.",
+   "Sim, pois <span style=\"text-decoration:overline\">5n</span> + <span style=\"text-decoration:overline\">5m</span> = <span style=\"text-decoration:overline\">5(n + m)</span>.",
+   "Não, pois 5 não divide 24."
+  ],
+  "e": "f preserva a soma. Para preservar o produto seria preciso <span style=\"text-decoration:overline\">5</span>² = <span style=\"text-decoration:overline\">5</span> em ℤ<sub>24</sub>, isto é, 24 | 20, o que é falso. Compare com f: ℤ → ℤ<sub>12</sub>, f(n) = <span style=\"text-decoration:overline\">4n</span>: aí <span style=\"text-decoration:overline\">4</span>² = <span style=\"text-decoration:overline\">16</span> = <span style=\"text-decoration:overline\">4</span>."
+ },
+ {
+  "t": 1,
+  "q": "Por que os corpos ℚ[√2] e ℚ[√3] não são isomorfos?",
+  "o": [
+   "Um isomorfismo f teria f(√2)² = f(2) = 2, mas nenhum elemento de ℚ[√3] tem quadrado 2.",
+   "Porque têm cardinalidades diferentes.",
+   "Porque um deles é corpo e o outro não.",
+   "Porque √2 e √3 são números irracionais diferentes."
+  ],
+  "e": "f(1) = 1, então f(2) = f(1 + 1) = 2. Se (a + b√3)² = a² + 3b² + 2ab√3 = 2, então ab = 0, e nem a² = 2 nem 3b² = 2 têm solução racional. Os dois corpos são infinitos enumeráveis."
+ },
+ {
+  "t": 1,
+  "q": "A função f: ℂ → M<sub>2</sub>(ℝ), f(a + bi) = matriz de linhas (a, −b) e (b, a), é:",
+  "o": [
+   "um homomorfismo injetor de anéis.",
+   "um isomorfismo de anéis.",
+   "não é homomorfismo, pois M<sub>2</sub>(ℝ) não é comutativo.",
+   "um homomorfismo com núcleo ℝ."
+  ],
+  "e": "Soma e produto se correspondem (confira com (a + bi)(c + di) = (ac − bd) + (ad + bc)i), e f(z) = 0 só para z = 0. Não é sobrejetor: a matriz de linhas (1, 0) e (0, 2) não está na imagem."
+ },
+ {
+  "t": 1,
+  "q": "Sejam A um anel com unidade, B um domínio de integridade e ψ: A → B um homomorfismo de anéis com ψ ≠ 0. Quanto vale ψ(1<sub>A</sub>)?",
+  "o": [
+   "1<sub>B</sub>",
+   "0<sub>B</sub>",
+   "pode ser qualquer elemento de B",
+   "−1<sub>B</sub>"
+  ],
+  "e": "ψ(1<sub>A</sub>)ψ(1<sub>A</sub>) = ψ(1<sub>A</sub>) = ψ(1<sub>A</sub>)1<sub>B</sub>. Se ψ(1<sub>A</sub>) = 0, então ψ(a) = ψ(a)ψ(1<sub>A</sub>) = 0 para todo a. Logo ψ(1<sub>A</sub>) ≠ 0 e, cancelando no domínio B, ψ(1<sub>A</sub>) = 1<sub>B</sub>."
  }
 ];
 </script>

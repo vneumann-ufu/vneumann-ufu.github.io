@@ -103,7 +103,7 @@ a.btn { text-decoration: none; }
 <main id="app" aria-live="polite"></main>
 <script>
 var INFO = {"titulo": "Teste de revisão – Capítulo 2", "capitulo": "Capítulo 2: Grupos", "curto": "Capítulo 2"};
-var TEMAS = [{"nome": "Definição e exemplos", "n": 2}, {"nome": "Propriedades básicas", "n": 2}, {"nome": "Tábua de Cayley e grupos pequenos", "n": 2}, {"nome": "Os grupos ℤ<sub>n</sub> e ℤ<sub>n</sub><sup>*</sup>", "n": 2}];
+var TEMAS = [{"nome": "Definição e exemplos", "n": 3}, {"nome": "Propriedades básicas", "n": 2}, {"nome": "Tábua de Cayley e grupos pequenos", "n": 2}, {"nome": "Os grupos ℤ<sub>n</sub> e ℤ<sub>n</sub><sup>*</sup>", "n": 3}];
 var BANCO = [
  {
   "t": 0,
@@ -161,6 +161,61 @@ var BANCO = [
   "e": "Com a, b, c distintos, f = (a b c) e g = (a b) satisfazem f∘g(a) = c ≠ a = g∘f(a). Se A é infinito, S<sub>A</sub> é infinito."
  },
  {
+  "t": 0,
+  "q": "Por que (ℕ, +) não é um grupo?",
+  "o": [
+   "Porque 1 não tem oposto em ℕ.",
+   "Porque a adição não é associativa em ℕ.",
+   "Porque a soma de dois naturais pode não ser natural.",
+   "Porque ℕ é infinito."
+  ],
+  "e": "A adição é associativa e a soma de naturais é natural, mas não existe b ∈ ℕ com 1 + b = 0. Ser infinito não impede um conjunto de ser grupo: (ℤ, +) é infinito."
+ },
+ {
+  "t": 0,
+  "q": "Por que o conjunto dos inteiros ímpares, com a adição, não é um grupo?",
+  "o": [
+   "Porque 1 + 1 = 2 não é ímpar (e o neutro 0 também não é ímpar).",
+   "Porque a adição não é associativa nos ímpares.",
+   "Porque o oposto de um ímpar é par.",
+   "Porque a adição de ímpares não é comutativa."
+  ],
+  "e": "A soma de dois ímpares é par, então a adição nem é uma operação no conjunto dos ímpares; além disso 0 não é ímpar. O oposto de um ímpar é ímpar: o oposto de 3 é −3."
+ },
+ {
+  "t": 0,
+  "q": "A subtração em ℤ é uma operação associativa?",
+  "o": [
+   "Não: (1 − 2) − 3 = −4, mas 1 − (2 − 3) = 2.",
+   "Sim, pois a adição é associativa.",
+   "Sim, pois ℤ com a subtração é um grupo.",
+   "Não, apenas porque ela não é comutativa."
+  ],
+  "e": "Um contraexemplo basta. Comutatividade e associatividade são propriedades diferentes: o fato de 1 − 2 ≠ 2 − 1 não mostra, sozinho, que a subtração não é associativa."
+ },
+ {
+  "t": 0,
+  "q": "Qual é o inverso de i no grupo 𝕊¹ = {z ∈ ℂ : |z| = 1}, com a multiplicação?",
+  "o": [
+   "−i",
+   "i",
+   "1",
+   "−1"
+  ],
+  "e": "i · (−i) = −i² = 1. Note que |−i| = 1, então −i ∈ 𝕊¹. Já i · i = −1 e i · (−1) = −i."
+ },
+ {
+  "t": 0,
+  "q": "Em SL(2, ℝ), qual é o inverso da matriz de linhas (3, 2) e (1, 1)?",
+  "o": [
+   "A matriz de linhas (1, −2) e (−1, 3).",
+   "A matriz de linhas (1, 2) e (1, 3).",
+   "A matriz de linhas (−1, 2) e (1, −3).",
+   "A matriz de linhas (1/3, 1/2) e (1, 1)."
+  ],
+  "e": "O determinante é 3 · 1 − 2 · 1 = 1. Para uma matriz 2 × 2 de determinante 1, o inverso troca as entradas da diagonal e muda o sinal das outras duas. Conferindo: a primeira linha do produto é (3 · 1 + 2 · (−1), 3 · (−2) + 2 · 3) = (1, 0). Inverter entrada por entrada não dá o inverso de uma matriz."
+ },
+ {
   "t": 1,
   "q": "Em um grupo G, quanto vale (ab)<sup>-1</sup>?",
   "o": [
@@ -216,6 +271,50 @@ var BANCO = [
   "e": "abab = aabb; cancelando a à esquerda e b à direita, ba = ab."
  },
  {
+  "t": 1,
+  "q": "Sejam a, b elementos de um grupo G. Quanto vale (a⁴b<sup>−2</sup>a)<sup>-1</sup>?",
+  "o": [
+   "a<sup>-1</sup>b²a<sup>−4</sup>",
+   "a<sup>−4</sup>b²a<sup>-1</sup>",
+   "a<sup>−5</sup>b²",
+   "a<sup>-1</sup>b<sup>−2</sup>a<sup>−4</sup>"
+  ],
+  "e": "(xyz)<sup>-1</sup> = z<sup>-1</sup>y<sup>-1</sup>x<sup>-1</sup>: inverte-se cada fator e a ordem. Com x = a⁴, y = b<sup>−2</sup> e z = a, fica a<sup>-1</sup>b²a<sup>−4</sup>. Juntar as potências de a só seria permitido se a e b comutassem."
+ },
+ {
+  "t": 1,
+  "q": "Em um grupo G, qual é a solução da equação ax = b?",
+  "o": [
+   "x = a<sup>-1</sup>b",
+   "x = ba<sup>-1</sup>",
+   "x = ab<sup>-1</sup>",
+   "x = b − a"
+  ],
+  "e": "Multiplicando ax = b à esquerda por a<sup>-1</sup>, obtemos x = a<sup>-1</sup>b. Em um grupo não abeliano, ba<sup>-1</sup> pode ser diferente: ba<sup>-1</sup> é a solução de ya = b."
+ },
+ {
+  "t": 1,
+  "q": "Seja G um grupo com um número par de elementos. O que se pode afirmar?",
+  "o": [
+   "Existe a ∈ G, a ≠ 1, com a² = 1.",
+   "G é abeliano.",
+   "Todo elemento de G satisfaz a² = 1.",
+   "G é cíclico."
+  ],
+  "e": "Os elementos com a ≠ a<sup>-1</sup> aparecem em pares {a, a<sup>-1</sup>}. Tirando o neutro, sobra um número ímpar de elementos, então algum a ≠ 1 satisfaz a = a<sup>-1</sup>, isto é, a² = 1. S<sub>3</sub> mostra que G não precisa ser abeliano nem cíclico."
+ },
+ {
+  "t": 1,
+  "q": "Em notação aditiva, a propriedade (a<sup>m</sup>)<sup>n</sup> = a<sup>mn</sup> se escreve:",
+  "o": [
+   "n(ma) = (nm)a",
+   "(ma)<sup>n</sup> = a<sup>mn</sup>",
+   "m + (n + a) = (m + n) + a",
+   "ma + na = (mn)a"
+  ],
+  "e": "Em notação aditiva, a potência a<sup>m</sup> vira o múltiplo ma. A outra propriedade, a<sup>m</sup>a<sup>n</sup> = a<sup>m+n</sup>, fica ma + na = (m + n)a, e não (mn)a."
+ },
+ {
   "t": 2,
   "q": "Na tábua de Cayley de um grupo finito, o que acontece em cada linha?",
   "o": [
@@ -258,6 +357,50 @@ var BANCO = [
    "isomorfo a ℤ<sub>8</sub><sup>*</sup>"
   ],
   "e": "Se G = {1, a}, os únicos produtos possíveis comutam: 1a = a1 e aa = aa."
+ },
+ {
+  "t": 2,
+  "q": "Seja G = {1, a, b, c} um grupo com neutro 1 tal que ab = c e b² = a. Quanto vale b³?",
+  "o": [
+   "c",
+   "1",
+   "a",
+   "b"
+  ],
+  "e": "b³ = b² · b = ab = c. Como b² = a ≠ 1, b não tem ordem 2; e b³ ≠ 1, então b tem ordem 4 e G = {1, b, b², b³}."
+ },
+ {
+  "t": 2,
+  "q": "Seja G = {1, a, b, c, d} um grupo com neutro 1 tal que a² = b, b² = d e ad = 1. Quanto vale ab?",
+  "o": [
+   "c",
+   "d",
+   "1",
+   "a"
+  ],
+  "e": "ab = a · a² = a³. Temos a⁴ = (a²)² = b² = d e a⁵ = ad = 1, então 1, a, a², a³, a⁴ são os 5 elementos distintos. Como a² = b e a⁴ = d, sobra a³ = c."
+ },
+ {
+  "t": 2,
+  "q": "Em S<sub>3</sub>, sejam φ e ψ com φ² = ψ³ = I e ψφ = φψ². Quanto vale (φψ)φ?",
+  "o": [
+   "ψ²",
+   "ψ",
+   "φψ²",
+   "I"
+  ],
+  "e": "(φψ)φ = φ(ψφ) = φ(φψ²) = φ²ψ² = ψ². Não podemos trocar ψφ por φψ, pois S<sub>3</sub> não é abeliano."
+ },
+ {
+  "t": 2,
+  "q": "Seja G = {1, a, b} com neutro 1. Pode acontecer a² = a?",
+  "o": [
+   "Não: de a² = a = a · 1, cancelando a, obteríamos a = 1.",
+   "Sim, desde que ab = 1.",
+   "Sim, desde que b² = b.",
+   "Sim: basta que a operação seja associativa."
+  ],
+  "e": "Em um grupo vale a lei do cancelamento. Assim a² = a força a = 1, mas a é diferente do neutro. Na tábua, a linha de a teria a repetido (a · 1 = a · a)."
  },
  {
   "t": 3,
@@ -313,6 +456,50 @@ var BANCO = [
    "Não existe"
   ],
   "e": "<span style=\"text-decoration:overline\">4</span> + <span style=\"text-decoration:overline\">6</span> = <span style=\"text-decoration:overline\">10</span> = <span style=\"text-decoration:overline\">0</span>. No grupo aditivo todo elemento tem oposto; quem não tem inverso multiplicativo é <span style=\"text-decoration:overline\">4</span>, pois mdc(4, 10) = 2."
+ },
+ {
+  "t": 3,
+  "q": "Os grupos ℤ<sub>10</sub><sup>*</sup> e ℤ<sub>12</sub><sup>*</sup> têm 4 elementos cada. Qual propriedade os distingue?",
+  "o": [
+   "Em ℤ<sub>10</sub><sup>*</sup> há um elemento cujas potências são todos os elementos; em ℤ<sub>12</sub><sup>*</sup> todo x satisfaz x² = <span style=\"text-decoration:overline\">1</span>.",
+   "ℤ<sub>10</sub><sup>*</sup> tem mais elementos que ℤ<sub>12</sub><sup>*</sup>.",
+   "ℤ<sub>12</sub><sup>*</sup> não é abeliano.",
+   "ℤ<sub>10</sub><sup>*</sup> não é um grupo."
+  ],
+  "e": "As potências de <span style=\"text-decoration:overline\">3</span> em ℤ<sub>10</sub><sup>*</sup> são <span style=\"text-decoration:overline\">3</span>, <span style=\"text-decoration:overline\">9</span>, <span style=\"text-decoration:overline\">7</span>, <span style=\"text-decoration:overline\">1</span>. Em ℤ<sub>12</sub><sup>*</sup>, <span style=\"text-decoration:overline\">5</span>² = <span style=\"text-decoration:overline\">7</span>² = <span style=\"text-decoration:overline\">11</span>² = <span style=\"text-decoration:overline\">1</span>, e ele é um grupo de Klein."
+ },
+ {
+  "t": 3,
+  "q": "Qual é o inverso de <span style=\"text-decoration:overline\">11</span> em ℤ<sub>20</sub><sup>*</sup>?",
+  "o": [
+   "<span style=\"text-decoration:overline\">11</span>",
+   "<span style=\"text-decoration:overline\">9</span>",
+   "<span style=\"text-decoration:overline\">1</span>",
+   "<span style=\"text-decoration:overline\">19</span>"
+  ],
+  "e": "<span style=\"text-decoration:overline\">11</span> · <span style=\"text-decoration:overline\">11</span> = <span style=\"text-decoration:overline\">121</span> = <span style=\"text-decoration:overline\">1</span>, pois 121 = 6 · 20 + 1. O elemento <span style=\"text-decoration:overline\">9</span> é o oposto de <span style=\"text-decoration:overline\">11</span> na adição (<span style=\"text-decoration:overline\">11</span> + <span style=\"text-decoration:overline\">9</span> = <span style=\"text-decoration:overline\">0</span>), não o inverso na multiplicação."
+ },
+ {
+  "t": 3,
+  "q": "Quanto vale <span style=\"text-decoration:overline\">5</span> · <span style=\"text-decoration:overline\">7</span> em ℤ<sub>12</sub><sup>*</sup>?",
+  "o": [
+   "<span style=\"text-decoration:overline\">11</span>",
+   "<span style=\"text-decoration:overline\">1</span>",
+   "<span style=\"text-decoration:overline\">0</span>",
+   "<span style=\"text-decoration:overline\">7</span>"
+  ],
+  "e": "5 · 7 = 35 = 2 · 12 + 11, logo <span style=\"text-decoration:overline\">5</span> · <span style=\"text-decoration:overline\">7</span> = <span style=\"text-decoration:overline\">11</span>. O produto de dois elementos de ℤ<sub>12</sub><sup>*</sup> está sempre em ℤ<sub>12</sub><sup>*</sup>, então não pode ser <span style=\"text-decoration:overline\">0</span>."
+ },
+ {
+  "t": 3,
+  "q": "Para quais n ≥ 2 o conjunto ℤ<sub>n</sub> ∖ {<span style=\"text-decoration:overline\">0</span>} é um grupo com a multiplicação?",
+  "o": [
+   "Exatamente quando n é primo.",
+   "Para todo n ≥ 2.",
+   "Exatamente quando n é ímpar.",
+   "Para nenhum n, pois <span style=\"text-decoration:overline\">1</span> não tem inverso."
+  ],
+  "e": "ℤ<sub>n</sub> ∖ {<span style=\"text-decoration:overline\">0</span>} = ℤ<sub>n</sub><sup>*</sup> exatamente quando todo a com 1 ≤ a ≤ n − 1 satisfaz mdc(a, n) = 1, isto é, quando n é primo. Para n = 6, <span style=\"text-decoration:overline\">2</span> · <span style=\"text-decoration:overline\">3</span> = <span style=\"text-decoration:overline\">0</span> sai do conjunto. E <span style=\"text-decoration:overline\">1</span> é o próprio inverso."
  }
 ];
 </script>
