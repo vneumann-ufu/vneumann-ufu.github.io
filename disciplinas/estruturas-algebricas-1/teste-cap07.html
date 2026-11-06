@@ -282,6 +282,72 @@ var BANCO = [
   "e": "Com x = (1 2 3) e x<sup>-1</sup> = (1 3 2), o produto x h x<sup>-1</sup> (aplicando da direita para a esquerda) dá (1 4)(2 3), que não está em H. O índice de H em A<sub>4</sub> é 12/2 = 6, e A<sub>4</sub> não é abeliano."
  },
  {
+  "t": 0,
+  "q": "Quantos subgrupos de ordem 4 tem A<sub>4</sub>?",
+  "o": [
+   "Um só: V = {I, (1 2)(3 4), (1 3)(2 4), (1 4)(2 3)}.",
+   "Três, um para cada elemento de ordem 2.",
+   "Nenhum, pois A<sub>4</sub> não tem elementos de ordem 4.",
+   "Quatro, um para cada 3-ciclo e seu inverso."
+  ],
+  "e": "Num subgrupo de ordem 4, os elementos têm ordem 1, 2 ou 4. Em A<sub>4</sub>, os oito 3-ciclos têm ordem 3, e sobram exatamente os 4 elementos de V. Um grupo de ordem 4 não precisa ter elemento de ordem 4: V não é cíclico."
+ },
+ {
+  "t": 0,
+  "q": "Por que V = {I, (1 2)(3 4), (1 3)(2 4), (1 4)(2 3)} é normal em A<sub>4</sub>?",
+  "o": [
+   "Porque é o único subgrupo de ordem 4 de A<sub>4</sub>.",
+   "Porque tem índice 2 em A<sub>4</sub>.",
+   "Porque A<sub>4</sub> é abeliano.",
+   "Porque V é abeliano."
+  ],
+  "e": "Para todo a ∈ A<sub>4</sub>, aVa<sup>-1</sup> é subgrupo de ordem 4, logo é igual a V. O índice é 12/4 = 3, não 2; A<sub>4</sub> não é abeliano; e ser abeliano não torna um subgrupo normal: {I, (1 2)(3 4)} ⊆ V é abeliano e não é normal em A<sub>4</sub>."
+ },
+ {
+  "t": 0,
+  "q": "Seja G um grupo que tem exatamente um elemento t de ordem 2. O que se pode concluir?",
+  "o": [
+   "xt = tx para todo x ∈ G.",
+   "G é abeliano.",
+   "G é cíclico.",
+   "|G| = 2."
+  ],
+  "e": "{1, t} é o único subgrupo de ordem 2, logo é normal. Então xtx<sup>-1</sup> ∈ {1, t}, e xtx<sup>-1</sup> ≠ 1 (senão t = 1). Logo xtx<sup>-1</sup> = t, isto é, xt = tx. Isso diz que t comuta com todos, não que quaisquer dois elementos comutam; e ℤ<sub>4</sub> tem um só elemento de ordem 2 e tem 4 elementos."
+ },
+ {
+  "t": 0,
+  "q": "Em D<sub>4</sub>, o subgrupo K = {e, r²} é normal. Ele é o único subgrupo de ordem 2 de D<sub>4</sub>?",
+  "o": [
+   "Não: {e, s}, por exemplo, também tem ordem 2. Um subgrupo normal não precisa ser único na sua ordem.",
+   "Sim, e é por isso que K é normal.",
+   "Sim, pois r² é o único elemento de ordem 2 de D<sub>4</sub>.",
+   "Não, e por isso K não é normal."
+  ],
+  "e": "D<sub>4</sub> tem cinco elementos de ordem 2: r², s, rs, r²s, r³s. Ser o único subgrupo de uma ordem garante a normalidade, mas a recíproca é falsa: K é normal (rK = Kr e sK = Ks) sem ser único."
+ },
+ {
+  "t": 0,
+  "q": "Todo subgrupo de R<sub>n</sub> = ⟨r⟩ é normal em D<sub>n</sub>?",
+  "o": [
+   "Sim: (r<sup>j</sup>s) r<sup>k</sup> (r<sup>j</sup>s) = r<sup>−k</sup>, e todo subgrupo contém os inversos dos seus elementos.",
+   "Não: só R<sub>n</sub>, que tem índice 2.",
+   "Só os subgrupos de índice 2.",
+   "Só quando n é primo."
+  ],
+  "e": "Conjugando r<sup>k</sup> por uma rotação obtemos r<sup>k</sup>, e por uma reflexão obtemos r<sup>−k</sup> = (r<sup>k</sup>)<sup>-1</sup>. Por exemplo, ⟨r²⟩ = {e, r², r⁴} é normal em D<sub>6</sub>, embora tenha índice 4."
+ },
+ {
+  "t": 0,
+  "q": "Um grupo G tem exatamente dois subgrupos de ordem 3, H<sub>1</sub> e H<sub>2</sub>. O que se pode afirmar?",
+  "o": [
+   "Para cada a ∈ G, aH<sub>1</sub>a<sup>-1</sup> é igual a H<sub>1</sub> ou a H<sub>2</sub>.",
+   "H<sub>1</sub> e H<sub>2</sub> são normais, pois são subgrupos de ordem prima.",
+   "Nenhum dos dois pode ser normal.",
+   "Isso é impossível, pois 3 é primo."
+  ],
+  "e": "aH<sub>1</sub>a<sup>-1</sup> é um subgrupo de ordem 3, então é H<sub>1</sub> ou H<sub>2</sub>. Sem a unicidade, não dá para concluir que é H<sub>1</sub>. Ter ordem prima não garante normalidade: os subgrupos {I, (1 2)} e {I, (1 3)} de S<sub>3</sub> têm ordem 2 e não são normais."
+ },
+ {
   "t": 1,
   "q": "Quantos elementos tem o grupo quociente ℤ<sub>18</sub>/⟨<span style=\"text-decoration:overline\">6</span>⟩?",
   "o": [
@@ -466,7 +532,29 @@ var BANCO = [
    "G tem um subgrupo de ordem p².",
    "G é cíclico."
   ],
-  "e": "A prova é por indução na ordem de G, passando ao grupo quociente G/⟨a⟩. ℤ<sub>8</sub><sup>*</sup> tem ordem 4, divisível por 2, tem elementos de ordem 2 e não é cíclico."
+  "e": "O teorema garante só a existência de um elemento de ordem p (a prova é por indução na ordem de G, passando ao grupo quociente G/⟨a⟩). As outras afirmações são falsas: em ℤ<sub>6</sub>, p = 2 divide 6, mas <span style=\"text-decoration:overline\">1</span> tem ordem 6, e não há subgrupo de ordem 4, pois 4 ∤ 6; e ℤ<sub>8</sub><sup>*</sup> tem ordem 4, divisível por 2, e não é cíclico."
+ },
+ {
+  "t": 1,
+  "q": "Por que a operação (aN)(bN) = (ab)N em G/N não depende dos representantes a e b?",
+  "o": [
+   "Porque (aN)(bN) é o produto dos conjuntos aN e bN, que só depende dos conjuntos.",
+   "Porque G é abeliano.",
+   "Porque aN = Na implica ab = ba.",
+   "Porque a e b estão em N."
+  ],
+  "e": "Pelo lema, o produto de conjuntos (aN)(bN) é igual a (ab)N quando N ◁ G. Se aN = a'N e bN = b'N, os conjuntos são os mesmos, logo (ab)N = (a'b')N. Não é preciso que G seja abeliano, e aN = Na não significa que a comuta com cada elemento de N."
+ },
+ {
+  "t": 1,
+  "q": "Na prova do teorema de Cauchy (caso abeliano), com N = ⟨a⟩, |a| = m e p ∤ m, por que p divide |G/N|?",
+  "o": [
+   "Porque |G| = m·|G/N|, p divide |G|, p é primo e p ∤ m.",
+   "Porque |G/N| &lt; |G|.",
+   "Porque G/N é abeliano.",
+   "Porque N = ⟨a⟩ é cíclico."
+  ],
+  "e": "Se um primo divide um produto, ele divide um dos fatores; como p ∤ m, p divide |G/N|. As outras afirmações são verdadeiras e também são usadas na prova (|G/N| &lt; |G| permite usar a hipótese de indução), mas não explicam por que p divide |G/N|."
  }
 ];
 </script>
