@@ -358,7 +358,7 @@ mjx-container[display="true"] { overflow-x: auto; overflow-y: hidden; max-width:
     { t: 1, dica: "dica 18",
       q: "Seja $\\zeta = e^{2\\pi i/5}$ e $K = \\Q(\\zeta)$. Quanto vale $\\operatorname{Tr}(1 + 2\\zeta + 3\\zeta^2)$?",
       o: ["$-1$", "$4$", "$6$", "$-6$"],
-      e: "Por linearidade, $\\operatorname{Tr}(1) = 4$ e $\\operatorname{Tr}(\\zeta) = \\operatorname{Tr}(\\zeta^2) = -1$, então o traço é $4 - 2 - 3 = -1$. É a fórmula $\\operatorname{Tr}\\bigl(\\sum a_i\\zeta^i\\bigr) = pa_0 - \\sum a_i$, com $p = 5$: $5 - 6 = -1$." },
+      e: "Por linearidade, $\\operatorname{Tr}(1) = 4$ e $\\operatorname{Tr}(\\zeta) = \\operatorname{Tr}(\\zeta^2) = -1$, então o traço é $4 - 2 - 3 = -1$. É a fórmula $\\operatorname{Tr}\\bigl(\\sum a_j\\zeta^j\\bigr) = pa_0 - \\sum a_j$, com $p = 5$: $5 - 6 = -1$." },
     { t: 1, dica: "dicas 4 e 5",
       q: "Em $K = \\Q(\\sqrt[3]{2})$, quanto vale $\\operatorname{N}(1 + \\sqrt[3]{2})$?",
       o: ["$3$", "$-3$", "$-1$", "$9$"],
@@ -367,7 +367,7 @@ mjx-container[display="true"] { overflow-x: auto; overflow-y: hidden; max-width:
     { t: 1, dica: "dica 3",
       q: "Sejam $\\theta_1, \\theta_2, \\theta_3$ as raízes de $x^3 - 3x + 1$. Quanto vale $\\theta_1^2 + \\theta_2^2 + \\theta_3^2$?",
       o: ["$6$", "$0$", "$-6$", "$9$"],
-      e: "A expressão é simétrica, logo é um polinômio nas funções simétricas elementares, que são os coeficientes: $s_1 = 0$ e $s_2 = -3$. Então $\\sum \\theta_i^2 = s_1^2 - 2s_2 = 6$. É também o traço de $\\theta^2$ em $\\Q(\\theta)$ — por isso o resultado é racional sem que se conheçam as raízes." },
+      e: "A expressão é simétrica, logo é um polinômio nas funções simétricas elementares, que são os coeficientes: $s_1 = 0$ e $s_2 = -3$. Então $\\sum \\theta_j^2 = s_1^2 - 2s_2 = 6$. É também o traço de $\\theta^2$ em $\\Q(\\theta)$ — por isso o resultado é racional sem que se conheçam as raízes." },
 
     // ---------- Tema 2: discriminante
     { t: 2, dica: "dica 10",
@@ -420,7 +420,7 @@ mjx-container[display="true"] { overflow-x: auto; overflow-y: hidden; max-width:
           "O polinômio minimal de $\\alpha + \\beta$ é o produto dos polinômios minimais de $\\alpha$ e $\\beta$.",
           "$\\alpha + \\beta$ é raiz de $p_\\alpha + p_\\beta$, que é mônico.",
           "A soma de raízes de dois polinômios mônicos de grau $n$ é raiz de um polinômio mônico de grau $n$."],
-      e: "Se $\\alpha$ e $\\beta$ têm graus $m$ e $n$, os monômios $\\alpha^i\\beta^j$ com $i < m$ e $j < n$ geram $\\Z[\\alpha,\\beta]$ como $\\Z$-módulo. Esse módulo é estável pela multiplicação por $\\alpha+\\beta$ (e por $\\alpha\\beta$), e o critério da dica 12 conclui. É assim que se prova que os inteiros algébricos formam um subanel." },
+      e: "Se $\\alpha$ e $\\beta$ têm graus $m$ e $n$, os monômios $\\alpha^j\\beta^k$ com $j < m$ e $k < n$ geram $\\Z[\\alpha,\\beta]$ como $\\Z$-módulo. Esse módulo é estável pela multiplicação por $\\alpha+\\beta$ (e por $\\alpha\\beta$), e o critério da dica 12 conclui. É assim que se prova que os inteiros algébricos formam um subanel." },
 
     // ---------- Tema 4: unidades, fatoração, euclidianos
     { t: 4, dica: "dica 28",
@@ -499,8 +499,8 @@ mjx-container[display="true"] { overflow-x: auto; overflow-y: hidden; max-width:
       e: "$\\det\\begin{pmatrix} 1 & \\frac{1+\\sqrt d}{2} \\\\ 1 & \\frac{1-\\sqrt d}{2}\\end{pmatrix} = -\\sqrt d$, cujo quadrado é $d$. Comparando com $\\Delta(1, \\sqrt d) = 4d$: o índice de $\\Z[\\sqrt d]$ em $\\mathcal{O}_K$ é $2$ quando $d \\equiv 1 \\pmod 4$." },
     { t: 2, dica: "dica 16",
       q: "Por que o discriminante $\\Delta(\\alpha_1, \\dots, \\alpha_n)$ de uma base de $K$ sobre $\\Q$ é diferente de zero?",
-      o: ["Porque $\\Delta = \\det\\bigl(\\operatorname{Tr}(\\alpha_i\\alpha_j)\\bigr)$, e a forma traço $(x, y) \\mapsto \\operatorname{Tr}(xy)$ é não degenerada.",
-          "Porque os $\\alpha_i$ são inteiros algébricos.",
+      o: ["Porque $\\Delta = \\det\\bigl(\\operatorname{Tr}(\\alpha_j\\alpha_k)\\bigr)$, e a forma traço $(x, y) \\mapsto \\operatorname{Tr}(xy)$ é não degenerada.",
+          "Porque os $\\alpha_j$ são inteiros algébricos.",
           "Porque o discriminante é sempre positivo.",
           "Porque $n \\ge 2$."],
       e: "Se a forma traço fosse degenerada, haveria $x \\neq 0$ com $\\operatorname{Tr}(xy) = 0$ para todo $y$; tomando $y = x^{-1}$, viria $\\operatorname{Tr}(1) = n = 0$, absurdo. Ser inteiro garante que $\\Delta \\in \\Z$, não que $\\Delta \\neq 0$; e o discriminante pode ser negativo, como $-4$ em $\\Q(i)$." },
@@ -514,7 +514,7 @@ mjx-container[display="true"] { overflow-x: auto; overflow-y: hidden; max-width:
           "O número de classes de $K$.",
           "O grau $n = [K:\\Q]$.",
           "A norma de $\\alpha_1 \\cdots \\alpha_n$."],
-      e: "A mudança de uma base integral para $\\{\\alpha_i\\}$ tem matriz inteira $M$, e $|\\det M|$ é o índice. Como $\\Delta(\\alpha) = (\\det M)^2\\Delta_K$, se $\\Delta(\\alpha)$ é livre de quadrados o índice só pode ser $1$ — é a dica 17." },
+      e: "A mudança de uma base integral para $\\{\\alpha_j\\}$ tem matriz inteira $M$, e $|\\det M|$ é o índice. Como $\\Delta(\\alpha) = (\\det M)^2\\Delta_K$, se $\\Delta(\\alpha)$ é livre de quadrados o índice só pode ser $1$ — é a dica 17." },
 
     // ---------- Tema 3: inteiros algébricos
     { t: 3, dica: "dica 15",
