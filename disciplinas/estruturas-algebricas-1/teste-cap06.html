@@ -249,6 +249,17 @@ var BANCO = [
   "e": "b ∈ bK = aH, então bH = aH = bK. Multiplicando à esquerda por b<sup>-1</sup>, obtemos H = K. Não se pode concluir a = b: em ℤ, 1 + 2ℤ = 3 + 2ℤ."
  },
  {
+  "t": 0,
+  "q": "Em S<sub>3</sub>, seja H = {I, (1 3)}. Para quais a ∈ S<sub>3</sub> vale aH = Ha?",
+  "o": [
+   "Somente para a ∈ H, isto é, a = I ou a = (1 3).",
+   "Para todo a ∈ S<sub>3</sub>.",
+   "Somente para a = I.",
+   "Para a ∈ A<sub>3</sub> = {I, (1 2 3), (1 3 2)}."
+  ],
+  "e": "Se a ∈ H, então aH = H = Ha. Para a ∉ H as classes diferem: por exemplo, (1 2)H = {(1 2), (1 3 2)} e H(1 2) = {(1 2), (1 2 3)}. Ter aH = Ha para todo a significaria que H é normal, e H não é normal em S<sub>3</sub>."
+ },
+ {
   "t": 1,
   "q": "Seja G um grupo de ordem 24 e H um subgrupo de ordem 6. Quantas classes laterais à esquerda distintas H tem em G?",
   "o": [
@@ -381,6 +392,28 @@ var BANCO = [
   "e": "|ℤ<sub>7</sub><sup>*</sup>| = φ(7) = 6, e a ordem de cada elemento divide 6. De fato, <span style=\"text-decoration:overline\">6</span> tem ordem 2, <span style=\"text-decoration:overline\">2</span> tem ordem 3 e <span style=\"text-decoration:overline\">3</span> tem ordem 6."
  },
  {
+  "t": 1,
+  "q": "Seja G um grupo de ordem 155 e a, b ∈ G, diferentes de 1, com |a| ≠ |b|. Qual é o menor subgrupo de G que contém a e b?",
+  "o": [
+   "O próprio G.",
+   "⟨a⟩",
+   "Um subgrupo de ordem 5.",
+   "Não se pode determinar sem conhecer G."
+  ],
+  "e": "155 = 5 · 31, então |a|, |b| ∈ {5, 31, 155}. Um subgrupo que contém a e b tem ordem múltipla de |a| e de |b| (Lagrange aplicado a ⟨a⟩ e ⟨b⟩) e divisora de 155. Como |a| ≠ |b|, essa ordem é múltipla de 5 e de 31, logo é 155."
+ },
+ {
+  "t": 1,
+  "q": "Quais são as ordens dos elementos <span style=\"text-decoration:overline\">1</span>, <span style=\"text-decoration:overline\">5</span>, <span style=\"text-decoration:overline\">7</span>, <span style=\"text-decoration:overline\">11</span> de ℤ<sub>12</sub><sup>*</sup>?",
+  "o": [
+   "1, 2, 2, 2; logo ℤ<sub>12</sub><sup>*</sup> não é cíclico.",
+   "1, 2, 3, 4; logo ℤ<sub>12</sub><sup>*</sup> é cíclico.",
+   "1, 4, 4, 2; logo ℤ<sub>12</sub><sup>*</sup> é cíclico.",
+   "1, 5, 7, 11"
+  ],
+  "e": "25 = 2 · 12 + 1, 49 = 4 · 12 + 1 e 121 = 10 · 12 + 1, então cada elemento diferente de <span style=\"text-decoration:overline\">1</span> tem quadrado <span style=\"text-decoration:overline\">1</span>. Nenhum tem ordem 4 = |ℤ<sub>12</sub><sup>*</sup>|, e o grupo não é cíclico. A ordem não é o representante do elemento."
+ },
+ {
   "t": 2,
   "q": "Qual é o resto da divisão de 2<sup>50</sup> por 7?",
   "o": [
@@ -489,6 +522,17 @@ var BANCO = [
    "O correto seria usar 2<sup>15</sup> ≡ 1 (mod 15)."
   ],
   "e": "O pequeno teorema de Fermat vale para módulo primo. Na verdade, 2<sup>14</sup> = 16384 ≡ 4 (mod 15). Com φ(15) = 8 o cálculo funciona."
+ },
+ {
+  "t": 2,
+  "q": "Qual é o resto de 7<sup>222</sup> na divisão por 10?",
+  "o": [
+   "9",
+   "1",
+   "7",
+   "3"
+  ],
+  "e": "φ(10) = 4 e mdc(7, 10) = 1, logo 7⁴ ≡ 1 (mod 10) pelo teorema de Euler–Fermat. Como 222 = 4 · 55 + 2, 7<sup>222</sup> ≡ 7² = 49 ≡ 9. A resposta 1 vem de supor que 4 divide 222."
  }
 ];
 </script>

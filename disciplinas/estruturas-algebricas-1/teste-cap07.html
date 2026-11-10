@@ -348,6 +348,28 @@ var BANCO = [
   "e": "aH<sub>1</sub>a<sup>-1</sup> é um subgrupo de ordem 3, então é H<sub>1</sub> ou H<sub>2</sub>. Sem a unicidade, não dá para concluir que é H<sub>1</sub>. Ter ordem prima não garante normalidade: os subgrupos {I, (1 2)} e {I, (1 3)} de S<sub>3</sub> têm ordem 2 e não são normais."
  },
  {
+  "t": 0,
+  "q": "Por que ⟨r²⟩ = {e, r², r⁴, r⁶} é normal em D<sub>8</sub>?",
+  "o": [
+   "Para x = r<sup>j</sup>, x r<sup>2i</sup> x<sup>-1</sup> = r<sup>2i</sup>; para x = r<sup>j</sup>s, x r<sup>2i</sup> x<sup>-1</sup> = r<sup>−2i</sup>. Nos dois casos o resultado está em ⟨r²⟩.",
+   "Porque tem índice 2 em D<sub>8</sub>.",
+   "Porque é o único subgrupo de ordem 4 de D<sub>8</sub>.",
+   "Porque D<sub>8</sub> é abeliano."
+  ],
+  "e": "O índice é 16/4 = 4, não 2. {e, r⁴, s, r⁴s} também é subgrupo de ordem 4, então ⟨r²⟩ não é o único. D<sub>8</sub> não é abeliano. A conta usa as regras (r<sup>j</sup>s)r<sup>2i</sup> = r<sup>j−2i</sup>s e (r<sup>j−2i</sup>s)(r<sup>j</sup>s) = r<sup>−2i</sup>, e r<sup>−2i</sup> = r<sup>8−2i</sup> ∈ ⟨r²⟩."
+ },
+ {
+  "t": 0,
+  "q": "Sejam M e N subgrupos normais de G. O que se pode afirmar sobre MN = {mn : m ∈ M, n ∈ N}?",
+  "o": [
+   "MN é subgrupo normal de G.",
+   "MN é subgrupo de G, mas pode não ser normal.",
+   "MN pode não ser subgrupo de G.",
+   "MN = M ∩ N."
+  ],
+  "e": "MN é subgrupo porque N é normal. Para a normalidade, dado x ∈ G, inserimos x<sup>-1</sup>x: x(mn)x<sup>-1</sup> = (xmx<sup>-1</sup>)(xnx<sup>-1</sup>), com o primeiro fator em M e o segundo em N."
+ },
+ {
   "t": 1,
   "q": "Quantos elementos tem o grupo quociente ℤ<sub>18</sub>/⟨<span style=\"text-decoration:overline\">6</span>⟩?",
   "o": [
@@ -555,6 +577,17 @@ var BANCO = [
    "Porque N = ⟨a⟩ é cíclico."
   ],
   "e": "Se um primo divide um produto, ele divide um dos fatores; como p ∤ m, p divide |G/N|. As outras afirmações são verdadeiras e também são usadas na prova (|G/N| &lt; |G| permite usar a hipótese de indução), mas não explicam por que p divide |G/N|."
+ },
+ {
+  "t": 1,
+  "q": "O grupo quociente ℤ<sub>8</sub>/{<span style=\"text-decoration:overline\">0</span>, <span style=\"text-decoration:overline\">4</span>} é isomorfo a:",
+  "o": [
+   "ℤ<sub>4</sub>",
+   "ℤ<sub>2</sub> × ℤ<sub>2</sub>",
+   "ℤ<sub>2</sub>",
+   "ℤ<sub>8</sub>"
+  ],
+  "e": "O quociente tem 8/2 = 4 elementos. A classe <span style=\"text-decoration:overline\">1</span> + H tem ordem 4, pois k · <span style=\"text-decoration:overline\">1</span> = <span style=\"text-decoration:overline\">k</span> está em H = {<span style=\"text-decoration:overline\">0</span>, <span style=\"text-decoration:overline\">4</span>} pela primeira vez para k = 4. Logo o quociente é cíclico de ordem 4. Ter 4 elementos não basta para ser o grupo de Klein."
  }
 ];
 </script>
