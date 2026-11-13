@@ -315,6 +315,39 @@ var BANCO = [
   "e": "O neutro de {1, −1} é 1, e ε(σ) = 1 exatamente quando σ é par. Logo ker ε = A<sub>n</sub>, o que dá outra prova de que A<sub>n</sub> ◁ S<sub>n</sub>."
  },
  {
+  "t": 0,
+  "q": "A regra f(<span style=\"text-decoration:overline\">n</span>) = <span style=\"text-decoration:overline\">3n</span> define uma função de ℤ<sub>15</sub> em ℤ<sub>20</sub>?",
+  "o": [
+   "Não: <span style=\"text-decoration:overline\">0</span> = <span style=\"text-decoration:overline\">15</span> em ℤ<sub>15</sub>, mas <span style=\"text-decoration:overline\">0</span> ≠ <span style=\"text-decoration:overline\">45</span> = <span style=\"text-decoration:overline\">5</span> em ℤ<sub>20</sub>.",
+   "Sim, e é um homomorfismo.",
+   "Sim, pois 3 divide 15.",
+   "Não, pois 3 não divide 20."
+  ],
+  "e": "Para a regra estar bem definida, a imagem não pode depender do representante da classe. Os representantes 0 e 15 dão a mesma classe em ℤ<sub>15</sub>, mas 3 · 0 = 0 e 3 · 15 = 45 = 2 · 20 + 5 dão classes diferentes em ℤ<sub>20</sub>."
+ },
+ {
+  "t": 0,
+  "q": "Seja f: ℤ → D<sub>8</sub>, f(j) = r<sup>j</sup>. Quais são ker f e im f?",
+  "o": [
+   "ker f = 8ℤ e im f = R<sub>8</sub> = ⟨r⟩",
+   "ker f = {0} e im f = D<sub>8</sub>",
+   "ker f = 8ℤ e im f = D<sub>8</sub>",
+   "ker f = 16ℤ e im f = R<sub>8</sub>"
+  ],
+  "e": "f(j + k) = r<sup>j+k</sup> = r<sup>j</sup>r<sup>k</sup>, então f é homomorfismo. Como |r| = 8, r<sup>j</sup> = e ⟺ 8 | j. As imagens são só rotações, logo im f = R<sub>8</sub>, que tem 8 elementos (D<sub>8</sub> tem 16). Note que ℤ e R<sub>8</sub> são cíclicos e abelianos, mas D<sub>8</sub> não é abeliano."
+ },
+ {
+  "t": 0,
+  "q": "Seja D a matriz diagonal com entradas 2, 1, …, 1. O conjunto {A ∈ GL(n, ℝ) : det A = 2} é igual a:",
+  "o": [
+   "D · SL(n, ℝ) = {DB : B ∈ SL(n, ℝ)}",
+   "SL(n, ℝ)",
+   "{D}",
+   "2 · SL(n, ℝ) = {2B : B ∈ SL(n, ℝ)}"
+  ],
+  "e": "det D = 2 e, se f(a) = b, então f<sup>-1</sup>(b) = a ker f. Com f = det, a = D e ker(det) = SL(n, ℝ), obtemos det<sup>-1</sup>(2) = D · SL(n, ℝ). Já det(2B) = 2<sup>n</sup> det B = 2<sup>n</sup>, que não é 2 para n ≥ 2."
+ },
+ {
   "t": 1,
   "q": "Pelo primeiro teorema do isomorfismo, usando f(z) = zⁿ, o grupo ℂ*/U<sub>n</sub> é isomorfo a:",
   "o": [
@@ -521,7 +554,7 @@ var BANCO = [
    "5",
    "6"
   ],
-  "e": "|im f| divide |ℤ<sub>5</sub>| = 5 e |S<sub>3</sub>| = 6, logo divide mdc(5, 6) = 1. Então im f = {I}. A função constante igual a I é sempre um homomorfismo, então existe exatamente um."
+  "e": "Seja b = f(<span style=\"text-decoration:overline\">1</span>). A ordem de b divide |<span style=\"text-decoration:overline\">1</span>| = 5 (pois f(a)<sup>n</sup> = f(a<sup>n</sup>)) e divide |S<sub>3</sub>| = 6 (Lagrange); logo |b| = 1 e b = I. Então f(<span style=\"text-decoration:overline\">n</span>) = b<sup>n</sup> = I para todo <span style=\"text-decoration:overline\">n</span>. A função constante igual a I é sempre um homomorfismo, então existe exatamente um."
  },
  {
   "t": 1,
@@ -533,6 +566,39 @@ var BANCO = [
    "ℤ"
   ],
   "e": "Use f: ℝ* → {1, −1}, f(x) = x/|x| (o sinal de x). É homomorfismo sobrejetor com ker f = ℝ<sub>+</sub><sup>*</sup>. Pelo primeiro teorema do isomorfismo, ℝ*/ℝ<sub>+</sub><sup>*</sup> ≅ {1, −1}: o quociente tem só duas classes, a dos positivos e a dos negativos."
+ },
+ {
+  "t": 1,
+  "q": "Quantos homomorfismos existem de ℤ<sub>4</sub> em ℤ<sub>3</sub>?",
+  "o": [
+   "Apenas 1, o que leva tudo em <span style=\"text-decoration:overline\">0</span>.",
+   "Nenhum.",
+   "3",
+   "4"
+  ],
+  "e": "Seja b = f(<span style=\"text-decoration:overline\">1</span>). A ordem de b divide |<span style=\"text-decoration:overline\">1</span>| = 4 e divide |ℤ<sub>3</sub>| = 3 (Lagrange), logo divide mdc(4, 3) = 1. Então b = <span style=\"text-decoration:overline\">0</span> e f(<span style=\"text-decoration:overline\">n</span>) = n · f(<span style=\"text-decoration:overline\">1</span>) = <span style=\"text-decoration:overline\">0</span>. A função constante igual a <span style=\"text-decoration:overline\">0</span> é sempre um homomorfismo."
+ },
+ {
+  "t": 1,
+  "q": "Quantos homomorfismos existem de ℤ<sub>8</sub> em ℤ<sub>10</sub>?",
+  "o": [
+   "2: <span style=\"text-decoration:overline\">n</span> ↦ <span style=\"text-decoration:overline\">0</span> e <span style=\"text-decoration:overline\">n</span> ↦ <span style=\"text-decoration:overline\">5n</span>.",
+   "1: só o trivial.",
+   "4",
+   "10, um para cada escolha de f(<span style=\"text-decoration:overline\">1</span>)."
+  ],
+  "e": "A ordem de f(<span style=\"text-decoration:overline\">1</span>) divide |<span style=\"text-decoration:overline\">1</span>| = 8 e |ℤ<sub>10</sub>| = 10, logo divide mdc(8, 10) = 2. Os elementos de ℤ<sub>10</sub> de ordem 1 ou 2 são <span style=\"text-decoration:overline\">0</span> e <span style=\"text-decoration:overline\">5</span>. Como f(<span style=\"text-decoration:overline\">n</span>) = n · f(<span style=\"text-decoration:overline\">1</span>), há no máximo dois homomorfismos, e os dois existem: <span style=\"text-decoration:overline\">n</span> ↦ <span style=\"text-decoration:overline\">5n</span> está bem definida porque 5 · 8 = 40 é múltiplo de 10."
+ },
+ {
+  "t": 1,
+  "q": "Seja f: G → H um homomorfismo e K = ⟨a⟩ um subgrupo cíclico de G. Então f(K) é:",
+  "o": [
+   "o subgrupo cíclico ⟨f(a)⟩ de H.",
+   "igual a H.",
+   "um subgrupo cíclico apenas quando f é injetor.",
+   "um subconjunto de H que pode não ser subgrupo."
+  ],
+  "e": "f(K) = {f(a<sup>l</sup>) : l ∈ ℤ} = {f(a)<sup>l</sup> : l ∈ ℤ} = ⟨f(a)⟩. Não é preciso f injetor; por exemplo, f: ℤ → D<sub>8</sub>, f(j) = r<sup>j</sup>, leva o cíclico ℤ no cíclico R<sub>8</sub>."
  }
 ];
 </script>
