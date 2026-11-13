@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Teste de revisão – Capítulo 8: Homomorfismos de grupos (até os teoremas do isomorfismo) — Estruturas Algébricas 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #fbfaf7; --surface: #ffffff; --ink: #1d2330; --muted: #5d6675; --line: #e4e1d9;
+  --blue: #1f4e79; --blue-soft: #e8eef5; --ok: #2e7d4f; --ok-soft: #e6f3ec; --bad: #b03a2e; --bad-soft: #f8e9e7;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14171d; --surface: #1b1f27; --ink: #e7e9ee; --muted: #9aa3b2; --line: #2c3240;
+    --blue: #8db8e3; --blue-soft: #1f2a38; --ok: #6cc38f; --ok-soft: #1b2c23; --bad: #e58a80; --bad-soft: #33201e;
+    color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+  padding-bottom: env(safe-area-inset-bottom, 0px); }
+h1, h2 { font-family: "Source Serif 4", Georgia, "Times New Roman", serif; font-weight: 600; line-height: 1.25; }
+h1 { font-size: 1.9rem; margin: 0 0 12px; }
+h2 { font-size: 1.35rem; margin: 32px 0 12px; }
+.tally { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: blur(6px); border-bottom: 1px solid var(--line); padding-top: env(safe-area-inset-top, 0px); }
+.tally-inner { max-width: 760px; margin: 0 auto; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.group { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.marks { display: flex; flex-wrap: wrap; gap: 5px; }
+.mark { width: 14px; height: 14px; border-radius: 4px; border: 1.5px solid var(--line); background: var(--surface); }
+.mark.right { background: var(--ok); border-color: var(--ok); }
+.mark.wrong { background: var(--bad); border-color: var(--bad); }
+.mark.current { border-color: var(--blue); box-shadow: 0 0 0 2px var(--blue-soft); }
+.group-name { color: var(--muted); font-size: .88rem; white-space: nowrap; }
+.count { color: var(--muted); font-size: .88rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+main { max-width: 760px; margin: 0 auto; padding: 28px 16px 48px; }
+.lead { color: var(--muted); font-size: 1.02rem; }
+.nome-box { margin: 22px 0 8px; }
+.nome-box label { display: block; font-weight: 600; margin-bottom: 6px; }
+.nome-box input { width: 100%; max-width: 420px; padding: 10px 12px; font: inherit; color: var(--ink);
+  background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
+.nome-box input:focus { outline: 2px solid var(--blue); outline-offset: 1px; }
+.erro { color: var(--bad); font-size: .9rem; min-height: 1.2em; margin: 6px 0 0; }
+.nav { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 22px; }
+.btn { display: inline-block; padding: 9px 18px; border-radius: 8px; border: 1px solid var(--blue);
+  background: var(--blue); color: var(--bg); font: 500 .95rem Inter, system-ui, sans-serif; cursor: pointer; }
+.btn:hover { filter: brightness(1.08); }
+.btn.ghost { background: transparent; color: var(--blue); }
+a.btn { text-decoration: none; }
+.hint { color: var(--muted); font-size: .86rem; }
+.q-topic { color: var(--muted); font-size: .85rem; text-transform: uppercase; letter-spacing: .04em; margin: 0 0 8px; }
+.q-text { font-family: "Source Serif 4", Georgia, serif; font-size: 1.15rem; line-height: 1.6; margin-bottom: 18px; }
+.opts { display: flex; flex-direction: column; gap: 10px; }
+.opt { display: flex; align-items: flex-start; gap: 12px; width: 100%; text-align: left; padding: 12px 14px;
+  border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--ink);
+  font: 1rem/1.5 Inter, system-ui, sans-serif; cursor: pointer; transition: border-color .15s, background .15s; }
+.opt:hover:not(:disabled) { border-color: var(--blue); }
+.opt:disabled { cursor: default; }
+.opt .key { flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--blue-soft); color: var(--blue); font-weight: 600; font-size: .85rem; }
+.opt.is-right { border-color: var(--ok); background: var(--ok-soft); }
+.opt.is-right .key { background: var(--ok); color: var(--surface); }
+.opt.is-wrong { border-color: var(--bad); background: var(--bad-soft); }
+.opt.is-wrong .key { background: var(--bad); color: var(--surface); }
+.opt.faded { opacity: .55; }
+.feedback { margin-top: 18px; padding: 14px 16px; border-radius: 10px; border-left: 4px solid var(--line); background: var(--surface); }
+.feedback.right { border-left-color: var(--ok); }
+.feedback.wrong { border-left-color: var(--bad); }
+.verdict { margin: 0 0 6px; font-weight: 600; }
+.feedback.right .verdict { color: var(--ok); }
+.feedback.wrong .verdict { color: var(--bad); }
+.expl { color: var(--ink); }
+.ident { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; margin: 6px 0 14px; }
+.ident p { margin: 2px 0; }
+.quem { font-weight: 600; font-size: 1.05rem; }
+.quando { color: var(--muted); font-size: .9rem; }
+.nota { font-family: "Source Serif 4", Georgia, serif; font-size: 1.4rem; font-weight: 600; color: var(--blue); }
+.review { display: flex; flex-direction: column; gap: 14px; }
+.review-item { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+.review-item .q-text { font-size: 1.05rem; margin-bottom: 8px; }
+.ans { margin: 6px 0; }
+.label-right { color: var(--ok); font-weight: 600; }
+@media (max-width: 600px) { h1 { font-size: 1.55rem; } .q-text { font-size: 1.05rem; } }
+
+.temas { list-style: none; padding: 0; margin: 4px 0 18px; }
+.temas li { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--line); }
+.temas li:last-child { border-bottom: none; }
+.temas .tnome { flex: 1; }
+.temas .tnota { font-variant-numeric: tabular-nums; font-weight: 600; white-space: nowrap; }
+.temas .tcom { display: block; color: var(--muted); font-size: .88rem; font-weight: 400; }
+.temas .ok { color: var(--ok); } .temas .mid { color: var(--muted); } .temas .low { color: var(--bad); }
+</style>
+</head>
+<body>
+<div class="tally" aria-hidden="true">
+  <div class="tally-inner" id="tally"></div>
+</div>
+<main id="app" aria-live="polite"></main>
+<script>
+var INFO = {"titulo": "Teste de revisão – Capítulo 8", "capitulo": "Capítulo 8: Homomorfismos de grupos (até os teoremas do isomorfismo)", "curto": "Capítulo 8"};
+var TEMAS = [{"nome": "Homomorfismos, núcleo e imagem", "n": 5}, {"nome": "Isomorfismos e teoremas", "n": 5}];
+var BANCO = [
+ {
+  "t": 0,
+  "q": "Qual das funções f: (ℤ, +) → (ℤ, +) é um homomorfismo?",
+  "o": [
+   "f(x) = 3x",
+   "f(x) = x + 1",
+   "f(x) = x²",
+   "f(x) = |x|"
+  ],
+  "e": "3(x + y) = 3x + 3y. As outras falham: (x + y) + 1 ≠ (x + 1) + (y + 1), (1 + 1)² ≠ 1² + 1², |1 + (−1)| ≠ |1| + |−1|."
+ },
+ {
+  "t": 0,
+  "q": "Seja f: G → H um homomorfismo. Qual afirmação é sempre verdadeira?",
+  "o": [
+   "f(1<sub>G</sub>) = 1<sub>H</sub>",
+   "f é injetor",
+   "f é sobrejetor",
+   "ker f = {1<sub>G</sub>}"
+  ],
+  "e": "f(1<sub>G</sub>) = f(1<sub>G</sub>1<sub>G</sub>) = f(1<sub>G</sub>)f(1<sub>G</sub>) e, cancelando, f(1<sub>G</sub>) = 1<sub>H</sub>. A função x ↦ 1<sub>H</sub> é um homomorfismo que não é injetor nem sobrejetor."
+ },
+ {
+  "t": 0,
+  "q": "Qual é o núcleo do homomorfismo det: GL(n, ℝ) → ℝ*?",
+  "o": [
+   "SL(n, ℝ) = {A : det A = 1}",
+   "{I<sub>n</sub>}",
+   "GL(n, ℝ)",
+   "{A : det A = 0}"
+  ],
+  "e": "O neutro de ℝ* é 1, então ker(det) = {A : det A = 1} = SL(n, ℝ). As matrizes com det 0 nem estão em GL(n, ℝ)."
+ },
+ {
+  "t": 0,
+  "q": "Seja f: ℤ → ℤ<sub>20</sub>, f(n) = <span style=\"text-decoration:overline\">6n</span>. Qual é ker f?",
+  "o": [
+   "10ℤ",
+   "6ℤ",
+   "20ℤ",
+   "2ℤ"
+  ],
+  "e": "f(n) = <span style=\"text-decoration:overline\">0</span> ⟺ 20 | 6n ⟺ 10 | 3n ⟺ 10 | n."
+ },
+ {
+  "t": 0,
+  "q": "Um homomorfismo f: G → H é injetor se, e somente se:",
+  "o": [
+   "ker f = {1<sub>G</sub>}",
+   "im f = H",
+   "ker f = G",
+   "G é abeliano"
+  ],
+  "e": "Se ker f = {1} e f(a) = f(b), então f(ab<sup>-1</sup>) = 1, logo ab<sup>-1</sup> = 1 e a = b. A recíproca vem de f(1) = 1."
+ },
+ {
+  "t": 0,
+  "q": "Qual é o núcleo do homomorfismo f: ℝ* → ℝ*, f(x) = |x|?",
+  "o": [
+   "{1, −1}",
+   "{0}",
+   "{1}",
+   "ℝ*"
+  ],
+  "e": "O neutro de (ℝ*, ·) é 1, e |x| = 1 ⟺ x = ±1."
+ },
+ {
+  "t": 0,
+  "q": "Qual é o núcleo do homomorfismo f: (ℝ, +) → (ℂ*, ·), f(x) = e<sup>2πix</sup>?",
+  "o": [
+   "ℤ",
+   "{0}",
+   "ℝ",
+   "{1}"
+  ],
+  "e": "e<sup>2πix</sup> = 1 ⟺ x ∈ ℤ. A imagem é o círculo 𝕊¹ = {z : |z| = 1}."
+ },
+ {
+  "t": 0,
+  "q": "Qual é o núcleo do homomorfismo f: ℤ → ℂ*, f(n) = iⁿ?",
+  "o": [
+   "4ℤ",
+   "2ℤ",
+   "{0}",
+   "{0, 1, 2, 3}"
+  ],
+  "e": "iⁿ = 1 ⟺ 4 | n, pois i tem ordem 4."
+ },
+ {
+  "t": 0,
+  "q": "Seja f: G → H um homomorfismo e a ∈ G com |a| = 6. Qual pode ser a ordem de f(a)?",
+  "o": [
+   "3",
+   "4",
+   "5",
+   "12"
+  ],
+  "e": "f(a)⁶ = f(a⁶) = f(1) = 1, então |f(a)| divide 6."
+ },
+ {
+  "t": 0,
+  "q": "Seja f: ℤ × ℤ → ℤ, f(x, y) = 4x + 6y (grupos aditivos). Qual é a imagem de f?",
+  "o": [
+   "2ℤ",
+   "12ℤ",
+   "10ℤ",
+   "ℤ"
+  ],
+  "e": "Todo 4x + 6y é par, e 2 = 4 · 2 + 6 · (−1) está na imagem; como a imagem é subgrupo de ℤ, ela é ⟨2⟩ = 2ℤ (o mdc de 4 e 6, não o mmc)."
+ },
+ {
+  "t": 0,
+  "q": "Seja f: ℤ → ℂ*, f(n) = i<sup>n</sup>. Quem é f(3ℤ)?",
+  "o": [
+   "{1, −1, i, −i}",
+   "{1, −i}",
+   "{1, −1}",
+   "{−i}"
+  ],
+  "e": "f(3k) = (i³)<sup>k</sup> = (−i)<sup>k</sup>, e as potências de −i são −i, −1, i, 1. Como mdc(3, 4) = 1, f(3ℤ) é toda a imagem de f."
+ },
+ {
+  "t": 0,
+  "q": "A função h: ℂ* → ℂ*, h(z) = −z, é um homomorfismo?",
+  "o": [
+   "Não: h(1) = −1, e um homomorfismo leva o neutro no neutro.",
+   "Sim, pois h(zw) = −zw.",
+   "Sim, pois h é bijetora.",
+   "Não, pois h não é injetora."
+  ],
+  "e": "h(zw) = −zw, mas h(z)h(w) = (−z)(−w) = zw. O teste mais rápido é o neutro: h(1) = −1 ≠ 1. Ser bijetora não torna uma função homomorfismo."
+ },
+ {
+  "t": 0,
+  "q": "A função f: S<sub>4</sub> → A<sub>4</sub>, f(σ) = σ², é um homomorfismo?",
+  "o": [
+   "Não: com σ = (1 2) e τ = (1 3), (στ)² = (1 2 3), mas σ²τ² = I.",
+   "Sim, pois σ² é sempre par.",
+   "Sim, pois (στ)² = σ²τ².",
+   "Não, pois a imagem não está contida em A<sub>4</sub>."
+  ],
+  "e": "στ = (1 2)(1 3) = (1 3 2) e (1 3 2)² = (1 2 3). A igualdade (στ)² = σ²τ² vale em grupos abelianos, e S<sub>4</sub> não é abeliano. A imagem está em A<sub>4</sub>: todo quadrado é par."
+ },
+ {
+  "t": 0,
+  "q": "A regra γ(<span style=\"text-decoration:overline\">n</span>) = <span style=\"text-decoration:overline\">5n</span> define uma função de ℤ<sub>160</sub> em ℤ<sub>120</sub>?",
+  "o": [
+   "Não: <span style=\"text-decoration:overline\">0</span> = <span style=\"text-decoration:overline\">160</span> em ℤ<sub>160</sub>, mas <span style=\"text-decoration:overline\">0</span> ≠ <span style=\"text-decoration:overline\">800</span> = <span style=\"text-decoration:overline\">80</span> em ℤ<sub>120</sub>.",
+   "Sim, e é um homomorfismo.",
+   "Sim, mas não é homomorfismo.",
+   "Não, porque 5 não divide 120."
+  ],
+  "e": "Para estar bem definida, a imagem não pode depender do representante. Como 800 = 6 · 120 + 80, dois representantes da mesma classe têm imagens diferentes. (E 5 divide 120.)"
+ },
+ {
+  "t": 0,
+  "q": "Seja α: ℤ<sub>n</sub> → D<sub>n</sub>, α(<span style=\"text-decoration:overline\">a</span>) = r<sup>a</sup>. Qual é a imagem de α?",
+  "o": [
+   "R<sub>n</sub> = ⟨r⟩",
+   "D<sub>n</sub>",
+   "{e, s}",
+   "{e}"
+  ],
+  "e": "α está bem definida porque r<sup>n</sup> = e, é homomorfismo porque r<sup>a+b</sup> = r<sup>a</sup>r<sup>b</sup>, e sua imagem é o conjunto das rotações. Como ker α = {<span style=\"text-decoration:overline\">0</span>}, α é injetor."
+ },
+ {
+  "t": 0,
+  "q": "Seja f: G → H um homomorfismo e a ∈ G com f(a) = b. O conjunto f<sup>-1</sup>(b) = {x ∈ G : f(x) = b} é:",
+  "o": [
+   "a ker f",
+   "{a}",
+   "ker f",
+   "b ker f"
+  ],
+  "e": "f(x) = f(a) ⟺ f(a<sup>-1</sup>x) = 1<sub>H</sub> ⟺ a<sup>-1</sup>x ∈ ker f ⟺ x ∈ a ker f. Só é {a} quando f é injetor; e b está em H, então b ker f nem faz sentido."
+ },
+ {
+  "t": 0,
+  "q": "Seja f: ℤ<sub>6</sub> → ℤ<sub>3</sub>, f(<span style=\"text-decoration:overline\">a</span>) = <span style=\"text-decoration:overline\">a</span> (classe de a módulo 6 levada na classe de a módulo 3). Qual é ker f?",
+  "o": [
+   "{<span style=\"text-decoration:overline\">0</span>, <span style=\"text-decoration:overline\">3</span>}",
+   "{<span style=\"text-decoration:overline\">0</span>}",
+   "{<span style=\"text-decoration:overline\">0</span>, <span style=\"text-decoration:overline\">2</span>, <span style=\"text-decoration:overline\">4</span>}",
+   "ℤ<sub>6</sub>"
+  ],
+  "e": "f(<span style=\"text-decoration:overline\">a</span>) = <span style=\"text-decoration:overline\">0</span> em ℤ<sub>3</sub> exatamente quando 3 | a. Em ℤ<sub>6</sub>, as classes de múltiplos de 3 são <span style=\"text-decoration:overline\">0</span> e <span style=\"text-decoration:overline\">3</span>. Pelo primeiro teorema do isomorfismo, ℤ<sub>6</sub>/{<span style=\"text-decoration:overline\">0</span>, <span style=\"text-decoration:overline\">3</span>} ≅ ℤ<sub>3</sub>."
+ },
+ {
+  "t": 0,
+  "q": "Em D<sub>3</sub>, a função f(a) = a² é um homomorfismo de D<sub>3</sub> em D<sub>3</sub>?",
+  "o": [
+   "Não: f(rs) = (rs)² = e, mas f(r)f(s) = r²s² = r².",
+   "Sim, pois f(a) = aⁿ é sempre um homomorfismo.",
+   "Sim, pois D<sub>3</sub> é abeliano.",
+   "Não, pois f não é injetora."
+  ],
+  "e": "(ab)² = a²b² vale em grupos abelianos; D<sub>3</sub> não é abeliano. Pela regra (r<sup>i</sup>s)(r<sup>j</sup>s) = r<sup>i−j</sup>, (rs)(rs) = e; e s² = e, então r²s² = r² ≠ e."
+ },
+ {
+  "t": 0,
+  "q": "Qual é o núcleo do homomorfismo ε: S<sub>n</sub> → {1, −1} (n ≥ 2), com ε(σ) = 1 se σ é par e ε(σ) = −1 se σ é ímpar?",
+  "o": [
+   "A<sub>n</sub>",
+   "{I}",
+   "O conjunto das transposições",
+   "S<sub>n</sub>"
+  ],
+  "e": "O neutro de {1, −1} é 1, e ε(σ) = 1 exatamente quando σ é par. Logo ker ε = A<sub>n</sub>, o que dá outra prova de que A<sub>n</sub> ◁ S<sub>n</sub>."
+ },
+ {
+  "t": 1,
+  "q": "Pelo primeiro teorema do isomorfismo, usando f(z) = zⁿ, o grupo ℂ*/U<sub>n</sub> é isomorfo a:",
+  "o": [
+   "ℂ*",
+   "U<sub>n</sub>",
+   "ℝ*",
+   "𝕊¹"
+  ],
+  "e": "f: ℂ* → ℂ*, f(z) = zⁿ, é um homomorfismo sobrejetor com núcleo U<sub>n</sub>. Logo ℂ*/U<sub>n</sub> ≅ im f = ℂ*."
+ },
+ {
+  "t": 1,
+  "q": "Por que ℤ<sub>4</sub> não é isomorfo a ℤ<sub>2</sub> × ℤ<sub>2</sub>?",
+  "o": [
+   "ℤ<sub>4</sub> tem um elemento de ordem 4 e ℤ<sub>2</sub> × ℤ<sub>2</sub> não tem.",
+   "Porque têm ordens diferentes.",
+   "Porque ℤ<sub>4</sub> não é abeliano.",
+   "Porque não existe função bijetora entre eles."
+  ],
+  "e": "Isomorfismos preservam ordens de elementos. <span style=\"text-decoration:overline\">1</span> tem ordem 4 em ℤ<sub>4</sub>, e em ℤ<sub>2</sub> × ℤ<sub>2</sub> todo elemento x satisfaz 2x = 0. Os dois grupos têm 4 elementos e são abelianos."
+ },
+ {
+  "t": 1,
+  "q": "Pelo primeiro teorema do isomorfismo, GL(n, ℝ)/SL(n, ℝ) é isomorfo a:",
+  "o": [
+   "ℝ*",
+   "SL(n, ℝ)",
+   "{1}",
+   "GL(n, ℝ)"
+  ],
+  "e": "det: GL(n, ℝ) → ℝ* é um homomorfismo sobrejetor com núcleo SL(n, ℝ)."
+ },
+ {
+  "t": 1,
+  "q": "O grupo quociente ℝ/ℤ é isomorfo a:",
+  "o": [
+   "𝕊¹ = {z ∈ ℂ : |z| = 1}",
+   "ℤ",
+   "ℝ",
+   "{0}"
+  ],
+  "e": "x ↦ e<sup>2πix</sup> é um homomorfismo sobrejetor de ℝ em 𝕊¹ com núcleo ℤ."
+ },
+ {
+  "t": 1,
+  "q": "O grupo ℤ<sub>6</sub> é isomorfo a:",
+  "o": [
+   "ℤ<sub>2</sub> × ℤ<sub>3</sub>",
+   "S<sub>3</sub>",
+   "D<sub>3</sub>",
+   "ℤ<sub>3</sub>"
+  ],
+  "e": "(<span style=\"text-decoration:overline\">1</span>, <span style=\"text-decoration:overline\">1</span>) tem ordem mmc(2, 3) = 6 em ℤ<sub>2</sub> × ℤ<sub>3</sub>, que é cíclico de ordem 6. S<sub>3</sub> ≅ D<sub>3</sub> não é abeliano."
+ },
+ {
+  "t": 1,
+  "q": "O grupo de automorfismos Aut(ℤ<sub>n</sub>) é isomorfo a:",
+  "o": [
+   "ℤ<sub>n</sub><sup>*</sup>",
+   "ℤ<sub>n</sub>",
+   "S<sub>n</sub>",
+   "{1}"
+  ],
+  "e": "Um automorfismo é determinado pela imagem <span style=\"text-decoration:overline\">k</span> de <span style=\"text-decoration:overline\">1</span>, que deve ser um gerador (mdc(k, n) = 1), e f ↦ f(<span style=\"text-decoration:overline\">1</span>) é um isomorfismo."
+ },
+ {
+  "t": 1,
+  "q": "Seja f: ℤ<sub>12</sub> → ℤ<sub>8</sub> um homomorfismo com |ker f| = 3. Quantos elementos tem im f?",
+  "o": [
+   "4",
+   "3",
+   "8",
+   "12"
+  ],
+  "e": "Pelo primeiro teorema do isomorfismo, |im f| = |ℤ<sub>12</sub>|/|ker f| = 12/3 = 4 (e 4 divide 8, como deve)."
+ },
+ {
+  "t": 1,
+  "q": "Seja f: ℤ → ℤ<sub>7</sub><sup>*</sup>, f(n) = <span style=\"text-decoration:overline\">3</span><sup>n</sup>. O que dá o primeiro teorema do isomorfismo?",
+  "o": [
+   "ℤ<sub>6</sub> ≅ ℤ<sub>7</sub><sup>*</sup>",
+   "ℤ<sub>7</sub> ≅ ℤ<sub>7</sub><sup>*</sup>",
+   "ℤ<sub>3</sub> ≅ ℤ<sub>7</sub><sup>*</sup>",
+   "ℤ ≅ ℤ<sub>7</sub><sup>*</sup>"
+  ],
+  "e": "As potências de <span style=\"text-decoration:overline\">3</span> são <span style=\"text-decoration:overline\">3</span>, <span style=\"text-decoration:overline\">2</span>, <span style=\"text-decoration:overline\">6</span>, <span style=\"text-decoration:overline\">4</span>, <span style=\"text-decoration:overline\">5</span>, <span style=\"text-decoration:overline\">1</span>: |<span style=\"text-decoration:overline\">3</span>| = 6, ker f = 6ℤ e im f = ℤ<sub>7</sub><sup>*</sup>. Logo ℤ/6ℤ = ℤ<sub>6</sub> ≅ ℤ<sub>7</sub><sup>*</sup>."
+ },
+ {
+  "t": 1,
+  "q": "Seja f: ℤ → ℤ<sub>30</sub>, f(n) = <span style=\"text-decoration:overline\">12n</span>. Qual é ker f?",
+  "o": [
+   "5ℤ",
+   "30ℤ",
+   "12ℤ",
+   "6ℤ"
+  ],
+  "e": "30 | 12n ⟺ 5 | 2n ⟺ 5 | n. Logo ker f = 5ℤ, e im f = ⟨<span style=\"text-decoration:overline\">12</span>⟩ = ⟨<span style=\"text-decoration:overline\">6</span>⟩ tem 5 elementos, como manda ℤ/5ℤ ≅ im f."
+ },
+ {
+  "t": 1,
+  "q": "Sejam d, n inteiros positivos com d | n. O grupo ℤ<sub>n</sub>/⟨<span style=\"text-decoration:overline\">d</span>⟩ é isomorfo a:",
+  "o": [
+   "ℤ<sub>d</sub>",
+   "ℤ<sub>n/d</sub>",
+   "ℤ<sub>n</sub>",
+   "ℤ<sub>n−d</sub>"
+  ],
+  "e": "⟨<span style=\"text-decoration:overline\">d</span>⟩ tem n/d elementos, então o quociente tem d elementos. A função <span style=\"text-decoration:overline\">a</span> ↦ <span style=\"text-decoration:overline\">a</span> de ℤ<sub>n</sub> em ℤ<sub>d</sub> está bem definida (pois d | n), é sobrejetora e tem núcleo ⟨<span style=\"text-decoration:overline\">d</span>⟩."
+ },
+ {
+  "t": 1,
+  "q": "Seja f: G → H um homomorfismo entre grupos finitos. Então |im f| divide:",
+  "o": [
+   "|G| e |H|",
+   "apenas |H|",
+   "|ker f|",
+   "|G| − |H|"
+  ],
+  "e": "|im f| = |G|/|ker f| divide |G|, pelo primeiro teorema do isomorfismo; e im f é subgrupo de H, então |im f| divide |H| por Lagrange."
+ },
+ {
+  "t": 1,
+  "q": "Existe um homomorfismo sobrejetor de ℤ<sub>12</sub> em ℤ<sub>5</sub>?",
+  "o": [
+   "Não: |im f| teria de dividir 12, e 5 não divide 12.",
+   "Sim: f(<span style=\"text-decoration:overline\">n</span>) = <span style=\"text-decoration:overline\">n</span>.",
+   "Sim, pois 12 &gt; 5.",
+   "Não, pois ℤ<sub>5</sub> não é cíclico."
+  ],
+  "e": "Se f fosse sobrejetor, teríamos 5 = |im f|, que divide |ℤ<sub>12</sub>| = 12. A regra f(<span style=\"text-decoration:overline\">n</span>) = <span style=\"text-decoration:overline\">n</span> nem está bem definida de ℤ<sub>12</sub> em ℤ<sub>5</sub>, pois 5 ∤ 12."
+ },
+ {
+  "t": 1,
+  "q": "O grupo Aut(ℤ) é isomorfo a:",
+  "o": [
+   "{1, −1}",
+   "ℤ",
+   "{1}",
+   "ℤ<sub>4</sub>"
+  ],
+  "e": "Um automorfismo de ℤ leva o gerador 1 em um gerador: f(1) = 1 ou f(1) = −1. Assim Aut(ℤ) = {I, x ↦ −x}, que tem 2 elementos."
+ },
+ {
+  "t": 1,
+  "q": "Qual subgrupo de S<sub>4</sub> é isomorfo a ℤ<sub>8</sub><sup>*</sup>?",
+  "o": [
+   "{I, (1 2)(3 4), (1 3)(2 4), (1 4)(2 3)}",
+   "⟨(1 2 3 4)⟩",
+   "A<sub>4</sub>",
+   "{I, (1 2), (1 3), (1 4)}"
+  ],
+  "e": "ℤ<sub>8</sub><sup>*</sup> é um grupo de Klein: 4 elementos e x² = <span style=\"text-decoration:overline\">1</span> para todo x. O subgrupo da primeira opção também (o produto de dois dos elementos ≠ I é o terceiro). ⟨(1 2 3 4)⟩ é cíclico, e {I, (1 2), (1 3), (1 4)} nem é subgrupo."
+ },
+ {
+  "t": 1,
+  "q": "Quantos homomorfismos existem de ℤ<sub>5</sub> em S<sub>3</sub>?",
+  "o": [
+   "Apenas 1, o que leva tudo em I.",
+   "Nenhum.",
+   "5",
+   "6"
+  ],
+  "e": "|im f| divide |ℤ<sub>5</sub>| = 5 e |S<sub>3</sub>| = 6, logo divide mdc(5, 6) = 1. Então im f = {I}. A função constante igual a I é sempre um homomorfismo, então existe exatamente um."
+ },
+ {
+  "t": 1,
+  "q": "O grupo quociente ℝ*/ℝ<sub>+</sub><sup>*</sup> é isomorfo a:",
+  "o": [
+   "{1, −1}",
+   "ℝ<sub>+</sub><sup>*</sup>",
+   "ℝ*",
+   "ℤ"
+  ],
+  "e": "Use f: ℝ* → {1, −1}, f(x) = x/|x| (o sinal de x). É homomorfismo sobrejetor com ker f = ℝ<sub>+</sub><sup>*</sup>. Pelo primeiro teorema do isomorfismo, ℝ*/ℝ<sub>+</sub><sup>*</sup> ≅ {1, −1}: o quociente tem só duas classes, a dos positivos e a dos negativos."
+ }
+];
+</script>
+<script>
+(function () {
+  var N = 0; TEMAS.forEach(function (t) { N += t.n; });
+  var state = { i: 0, answers: [], order: [], sel: [], started: false, done: false };
+  var app = document.getElementById("app");
+  var tally = document.getElementById("tally");
+  var KEYS = ["a", "b", "c", "d", "e", "f"];
+  var nomeAluno = "";
+  function esc(t) { return String(t).replace(/[&<>"']/g, function (c) { return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+  function shuffle(n) {
+    var a = []; for (var k = 0; k < n; k++) a.push(k);
+    for (var j = n - 1; j > 0; j--) { var r = Math.floor(Math.random() * (j + 1)); var t = a[j]; a[j] = a[r]; a[r] = t; }
+    return a;
+  }
+  function sortear() {
+    var sel = [];
+    TEMAS.forEach(function (t, k) {
+      var pool = [];
+      BANCO.forEach(function (q, qi) { if (q.t === k) pool.push(qi); });
+      var idx = shuffle(pool.length);
+      for (var j = 0; j < t.n && j < pool.length; j++) sel.push(pool[idx[j]]);
+    });
+    return sel;
+  }
+  function Q(i) { return BANCO[state.sel[i]]; }
+  function renderTally() {
+    var h = '<div class="group"><div class="marks">';
+    for (var qi = 0; qi < N; qi++) {
+      var cls = "mark", a = state.answers[qi];
+      if (a === true) cls += " right"; else if (a === false) cls += " wrong";
+      else if (state.started && !state.done && qi === state.i) cls += " current";
+      h += '<span class="' + cls + '"></span>';
+    }
+    h += '</div><span class="group-name">' + INFO.curto + "</span></div>";
+    var answered = state.answers.filter(function (x) { return x !== undefined; }).length;
+    h += '<span class="count">' + answered + " de " + N + "</span>";
+    tally.innerHTML = h;
+  }
+  function renderIntro() {
+    var temas = TEMAS.map(function (t) { return t.nome + " (" + t.n + ")"; }).join("; ");
+    app.innerHTML =
+      "<h1>" + INFO.titulo + "</h1>" +
+      '<p class="lead">Estruturas Algébricas 1 · ' + INFO.capitulo + ". A cada tentativa são sorteadas " + N +
+      " questões de múltipla escolha de um banco de " + BANCO.length + ", divididas por tema: " + temas + ". " +
+      "Cada resposta é corrigida na hora, com a explicação. No final, você vê seu resultado, o desempenho em cada tema " +
+      "e as questões que errou. Ao refazer o teste, as questões mudam.</p>" +
+      '<div class="nome-box"><label for="nome">Seu nome</label>' +
+      '<input id="nome" type="text" autocomplete="name" placeholder="Digite seu nome completo" value="' + esc(nomeAluno) + '">' +
+      '<p class="erro" id="nome-erro"></p></div>' +
+      '<div class="nav"><button class="btn" id="start">Começar o teste</button>' +
+      '<span class="hint">Use as teclas 1 a 4 para responder e Enter para avançar.</span></div>';
+    var campo = document.getElementById("nome");
+    function comecar() {
+      var n = campo.value.trim();
+      if (!n) { document.getElementById("nome-erro").textContent = "Escreva seu nome para começar."; campo.focus(); return; }
+      nomeAluno = n; start();
+    }
+    document.getElementById("start").addEventListener("click", comecar);
+    campo.addEventListener("keydown", function (ev) { if (ev.key === "Enter") { ev.preventDefault(); comecar(); } });
+    renderTally();
+  }
+  function start() {
+    var sel = sortear();
+    state = { i: 0, answers: [], sel: sel, order: sel.map(function (qi) { return shuffle(BANCO[qi].o.length); }), started: true, done: false };
+    renderQuestion();
+  }
+  function renderQuestion() {
+    var qi = state.i, q = Q(qi), order = state.order[qi];
+    var opts = order.map(function (oi, pos) {
+      return '<button class="opt" data-oi="' + oi + '"><span class="key">' + KEYS[pos] + "</span><span>" + q.o[oi] + "</span></button>";
+    }).join("");
+    app.innerHTML =
+      '<p class="q-topic">Questão ' + (qi + 1) + " de " + N + " · " + TEMAS[q.t].nome + "</p>" +
+      '<div class="q-text">' + q.q + "</div>" +
+      '<div class="opts" role="group" aria-label="Alternativas">' + opts + "</div>" +
+      '<div id="fb"></div>';
+    Array.prototype.forEach.call(app.querySelectorAll(".opt"), function (b) {
+      b.addEventListener("click", function () { answer(parseInt(b.getAttribute("data-oi"), 10)); });
+    });
+    renderTally();
+    var first = app.querySelector(".opt"); if (first) first.focus({ preventScroll: true });
+    window.scrollTo({ top: 0 });
+  }
+  function answer(oi) {
+    var qi = state.i;
+    if (state.answers[qi] !== undefined) return;
+    var q = Q(qi), ok = oi === 0;
+    state.answers[qi] = ok;
+    Array.prototype.forEach.call(app.querySelectorAll(".opt"), function (b) {
+      var bo = parseInt(b.getAttribute("data-oi"), 10);
+      b.disabled = true;
+      if (bo === 0) b.classList.add("is-right");
+      else if (bo === oi) b.classList.add("is-wrong");
+      else b.classList.add("faded");
+    });
+    var last = qi === N - 1;
+    var fb = document.getElementById("fb");
+    fb.innerHTML =
+      '<div class="feedback ' + (ok ? "right" : "wrong") + '">' +
+      '<p class="verdict">' + (ok ? "Correto." : "Não é essa.") + "</p>" +
+      '<div class="expl">' + q.e + "</div></div>" +
+      '<div class="nav"><button class="btn" id="next">' + (last ? "Ver o resultado" : "Próxima questão") + "</button></div>";
+    document.getElementById("next").addEventListener("click", next);
+    renderTally();
+    document.getElementById("next").focus({ preventScroll: true });
+    fb.scrollIntoView({ block: "nearest", behavior: "smooth" });
+  }
+  function next() {
+    if (state.i < N - 1) { state.i++; renderQuestion(); }
+    else { state.done = true; renderResults(); }
+  }
+  function comentario(acertos, n) {
+    if (acertos === n) return { cls: "ok", txt: "Seguro neste tema." };
+    if (2 * acertos >= n) return { cls: "mid", txt: "Quase lá: reveja as questões que errou." };
+    return { cls: "low", txt: "Reveja este tema nas notas de aula." };
+  }
+  function renderResults() {
+    var total = state.answers.filter(function (x) { return x === true; }).length;
+    var frac = total / N;
+    var veredito = frac === 1 ? "Você acertou todas. Muito bem!"
+      : frac >= 0.75 ? "Bom resultado. Reveja as questões que errou."
+      : frac >= 0.5 ? "Resultado razoável. Vale reler o capítulo nas notas de aula."
+      : "Este capítulo precisa de mais estudo. Releia as notas de aula e tente de novo.";
+    var porTema = TEMAS.map(function () { return 0; });
+    state.sel.forEach(function (bi, qi) { if (state.answers[qi] === true) porTema[BANCO[bi].t]++; });
+    var temas = TEMAS.map(function (t, k) {
+      var c = comentario(porTema[k], t.n);
+      return '<li><span class="tnome">' + t.nome + '<span class="tcom">' + c.txt + '</span></span>' +
+             '<span class="tnota ' + c.cls + '">' + porTema[k] + " de " + t.n + "</span></li>";
+    }).join("");
+    var wrong = [];
+    for (var qi = 0; qi < N; qi++) if (state.answers[qi] === false) wrong.push(qi);
+    var review = wrong.map(function (qi) {
+      var q = Q(qi);
+      return '<div class="review-item"><div class="q-text">' + (qi + 1) + ". " + q.q + "</div>" +
+             '<p class="ans"><span class="label-right">Resposta:</span> ' + q.o[0] + "</p>" +
+             '<div class="ans">' + q.e + "</div></div>";
+    }).join("");
+    app.innerHTML =
+      "<h1>Seu resultado</h1>" +
+      '<div class="ident"><p class="quem">' + esc(nomeAluno) + "</p>" +
+      '<p class="quando">' + INFO.titulo + " · concluído em " + new Date().toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" }) + "</p>" +
+      '<p class="nota">' + total + " de " + N + " acertos</p></div>" +
+      '<p class="lead">' + veredito + "</p>" +
+      "<h2>Desempenho por tema</h2>" + '<ul class="temas">' + temas + "</ul>" +
+      (wrong.length ? '<h2>As questões que você errou</h2><div class="review">' + review + "</div>" : "") +
+      '<div class="nav"><button class="btn" id="again">Refazer com novas questões</button>' +
+      '<a class="btn ghost" href="index.html">Outros testes da disciplina</a>' +
+      '<a class="btn ghost" href="../index.html">Voltar às disciplinas</a></div>';
+    document.getElementById("again").addEventListener("click", start);
+    renderTally();
+    window.scrollTo({ top: 0 });
+  }
+  document.addEventListener("keydown", function (ev) {
+    if (!state.started || state.done) return;
+    if (ev.target && ev.target.tagName === "INPUT") return;
+    if (ev.key >= "1" && ev.key <= "4") {
+      var b = app.querySelectorAll(".opt")[parseInt(ev.key, 10) - 1];
+      if (b && !b.disabled) { ev.preventDefault(); b.click(); }
+    } else if (ev.key === "Enter" || ev.key === "ArrowRight") {
+      var nx = document.getElementById("next");
+      if (nx && state.answers[state.i] !== undefined) { ev.preventDefault(); nx.click(); }
+    }
+  });
+  renderIntro();
+})();
+</script>
+</body>
+</html>
