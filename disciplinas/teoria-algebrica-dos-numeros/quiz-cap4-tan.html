@@ -180,9 +180,9 @@ var BANK = [
   "ref": "Seção 4.1 do livro",
   "q": "Por que $G = \\Z + \\Z\\sqrt2 \\subseteq \\R$ não é uma rede?",
   "o": [
-   "Porque não é discreto: $1$ e $\\sqrt2$ são independentes sobre $\\Z$, mas não sobre $\\R$, e $G$ é denso em $\\R$.",
-   "Porque não é finitamente gerado.",
-   "Porque não é um subgrupo de $\\R$.",
+   "Porque não é discreto: $G$ é denso em $\\R$.",
+   "Porque não é finitamente gerado como grupo abeliano.",
+   "Porque não é um subgrupo aditivo de $\\R$.",
    "Porque $\\sqrt2$ é irracional, e redes só têm coordenadas racionais."
   ],
   "e": "Uma rede é gerada por vetores linearmente independentes sobre $\\R$. Em $\\R$, dois geradores nunca são. E $G$ tem posto $2$ como grupo abeliano, então pelo teorema “subgrupo discreto $\\Rightarrow$ rede” ele não pode ser discreto. Redes podem ter coordenadas irracionais, como a hexagonal.",
@@ -232,7 +232,7 @@ var BANK = [
   "ref": "Seção 4.1 do livro",
   "q": "Por que todo subgrupo aditivo de $\\Z^n$ é uma rede em $\\R^n$?",
   "o": [
-   "Porque é discreto, e todo subgrupo aditivo discreto de $\\R^n$ é uma rede.",
+   "Porque é discreto, e todo subgrupo discreto de $\\R^n$ é uma rede.",
    "Porque todo subgrupo de $\\Z^n$ tem posto $n$.",
    "Porque todo subgrupo de $\\Z^n$ é finito.",
    "Porque todo subgrupo aditivo finitamente gerado de $\\R^n$ é uma rede."
@@ -271,9 +271,9 @@ var BANK = [
   "ref": "Seção 4.2 do livro",
   "q": "Por que o volume do domínio fundamental de uma rede de posto completo não depende da base escolhida?",
   "o": [
-   "Porque a matriz de mudança entre duas bases da rede é inteira, com inversa inteira, e portanto tem determinante $\\pm1$.",
-   "Porque todo domínio fundamental tem volume $1$.",
-   "Porque duas bases da mesma rede diferem por uma rotação.",
+   "Porque a matriz de mudança entre duas bases tem determinante $\\pm1$.",
+   "Porque todo domínio fundamental de uma rede tem volume $1$.",
+   "Porque duas bases da mesma rede diferem por uma rotação de $\\R^n$.",
    "Porque os domínios fundamentais de duas bases são o mesmo conjunto."
   ],
   "e": "Se $P$ e $P'$ são as matrizes das duas bases, $P' = AP$ com $A$ e $A^{-1}$ inteiras, logo $\\det A = \\pm1$ e $|\\det P'| = |\\det P|$. Os conjuntos podem ser bem diferentes: em $\\Z^2$, as bases $\\{(1,0),(0,1)\\}$ e $\\{(1,0),(5,1)\\}$ dão um quadrado e um paralelogramo muito alongado, ambos de área $1$.",
@@ -297,10 +297,10 @@ var BANK = [
   "ref": "Seção 4.3 do livro",
   "q": "Para $L = \\Z^2$, o quadrado aberto $(-1,1)^2$ é limitado, convexo e simétrico, tem volume $4 = 2^2 \\operatorname{vol}(\\mathcal T)$ e não contém ponto não nulo de $L$. Isso mostra que:",
   "o": [
-   "a desigualdade estrita no Teorema de Minkowski não pode ser trocada por $\\ge$.",
-   "o Teorema de Minkowski falha para $n = 2$.",
-   "a hipótese de convexidade é desnecessária.",
-   "$\\Z^2$ não é uma rede de posto completo."
+   "a desigualdade estrita do teorema não pode virar $\\ge$.",
+   "o Teorema de Minkowski falha em dimensão $n = 2$.",
+   "a hipótese de convexidade do teorema é desnecessária.",
+   "$\\Z^2$ não é uma rede de posto completo em $\\R^2$."
   ],
   "e": "O exemplo atinge exatamente $2^n \\operatorname{vol}(\\mathcal T)$ sem ter ponto não nulo, então a hipótese estrita é necessária. Para conjuntos compactos, a versão com $\\ge$ vale — mas esse quadrado é aberto.",
   "d": 2
@@ -310,9 +310,9 @@ var BANK = [
   "ref": "Seção 4.3 do livro",
   "q": "Onde a simetria de $X$ é usada na prova do Teorema de Minkowski?",
   "o": [
-   "Para que, dados $x, y \\in X$ com $x - y \\in 2L$, o ponto $\\frac{x-y}{2} = \\frac12 x + \\frac12(-y)$ esteja em $X$.",
-   "Para garantir que $X$ tenha volume.",
-   "Para garantir que $X$ seja limitado.",
+   "Para garantir $-y \\in X$, e daí $\\frac{x-y}{2} \\in X$ pela convexidade.",
+   "Para garantir que $X$ tenha volume e que ele seja finito.",
+   "Para garantir que $X$ seja limitado e contenha a origem no seu interior.",
    "Para que o domínio fundamental de $L$ seja simétrico."
   ],
   "e": "A prova encontra $x \\neq y$ em $X$ com mesma imagem no toro $\\R^n/2L$. Simetria dá $-y \\in X$. Convexidade dá o ponto médio $\\frac12 x + \\frac12(-y) \\in X$, que é um ponto não nulo de $L$. As duas hipóteses trabalham juntas nesse passo.",
@@ -388,10 +388,10 @@ var BANK = [
   "ref": "Seção 4.3 do livro",
   "q": "Na demonstração do Teorema de Minkowski, considera-se o homomorfismo $\\psi_2 \\colon \\R^n \\to \\R^n/2L$. Por que $\\psi_2$ restrito a $X$ não pode ser injetivo?",
   "o": [
-   "Porque a imagem de $X$ cabe num conjunto de volume $\\operatorname{vol}(2\\mathcal{T}) = 2^n\\operatorname{vol}(\\mathcal{T}) < \\operatorname{vol}(X)$, e uma aplicação injetiva desse tipo preservaria o volume.",
-   "Porque $X$ é convexo.",
+   "Porque a imagem cabe em volume $2^n\\operatorname{vol}(\\mathcal{T})$, menor que $\\operatorname{vol}(X)$.",
+   "Porque $X$ é convexo, e $\\psi_2$ nunca é injetivo em conjuntos convexos de $\\R^n$.",
    "Porque $\\psi_2$ nunca é injetivo em conjuntos limitados.",
-   "Porque $X$ contém a origem."
+   "Porque $X$ contém a origem, que está no núcleo de $\\psi_2$."
   ],
   "e": "O domínio fundamental de $2L$ é $2\\mathcal{T}$, de volume $2^n\\operatorname{vol}(\\mathcal{T})$. Se $\\psi_2$ fosse injetivo em $X$, o volume de $X$ seria igual ao da imagem, que é no máximo esse valor. Obtêm-se assim $x \\neq y$ em $X$ com $x - y \\in 2L$. A convexidade e a simetria só entram depois, para mostrar que $\\frac{x-y}{2}$ está em $X$.",
   "d": 3
@@ -414,10 +414,10 @@ var BANK = [
   "ref": "Seção 4.5 do livro",
   "q": "Na prova de que todo primo ímpar $p$ é soma de quatro quadrados, aplica-se Minkowski à rede $L_4$, com $\\operatorname{vol}(\\mathcal T) = p^2$, e à bola de raio $\\sqrt{2p}$. Por que esse raio?",
   "o": [
-   "Porque o volume $\\frac{\\pi^2}{2}(2p)^2 = 2\\pi^2p^2$ supera $2^4p^2$, e os pontos da bola têm $a^2+b^2+c^2+d^2 < 2p$. Sendo essa soma positiva e múltipla de $p$, ela vale $p$.",
-   "Porque é o menor raio para o qual a bola contém $L_4$.",
-   "Porque $2p$ é o volume do domínio fundamental de $L_4$.",
-   "Porque com raio $\\sqrt{p}$ a bola não seria convexa."
+   "É grande para o teorema valer e pequeno para a soma, múltipla de $p$, ser $p$.",
+   "Porque é o menor raio para o qual a bola contém uma base da rede $L_4$.",
+   "Porque $2p$ é o volume do domínio fundamental de $L_4$, e os volumes devem coincidir.",
+   "Porque com raio menor, como $\\sqrt{p}$, a bola deixaria de ser convexa e simétrica."
   ],
   "e": "As duas exigências se equilibram: o raio precisa ser grande o bastante para Minkowski valer ($2\\pi^2 \\approx 19{,}74 > 16$) e pequeno o bastante para que a única soma possível, múltipla de $p$ e menor que $2p$, seja $p$.",
   "d": 3
@@ -453,12 +453,12 @@ var BANK = [
   "ref": "Seção 4.4 do livro",
   "q": "Para $p \\equiv 1 \\pmod 4$, a rede $L_2$ tem $\\operatorname{vol}(\\mathcal{T}) = p$, e todos os seus pontos têm $a^2 + b^2$ múltiplo de $p$. Quais valores de $r^2$ servem para o disco $x^2 + y^2 < r^2$ na demonstração?",
   "o": [
-   "Qualquer $r^2$ com $\\frac{4p}{\\pi} < r^2 \\le 2p$, por exemplo $r^2 = \\frac{3p}{2}$.",
-   "Apenas $r^2 = p$.",
-   "Qualquer $r^2 > \\frac{4p}{\\pi}$.",
-   "Qualquer $r^2 \\le 2p$."
+   "Qualquer $r^2$ com $\\frac{4p}{\\pi} < r^2 \\le 2p$.",
+   "Apenas $r^2 = p$, para o ponto ter $a^2 + b^2 = p$.",
+   "Qualquer $r^2 > \\frac{4p}{\\pi}$, sem limite superior.",
+   "Qualquer $r^2 \\le 2p$, sem limite inferior."
   ],
-  "e": "São duas exigências. Para o Teorema de Minkowski valer, $\\pi r^2 > 4p$. Para a conclusão, o ponto obtido precisa ter $0 < a^2 + b^2 < 2p$, de modo que o único múltiplo de $p$ possível seja $p$. Com $r^2 = p$ a área $\\pi p$ é menor que $4p$, e o teorema não se aplica.",
+  "e": "São duas exigências. Para o Teorema de Minkowski valer, $\\pi r^2 > 4p$. Para a conclusão, o ponto obtido precisa ter $0 < a^2 + b^2 < 2p$, de modo que o único múltiplo de $p$ possível seja $p$. Com $r^2 = p$ a área $\\pi p$ é menor que $4p$, e o teorema não se aplica. O livro usa $r^2 = \\frac{3p}{2}$.",
   "d": 3
  },
  {
@@ -466,9 +466,9 @@ var BANK = [
   "ref": "Seção 4.4 do livro",
   "q": "Para um primo $p \\equiv 3 \\pmod 4$, em que ponto a demonstração de que $p$ é soma de dois quadrados deixa de funcionar?",
   "o": [
-   "Não existe $u \\in \\Z$ com $u^2 \\equiv -1 \\pmod p$, e sem isso os pontos da rede $L_2$ não têm $a^2 + b^2$ múltiplo de $p$.",
-   "O disco deixa de ser convexo.",
-   "O domínio fundamental de $L_2$ deixa de ter volume $p$.",
+   "Não existe $u$ com $u^2 \\equiv -1 \\pmod p$, e some a congruência $a^2 + b^2 \\equiv 0$.",
+   "O disco $x^2 + y^2 < \\frac{3p}{2}$ deixa de ser convexo e simétrico.",
+   "O domínio fundamental da rede $L_2$ deixa de ter volume $p$.",
    "O Teorema de Minkowski só vale para redes definidas por primos $p \\equiv 1 \\pmod 4$."
   ],
   "e": "A rede $L_2$ existe para qualquer $u$, tem volume $p$, e o Teorema de Minkowski continua dando um ponto pequeno. O que se perde é a congruência $a^2 + b^2 \\equiv a^2(1 + u^2) \\equiv 0 \\pmod p$, que depende de $-1$ ser quadrado módulo $p$. De fato, um primo $p \\equiv 3 \\pmod 4$ nunca é soma de dois quadrados, pois os quadrados módulo $4$ são $0$ e $1$.",
@@ -479,12 +479,12 @@ var BANK = [
   "ref": "Seção 4.5 do livro",
   "q": "Para que serve a identidade dos quatro quadrados de Euler na demonstração do Teorema de Lagrange?",
   "o": [
-   "Ela mostra que o produto de duas somas de quatro quadrados é uma soma de quatro quadrados, o que reduz o teorema ao caso dos primos.",
+   "Ela mostra que basta provar o teorema para os números primos.",
    "Ela fornece $u, v$ com $u^2 + v^2 + 1 \\equiv 0 \\pmod p$.",
-   "Ela calcula o volume da bola de $\\R^4$.",
-   "Ela mostra que a rede $L_4$ tem posto completo."
+   "Ela calcula o volume da bola de raio $r$ em $\\R^4$.",
+   "Ela mostra que a rede $L_4$ tem posto completo em $\\R^4$ e volume $p^2$."
   ],
-  "e": "Todo natural maior que $1$ é produto de primos. Sabendo que cada primo é soma de quatro quadrados (pelo Teorema de Minkowski, para os ímpares, e $2 = 1^2 + 1^2 + 0^2 + 0^2$), a identidade de Euler passa a propriedade aos produtos.",
+  "e": "A identidade mostra que o produto de duas somas de quatro quadrados é uma soma de quatro quadrados. Todo natural maior que $1$ é produto de primos. Sabendo que cada primo é soma de quatro quadrados (pelo Teorema de Minkowski, para os ímpares, e $2 = 1^2 + 1^2 + 0^2 + 0^2$), a identidade de Euler passa a propriedade aos produtos.",
   "d": 1
  },
  {
@@ -492,10 +492,10 @@ var BANK = [
   "ref": "Seção 4.5 do livro",
   "q": "Seja $L_4$ a rede dos pontos $(a,b,c,d) \\in \\Z^4$ com $c \\equiv au + bv$ e $d \\equiv bu - av \\pmod p$, onde $u^2 + v^2 + 1 \\equiv 0 \\pmod p$. Por que todo ponto de $L_4$ tem $a^2 + b^2 + c^2 + d^2$ múltiplo de $p$?",
   "o": [
-   "Porque $c^2 + d^2 \\equiv (a^2 + b^2)(u^2 + v^2)$, e a soma dos quatro quadrados é congruente a $(a^2 + b^2)(1 + u^2 + v^2) \\equiv 0 \\pmod p$.",
+   "Porque a soma é congruente a $(a^2 + b^2)(1 + u^2 + v^2)$ módulo $p$.",
    "Porque todas as coordenadas de um ponto de $L_4$ são múltiplas de $p$.",
    "Porque o domínio fundamental de $L_4$ tem volume $p^2$.",
-   "Porque $c \\equiv d \\pmod p$."
+   "Porque $c \\equiv d \\pmod p$, e então $c^2 + d^2 \\equiv 0 \\pmod p$."
   ],
   "e": "Desenvolvendo, $(au + bv)^2 + (bu - av)^2 = (a^2 + b^2)(u^2 + v^2)$, pois os termos mistos $\\pm 2abuv$ se cancelam. O ponto $(1, 0, u, -v)$ está em $L_4$ e não tem as coordenadas múltiplas de $p$. O volume $p^2$ é usado em outro passo, na aplicação do Teorema de Minkowski.",
   "d": 2

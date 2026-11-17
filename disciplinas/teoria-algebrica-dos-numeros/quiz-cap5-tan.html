@@ -232,10 +232,10 @@ var BANK = [
   "ref": "Seção 5.1 do livro",
   "q": "Na prova de que $\\sigma(\\alpha_1), \\dots, \\sigma(\\alpha_n)$ são $\\R$-linearmente independentes, troca-se cada par de colunas $(\\operatorname{Re}\\sigma_{s+j}, \\operatorname{Im}\\sigma_{s+j})$ por $(\\sigma_{s+j}, \\overline{\\sigma}_{s+j})$. Para quê?",
   "o": [
-   "Para chegar à matriz $(\\sigma_k(\\alpha_j))$, cujo determinante ao quadrado é $\\Delta(\\alpha_1,\\dots,\\alpha_n) \\neq 0$. A troca só multiplica o determinante por $(-2i)^t$.",
-   "Para tornar a matriz real.",
-   "Para que o determinante passe a valer $1$.",
-   "Porque $\\operatorname{Re}$ e $\\operatorname{Im}$ não são funções lineares."
+   "Para chegar à matriz $(\\sigma_k(\\alpha_j))$, cujo determinante não é nulo.",
+   "Para tornar reais todas as entradas da matriz.",
+   "Para que o determinante da matriz passe a valer $1$.",
+   "Porque $\\operatorname{Re}$ e $\\operatorname{Im}$ não são funções $\\R$-lineares, e a troca corrige isso."
   ],
   "e": "As colunas $(y, z)$ viram $(y + iz,\\ y - iz)$, operação de determinante $-2i$. Assim o determinante original é não nulo se, e só se, $\\det(\\sigma_k(\\alpha_j)) \\neq 0$, e o quadrado deste é o discriminante, não nulo para uma base. $\\operatorname{Re}$ e $\\operatorname{Im}$ são $\\R$-lineares.",
   "d": 3
@@ -245,10 +245,10 @@ var BANK = [
   "ref": "Seção 5.1 do livro",
   "q": "Por que $\\sigma(\\OK)$ é uma rede em $\\mathcal{L}^{st}$, mas $\\sigma(K)$ não é?",
   "o": [
-   "$\\sigma(\\OK)$ é gerado pela imagem de uma $\\Z$-base de $\\OK$, que são $n$ vetores $\\R$-linearmente independentes. Já $\\sigma(K)$ é denso em $\\mathcal{L}^{st}$.",
-   "Porque $\\OK$ é finito e $K$ é infinito.",
-   "Porque $\\sigma$ é injetora em $\\OK$, mas não em $K$.",
-   "Porque $\\sigma(K)$ não é um subgrupo aditivo."
+   "$\\sigma(\\OK)$ tem uma $\\Z$-base $\\R$-linearmente independente, e $\\sigma(K)$ é denso.",
+   "Porque $\\sigma$ é injetora em $\\OK$, mas deixa de ser em $K$.",
+   "Porque $\\sigma(K)$ não é um subgrupo aditivo de $\\mathcal{L}^{st}$, enquanto $\\sigma(\\OK)$ é fechado para a soma.",
+   "Porque $\\sigma(\\OK)$ é limitado, enquanto $\\sigma(K)$ não é."
   ],
   "e": "Uma $\\Z$-base de $\\OK$ tem $n$ elementos $\\Q$-linearmente independentes, que $\\sigma$ leva em vetores $\\R$-linearmente independentes. Como $K = \\Q \\cdot \\OK$, o conjunto $\\sigma(K)$ contém múltiplos racionais arbitrariamente pequenos dos vetores da rede: é denso e não discreto. A imersão $\\sigma$ é injetora em todo $K$.",
   "d": 3
@@ -323,10 +323,10 @@ var BANK = [
   "ref": "Seção 5.4 do livro",
   "q": "Por que o grupo de classes $\\mathcal{H}$ é finito?",
   "o": [
-   "Toda classe contém um ideal de norma limitada por uma constante que só depende de $K$, e há apenas finitos ideais com norma limitada.",
-   "Porque $\\OK$ é noetheriano.",
-   "Porque $\\OK$ tem apenas finitos ideais primos.",
-   "Porque todo ideal fracionário é principal."
+   "Porque toda classe contém um ideal de norma limitada, e eles são finitos.",
+   "Porque $\\OK$ é noetheriano, e num anel noetheriano o número de classes é finito.",
+   "Porque $\\OK$ tem apenas um número finito de ideais primos.",
+   "Porque todo ideal fracionário de $\\OK$ é principal."
   ],
   "e": "A cota $M_{st}\\sqrt{|\\Delta_K|}$ não depende da classe. E há finitos ideais de norma $\\le B$: cada um contém a sua norma, um inteiro $\\le B$, e há finitos ideais contendo um inteiro fixo. $\\OK$ tem infinitos primos.",
   "d": 2
@@ -336,10 +336,10 @@ var BANK = [
   "ref": "Seção 5.4 do livro",
   "q": "Por que $M_{st}\\sqrt{|\\Delta_K|} \\ge 1$ para todo corpo $K$?",
   "o": [
-   "A classe trivial contém um ideal de norma $\\le M_{st}\\sqrt{|\\Delta_K|}$, e toda norma de ideal é um inteiro $\\ge 1$.",
-   "Porque $|\\Delta_K| \\ge 1$ e $M_{st} \\ge 1$.",
-   "Porque $M_{st} = 1$ para todo $K$.",
-   "Porque $\\sqrt{|\\Delta_K|} \\ge n$."
+   "Porque essa cota limita a norma de algum ideal, que é um inteiro $\\ge 1$.",
+   "Porque $|\\Delta_K| \\ge 1$ e $M_{st} \\ge 1$ para todo corpo de números $K$, e basta multiplicar.",
+   "Porque $M_{st} = 1$ para todo $K$, e $|\\Delta_K| \\ge 1$.",
+   "Porque $\\sqrt{|\\Delta_K|} \\ge n$ e $M_{st} \\ge \\frac1n$."
   ],
   "e": "$M_{st}$ é sempre menor que $1$ — por exemplo, $M_{1,1} \\approx 0{,}28$ —, então $|\\Delta_K| \\ge 1$ não basta. A desigualdade sai do corolário aplicado a qualquer classe, e dela vem $|\\Delta_K| > 1$ para $n \\ge 2$: todo corpo diferente de $\\Q$ tem algum primo ramificado.",
   "d": 3
@@ -375,10 +375,10 @@ var BANK = [
   "ref": "Seção 5.3 do livro",
   "q": "Considere o homomorfismo $K^* \\longrightarrow \\mathfrak{F}$, $\\alpha \\longmapsto \\alpha\\,\\OK$, do grupo multiplicativo de $K$ no grupo dos ideais fracionários não nulos. Quais são o seu núcleo e a sua imagem?",
   "o": [
-   "O núcleo é $\\OK^*$ e a imagem é o subgrupo $\\mathcal{P}$ dos ideais fracionários principais.",
-   "O núcleo é $\\{1\\}$ e a imagem é $\\mathcal{P}$.",
-   "O núcleo é $\\OK^*$ e a imagem é $\\mathfrak{F}$.",
-   "O núcleo é $\\{\\pm1\\}$ e a imagem é $\\mathcal{H}$."
+   "O núcleo é $\\OK^*$ e a imagem é $\\mathcal{P}$, os ideais principais.",
+   "O núcleo é $\\{1\\}$ e a imagem é $\\mathcal{P}$, os ideais principais.",
+   "O núcleo é $\\OK^*$ e a imagem é todo o grupo $\\mathfrak{F}$.",
+   "O núcleo é $\\{\\pm1\\}$ e a imagem é o grupo de classes $\\mathcal{H}$."
   ],
   "e": "$\\alpha\\,\\OK = \\OK$ equivale a $\\alpha$ e $\\alpha^{-1}$ estarem em $\\OK$, isto é, $\\alpha \\in \\OK^*$. Logo $\\mathcal{P} \\cong K^*/\\OK^*$. O homomorfismo só é sobrejetor quando todo ideal fracionário é principal, isto é, quando $h = 1$. O conúcleo $\\mathfrak{F}/\\mathcal{P}$ é o grupo de classes $\\mathcal{H}$.",
   "d": 2
@@ -401,8 +401,8 @@ var BANK = [
   "ref": "Seção 5.5 do livro",
   "q": "Se $h = 4$ e $I^2$ é principal, $I$ é necessariamente principal?",
   "o": [
-   "Não: $\\operatorname{mdc}(2, 4) = 2$, e a classe de $I$ pode ter ordem $2$.",
-   "Sim, sempre.",
+   "Não: a classe de $I$ pode ter ordem $2$.",
+   "Sim: a ordem da classe divide $2$ e $4$, logo é $1$.",
    "Sim, porque $I^4$ é principal.",
    "Não, e aliás $I$ nunca é principal."
   ],
@@ -414,10 +414,10 @@ var BANK = [
   "ref": "Seção 5.5 do livro",
   "q": "O critério de DIP só pede que os primos $P$ com $\\N(P) \\le M_{st}\\sqrt{|\\Delta_K|}$ sejam principais. Por que basta olhar esses primos?",
   "o": [
-   "Toda classe contém um ideal $I$ com $\\N(I) \\le M_{st}\\sqrt{|\\Delta_K|}$. Cada fator primo de $I$ tem norma $\\le \\N(I)$. Se todos forem principais, $I$ é principal.",
-   "Porque todo ideal de norma grande é principal.",
-   "Porque o grupo de classes é gerado pelos primos de norma $2$.",
-   "Porque primos de norma grande são sempre inertes."
+   "Porque toda classe contém um ideal de norma até a cota, produto desses primos.",
+   "Porque todo ideal de norma maior que a cota é principal, pelo Teorema de Minkowski.",
+   "Porque o grupo de classes é sempre gerado pelos primos de norma $2$.",
+   "Porque os primos de norma maior que a cota são sempre inertes."
   ],
   "e": "A norma é multiplicativa e cada fator tem norma $\\ge 2$, então $\\N(P_j) \\le \\N(I)$. Um primo de norma maior que a cota pode existir e até não ser principal — mas a classe dele também contém um ideal pequeno.",
   "d": 3
@@ -427,12 +427,12 @@ var BANK = [
   "ref": "Seção 5.5 do livro",
   "q": "Em $K = \\Q(\\sqrt{-11})$, a cota é $M_{st}\\sqrt{|\\Delta_K|} \\approx 2{,}11$, e $\\OK = \\Z[\\theta]$ com $\\theta = \\frac{1+\\sqrt{-11}}{2}$ e $p_\\theta = x^2 - x + 3$. O que basta verificar para concluir que $h = 1$?",
   "o": [
-   "Que não há ideal primo de norma $2$: como $x^2 - x + 3$ é irredutível em $\\F_2[x]$, $\\langle 2 \\rangle$ é primo, de norma $4$.",
-   "Que $\\langle 2 \\rangle$ e $\\langle 3 \\rangle$ são principais.",
+   "Que não há ideal primo de norma $2$.",
+   "Que $2$ é decomposto em dois ideais primos distintos de norma $2$.",
    "Que $x^2 + 11$ é irredutível módulo $2$.",
-   "Que $11$ é ramificado."
+   "Que $11$ é ramificado em $\\OK$."
   ],
-  "e": "Pelo critério, só importam primos com $\\N(P) \\le 2{,}11$, isto é, de norma $2$. Como $2$ é inerte, não há nenhum, e $\\OK$ é DIP. Usar $x^2 + 11$ seria trabalhar em $\\Z[\\sqrt{-11}] \\neq \\OK$ — e, aliás, $x^2 + 11 \\equiv (x+1)^2$ módulo $2$.",
+  "e": "Pelo critério, só importam primos com $\\N(P) \\le 2{,}11$, isto é, de norma $2$. Como $x^2 - x + 3$ é irredutível em $\\F_2[x]$, o ideal $\\langle 2 \\rangle$ é primo, de norma $4$, e não há nenhum, e $\\OK$ é DIP. Usar $x^2 + 11$ seria trabalhar em $\\Z[\\sqrt{-11}] \\neq \\OK$ — e, aliás, $x^2 + 11 \\equiv (x+1)^2$ módulo $2$.",
   "d": 2
  },
  {
@@ -466,10 +466,10 @@ var BANK = [
   "ref": "Seção 5.5 do livro",
   "q": "Em $K = \\Q(\\sqrt[3]{2})$, com $\\Delta_K = -108$ e $s = t = 1$, a cota é $M_{st}\\sqrt{|\\Delta_K|} \\approx 2{,}94$. Como se conclui que $\\OK$ é DIP?",
   "o": [
-   "Só importam primos de norma $2$, e $\\langle 2 \\rangle = \\langle \\sqrt[3]{2} \\rangle^3$ é potência de um primo principal.",
-   "É preciso analisar os primos $2$ e $3$.",
+   "O único primo de norma $2$ é $\\langle \\sqrt[3]{2} \\rangle$, que é principal.",
+   "É preciso analisar os primos $2$ e $3$, e $3$ não é principal.",
    "$\\OK$ não é DIP, pois $\\Delta_K$ não é livre de quadrados.",
-   "Basta observar que $s = 1$."
+   "Basta observar que $s = 1$, pois então $h = 1$."
   ],
   "e": "$x^3 - 2 \\equiv x^3 \\pmod 2$, então $\\langle 2 \\rangle = P^3$ com $P = \\langle 2, \\sqrt[3]{2}\\rangle = \\langle \\sqrt[3]{2} \\rangle$, pois $2 = (\\sqrt[3]{2})^3$. O único primo de norma $\\le 2{,}94$ é principal. Discriminante não livre de quadrados não impede $h = 1$.",
   "d": 2
@@ -479,9 +479,9 @@ var BANK = [
   "ref": "Seção 5.5 do livro",
   "q": "Para $K = \\Q(\\zeta_5)$, com $s = 0$, $t = 2$ e $\\Delta_K = 125$, a cota é $\\approx 1{,}70$. O que se conclui?",
   "o": [
-   "Toda classe contém um ideal de norma $1$, isto é, $\\OK$. Logo $h = 1$.",
-   "É preciso analisar o primo $2$.",
-   "$h = 2$.",
+   "Toda classe contém $\\OK$, logo $h = 1$.",
+   "É preciso analisar os primos acima de $2$.",
+   "$h = 2$, pois a cota é menor que $2$.",
    "Nada: a cota só vale para corpos quadráticos."
   ],
   "e": "Como a cota é menor que $2$, o único ideal de norma $\\le 1{,}70$ é $\\OK$, e todas as classes são triviais. Para $\\Q(\\zeta_7)$ a cota já é $\\approx 4{,}13$, e é preciso olhar os primos acima de $2$ e $3$.",

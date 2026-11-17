@@ -167,10 +167,10 @@ var BANK = [
   "ref": "Seção 2.2 do livro",
   "q": "Por que $\\mathcal{O}_K$ é noetheriano?",
   "o": [
-   "Porque todo ideal de $\\mathcal{O}_K$ é subgrupo de $\\mathcal{O}_K$, que é um $\\Z$-módulo livre de posto $n$. Logo todo ideal é finitamente gerado como $\\Z$-módulo e, portanto, como ideal.",
+   "Porque todo ideal é subgrupo de $\\mathcal{O}_K \\cong \\Z^n$, logo é finitamente gerado.",
    "Porque $\\mathcal{O}_K$ é sempre um domínio de ideais principais.",
    "Porque $\\mathcal{O}_K$ tem apenas um número finito de ideais.",
-   "Porque todo ideal de $\\mathcal{O}_K$ é gerado por um inteiro racional."
+   "Porque todo ideal de $\\mathcal{O}_K$ é gerado por um inteiro racional, logo é principal."
   ],
   "e": "Subgrupos de um $\\Z$-módulo livre de posto $n$ são livres de posto no máximo $n$, logo finitamente gerados. Um conjunto de geradores sobre $\\Z$ também gera o ideal sobre $\\mathcal{O}_K$. Nem todo $\\mathcal{O}_K$ é DIP — $\\Z[\\sqrt{-5}]$ não é.",
   "d": 3
@@ -193,10 +193,10 @@ var BANK = [
   "ref": "Seção 2.2 do livro",
   "q": "Em $\\Z[\\sqrt{-14}]$, temos $15 = 3 \\cdot 5 = (1+\\sqrt{-14})(1-\\sqrt{-14})$. Por que $3$ é irredutível?",
   "o": [
-   "Se $3 = xy$ com $x, y$ não unidades, então $\\operatorname{N}(x) = 3$, mas $a^2 + 14b^2 = 3$ não tem solução inteira.",
-   "Porque $3$ é primo em $\\Z$.",
-   "Porque $\\operatorname{N}(3) = 9$ é um quadrado perfeito.",
-   "Porque $3$ não divide $1 + \\sqrt{-14}$."
+   "Um fator próprio teria norma $3$, e $a^2 + 14b^2 = 3$ não tem solução.",
+   "Porque $3$ é primo em $\\Z$, e todo primo de $\\Z$ continua irredutível em $\\mathcal{O}_K$.",
+   "Porque $\\operatorname{N}(3) = 9$ não é primo, e isso impede fatorações.",
+   "Porque $3$ não divide $1 + \\sqrt{-14}$ nem $1 - \\sqrt{-14}$."
   ],
   "e": "$\\operatorname{N}(x)\\operatorname{N}(y) = 9$ com fatores diferentes de $1$ força $\\operatorname{N}(x) = 3$, impossível. Ser primo em $\\Z$ não basta: $5 = (2+i)(2-i)$ em $\\Z[i]$. E “$3$ não divide $1+\\sqrt{-14}$” mostra que $3$ não é <em>primo</em> em $\\Z[\\sqrt{-14}]$ — que é outra coisa.",
   "d": 2
@@ -206,9 +206,9 @@ var BANK = [
   "ref": "Seção 2.2 do livro",
   "q": "Em $\\Z[\\sqrt{10}]$, temos $6 = 2 \\cdot 3 = (4+\\sqrt{10})(4-\\sqrt{10})$. Por que $2$ é irredutível?",
   "o": [
-   "Um fator próprio teria norma $\\pm2$, e $a^2 - 10b^2 = \\pm 2$ não tem solução, pois $\\pm2$ não é quadrado módulo $5$.",
+   "Um fator próprio teria norma $\\pm2$, e $a^2 - 10b^2 = \\pm 2$ não tem solução.",
    "Um fator próprio teria norma $2$, e $a^2 + 10b^2 = 2$ não tem solução.",
-   "Porque $2$ é primo em $\\Z$.",
+   "Porque $2$ é primo em $\\Z$, e $\\Z$ está contido em $\\Z[\\sqrt{10}]$ com as mesmas unidades.",
    "Porque as únicas unidades de $\\Z[\\sqrt{10}]$ são $\\pm1$."
   ],
   "e": "Em corpo real a norma é $a^2 - 10b^2$ e pode ser negativa, então é preciso excluir $\\pm 2$. Reduzindo módulo $5$: $a^2 \\equiv \\pm2$, impossível, pois os quadrados módulo $5$ são $0, 1, 4$. E $\\Z[\\sqrt{10}]$ tem infinitas unidades, como $3 + \\sqrt{10}$.",
@@ -245,7 +245,7 @@ var BANK = [
   "ref": "Seção 2.1 do livro",
   "q": "O grupo das unidades do anel de inteiros de $\\Q(\\sqrt3)$ é finito?",
   "o": [
-   "Não: $2 + \\sqrt3$ tem norma $1$ e é maior que $1$, logo suas potências são unidades duas a duas distintas.",
+   "Não: $2 + \\sqrt3$ tem norma $1$, e suas potências são unidades distintas.",
    "Sim: as unidades são $\\pm1$, pois $a^2 - 3b^2 = -1$ não tem solução inteira.",
    "Sim: as unidades são $\\pm1$, pois $a^2 + 3b^2 = 1$ só tem as soluções $a = \\pm1$, $b = 0$.",
    "Não: $\\sqrt3$ é uma unidade de ordem infinita."
@@ -297,10 +297,10 @@ var BANK = [
   "ref": "Seção 2.2 do livro",
   "q": "Seja $\\mathbb{B}$ o anel de todos os inteiros algébricos. Por que $\\mathbb{B}$ não tem elementos irredutíveis?",
   "o": [
-   "Porque todo $\\alpha \\in \\mathbb{B}$ não nulo e não unidade se escreve como $\\alpha = \\sqrt\\alpha \\cdot \\sqrt\\alpha$, e $\\sqrt\\alpha$ é um inteiro algébrico que não é unidade.",
-   "Porque $\\mathbb{B}$ é um corpo.",
+   "Porque todo $\\alpha$ não unidade é $\\sqrt\\alpha \\cdot \\sqrt\\alpha$, com $\\sqrt\\alpha \\in \\mathbb{B}$ não unidade.",
+   "Porque $\\mathbb{B}$ é um corpo, e num corpo não há elementos irredutíveis nem primos.",
    "Porque todo elemento não nulo de $\\mathbb{B}$ é uma unidade.",
-   "Porque $\\mathbb{B}$ é noetheriano."
+   "Porque $\\mathbb{B}$ é noetheriano, e a fatoração nunca termina."
   ],
   "e": "Se $\\alpha$ é raiz do polinômio mônico $p(x) \\in \\Z[x]$, então $\\sqrt\\alpha$ é raiz de $p(x^2)$, e portanto é inteiro algébrico. Se $\\sqrt\\alpha$ fosse unidade, $\\alpha$ também seria. $\\mathbb{B}$ não é corpo: $\\frac12 \\notin \\mathbb{B}$. E a cadeia $\\langle 2 \\rangle \\subsetneq \\langle \\sqrt2 \\rangle \\subsetneq \\langle \\sqrt[4]{2} \\rangle \\subsetneq \\cdots$ mostra que $\\mathbb{B}$ não é noetheriano.",
   "d": 3
@@ -310,7 +310,7 @@ var BANK = [
   "ref": "Seção 2.2 do livro",
   "q": "Considere o argumento: “se $p_1, \\dots, p_m$ fossem todos os irredutíveis de $\\mathcal{O}_K$, o número $1 + p_1 \\cdots p_m$ seria divisível por um irredutível diferente de todos eles, absurdo”. Onde está o erro?",
   "o": [
-   "O número $1 + p_1 \\cdots p_m$ pode ser uma unidade, e unidades não têm fator irredutível.",
+   "O número $1 + p_1 \\cdots p_m$ pode ser uma unidade, sem fator irredutível.",
    "Em $\\mathcal{O}_K$ nem todo elemento não nulo e não unidade é produto de irredutíveis.",
    "O produto $p_1 \\cdots p_m$ pode ser zero.",
    "Não há erro: o argumento de Euclides vale em qualquer domínio."
@@ -323,10 +323,10 @@ var BANK = [
   "ref": "Seção 2.3 do livro",
   "q": "Em $\\Z[i]$, temos $10 = (3+i)(3-i) = 2 \\cdot 5$. Isso é um exemplo de fatoração não única?",
   "o": [
-   "Não: nenhum dos quatro fatores é irredutível, e as duas fatorações se refinam em $(1+i)(1-i)(2+i)(2-i)$.",
+   "Não: os quatro fatores são redutíveis, e o refinamento é o mesmo.",
    "Sim: os fatores $3 \\pm i$ não são associados a $2$ nem a $5$.",
-   "Sim: $\\Z[i]$ não é um domínio de fatoração única.",
-   "Não: $3 + i$ e $2$ são associados."
+   "Sim: isso mostra que $\\Z[i]$ não é um domínio de fatoração única.",
+   "Não: $3 + i$ é associado a $2$, e $3 - i$ é associado a $5$."
   ],
   "e": "Fatoração única se refere a fatorações em irredutíveis. Aqui $2 = (1+i)(1-i)$, $5 = (2+i)(2-i)$, $3 + i = (1+i)(2-i)$ e $3 - i = (1-i)(2+i)$. As duas fatorações de $10$ são agrupamentos diferentes dos mesmos quatro irredutíveis. $\\Z[i]$ é euclidiano, logo é DFU.",
   "d": 2
@@ -336,10 +336,10 @@ var BANK = [
   "ref": "Seção 2.3 do livro",
   "q": "Em $\\Z[\\sqrt{-5}]$, o elemento $2$ é irredutível. O que mostra que ele não é primo?",
   "o": [
-   "$2$ divide $6 = (1+\\sqrt{-5})(1-\\sqrt{-5})$ e não divide nenhum dos dois fatores.",
-   "$\\operatorname{N}(2) = 4$ não é um número primo.",
-   "$2$ tem um fator próprio de norma $2$.",
-   "$2$ não é irredutível, logo não é primo."
+   "$2$ divide $(1+\\sqrt{-5})(1-\\sqrt{-5})$ e não divide nenhum dos fatores.",
+   "$\\operatorname{N}(2) = 4$ não é primo, e todo elemento primo tem norma prima.",
+   "$2$ tem um fator próprio de norma $2$, a saber $1 + \\sqrt{-5}$.",
+   "$2$ não divide $6$ em $\\Z[\\sqrt{-5}]$, embora divida em $\\Z$."
   ],
   "e": "Primo quer dizer: se divide um produto, divide um dos fatores. Como $\\frac{1 \\pm \\sqrt{-5}}{2} \\notin \\Z[\\sqrt{-5}]$, o elemento $2$ não divide $1 \\pm \\sqrt{-5}$. Norma composta não decide nada: em $\\Z[i]$, o elemento $3$ tem norma $9$ e é primo. E não há elementos de norma $2$, pois $a^2 + 5b^2 = 2$ não tem solução.",
   "d": 1
@@ -375,10 +375,10 @@ var BANK = [
   "ref": "Seção 2.3 do livro",
   "q": "Em $\\Z[\\sqrt{-6}]$, temos $6 = 2 \\cdot 3 = (\\sqrt{-6})(-\\sqrt{-6})$. Por que isso mostra que $\\Z[\\sqrt{-6}]$ não é DFU?",
   "o": [
-   "Porque $2$, $3$ e $\\sqrt{-6}$ são irredutíveis (não há elementos de norma $2$ nem $3$), e $2$ não é associado a $\\pm\\sqrt{-6}$, que tem norma $6 \\neq 4$.",
-   "Porque $6$ tem duas fatorações, e num DFU cada elemento tem uma única maneira de se escrever como produto.",
-   "Porque $\\operatorname{N}(2) = 4$ e $\\operatorname{N}(3) = 9$ não são primos.",
-   "Porque $\\sqrt{-6}$ não é um inteiro algébrico."
+   "Porque $2$, $3$ e $\\sqrt{-6}$ são irredutíveis, e $2$ não é associado a $\\pm\\sqrt{-6}$.",
+   "Porque $6$ tem duas fatorações diferentes, e num DFU todo elemento tem uma só.",
+   "Porque $\\operatorname{N}(2) = 4$ e $\\operatorname{N}(3) = 9$ não são números primos.",
+   "Porque $\\sqrt{-6}$ é irredutível, mas não é um inteiro algébrico."
   ],
   "e": "É preciso verificar duas coisas: que os fatores são irredutíveis e que as fatorações não diferem só por unidades. Um fator próprio de $2$, $3$ ou $\\sqrt{-6}$ teria norma $2$ ou $3$, e $a^2 + 6b^2$ nunca vale $2$ ou $3$. Associados têm a mesma norma, e $4 \\neq 6$. Ter duas fatorações quaisquer não basta: em $\\Z$, $12 = 2 \\cdot 6 = 3 \\cdot 4$.",
   "d": 3
@@ -401,12 +401,12 @@ var BANK = [
   "ref": "Seção 2.4 do livro",
   "q": "Qual é o argumento-chave para provar que $\\Z[\\sqrt{-2}]$ é euclidiano em relação a $|\\operatorname{N}|$?",
   "o": [
-   "Dado $\\varepsilon = x + y\\sqrt{-2} \\in K$, arredondando $x$ e $y$ ao inteiro mais próximo obtém-se $\\kappa \\in \\mathcal{O}_K$ com $|\\operatorname{N}(\\varepsilon - \\kappa)| \\le \\frac14 + 2 \\cdot \\frac14 = \\frac34 < 1$.",
-   "$\\Z[\\sqrt{-2}]$ é um domínio de ideais principais, e todo DIP é euclidiano.",
-   "A norma $a^2 + 2b^2$ é sempre par.",
-   "As únicas unidades de $\\Z[\\sqrt{-2}]$ são $\\pm 1$."
+   "Todo $\\varepsilon \\in K$ está a norma no máximo $\\frac34$ de algum elemento de $\\Z[\\sqrt{-2}]$.",
+   "$\\Z[\\sqrt{-2}]$ é um domínio de ideais principais, e todo DIP é euclidiano pela norma.",
+   "A norma $a^2 + 2b^2$ de um elemento não nulo de $\\Z[\\sqrt{-2}]$ é sempre par.",
+   "As únicas unidades de $\\Z[\\sqrt{-2}]$ são $\\pm 1$, e isso basta."
   ],
-  "e": "Basta aproximar cada $\\varepsilon \\in K$ por um inteiro a uma norma menor que $1$. Para $\\sqrt{-5}$ a mesma conta dá $\\frac14 + \\frac54 = \\frac32 > 1$, e de fato $\\Z[\\sqrt{-5}]$ nem é DFU. E há DIPs que não são euclidianos, como o anel de inteiros de $\\Q(\\sqrt{-19})$.",
+  "e": "Arredondando as coordenadas de $\\varepsilon = x + y\\sqrt{-2}$ aos inteiros mais próximos, obtém-se $\\kappa$ com $|\\operatorname{N}(\\varepsilon - \\kappa)| \\le \\frac14 + 2 \\cdot \\frac14 = \\frac34$. Basta aproximar cada $\\varepsilon \\in K$ por um inteiro a uma norma menor que $1$. Para $\\sqrt{-5}$ a mesma conta dá $\\frac14 + \\frac54 = \\frac32 > 1$, e de fato $\\Z[\\sqrt{-5}]$ nem é DFU. E há DIPs que não são euclidianos, como o anel de inteiros de $\\Q(\\sqrt{-19})$.",
   "d": 2
  },
  {
@@ -427,10 +427,10 @@ var BANK = [
   "ref": "Seção 2.4 do livro",
   "q": "Para mostrar que $\\mathcal{O}_K$ ($d < -11$) não é euclidiano, toma-se $\\alpha$ não nulo, não unidade, com $\\varphi(\\alpha)$ mínimo. Por que $|\\mathcal{O}_K/\\langle\\alpha\\rangle| \\le 3$?",
   "o": [
-   "Porque todo elemento de $\\mathcal{O}_K/\\langle \\alpha \\rangle$ é representado por $0$ ou por uma unidade, e as únicas unidades são $\\pm1$.",
-   "Porque $\\alpha$ tem norma no máximo $3$.",
-   "Porque $\\mathcal{O}_K/\\langle \\alpha \\rangle$ é um corpo.",
-   "Porque $\\alpha$ divide $3$."
+   "Porque toda classe é representada por $0$ ou por uma unidade, e as unidades são $\\pm1$.",
+   "Porque a minimalidade de $\\varphi(\\alpha)$ obriga $\\alpha$ a ter norma no máximo $3$ em valor absoluto.",
+   "Porque $\\mathcal{O}_K/\\langle \\alpha \\rangle$ é um corpo de característica $2$ ou $3$.",
+   "Porque $\\alpha$ divide $3$, já que $\\varphi(\\alpha) \\le \\varphi(3)$."
   ],
   "e": "Dividindo qualquer $\\beta$ por $\\alpha$, o resto $\\delta$ tem $\\varphi(\\delta) < \\varphi(\\alpha)$, logo é $0$ ou unidade, pela minimalidade. Com unidades $\\pm 1$, sobram as classes de $0$, $1$ e $-1$. Depois mostra-se que nenhum $\\alpha$ tem quociente tão pequeno.",
   "d": 3
@@ -479,10 +479,10 @@ var BANK = [
   "ref": "Seção 2.4 do livro",
   "q": "Qual das afirmações sobre domínios é correta?",
   "o": [
-   "Euclidiano implica DIP, DIP implica DFU, e nenhuma das duas recíprocas vale em geral.",
+   "Euclidiano implica DIP, e DIP implica DFU.",
    "DFU implica DIP, e DIP implica euclidiano.",
-   "Euclidiano, DIP e DFU são equivalentes para todo domínio.",
-   "Euclidiano implica DFU, mas um domínio euclidiano pode não ser DIP."
+   "Euclidiano, DIP e DFU são equivalentes em todo domínio.",
+   "Euclidiano implica DFU, mas não implica DIP."
   ],
   "e": "Num domínio euclidiano, um elemento de valor mínimo num ideal gera esse ideal. Num DIP, os irredutíveis são primos e há fatoração. As recíprocas falham: $\\Z[x]$ é DFU e o ideal $\\langle 2, x \\rangle$ não é principal, e o anel de inteiros de $\\Q(\\sqrt{-19})$ é DIP e não é euclidiano. Para anéis de inteiros $\\mathcal{O}_K$, DFU e DIP coincidem, o que se prova mais adiante no livro.",
   "d": 2

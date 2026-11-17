@@ -180,9 +180,9 @@ var BANK = [
   "ref": "Seção 1.2 do livro",
   "q": "Em $K = \\Q(\\sqrt[4]{2})$, de grau $4$, quais são os $K$-conjugados de $\\alpha = \\sqrt{2}$?",
   "o": [
-   "$\\sqrt2,\\ -\\sqrt2,\\ \\sqrt2,\\ -\\sqrt2$: as raízes de $x^2 - 2$, cada uma repetida $[K:\\Q(\\sqrt2)] = 2$ vezes.",
-   "$\\sqrt2,\\ -\\sqrt2$, cada um uma única vez.",
-   "$\\sqrt2,\\ i\\sqrt2,\\ -\\sqrt2,\\ -i\\sqrt2$.",
+   "$\\sqrt2$ e $-\\sqrt2$, cada um repetido duas vezes.",
+   "$\\sqrt2$ e $-\\sqrt2$, cada um uma única vez.",
+   "$\\sqrt2,\\ i\\sqrt2,\\ -\\sqrt2,\\ -i\\sqrt2$, um para cada monomorfismo.",
    "$\\sqrt2$ repetido quatro vezes, pois $\\sqrt2 \\in \\R$."
   ],
   "e": "Os monomorfismos de $K$ levam $\\sqrt[4]{2}$ em $i^j\\sqrt[4]{2}$, $j = 0, 1, 2, 3$. Elevando ao quadrado, $\\sqrt2 \\mapsto (-1)^j\\sqrt2$. São sempre $n$ conjugados, contados com repetição: cada raiz de $p_\\alpha$ aparece $\\ell = [K:\\Q(\\alpha)]$ vezes.",
@@ -194,7 +194,7 @@ var BANK = [
   "q": "Seja $K = \\Q(\\sqrt2, \\sqrt3)$, de grau $4$, e $\\alpha = \\sqrt2 + \\sqrt3$. O que se pode concluir dos $K$-conjugados de $\\alpha$?",
   "o": [
    "São os quatro números $\\pm\\sqrt2 \\pm \\sqrt3$, todos distintos. Logo $\\Q(\\alpha) = K$ e $f_\\alpha = p_\\alpha$.",
-   "São $\\pm(\\sqrt2 + \\sqrt3)$, cada um repetido duas vezes. Logo $[K : \\Q(\\alpha)] = 2$.",
+   "São $\\pm(\\sqrt2 + \\sqrt3)$, cada um repetido duas vezes. Logo $[K : \\Q(\\alpha)] = 2$ e $f_\\alpha = p_\\alpha^2$.",
    "São todos iguais a $\\sqrt2 + \\sqrt3$, pois $\\alpha$ é real.",
    "São apenas $\\sqrt2 + \\sqrt3$ e $\\sqrt2 - \\sqrt3$."
   ],
@@ -219,10 +219,10 @@ var BANK = [
   "ref": "Seção 1.1 do livro",
   "q": "Para $K = \\Q(\\theta)$, define-se $\\sigma_j(f(\\theta)) = f(\\theta_j)$ para $f \\in \\Q[x]$. Por que $\\sigma_j$ está bem definida?",
   "o": [
-   "Se $f(\\theta) = g(\\theta)$, então $p_\\theta$ divide $f - g$. Como $p_\\theta(\\theta_j) = 0$, segue que $f(\\theta_j) = g(\\theta_j)$.",
-   "Porque $\\theta$ e $\\theta_j$ são iguais.",
-   "Porque todo $f \\in \\Q[x]$ tem grau menor que $n$.",
-   "Porque $\\sigma_j$ é injetora."
+   "Porque, se $f(\\theta) = g(\\theta)$, então $p_\\theta$ divide $f - g$.",
+   "Porque $\\theta$ e $\\theta_j$ têm o mesmo módulo, e então $f(\\theta) = f(\\theta_j)$.",
+   "Porque todo elemento de $K$ é $f(\\theta)$ para um único $f \\in \\Q[x]$.",
+   "Porque $\\sigma_j$ é injetora, e toda aplicação injetora está bem definida."
   ],
   "e": "Um mesmo elemento de $K$ se escreve como $f(\\theta)$ de muitas maneiras. Se $f(\\theta) = g(\\theta)$, então $\\theta$ é raiz de $f - g$, que é portanto múltiplo de $p_\\theta$. E todo múltiplo de $p_\\theta$ se anula em $\\theta_j$. A injetividade vem depois e não ajuda na boa definição.",
   "d": 2
@@ -245,7 +245,7 @@ var BANK = [
   "ref": "Seção 1.1 do livro",
   "q": "Seja $K = \\Q(\\sqrt[3]{2}) \\subseteq \\R$. Quantos monomorfismos $\\sigma \\colon K \\to \\C$ satisfazem $\\sigma(K) = K$?",
   "o": [
-   "Apenas um, a identidade.",
+   "Um.",
    "Três.",
    "Dois.",
    "Nenhum."
@@ -258,7 +258,7 @@ var BANK = [
   "ref": "Seção 1.2 do livro",
   "q": "Em $K = \\Q(\\sqrt2, i)$, de grau $4$, quais são os $K$-conjugados de $\\alpha = i\\sqrt2$?",
   "o": [
-   "$i\\sqrt2$ e $-i\\sqrt2$, cada um duas vezes. Logo $\\Q(\\alpha) \\neq K$.",
+   "$i\\sqrt2$ e $-i\\sqrt2$, cada um duas vezes.",
    "Os quatro números $\\pm\\sqrt2 \\pm i$, todos distintos.",
    "$i\\sqrt2$, repetido quatro vezes.",
    "$i\\sqrt2,\\ -i\\sqrt2,\\ \\sqrt2,\\ -\\sqrt2$."
@@ -427,10 +427,10 @@ var BANK = [
   "ref": "Seção 1.5 do livro",
   "q": "Em $K = \\Q(\\sqrt[3]{2})$, temos $\\Delta(1, \\sqrt[3]{2}, \\sqrt[3]{4}) = -108$. O que o critério “discriminante livre de quadrados implica base integral” permite concluir?",
   "o": [
-   "Nada: $-108 = -2^2 \\cdot 3^3$ não é livre de quadrados, e o critério é só uma condição suficiente.",
-   "Que $\\{1, \\sqrt[3]{2}, \\sqrt[3]{4}\\}$ não é base integral.",
-   "Que $\\{1, \\sqrt[3]{2}, \\sqrt[3]{4}\\}$ é base integral.",
-   "Que $\\mathcal{O}_K \\neq \\Z[\\sqrt[3]{2}]$."
+   "Nada, pois $-108 = -2^2 \\cdot 3^3$ não é livre de quadrados.",
+   "Que $\\{1, \\sqrt[3]{2}, \\sqrt[3]{4}\\}$ não é base integral, pois $4$ divide $-108$.",
+   "Que $\\{1, \\sqrt[3]{2}, \\sqrt[3]{4}\\}$ é base integral, pois $-108 \\neq 0$.",
+   "Que $\\mathcal{O}_K \\neq \\Z[\\sqrt[3]{2}]$, com índice $2$ ou $6$."
   ],
   "e": "O critério só se aplica quando o discriminante é livre de quadrados. Aqui não é, então ele não decide nada. De fato, $\\{1, \\sqrt[3]{2}, \\sqrt[3]{4}\\}$ é uma base integral, mas isso exige outro argumento. Confundir “suficiente” com “necessário” é o erro clássico aqui.",
   "d": 2
@@ -440,10 +440,10 @@ var BANK = [
   "ref": "Seção 1.5 do livro",
   "q": "Em $K = \\Q(\\sqrt5)$, temos $\\Delta(1, \\sqrt5) = 20$ e $\\Delta\\bigl(1, \\frac{1+\\sqrt5}{2}\\bigr) = 5$. Por que $\\{1, \\sqrt5\\}$ não é base integral?",
   "o": [
-   "Porque $\\sqrt5 = 2 \\cdot \\frac{1+\\sqrt5}{2} - 1$, a matriz de mudança de base tem determinante $2$, e $20 = 2^2 \\cdot 5$: o subanel $\\Z[\\sqrt5]$ tem índice $2$ em $\\mathcal{O}_K$.",
-   "Porque $\\sqrt5$ não é inteiro algébrico.",
-   "Porque $\\Delta(1, \\sqrt5)$ não é inteiro.",
-   "Porque $20$ não é livre de quadrados."
+   "Porque $\\frac{1+\\sqrt5}{2}$ é inteiro algébrico e não está em $\\Z + \\Z\\sqrt5$.",
+   "Porque $\\sqrt5$ não é inteiro algébrico, já que $5 \\equiv 1 \\pmod 4$.",
+   "Porque $\\Delta(1, \\sqrt5)$ é par, e toda base integral tem discriminante ímpar.",
+   "Porque $20$ não é livre de quadrados, como é o de toda base integral."
   ],
   "e": "Mudando de base por uma matriz $M$, o discriminante é multiplicado por $\\det(M)^2$. Como $\\frac{1+\\sqrt5}{2}$ é inteiro algébrico (raiz de $x^2 - x - 1$) e não está em $\\Z[\\sqrt5]$, a base $\\{1,\\sqrt5\\}$ não gera $\\mathcal{O}_K$, e o fator $4 = 2^2$ no discriminante mede exatamente isso. Já “$20$ não é livre de quadrados” é verdade, mas não é a razão: o critério do discriminante livre de quadrados é só uma condição suficiente, e há bases integrais com discriminante não livre de quadrados, como $\\{1, \\sqrt[3]{2}, \\sqrt[3]{4}\\}$, com $\\Delta = -108$.",
   "d": 3
@@ -453,10 +453,10 @@ var BANK = [
   "ref": "Seção 1.5 do livro",
   "q": "Seja $\\theta$ uma raiz de $x^3 + x + 1$ e $K = \\Q(\\theta)$. Sabendo que o discriminante de $x^3 + px + q$ é $-4p^3 - 27q^2$, o que se conclui?",
   "o": [
-   "$\\Delta(1, \\theta, \\theta^2) = -31$ é livre de quadrados. Logo $\\{1, \\theta, \\theta^2\\}$ é base integral e $\\mathcal{O}_K = \\Z[\\theta]$.",
-   "Como $\\Delta(1, \\theta, \\theta^2) < 0$, essa base não é integral.",
-   "Nada: o critério só se aplica a corpos quadráticos.",
-   "$\\mathcal{O}_K = \\Z[\\theta]$ só se $\\Delta(1, \\theta, \\theta^2)$ for um quadrado perfeito."
+   "$\\Delta(1, \\theta, \\theta^2) = -31$ é livre de quadrados, logo $\\mathcal{O}_K = \\Z[\\theta]$.",
+   "$\\Delta(1, \\theta, \\theta^2) = -31 < 0$, logo essa base não é integral.",
+   "Nada, pois o critério do discriminante só se aplica a corpos quadráticos.",
+   "$\\Delta(1, \\theta, \\theta^2) = -31$ não é quadrado perfeito, logo $\\mathcal{O}_K \\neq \\Z[\\theta]$."
   ],
   "e": "$\\Delta(1,\\theta,\\theta^2)$ é o discriminante de $p_\\theta$: $-4 - 27 = -31$. Como $-31$ é livre de quadrados, o critério garante que $\\{1, \\theta, \\theta^2\\}$ é base integral. O sinal do discriminante não diz nada sobre a base ser integral.",
   "d": 2
@@ -479,10 +479,10 @@ var BANK = [
   "ref": "Seção 1.3 do livro",
   "q": "Por que o discriminante $\\Delta(\\alpha_1, \\dots, \\alpha_n)$ de uma base de $K$ sobre $\\Q$ é diferente de zero?",
   "o": [
-   "Porque $\\Delta(1, \\theta, \\dots, \\theta^{n-1}) = \\prod_{j<k}(\\theta_k - \\theta_j)^2 \\neq 0$, já que os conjugados de $\\theta$ são distintos, e mudar de base multiplica o discriminante por $(\\det M)^2 \\neq 0$.",
-   "Porque os $\\alpha_j$ são inteiros algébricos.",
-   "Porque o discriminante é sempre positivo.",
-   "Porque $n \\ge 2$."
+   "Porque vale para a base de potências de $\\theta$, e mudar de base multiplica $\\Delta$ por $(\\det M)^2$.",
+   "Porque os $\\alpha_j$ são inteiros algébricos, e então $\\Delta$ é um inteiro positivo, em particular não nulo.",
+   "Porque o discriminante é o quadrado de um número real, logo é positivo.",
+   "Porque $\\Delta$ é a norma do produto $\\alpha_1 \\cdots \\alpha_n$, que não é zero."
   ],
   "e": "Para a base de potências, o discriminante é o quadrado de um determinante de Vandermonde. As raízes de $p_\\theta$ são distintas, porque um polinômio irredutível sobre $\\Q$ não tem raízes múltiplas. Qualquer outra base se obtém dessa por uma matriz $M$ invertível. Ser inteiro garante que $\\Delta \\in \\Z$, não que $\\Delta \\neq 0$. E o discriminante pode ser negativo, como $-4$ em $\\Q(i)$.",
   "d": 3
@@ -508,7 +508,7 @@ var BANK = [
    "O índice de $\\Z\\alpha_1 + \\cdots + \\Z\\alpha_n$ em $\\mathcal{O}_K$.",
    "O número de monomorfismos reais de $K$.",
    "O grau $n = [K:\\Q]$.",
-   "A norma de $\\alpha_1 \\cdots \\alpha_n$."
+   "A norma do produto $\\alpha_1 \\cdots \\alpha_n$, a menos de sinal."
   ],
   "e": "A mudança de uma base integral para $\\{\\alpha_j\\}$ tem matriz inteira $M$, e $|\\det M|$ é o índice. Como $\\Delta(\\alpha) = (\\det M)^2\\Delta_K$, se $\\Delta(\\alpha)$ é livre de quadrados o índice só pode ser $1$. É o critério do discriminante livre de quadrados.",
   "d": 3
@@ -518,8 +518,8 @@ var BANK = [
   "ref": "Seção 1.3 do livro",
   "q": "Em $K = \\Q(\\sqrt3, \\sqrt5)$, quanto vale o discriminante da base $\\{1, \\sqrt3, \\sqrt5, \\sqrt{15}\\}$?",
   "o": [
-   "$57600 = 12^2 \\cdot 20^2$",
-   "$240 = 12 \\cdot 20$",
+   "$57600$",
+   "$240$",
    "$3600$",
    "$900$"
   ],
@@ -557,9 +557,9 @@ var BANK = [
   "ref": "Seção 1.4 do livro",
   "q": "Qual é o argumento usual para provar que a soma $\\alpha + \\beta$ de dois inteiros algébricos é um inteiro algébrico?",
   "o": [
-   "$\\Z[\\alpha, \\beta]$ é um $\\Z$-módulo finitamente gerado e $(\\alpha+\\beta)\\,\\Z[\\alpha,\\beta] \\subseteq \\Z[\\alpha,\\beta]$. Pelo critério dos módulos finitamente gerados, $\\alpha+\\beta$ é inteiro.",
+   "$\\Z[\\alpha, \\beta]$ é um $\\Z$-módulo finitamente gerado, estável pela multiplicação por $\\alpha + \\beta$.",
    "O polinômio minimal de $\\alpha + \\beta$ é o produto dos polinômios minimais de $\\alpha$ e $\\beta$.",
-   "$\\alpha + \\beta$ é raiz de $p_\\alpha + p_\\beta$, que é mônico.",
+   "$\\alpha + \\beta$ é raiz de $p_\\alpha + p_\\beta$, que é mônico com coeficientes inteiros.",
    "A soma de raízes de dois polinômios mônicos de grau $n$ é raiz de um polinômio mônico de grau $n$."
   ],
   "e": "Se $\\alpha$ e $\\beta$ têm graus $m$ e $n$, os monômios $\\alpha^j\\beta^k$ com $j < m$ e $k < n$ geram $\\Z[\\alpha,\\beta]$ como $\\Z$-módulo. Esse módulo é estável pela multiplicação por $\\alpha+\\beta$ (e por $\\alpha\\beta$), e o critério dos módulos finitamente gerados conclui. É assim que se prova que os inteiros algébricos formam um subanel.",

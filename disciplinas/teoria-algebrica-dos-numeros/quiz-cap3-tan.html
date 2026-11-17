@@ -180,10 +180,10 @@ var BANK = [
   "ref": "Seção 3.1 do livro",
   "q": "Por que $D = \\Z[\\sqrt{-3}]$ não é um anel de Dedekind?",
   "o": [
-   "Não é integralmente fechado: $\\frac{1+\\sqrt{-3}}{2}$ é raiz de $x^2 - x + 1$, está no corpo de frações de $D$ e não está em $D$.",
-   "Não é noetheriano.",
-   "Tem um ideal primo não nulo que não é maximal.",
-   "Não é um domínio de integridade."
+   "Não é integralmente fechado: $\\frac{1+\\sqrt{-3}}{2}$ é inteiro sobre $D$ e não está em $D$.",
+   "Não é noetheriano: o ideal $\\langle 2, 1+\\sqrt{-3} \\rangle$ não é finitamente gerado como $\\Z$-módulo.",
+   "Tem um ideal primo não nulo que não é maximal, a saber $\\langle 2 \\rangle$.",
+   "Não é um domínio, pois $(1+\\sqrt{-3})(1-\\sqrt{-3}) = 4$."
   ],
   "e": "$D$ é noetheriano e seus primos não nulos são maximais (os quocientes são finitos). O que falha é o fecho integral: o anel de inteiros de $\\Q(\\sqrt{-3})$ é $\\Z\\bigl[\\frac{1+\\sqrt{-3}}{2}\\bigr] \\supsetneq D$. Uma consequência: com $P = \\langle 2, 1+\\sqrt{-3}\\rangle$, vale $P^2 = 2P$ mas $P \\neq \\langle 2\\rangle$, e o cancelamento falha.",
   "d": 2
@@ -219,7 +219,7 @@ var BANK = [
   "ref": "Seção 3.1 do livro",
   "q": "Por que todo ideal primo não nulo $P$ de $\\OK$ é maximal?",
   "o": [
-   "Porque $\\OK/P$ é um domínio finito, já que $\\N(P) < \\infty$, e todo domínio finito é corpo.",
+   "Porque $\\OK/P$ é um domínio finito, e todo domínio finito é corpo.",
    "Porque $\\OK$ é um domínio de ideais principais.",
    "Porque $P$ contém um primo racional $p$, e $\\langle p \\rangle$ é maximal em $\\OK$.",
    "Porque em $\\OK$ todo ideal próprio é maximal."
@@ -232,9 +232,9 @@ var BANK = [
   "ref": "Seção 3.2 do livro",
   "q": "Na prova de que $PP^{-1} = \\OK$, usa-se que, se $I \\neq \\{0\\}$ e $IS \\subseteq I$, então $S \\subseteq \\OK$. Qual propriedade de $\\OK$ sustenta esse fato?",
   "o": [
-   "$\\OK$ é integralmente fechado: cada $s \\in S$ deixa estável o $\\Z$-módulo finitamente gerado $I$, logo é inteiro algébrico.",
+   "$\\OK$ é integralmente fechado no seu corpo de frações.",
    "$\\OK$ é um domínio de ideais principais.",
-   "Todo ideal primo não nulo de $\\OK$ é maximal.",
+   "Todo ideal primo não nulo de $\\OK$ é maximal, e $P$ é primo.",
    "O número de classes de $\\OK$ é finito."
   ],
   "e": "Se $sI \\subseteq I$ e $I$ é um $\\Z$-módulo finitamente gerado não nulo, o critério dos módulos finitamente gerados diz que $s$ é inteiro algébrico. Como $s \\in K$, segue $s \\in \\OK$. É exatamente aqui que o fecho integral entra na teoria dos ideais fracionários.",
@@ -271,12 +271,12 @@ var BANK = [
   "ref": "Seção 3.1 do livro",
   "q": "O anel $\\Z[x]$ não é um anel de Dedekind. Qual condição da definição falha?",
   "o": [
-   "Há um ideal primo não nulo que não é maximal: $\\langle x \\rangle \\subsetneq \\langle 2, x \\rangle$.",
+   "Há um ideal primo não nulo que não é maximal, a saber $\\langle x \\rangle$.",
    "$\\Z[x]$ não é noetheriano.",
    "$\\Z[x]$ não é integralmente fechado no seu corpo de frações.",
    "$\\Z[x]$ não é um domínio."
   ],
-  "e": "$\\Z[x]/\\langle x \\rangle \\cong \\Z$ é um domínio que não é corpo, logo $\\langle x \\rangle$ é primo e não é maximal. $\\Z[x]$ é noetheriano, pelo Teorema da Base de Hilbert, e é integralmente fechado, por ser DFU. Compare com $\\Z[\\sqrt5]$, em que a condição que falha é o fecho integral.",
+  "e": "$\\Z[x]/\\langle x \\rangle \\cong \\Z$ é um domínio que não é corpo, logo $\\langle x \\rangle$ é primo e não é maximal: $\\langle x \\rangle \\subsetneq \\langle 2, x \\rangle$. $\\Z[x]$ é noetheriano, pelo Teorema da Base de Hilbert, e é integralmente fechado, por ser DFU. Compare com $\\Z[\\sqrt5]$, em que a condição que falha é o fecho integral.",
   "d": 2
  },
  {
@@ -285,9 +285,9 @@ var BANK = [
   "q": "Quais são os ideais fracionários não nulos de $\\Z$?",
   "o": [
    "Os conjuntos $q\\Z$, com $q \\in \\Q^*$, e $(q\\Z)^{-1} = q^{-1}\\Z$.",
-   "Apenas os ideais $m\\Z$, com $m \\in \\Z$ não nulo.",
+   "Apenas os ideais $m\\Z$, com $m \\in \\Z$ não nulo, e $(m\\Z)^{-1} = \\Z$.",
    "Todos os subgrupos aditivos não nulos de $\\Q$.",
-   "Apenas $\\Z$ e $\\Q$."
+   "Apenas $\\Z$ e $\\Q$, que são os únicos subanéis de $\\Q$."
   ],
   "e": "Um ideal fracionário é um conjunto $c^{-1}I$, com $I$ ideal de $\\Z$ e $c \\in \\Z$ não nulo, isto é, $\\frac{m}{c}\\Z$. Como $q\\Z = (-q)\\Z$, o grupo dos ideais fracionários não nulos de $\\Z$ é isomorfo a $\\Q^*/\\{\\pm1\\}$. O próprio $\\Q$ não é ideal fracionário de $\\Z$: nenhum inteiro não nulo $c$ satisfaz $c\\,\\Q \\subseteq \\Z$.",
   "d": 2
@@ -323,9 +323,9 @@ var BANK = [
   "ref": "Seção 3.3 do livro",
   "q": "Se $I$ é um ideal de $\\OK$ com $\\N(I) = 15$, então:",
   "o": [
-   "$I = P_1P_2$, com $P_1$ e $P_2$ primos de normas $3$ e $5$.",
-   "$I$ é um ideal primo.",
-   "$I$ é necessariamente principal.",
+   "$I = P_1P_2$, com primos de normas $3$ e $5$.",
+   "$I$ é um ideal primo, pois $15$ não é um quadrado.",
+   "$I$ é principal, gerado por um elemento de norma $15$.",
    "$I$ pode ter três ou mais fatores primos."
   ],
   "e": "Pela multiplicatividade, $\\N(I)$ é o produto das normas dos fatores primos, e cada uma é uma potência $p^f > 1$. Como $15 = 3 \\cdot 5$, sobram exatamente dois fatores. Nada garante que $I$ seja principal.",
@@ -401,10 +401,10 @@ var BANK = [
   "ref": "Seção 3.3 do livro",
   "q": "Por que um ideal não nulo $I$ de $\\OK$ é um $\\Z$-módulo livre de posto exatamente $n = [K:\\Q]$, e não menor?",
   "o": [
-   "Porque $\\N(I) \\in I$, então $\\N(I)\\,\\OK \\subseteq I \\subseteq \\OK$, e $\\N(I)\\,\\OK$ já tem posto $n$.",
-   "Porque todo ideal de $\\OK$ é principal.",
-   "Porque $\\OK/I$ é infinito.",
-   "Porque todo subgrupo de $\\Z^n$ tem posto $n$."
+   "Porque $I$ contém $\\N(I)\\,\\OK$, que já tem posto $n$.",
+   "Porque todo ideal de $\\OK$ é principal, gerado por um inteiro.",
+   "Porque $\\OK/I$ é infinito, e o posto mede o quociente.",
+   "Porque todo subgrupo não nulo de $\\Z^n$ tem posto $n$."
   ],
   "e": "$I$ é subgrupo de $\\OK \\cong \\Z^n$, logo é livre de posto no máximo $n$. E contém $\\N(I)\\OK \\cong \\Z^n$, logo tem posto pelo menos $n$. Nem todo subgrupo de $\\Z^n$ tem posto $n$: $\\Z \\times \\{0\\}$ tem posto $1$.",
   "d": 3
@@ -414,12 +414,12 @@ var BANK = [
   "ref": "Seção 3.3 do livro",
   "q": "Quantos ideais de $\\Z[i]$ têm norma $10$?",
   "o": [
-   "Dois: $\\langle 3+i \\rangle$ e $\\langle 3-i \\rangle$.",
-   "Um: $\\langle 10 \\rangle$.",
+   "Dois.",
+   "Um.",
    "Quatro.",
    "Nenhum."
   ],
-  "e": "Um ideal de norma $10$ é o produto de um primo de norma $2$ por um de norma $5$. Há um primo de norma $2$, $\\langle 1+i \\rangle$, e dois de norma $5$, $\\langle 2+i \\rangle$ e $\\langle 2-i \\rangle$. Os produtos são $\\langle 3+i \\rangle$ e $\\langle 1+3i \\rangle = \\langle 3-i \\rangle$. Já $\\langle 10 \\rangle$ tem norma $100$.",
+  "e": "Um ideal de norma $10$ é o produto de um primo de norma $2$ por um de norma $5$. Há um primo de norma $2$, $\\langle 1+i \\rangle$, e dois de norma $5$, $\\langle 2+i \\rangle$ e $\\langle 2-i \\rangle$. Os produtos são $\\langle 3+i \\rangle$ e $\\langle 1+3i \\rangle = \\langle 3-i \\rangle$. Já $\\langle 10 \\rangle$ tem norma $100$, e não $10$.",
   "d": 2
  },
  {
@@ -427,9 +427,9 @@ var BANK = [
   "ref": "Seção 3.4 do livro",
   "q": "Seja $K = \\Q(\\sqrt[3]{2})$, com $\\OK = \\Z[\\sqrt[3]{2}]$. Como o ideal $\\langle 5 \\rangle$ se fatora?",
   "o": [
-   "$\\langle 5\\rangle = P_1P_2$, com $\\N(P_1) = 5$ e $\\N(P_2) = 25$.",
-   "$\\langle 5 \\rangle$ é primo.",
-   "$\\langle 5 \\rangle = P^3$.",
+   "$\\langle 5\\rangle = P_1P_2$, de normas $5$ e $25$.",
+   "$\\langle 5 \\rangle$ é primo, de norma $125$.",
+   "$\\langle 5 \\rangle = P^3$, com $P$ de norma $5$.",
    "$\\langle 5\\rangle = P_1P_2P_3$, cada um de norma $5$."
   ],
   "e": "Como $3^3 = 27 \\equiv 2 \\pmod 5$, temos $x^3 - 2 \\equiv (x-3)(x^2+3x+4) \\pmod 5$, e o fator quadrático é irredutível (discriminante $-7 \\equiv 3$, que não é quadrado módulo $5$). Por Kummer–Dedekind, $e_1 = e_2 = 1$, $f_1 = 1$, $f_2 = 2$ — e $1 + 2 = 3 = n$.",
@@ -440,12 +440,12 @@ var BANK = [
   "ref": "Seção 3.4 do livro",
   "q": "No critério “$I_g$ é primo se, e somente se, $\\bar g$ é irredutível”, por que se exige que $\\bar g$ divida $\\bar p_\\alpha$?",
   "o": [
-   "Porque sem isso $I_g$ pode ser o anel todo: em $\\Z[i]$, com $p = 3$ e $g = x$, o polinômio $\\bar g$ é irredutível, mas $I_g = \\langle 3, i \\rangle = \\OK$.",
-   "Para garantir que $g$ seja mônico.",
-   "Para que $I_g$ seja finitamente gerado.",
-   "Porque senão $\\bar g$ teria grau maior que $n$."
+   "Porque sem isso $I_g$ pode ser o anel todo, como $\\langle 3, i \\rangle$ em $\\Z[i]$.",
+   "Para garantir que $g$ seja mônico e tenha grau menor que o grau $n$ da extensão $K | \\Q$.",
+   "Para que $I_g = \\langle p, g(\\alpha) \\rangle$ seja finitamente gerado.",
+   "Porque senão $\\bar g$ teria grau maior que o de $\\bar p_\\alpha$."
   ],
-  "e": "Em geral, $\\OK/I_g \\cong \\F_p[x]/\\langle \\bar g, \\bar p_\\alpha \\rangle$, e esse quociente só depende de $\\operatorname{mdc}(\\bar g, \\bar p_\\alpha)$. No exemplo, $\\operatorname{mdc}(x, x^2+1) = 1$ em $\\F_3[x]$, então o quociente é zero e $I_g = \\OK$ — de fato, $i$ é uma unidade.",
+  "e": "Em $\\Z[i]$, com $p = 3$ e $g = x$, o polinômio $\\bar g$ é irredutível, mas $I_g = \\langle 3, i \\rangle = \\OK$. Em geral, $\\OK/I_g \\cong \\F_p[x]/\\langle \\bar g, \\bar p_\\alpha \\rangle$, e esse quociente só depende de $\\operatorname{mdc}(\\bar g, \\bar p_\\alpha)$. No exemplo, $\\operatorname{mdc}(x, x^2+1) = 1$ em $\\F_3[x]$, então o quociente é zero e $I_g = \\OK$ — de fato, $i$ é uma unidade.",
   "d": 3
  },
  {
@@ -479,10 +479,10 @@ var BANK = [
   "ref": "Seção 3.4 do livro",
   "q": "Em $K = \\Q(\\sqrt{-7})$, temos $\\OK = \\Z[\\theta]$, com $\\theta = \\frac{1+\\sqrt{-7}}{2}$ e $p_\\theta = x^2 - x + 2$. Como $\\langle 2 \\rangle$ se fatora em $\\OK$?",
   "o": [
-   "$\\langle 2 \\rangle = PP'$, com $P \\neq P'$ de norma $2$: o primo $2$ é decomposto.",
+   "$\\langle 2 \\rangle = PP'$, com $P \\neq P'$ de norma $2$.",
    "$\\langle 2 \\rangle = P^2$, pois $x^2 + 7 \\equiv (x+1)^2 \\pmod 2$.",
-   "$\\langle 2 \\rangle$ é primo.",
-   "$\\langle 2 \\rangle = P^2$, com $\\N(P) = 4$."
+   "$\\langle 2 \\rangle$ é primo, de norma $4$.",
+   "$\\langle 2 \\rangle = P^2$, com $P$ de norma $4$."
   ],
   "e": "$x^2 - x + 2 \\equiv x(x-1) \\pmod 2$, com fatores distintos, então $2$ se decompõe. A armadilha é usar $x^2 + 7$: ele é o polinômio minimal de $\\sqrt{-7}$, mas $\\Z[\\sqrt{-7}] \\neq \\OK$, e Kummer–Dedekind exige $\\OK = \\Z[\\alpha]$. De fato, $2 \\nmid \\Delta_K = -7$, então $2$ não pode ramificar.",
   "d": 3
@@ -492,10 +492,10 @@ var BANK = [
   "ref": "Seção 3.4 do livro",
   "q": "Quando $\\OK = \\Z[\\alpha]$, os ideais de $\\OK$ que contêm $\\langle p \\rangle$ correspondem a quê?",
   "o": [
-   "Aos divisores mônicos $\\bar g$ de $\\bar p_\\alpha$ em $\\F_p[x]$, via $\\bar g \\mapsto I_g = \\langle p, g(\\alpha) \\rangle$.",
-   "Aos polinômios irredutíveis de $\\F_p[x]$.",
-   "Aos divisores de $p$ em $\\Z$.",
-   "Aos elementos de $\\OK/\\langle p \\rangle$."
+   "Aos divisores mônicos de $\\bar p_\\alpha$ em $\\F_p[x]$.",
+   "Aos polinômios mônicos irredutíveis de $\\F_p[x]$.",
+   "Aos divisores positivos de $p^n$ em $\\Z$.",
+   "Aos elementos do anel $\\OK/\\langle p \\rangle$."
   ],
   "e": "Todo ideal que contém $p$ é da forma $I_g$, e $I_g$ só depende de $\\operatorname{mdc}(\\bar g, \\bar p_\\alpha)$. Por isso basta olhar os divisores mônicos de $\\bar p_\\alpha$. Os primos acima de $p$ correspondem aos divisores irredutíveis, e a correspondência preserva a divisibilidade, $I_g \\mid I_h \\iff \\bar g \\mid \\bar h$ — o que se inverte é a inclusão.",
   "d": 2
@@ -505,9 +505,9 @@ var BANK = [
   "ref": "Seção 3.4 do livro",
   "q": "Num corpo $K$ de grau $3$, qual destas fatorações de $\\langle p \\rangle$ é impossível?",
   "o": [
-   "$\\langle p \\rangle = P_1P_2$, com graus residuais $f_1 = f_2 = 1$.",
+   "$\\langle p \\rangle = P_1P_2$, com $f_1 = f_2 = 1$.",
    "$\\langle p \\rangle = P_1^2P_2$, com $f_1 = f_2 = 1$.",
-   "$\\langle p \\rangle = P_1P_2$, com $f_1 = 1$ e $f_2 = 2$.",
+   "$\\langle p \\rangle = P_1P_2$, com graus residuais $f_1 = 1$ e $f_2 = 2$.",
    "$\\langle p \\rangle$ primo, com $f = 3$."
   ],
   "e": "A identidade $\\sum e_jf_j = n = 3$ descarta a primeira: $1 \\cdot 1 + 1 \\cdot 1 = 2$. As outras dão $2 + 1$, $1 + 2$ e $3$, e todas ocorrem em corpos cúbicos.",
@@ -557,10 +557,10 @@ var BANK = [
   "ref": "Seção 3.4 do livro",
   "q": "Em $\\Z[\\sqrt{-5}]$, temos $6 = 2 \\cdot 3 = (1+\\sqrt{-5})(1-\\sqrt{-5})$. O que explica essas duas fatorações?",
   "o": [
-   "$\\langle 6 \\rangle = P_2^2 P_3 P_3'$ com primos não principais. Cada fatoração de $6$ agrupa esses primos de um jeito.",
-   "$2$ e $3$ não são irredutíveis em $\\Z[\\sqrt{-5}]$.",
-   "$\\Z[\\sqrt{-5}]$ não é um anel de Dedekind.",
-   "$2$ e $1 + \\sqrt{-5}$ são associados."
+   "$\\langle 6 \\rangle = P_2^2 P_3 P_3'$, e cada fatoração agrupa esses primos de um jeito.",
+   "$2$ e $3$ não são irredutíveis em $\\Z[\\sqrt{-5}]$, e as duas fatorações se refinam.",
+   "$\\Z[\\sqrt{-5}]$ não é anel de Dedekind, por não ser integralmente fechado.",
+   "$2$ e $1 + \\sqrt{-5}$ são associados, e também $3$ e $1 - \\sqrt{-5}$."
   ],
   "e": "$\\langle 2 \\rangle = P_2^2$, $\\langle 3 \\rangle = P_3P_3'$, e $\\langle 1 \\pm \\sqrt{-5} \\rangle$ é o produto de $P_2$ por um dos primos acima de $3$. Não há elementos de norma $2$ ou $3$ ($a^2 + 5b^2$ nunca vale $2$ ou $3$), logo esses primos não são principais — e é isso que torna $2$, $3$ e $1 \\pm \\sqrt{-5}$ irredutíveis.",
   "d": 3
@@ -583,10 +583,10 @@ var BANK = [
   "ref": "Seção 3.4 do livro",
   "q": "Em $\\Z[\\sqrt{-10}]$, temos $\\langle 2 \\rangle = P^2$. O primo $P$ é principal?",
   "o": [
-   "Não: um gerador teria norma $2$, e $a^2 + 10b^2 = 2$ não tem solução inteira.",
-   "Sim, gerado por $\\sqrt{-10}$.",
-   "Sim, porque $2$ é ramificado.",
-   "Não, porque $P = \\langle 2 \\rangle$."
+   "Não: um gerador teria norma $2$, e $a^2 + 10b^2$ nunca vale $2$.",
+   "Sim: $P = \\langle \\sqrt{-10} \\rangle$, pois $(\\sqrt{-10})^2 = -10$ é múltiplo de $2$.",
+   "Sim, porque todo ideal primo ramificado é principal.",
+   "Não, porque $P = \\langle 2 \\rangle$, que não é primo."
   ],
   "e": "Se $P = \\langle \\gamma \\rangle$, então $|\\N(\\gamma)| = \\N(P) = 2$. Como $\\N(a + b\\sqrt{-10}) = a^2 + 10b^2$ nunca vale $2$, $P$ não é principal. E $\\sqrt{-10}$ tem norma $10$, não $2$.",
   "d": 2

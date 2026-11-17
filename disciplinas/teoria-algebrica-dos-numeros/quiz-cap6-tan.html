@@ -167,7 +167,7 @@ var BANK = [
   "ref": "Seção 6.1 do livro",
   "q": "Por que $\\Log(U)$ está contido no hiperplano $V = \\{x_1 + \\cdots + x_{s+t} = 0\\}$?",
   "o": [
-   "Para $\\varepsilon \\in U$, temos $|\\N(\\varepsilon)| = 1$, e $\\sum_j \\Log_j(\\varepsilon) = \\log|\\N(\\varepsilon)| = 0$.",
+   "Porque $|\\N(\\varepsilon)| = 1$, e a soma das coordenadas é $\\log|\\N(\\varepsilon)|$.",
    "Porque toda unidade tem todos os conjugados de módulo $1$.",
    "Porque $\\Log$ é um homomorfismo.",
    "Porque $U$ é finito."
@@ -180,10 +180,10 @@ var BANK = [
   "ref": "Seção 6.1 do livro",
   "q": "Por que, para $j > s$, a imersão logarítmica usa $\\Log_j(x) = \\log|x|^2$ em vez de $\\log|x|$?",
   "o": [
-   "Cada coordenada complexa representa um par de monomorfismos conjugados, de mesmo módulo. Com o quadrado, vale $\\sum_j \\Log_j(\\alpha) = \\log|\\N(\\alpha)|$.",
-   "Para que $\\Log_j(x)$ seja sempre positivo.",
-   "Para que $\\Log$ seja injetora.",
-   "Porque $\\log|x|$ não está definido para $x$ complexo."
+   "Porque cada coordenada complexa representa dois monomorfismos.",
+   "Para que $\\Log_j(x)$ seja sempre um número positivo.",
+   "Para que a aplicação $\\Log$ seja injetora em $K^*$.",
+   "Porque $\\log|x|$ não está definido quando $x$ é um número complexo."
   ],
   "e": "$|\\sigma_{s+j}(\\alpha)|$ aparece duas vezes em $|\\N(\\alpha)|$: uma por $\\sigma_{s+j}$ e outra pelo conjugado. O fator $2$ faz a soma dar $\\log|\\N(\\alpha)|$, o que põe $\\Log(U)$ no hiperplano $V$. E $\\Log$ não é injetora: seu núcleo em $U$ são as raízes da unidade.",
   "d": 2
@@ -193,9 +193,9 @@ var BANK = [
   "ref": "Seção 6.2 do livro",
   "q": "No Lema de Kronecker, por que a hipótese $\\alpha \\in \\OK$ é essencial?",
   "o": [
-   "Porque $\\frac{3+4i}{5}$ tem todos os conjugados de módulo $1$ e não é raiz da unidade — ele não é inteiro algébrico.",
+   "Porque $\\frac{3+4i}{5}$ tem conjugados de módulo $1$ e não é raiz da unidade.",
    "Porque sem ela os conjugados de $\\alpha$ não estariam definidos.",
-   "Porque toda raiz da unidade está em $\\Q$.",
+   "Porque toda raiz da unidade está em $\\Q$, e as únicas raízes da unidade de $\\Z$ são $\\pm1$.",
    "Não é essencial: o lema vale para todo $\\alpha \\in K$."
   ],
   "e": "$\\frac{3+4i}{5}$ é raiz de $5x^2 - 6x + 5$, com conjugados $\\frac{3 \\pm 4i}{5}$, ambos de módulo $1$. Raízes da unidade são inteiros algébricos (raízes de $x^m - 1$), e é a integralidade que limita os coeficientes na prova.",
@@ -206,12 +206,12 @@ var BANK = [
   "ref": "Seção 6.2 do livro",
   "q": "Na prova do Lema de Kronecker, por que é finito o conjunto dos $\\beta \\in \\OK$ com todos os conjugados de módulo $1$?",
   "o": [
-   "Os coeficientes do polinômio característico de $\\beta$ são inteiros e limitados (o de grau $n-k$ tem módulo $\\le \\binom nk$). Há finitos polinômios assim, cada um com no máximo $n$ raízes.",
-   "Porque $\\OK$ é finito.",
-   "Porque o círculo unitário é compacto.",
-   "Porque todo $\\beta$ assim é raiz da unidade."
+   "Porque seus polinômios característicos têm coeficientes inteiros e limitados.",
+   "Porque $\\OK$ tem apenas finitos elementos de norma $\\pm1$.",
+   "Porque o círculo unitário é compacto, e $\\OK$ é fechado.",
+   "Porque todo $\\beta$ assim é raiz da unidade, e as raízes da unidade de $K$ são finitas."
   ],
-  "e": "Os coeficientes são, a menos de sinal, as funções simétricas elementares dos conjugados, todos de módulo $1$, e são inteiros porque $\\beta \\in \\OK$. Aplicando isso a $\\alpha, \\alpha^2, \\alpha^3, \\dots$, todos no mesmo conjunto finito, obtém-se $\\alpha^a = \\alpha^b$ com $a < b$.",
+  "e": "Os coeficientes são, a menos de sinal, as funções simétricas elementares dos conjugados, todos de módulo $1$, e são inteiros porque $\\beta \\in \\OK$. Aplicando isso a $\\alpha, \\alpha^2, \\alpha^3, \\dots$, todos no mesmo conjunto finito, obtém-se $\\alpha^a = \\alpha^b$ com $a < b$. O coeficiente de grau $n-k$ tem módulo no máximo $\\binom nk$, e há finitos polinômios assim, cada um com no máximo $n$ raízes.",
   "d": 3
  },
  {
@@ -258,12 +258,12 @@ var BANK = [
   "ref": "Seção 6.2 do livro",
   "q": "Por que todo subgrupo finito $G$ do grupo multiplicativo $F^*$ de um corpo, de ordem $N$, é cíclico?",
   "o": [
-   "Para cada $d \\mid N$, a equação $x^d = 1$ tem no máximo $d$ soluções em $F$. Daí o número $\\psi(d)$ de elementos de ordem $d$ é $0$ ou $\\varphi(d)$, e como $\\sum_{d \\mid N}\\psi(d) = N = \\sum_{d\\mid N}\\varphi(d)$, vale $\\psi(N) = \\varphi(N) > 0$.",
-   "Porque todo grupo abeliano finito é cíclico.",
-   "Porque $G$ é gerado por $-1$.",
-   "Porque $N$ é primo."
+   "Porque $x^d = 1$ tem no máximo $d$ soluções em $F$, para cada $d \\mid N$.",
+   "Porque todo grupo abeliano finito é cíclico, e $G$ é abeliano por estar num corpo.",
+   "Porque $G$ é gerado por $-1$, que tem ordem $2$.",
+   "Porque a ordem $N$ de $G$ é sempre um número primo."
   ],
-  "e": "Se há um elemento $x$ de ordem $d$, suas $d$ potências são todas as soluções de $x^d = 1$, e entre elas exatamente $\\varphi(d)$ têm ordem $d$. Nem todo grupo abeliano finito é cíclico — $\\Z/2 \\times \\Z/2$ não é —, mas ele não cabe dentro de $F^*$: teria quatro soluções de $x^2 = 1$.",
+  "e": "Seja $\\psi(d)$ o número de elementos de $G$ de ordem $d$. Se há um elemento $x$ de ordem $d$, suas $d$ potências são todas as soluções de $x^d = 1$, e entre elas exatamente $\\varphi(d)$ têm ordem $d$. Logo $\\psi(d)$ é $0$ ou $\\varphi(d)$, e como $\\sum_{d \\mid N}\\psi(d) = N = \\sum_{d \\mid N}\\varphi(d)$, vale $\\psi(N) = \\varphi(N) > 0$. Nem todo grupo abeliano finito é cíclico: $\\Z/2 \\times \\Z/2$ não é, mas ele não cabe em $F^*$, pois teria quatro soluções de $x^2 = 1$.",
   "d": 3
  },
  {
@@ -323,10 +323,10 @@ var BANK = [
   "ref": "Seções 6.3 e 6.4 do livro",
   "q": "Na prova de que $E = \\Log(U)$ tem posto $s + t - 1$, mostra-se que $V$ é coberto pelos translados $\\ell + B$, $\\ell \\in E$, de um conjunto limitado $B$. Por que isso conclui a prova?",
   "o": [
-   "Porque uma rede $L$ em $\\R^m$ tem posto $m$ se, e somente se, $\\R^m$ é coberto pelos translados de um conjunto limitado por elementos de $L$.",
-   "Pelo Lema de Kronecker.",
-   "Pelo Teorema de Minkowski.",
-   "Porque a multiplicação por $y$ tem determinante $\\N(y)$."
+   "Porque uma rede em $\\R^m$ com essa cobertura tem posto $m$.",
+   "Pelo Lema de Kronecker, aplicado aos elementos de $B$.",
+   "Pelo Teorema de Minkowski, aplicado ao conjunto $B$.",
+   "Porque a multiplicação por $y$ tem determinante $\\N(y)$, que é $\\pm1$ em $S$."
   ],
   "e": "Se o posto fosse menor que $\\dim V$, a rede estaria num subespaço próprio, e os translados de um limitado ficariam a distância limitada dele — não cobririam $V$. O Teorema de Minkowski e a multiplicação por $y$ entram antes, para construir $B$.",
   "d": 3
@@ -362,10 +362,10 @@ var BANK = [
   "ref": "Seção 6.3 do livro",
   "q": "Antes de provar o Teorema de Dirichlet, já se sabe que $E = \\Log(U)$ é uma rede contida em $V$. Por que isso basta para concluir que $U$ é finito quando $s + t = 1$?",
   "o": [
-   "Porque $V = \\{\\vec{0}\\}$ em $\\R^1$, logo $E = \\{\\vec{0}\\}$ e $U$ é o núcleo de $\\Log$, que é o grupo finito $W$.",
-   "Porque nesse caso $\\OK$ é finito.",
-   "Porque nesse caso $\\Log$ é injetiva em $U$.",
-   "Porque uma rede de posto $1$ é finita."
+   "Porque $V = \\{\\vec{0}\\}$, logo $U$ é o núcleo de $\\Log$, que é finito.",
+   "Porque nesse caso o anel $\\OK$ é um conjunto finito.",
+   "Porque nesse caso a aplicação $\\Log$ é injetiva em $U$.",
+   "Porque uma rede de posto $1$ contida numa reta é um conjunto finito."
   ],
   "e": "A dimensão de $V$ é $s + t - 1 = 0$. Os corpos com $s + t = 1$ são $\\Q$ e os quadráticos imaginários. A aplicação $\\Log$ nunca é injetiva em $U$, pois $\\Log(-1) = \\vec{0}$, e uma rede de posto $1$ é infinita.",
   "d": 2
@@ -388,8 +388,8 @@ var BANK = [
   "ref": "Seção 6.4 do livro",
   "q": "Na demonstração de que $E$ tem posto $s + t - 1$, aplica-se o Teorema de Minkowski à rede $y \\cdot \\sigma(\\OK)$, para cada $y$ com $|\\N(y)| = 1$, sempre com o mesmo conjunto $X_c$. Por que é essencial que $c$ não dependa de $y$?",
   "o": [
-   "Porque a cota $|\\N(\\alpha)| < (c/n)^n$ fica a mesma para todo $y$, e assim uma única lista finita $\\alpha_1, \\dots, \\alpha_N$ serve para todos, o que torna limitado o conjunto $X_0$.",
-   "Porque só assim $X_c$ é convexo.",
+   "Porque assim uma única lista finita $\\alpha_1, \\dots, \\alpha_N$ serve para todo $y$.",
+   "Porque só assim o conjunto $X_c$ é convexo e simétrico.",
    "Porque só assim a rede $y \\cdot \\sigma(\\OK)$ tem posto completo.",
    "Porque o Teorema de Minkowski exige um conjunto que não dependa da rede."
   ],
@@ -442,7 +442,7 @@ var BANK = [
   "o": [
    "$\\Q$ e os corpos quadráticos imaginários.",
    "Apenas $\\Q$.",
-   "Os corpos totalmente complexos.",
+   "Os corpos totalmente complexos, de qualquer grau.",
    "Os corpos de grau ímpar."
   ],
   "e": "$U$ é finito se, e só se, $s + t - 1 = 0$, isto é, $(s, t) = (1, 0)$ ou $(0, 1)$: $K = \\Q$ ou $K$ quadrático imaginário. $\\Q(\\zeta_5)$ é totalmente complexo, mas tem posto $1$.",
@@ -479,12 +479,12 @@ var BANK = [
   "ref": "Seção 6.5 do livro",
   "q": "Como o Teorema de Dirichlet garante infinitas soluções inteiras de $x^2 - 7y^2 = 1$?",
   "o": [
-   "O posto de $U$ em $\\Q(\\sqrt7)$ é $1$. $\\varepsilon = 8 + 3\\sqrt7$ tem norma $1$, e as potências $\\varepsilon^k = x_k + y_k\\sqrt7$ dão infinitas soluções distintas.",
-   "Porque $7$ é primo.",
-   "Porque toda unidade de $\\Q(\\sqrt7)$ tem norma $1$.",
-   "Porque $U$ é finito."
+   "$U$ tem posto $1$, e as potências de $8 + 3\\sqrt7$ dão as soluções.",
+   "Porque $7$ é primo, e para $d$ primo a equação sempre tem solução.",
+   "Porque $\\sqrt7$ é uma unidade de ordem infinita em $\\Z[\\sqrt7]$.",
+   "Porque $U$ é finito, e cada unidade dá infinitas soluções."
   ],
-  "e": "Como $7 \\not\\equiv 1 \\pmod 4$, $\\OK = \\Z[\\sqrt7]$, e unidades de norma $1$ são exatamente as soluções da equação de Pell. As potências de $\\varepsilon > 1$ são distintas, e a norma é multiplicativa. Nem toda unidade tem norma $1$ em geral: em $\\Q(\\sqrt2)$, $1 + \\sqrt2$ tem norma $-1$.",
+  "e": "Como $7 \\not\\equiv 1 \\pmod 4$, $\\OK = \\Z[\\sqrt7]$, e unidades de norma $1$ são exatamente as soluções da equação de Pell. As potências de $\\varepsilon = 8 + 3\\sqrt7 > 1$, que tem norma $1$, são distintas, e a norma é multiplicativa. Nem toda unidade tem norma $1$ em geral: em $\\Q(\\sqrt2)$, $1 + \\sqrt2$ tem norma $-1$.",
   "d": 2
  },
  {
