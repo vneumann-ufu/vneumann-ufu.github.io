@@ -788,7 +788,7 @@ var VOZES = {"gargalhada": "SUQzBAAAAAAtTVRTU0UAAAAPAAADTGF2ZjYwLjE2LjEwMABHRU9C
   function lista(xs) { return xs.length <= 1 ? xs.join("") : xs.slice(0, -1).join(", ") + " e " + xs[xs.length - 1]; }
   function min(t) { return t.charAt(0).toLowerCase() + t.slice(1); }
 
-  /* ---------------- som (sintetizado, sem arquivos) ---------------- */
+  /* ---------------- som (sintetizado, sem arquivos; a música de fundo vem mais abaixo) ---------------- */
   var ctxSom = null, ruido = null;
   function audio() {
     if (!E.som) return null;
@@ -811,6 +811,7 @@ var VOZES = {"gargalhada": "SUQzBAAAAAAtTVRTU0UAAAAPAAADTGF2ZjYwLjE2LjEwMABHRU9C
       } catch (e) {}
     });
   }
+  function temVoz(tipo) { return typeof VOZES !== "undefined" && !!VOZES[INFO.chefe + "-" + tipo]; }
   function sala(c) {                                             // reverberação de salão de pedra: ruído que decai em 2 s
     if (salaNo) return salaNo;
     var n = Math.floor(c.sampleRate * 2), imp = c.createBuffer(2, n, c.sampleRate), ch, k, d, g = c.createGain();
@@ -886,8 +887,12 @@ var VOZES = {"gargalhada": "SUQzBAAAAAAtTVRTU0UAAAAPAAADTGF2ZjYwLjE2LjEwMABHRU9C
     sopro: function () { chiado(0.3, 0.45, "bandpass", 1500, 300); },
     trovao: function () { chiado(0.12, 0.5, "highpass", 1800); chiado(1.7, 0.75, "lowpass", 900, 70, 0.03); chiado(1.1, 0.4, "lowpass", 260, 60, 0.35); tom(58, 1.2, "sine", 0.3, 0.02, 36); },
     dano: function () { chiado(0.22, 0.5, "lowpass", 420, 110); tom(90, 0.2, "sine", 0.22, 0, 55); },
-    voltarei: function () { fala("voltarei", 0.05, 1, 1); },
+    voltarei: function () { musicaAbaixa(2); fala("voltarei", 0.05, 1, 1); },
+    // voz gravada dos outros chefes (voz-<chefe>-derrota.mp3 e voz-<chefe>-vitoria.mp3; derrota e vitória do ponto de vista do chefe)
+    chefeDerrota: function () { if (temVoz("derrota")) { musicaAbaixa(2.6); fala(INFO.chefe + "-derrota", 0, 1, 1); } },
+    chefeVitoria: function () { if (temVoz("vitoria")) { musicaAbaixa(2.6); fala(INFO.chefe + "-vitoria", 0, 1, 1); } },
     gargalhada: function () {
+      musicaAbaixa(3.5);
       if (fala("gargalhada", 0, 1, 1)) return;
       var t = 0;                                                   // sem a gravação: "ha ha ha" sintetizado
       for (var k = 0; k < 8; k++) { voz(t, 150 - k * 7 + (k % 2 ? 6 : 0), k === 7 ? 0.5 : 0.15, 0.55); t += (k < 3 ? 0.24 : 0.2); }
@@ -903,6 +908,198 @@ var VOZES = {"gargalhada": "SUQzBAAAAAAtTVRTU0UAAAAPAAADTGF2ZjYwLjE2LjEwMABHRU9C
     },
     derrota: function () { [392, 330, 262, 196].forEach(function (f, k) { tom(f, 0.45, "triangle", 0.10, k * 0.22); }); }
   };
+
+  /* ---------------- música de fundo (sintetizada, uma por cenário) ----------------
+     Floresta: lá menor, ternário, harpa e flauta. Castelo: ré menor, lento, cordas e sino. Masmorra: mi frígio, muito lento,
+     bordão grave, batida de coração e gotas. Melodias originais. A música começa com a partida, fica abaixo dos efeitos
+     (VOL_MUSICA) e abaixa quando um chefe solta a voz. Quando o chefe chega, a música NÃO recomeça: a partir do compasso
+     seguinte fica mais rápida (RITMO_CHEFE) e ganha uma camada de perigo (tambores, pulso e batidas secas em semicolcheias,
+     na faixa que alto-falante de celular reproduz), que cresce aos poucos. O botão "Som" desliga tudo. */
+  var VOL_MUSICA = 0.28, RITMO_CHEFE = 1.2;
+  var MUS = { g: null, ent: null, timer: null, perigo: null, ritmo: 1 };
+  function mf(m) { return 440 * Math.pow(2, (m - 69) / 12); }
+  function mFiltro(c, tipo, f, Q) { var b = c.createBiquadFilter(); b.type = tipo; b.frequency.value = f; if (Q !== undefined) b.Q.value = Q; return b; }
+  function mLiga() { for (var k = 0; k < arguments.length - 1; k++) arguments[k].connect(arguments[k + 1]); return arguments[arguments.length - 1]; }
+  function mRuido(c) { var s = c.createBufferSource(); s.buffer = ruido; s.loop = true; return s; }
+  function mEnvLin(c, t, atk, sust, rel, amp) {
+    var g = c.createGain(); g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(amp, t + atk);
+    g.gain.setValueAtTime(amp, t + atk + sust); g.gain.linearRampToValueAtTime(0, t + atk + sust + rel); return g;
+  }
+  function mEnvExp(c, t, atk, amp, dec) {
+    var g = c.createGain(); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(amp, t + atk);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + atk + dec); return g;
+  }
+  function mOsc(c, tipo, f, t, ate) { var o = c.createOscillator(); o.type = tipo; o.frequency.value = f; o.start(t); o.stop(ate); return o; }
+  var INSTR = {
+    pad: function (c, out, t, dur, midis, tipo, corte, amp) {
+      var lp = mFiltro(c, "lowpass", corte, 0.5), e = mEnvLin(c, t, Math.min(0.9, dur * 0.4), Math.max(0, dur - 0.9), 1.0, amp);
+      mLiga(lp, e, out);
+      midis.forEach(function (m) { [-6, 6].forEach(function (d) {
+        var o = mOsc(c, tipo, mf(m), t, t + dur + 1.1), g = c.createGain(); o.detune.value = d; g.gain.value = 1 / (2 * midis.length); mLiga(o, g, lp); }); });
+    },
+    dedilhado: function (c, out, t, m, amp) {
+      var lp = mFiltro(c, "lowpass", 3000, 0.7), e = mEnvExp(c, t, 0.005, amp, 1.4); mLiga(lp, e, out);
+      var o1 = mOsc(c, "triangle", mf(m), t, t + 1.5), o2 = mOsc(c, "sine", 2 * mf(m), t, t + 1.5), g2 = c.createGain(); g2.gain.value = 0.3;
+      o1.connect(lp); mLiga(o2, g2, lp);
+    },
+    flauta: function (c, out, t, dur, m, amp) {
+      var f = mf(m), o = mOsc(c, "sine", f, t, t + dur + 0.3), vib = mOsc(c, "sine", 5, t, t + dur + 0.3), vg = c.createGain();
+      vg.gain.setValueAtTime(0, t); vg.gain.linearRampToValueAtTime(f * 0.008, t + 0.35); mLiga(vib, vg, o.frequency);
+      var e = mEnvLin(c, t, 0.06, Math.max(0, dur - 0.2), 0.15, amp), n = mRuido(c), ng = c.createGain(); ng.gain.value = 0.08;
+      mLiga(n, mFiltro(c, "bandpass", f * 2, 2), ng, e); mLiga(o, e, out); n.start(t); n.stop(t + dur + 0.3);
+    },
+    cordas: function (c, out, t, dur, m, amp) {
+      var f = mf(m), lp = mFiltro(c, "lowpass", 1800, 0.6), e = mEnvLin(c, t, 0.25, Math.max(0, dur - 0.4), 0.45, amp); mLiga(lp, e, out);
+      var vib = mOsc(c, "sine", 5.5, t, t + dur + 0.5), vg = c.createGain(); vg.gain.value = f * 0.006; vib.connect(vg);
+      [-8, 8].forEach(function (d) { var o = mOsc(c, "sawtooth", f, t, t + dur + 0.5), g = c.createGain(); o.detune.value = d; g.gain.value = 0.5; vg.connect(o.frequency); mLiga(o, g, lp); });
+    },
+    baixo: function (c, out, t, dur, m, amp) {
+      mLiga(mOsc(c, "triangle", mf(m), t, t + dur + 0.1), mFiltro(c, "lowpass", 400, 0.7), mEnvLin(c, t, 0.05, Math.max(0, dur - 0.35), 0.3, amp), out);
+    },
+    passaro: function (c, out, t, amp) {
+      var k, n = 2 + Math.floor(Math.random() * 3), f0 = 2600 + Math.random() * 1500;
+      for (k = 0; k < n; k++) { var ti = t + k * 0.09, o = mOsc(c, "sine", f0, ti, ti + 0.1);
+        o.frequency.setValueAtTime(f0, ti); o.frequency.exponentialRampToValueAtTime(f0 * 1.4, ti + 0.06); mLiga(o, mEnvExp(c, ti, 0.005, amp, 0.07), out); }
+    },
+    sino: function (c, out, t, f, amp, dec) {
+      [[1, 1], [2.76, 0.5], [5.4, 0.3], [8.93, 0.15]].forEach(function (p) {
+        mLiga(mOsc(c, "sine", f * p[0], t, t + dec + 0.1), mEnvExp(c, t, 0.004, amp * p[1], dec / Math.sqrt(p[0])), out); });
+    },
+    tambor: function (c, out, t, amp) {
+      var o = mOsc(c, "sine", 70, t, t + 0.5); o.frequency.setValueAtTime(70, t); o.frequency.exponentialRampToValueAtTime(38, t + 0.3);
+      mLiga(o, mEnvExp(c, t, 0.005, amp, 0.45), out);
+    },
+    gota: function (c, out, t, amp) {
+      var f = 900 + Math.random() * 900, o = mOsc(c, "sine", f, t, t + 0.1);
+      o.frequency.setValueAtTime(f, t); o.frequency.exponentialRampToValueAtTime(f * 0.5, t + 0.06); mLiga(o, mEnvExp(c, t, 0.002, amp, 0.08), out);
+    },
+    tamborPerigo: function (c, out, t, amp) {                // tambor grave com pancada de ruído
+      var o = mOsc(c, "sine", 95, t, t + 0.6); o.frequency.setValueAtTime(95, t); o.frequency.exponentialRampToValueAtTime(42, t + 0.35);
+      mLiga(o, mEnvExp(c, t, 0.004, amp, 0.5), out);
+      var n = mRuido(c); mLiga(n, mFiltro(c, "lowpass", 700, 0.7), mEnvExp(c, t, 0.002, amp * 0.5, 0.08), out); n.start(t); n.stop(t + 0.12);
+    },
+    pulso: function (c, out, t, dur, m, amp) {               // nota grave curta e áspera (ostinato)
+      var lp = mFiltro(c, "lowpass", 900, 1.5); mLiga(lp, mEnvExp(c, t, 0.008, amp, dur), out);
+      [-7, 7].forEach(function (d) { var o = mOsc(c, "sawtooth", mf(m), t, t + dur + 0.05); o.detune.value = d; o.connect(lp); });
+    },
+    tique: function (c, out, t, amp) {                      // batida seca e curta (aro de caixa), bem audível em alto-falante pequeno
+      var n = mRuido(c); mLiga(n, mFiltro(c, "bandpass", 3200, 1.2), mEnvExp(c, t, 0.001, amp, 0.045), out); n.start(t); n.stop(t + 0.06);
+      mLiga(mOsc(c, "triangle", 1800, t, t + 0.04), mEnvExp(c, t, 0.001, amp * 0.35, 0.03), out);
+    },
+    raspar: function (c, out, t, dur, amp) {
+      var n = mRuido(c), bp = mFiltro(c, "bandpass", 300, 12);
+      bp.frequency.setValueAtTime(300, t); bp.frequency.exponentialRampToValueAtTime(900, t + dur);
+      mLiga(n, bp, mEnvLin(c, t, dur * 0.3, dur * 0.3, dur * 0.4, amp), out); n.start(t); n.stop(t + dur);
+    }
+  };
+  // Cada música é uma sequência de 8 compassos que se repete. O tocador agenda compasso a compasso, um pouco adiante do
+  // tempo real; por isso o andamento pode mudar no compasso seguinte sem recomeçar a música (o que acontece quando o chefe chega).
+  // Melodias: [compasso, tempo, duração em tempos, nota MIDI].
+  var MUSICAS = {
+    floresta: { molhado: 0.25, seg: 2, bpm: 84, tempos: 3, raizes: [45, 41, 48, 43, 45, 41, 43, 40],
+      acordes: [[57,60,64],[53,57,60],[48,52,55],[55,59,62],[57,60,64],[53,57,60],[55,59,62],[52,56,59]],
+      mel: [[0,0,2,76],[0,2,1,74],[1,0,1.5,72],[1,1.5,.5,69],[1,2,1,72],[2,0,3,67],[3,0,1,71],[3,1,1,74],[3,2,1,71],
+            [4,0,1,69],[4,1,1,72],[4,2,1,76],[5,0,2,77],[5,2,1,76],[6,0,1.5,74],[6,1.5,.5,71],[6,2,1,74],[7,0,1,76],[7,1,1,71],[7,2,1,68]],
+      compasso: function (c, out, tb, b, volta, q) {
+        var I = INSTR, comp = 3 * q, a = this.acordes[b];
+        I.pad(c, out, tb, comp, a, "triangle", 1200, 0.09); I.baixo(c, out, tb, comp * 0.95, a[0] - 12, 0.12);
+        [a[0], a[2], a[0] + 12, a[1] + 12, a[0] + 12, a[2]].forEach(function (m, k) { I.dedilhado(c, out, tb + k * q / 2, m, 0.09); });
+        if (volta % 2 === 0) this.mel.forEach(function (n) { if (n[0] === b) I.flauta(c, out, tb + n[1] * q, n[2] * q, n[3], 0.08); });
+        if (Math.random() < 0.4) I.passaro(c, out, tb + Math.random() * comp, 0.035);
+      },
+      perigo: function (c, out, tb, q, b) {                     // tambor em todo tempo, pulso em colcheias e batidas secas em semicolcheias
+        var I = INSTR, r = this.raizes[b] + 12, k;
+        for (k = 0; k < 3; k++) I.tamborPerigo(c, out, tb + k * q, k ? 0.26 : 0.40);
+        for (k = 0; k < 6; k++) I.pulso(c, out, tb + k * q / 2, q * 0.4, r, k % 2 ? 0.16 : 0.22);
+        for (k = 0; k < 12; k++) I.tique(c, out, tb + k * q / 4, k % 4 ? 0.14 : 0.28);
+      } },
+    castelo: { molhado: 0.4, seg: 3, bpm: 66, tempos: 4, raizes: [50, 46, 43, 45, 50, 41, 43, 45],
+      acordes: [[50,53,57],[50,53,58],[50,55,58],[49,52,57],[50,53,57],[48,53,57],[50,55,58],[49,52,55,57]], bx: [38,46,43,45,38,41,43,45],
+      mel: [[0,0,2,69],[0,2,2,65],[1,0,3,74],[1,3,1,70],[2,0,2,67],[2,2,1,70],[2,3,1,69],[3,0,2,64],[3,2,2,73],
+            [4,0,2,74],[4,2,2,69],[5,0,2,72],[5,2,1,69],[5,3,1,65],[6,0,1,67],[6,1,1,70],[6,2,2,74],[7,0,2,73],[7,2,1,76],[7,3,1,73]],
+      compasso: function (c, out, tb, b, volta, q) {
+        var I = INSTR, comp = 4 * q, a = this.acordes[b];
+        I.pad(c, out, tb, comp, a, "sawtooth", 800, 0.07);
+        I.baixo(c, out, tb, 2 * q, this.bx[b], 0.13); I.baixo(c, out, tb + 2 * q, 2 * q, this.bx[b], 0.11);
+        if (b === 0) I.sino(c, out, tb, mf(50), 0.10, 4); if (b === 4) I.sino(c, out, tb, mf(45), 0.09, 4);
+        if (volta % 2 === 0) this.mel.forEach(function (n) { if (n[0] === b) I.cordas(c, out, tb + n[1] * q, n[2] * q, n[3], 0.06); });
+        else if (b === 2 || b === 6) I.sino(c, out, tb + q, mf(b === 2 ? 74 : 69), 0.04, 3);
+      },
+      perigo: function (c, out, tb, q, b) {                     // tímpanos (1, 3 e antecipação), cordas em colcheias e caixa em semicolcheias
+        var I = INSTR, r = this.raizes[b] + 12, k;
+        [[0, 0.42], [2, 0.34], [3.5, 0.24]].forEach(function (p) { I.tamborPerigo(c, out, tb + p[0] * q, p[1]); });
+        for (k = 0; k < 8; k++) I.pulso(c, out, tb + k * q / 2, q * 0.4, r, k % 2 ? 0.08 : 0.12);
+        for (k = 0; k < 16; k++) I.tique(c, out, tb + k * q / 4, k % 4 ? 0.07 : 0.15);
+      } },
+    masmorra: { molhado: 0.6, seg: 4, bpm: 56, tempos: 4, raizes: [40, 41, 40, 41, 40, 36, 41, 40],
+      acordes: [[52,55,59],[53,57,60],[52,55,59],[53,57,60],[52,55,59],[48,52,55],[53,57,60],[52,55,59]],
+      sinos: [[1,2,77],[3,0,76],[3,2,79],[5,1,71],[6,2,77],[7,0,76]],
+      compasso: function (c, out, tb, b, volta, q) {
+        var I = INSTR, comp = 4 * q, a = this.acordes[b];
+        I.pad(c, out, tb, comp, [40, 47], "sawtooth", 250, 0.17);       // bordão (os compassos se sobrepõem e soam contínuos)
+        I.pad(c, out, tb, comp, a, "triangle", 700, 0.08); I.tambor(c, out, tb, 0.4); I.tambor(c, out, tb + 0.3, 0.26);
+        this.sinos.forEach(function (n) { if (n[0] === b) I.sino(c, out, tb + n[1] * q, mf(n[2]), 0.035, 2.5); });
+        if (Math.random() < 0.75) I.gota(c, out, tb + Math.random() * comp, 0.05);
+        if (volta % 2 === 1 && b === 4) I.raspar(c, out, tb, 2.5, 0.06);
+      },
+      perigo: function (c, out, tb, q, b) {                     // o coração bate em todo tempo; pulso que oscila meio tom; batidas de metal
+        var I = INSTR, r = this.raizes[b] + 12, k;
+        for (k = 1; k < 4; k++) { I.tambor(c, out, tb + k * q, 0.42); I.tambor(c, out, tb + k * q + 0.3, 0.28); }
+        for (k = 0; k < 8; k++) I.pulso(c, out, tb + k * q / 2, q * 0.45, k % 2 ? r + 1 : r, 0.09);
+        for (k = 0; k < 16; k++) I.tique(c, out, tb + k * q / 4, k % 4 ? 0.04 : 0.09);
+      } }
+  };
+  function mReverb(c, seg) {
+    var n = Math.floor(c.sampleRate * seg), b = c.createBuffer(2, n, c.sampleRate), ch, k, d;
+    for (ch = 0; ch < 2; ch++) { d = b.getChannelData(ch); for (k = 0; k < n; k++) d[k] = (Math.random() * 2 - 1) * Math.pow(1 - k / n, 3); }
+    var cv = c.createConvolver(); cv.buffer = b; return cv;
+  }
+  function musicaPara(tau) {
+    clearTimeout(MUS.timer); MUS.timer = null;
+    var g = MUS.g; MUS.g = null; MUS.ent = null; MUS.perigo = null; MUS.ritmo = 1;
+    if (g && ctxSom) {
+      try { var t = ctxSom.currentTime; g.gain.cancelScheduledValues(t); g.gain.setValueAtTime(g.gain.value, t); g.gain.setTargetAtTime(0, t, tau || 0.4); } catch (e) {}
+      setTimeout(function () { try { g.disconnect(); } catch (e) {} }, 3000);
+    }
+  }
+  function musicaToca() {
+    musicaPara(0.15);
+    if (document.hidden) return;
+    var c = audio(); if (!c) return;
+    try {
+      var mus = MUSICAS[INFO.cenario] || MUSICAS.floresta, g = c.createGain(), ent = c.createGain(), w = c.createGain();
+      var t = c.currentTime + 0.1, b = 0, volta = 0;
+      g.gain.setValueAtTime(0, c.currentTime); g.gain.linearRampToValueAtTime(VOL_MUSICA, c.currentTime + 1.5); g.connect(c.destination);
+      w.gain.value = mus.molhado; ent.connect(g); mLiga(ent, mReverb(c, mus.seg), w, g);
+      MUS.g = g; MUS.ent = ent; MUS.ritmo = 1;
+      var agenda = function () {                                 // agenda os compassos que começam nos próximos 2,5 s
+        if (MUS.g !== g) return;
+        while (t < c.currentTime + 2.5) {
+          var q = 60 / (mus.bpm * MUS.ritmo);                    // o andamento vale a partir deste compasso
+          mus.compasso(c, ent, t, b, volta, q);
+          if (MUS.perigo) mus.perigo(c, MUS.perigo, t, q, b);
+          t += mus.tempos * q; b++; if (b === 8) { b = 0; volta++; }
+        }
+        MUS.timer = setTimeout(agenda, 300);
+      };
+      agenda();
+    } catch (e) { MUS.g = null; }
+  }
+  function musicaPerigo() {                                      // o chefe chegou: a partir do próximo compasso, mais rápida e com a camada de perigo
+    if (!MUS.g || MUS.perigo || !ctxSom) return;
+    try {
+      var c = ctxSom, pg = c.createGain(), agora = c.currentTime;
+      pg.gain.setValueAtTime(0.0001, agora); pg.gain.linearRampToValueAtTime(0.6, agora + 1.5); pg.gain.linearRampToValueAtTime(1, agora + 5);
+      pg.connect(MUS.ent); MUS.perigo = pg; MUS.ritmo = RITMO_CHEFE;
+    } catch (e) {}
+  }
+  function musicaAbaixa(seg) {                                   // deixa a voz do Mago Sombrio passar por cima da música
+    if (!MUS.g || !ctxSom) return;
+    try { var g = MUS.g.gain, t = ctxSom.currentTime; g.cancelScheduledValues(t); g.setValueAtTime(g.value, t);
+      g.setTargetAtTime(VOL_MUSICA * 0.3, t, 0.08); g.setTargetAtTime(VOL_MUSICA, t + seg, 0.5); } catch (e) {}
+  }
+  function musicaRetoma() { if (E.som && E.fase === "jogo") { musicaToca(); if (E.chefe) musicaPerigo(); } else musicaPara(0.2); }
+  document.addEventListener("visibilitychange", function () { if (document.hidden) musicaPara(0.2); else musicaRetoma(); });
 
   /* ---------------- cenário ---------------- */
   function semente(s) { return function () { s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; }; }
@@ -1698,6 +1895,7 @@ var VOZES = {"gargalhada": "SUQzBAAAAAAtTVRTU0UAAAAPAAADTGF2ZjYwLjE2LjEwMABHRU9C
   }
 
   /* ---------------- HUD ---------------- */
+  var NUM_QUESTOES = TOPICS.reduce(function (s, t) { return s + (typeof t.n === "number" ? t.n : POR_TEMA); }, 0);   // 10 (3 na demonstração)
   var CORACAO = '<svg viewBox="0 0 26 24" aria-hidden="true"><path d="M13 22 C4 15 1 11 1 7 A6 6 0 0 1 13 5 A6 6 0 0 1 25 7 C25 11 22 15 13 22Z" fill="#ff4d5e" stroke="#7a1420" stroke-width="1.2"/></svg>';
   function pintaHud(quebrou) {
     var vidas = "", k;
@@ -1705,10 +1903,10 @@ var VOZES = {"gargalhada": "SUQzBAAAAAAtTVRTU0UAAAAPAAADTGF2ZjYwLjE2LjEwMABHRU9C
     var trilha = "", chefeNaTrilha = false;
     E.hist.forEach(function (h) { trilha += '<i class="' + (h.chefe ? "chefe " : "") + (h.ok ? "ok" : "erro") + '"></i>'; if (h.chefe) chefeNaTrilha = true; });
     if (E.fase === "jogo" && E.q && !E.respondida) { trilha += '<i class="' + (E.chefe ? "chefe " : "") + 'atual"></i>'; if (E.chefe) chefeNaTrilha = true; }
-    if (E.fase !== "fim") { for (k = 0; k < E.fila.length; k++) trilha += "<i></i>"; if (E.fase === "abertura") for (k = 0; k < 9; k++) trilha += "<i></i>"; if (!chefeNaTrilha) trilha += '<i class="chefe"></i>'; }
+    if (E.fase !== "fim") { for (k = 0; k < E.fila.length; k++) trilha += "<i></i>"; if (E.fase === "abertura") for (k = 0; k < NUM_QUESTOES - 1; k++) trilha += "<i></i>"; if (!chefeNaTrilha) trilha += '<i class="chefe"></i>'; }
     hud.innerHTML = '<span class="cap">' + INFO.titulo + '</span><span class="vidas" role="img" aria-label="' + E.vidas + ' de ' + VIDAS + ' vidas">' + vidas + "</span>" +
       '<span class="trilha" aria-hidden="true">' + trilha + '</span><button class="som" id="som" type="button" aria-pressed="' + E.som + '">' + (E.som ? "Som: ligado" : "Som: desligado") + "</button>";
-    document.getElementById("som").addEventListener("click", function () { E.som = !E.som; pintaHud(); });
+    document.getElementById("som").addEventListener("click", function () { E.som = !E.som; pintaHud(); musicaRetoma(); });
   }
 
   /* ---------------- cena: personagens e efeitos ---------------- */
@@ -1822,7 +2020,8 @@ var VOZES = {"gargalhada": "SUQzBAAAAAAtTVRTU0UAAAAPAAADTGF2ZjYwLjE2LjEwMABHRU9C
     SFX[mg.impacto](); faiscas(IX, alvoY, mg.cor, 18); faiscas(IX, alvoY, "#ffffff", 8);
     await Promise.all([treme(inimigoIn), pisca(inimigoIn, "#8fe3ff")]);
     if (chefe) {
-      if (m.fala) { SFX.voltarei(); await balao(m.fala, IX, CHAO - m.h * S - 8, 2000); } else await Promise.all([treme(inimigoIn), pisca(inimigoIn, "#ff8fa6")]);
+      if (m.fala) { SFX.voltarei(); await balao(m.fala, IX, CHAO - m.h * S - 8, 2000); }
+      else { SFX.chefeDerrota(); await Promise.all([treme(inimigoIn), pisca(inimigoIn, "#ff8fa6")]); if (temVoz("derrota")) await espera(700); }
       fumaca(IX, CHAO - 80); faiscas(IX, CHAO - 90, "#c77dff", 22);
       await anima(inimigoIn, [{ transform: "scale(1) translateY(0)", opacity: 1 }, { transform: "scale(.2,1.5) translateY(-60px)", opacity: 0 }], { duration: 650, easing: "ease-in", fill: "forwards" });
     } else {
@@ -1849,6 +2048,8 @@ var VOZES = {"gargalhada": "SUQzBAAAAAAtTVRTU0UAAAAPAAADTGF2ZjYwLjE2LjEwMABHRU9C
       heroiIn.style.transform = "translateY(-14px) rotate(82deg)"; heroiIn.style.opacity = .7;
       if (chefe && m.fala) { SFX.gargalhada(); await Promise.all([balao("Ha, ha, ha, ha!", IX, CHAO - m.h * S - 8, 2600),
         anima(inimigoIn, [{ transform: "translateY(0)" }, { transform: "translateY(-7px)" }, { transform: "translateY(0)" }], { duration: 210, iterations: 12 })]); }
+      else if (chefe && temVoz("vitoria")) { SFX.chefeVitoria();
+        await anima(inimigoIn, [{ transform: "translateY(0) scale(1)" }, { transform: "translateY(-8px) scale(1.04)" }, { transform: "translateY(0) scale(1)" }], { duration: 300, iterations: 8 }); }
     }
   }
   function limpaCena() { fx.innerHTML = ""; Array.prototype.forEach.call(cena.querySelectorAll(".faixa,.balao"), function (x) { x.remove(); }); }
@@ -1879,7 +2080,7 @@ var VOZES = {"gargalhada": "SUQzBAAAAAAtTVRTU0UAAAAPAAADTGF2ZjYwLjE2LjEwMABHRU9C
 
   function comeca() {
     E.fase = "jogo"; E.magia = Math.floor(Math.random() * 4); E.vidas = VIDAS; E.hist = []; E.usadas = []; E.vistos = {}; E.monstro = null; E.ocupado = false; E.q = null;
-    sortear(); limpaCena(); poeHeroi(); inimigoIn.innerHTML = ""; proxima();
+    sortear(); limpaCena(); poeHeroi(); inimigoIn.innerHTML = ""; musicaToca(); proxima();
   }
 
   /* próxima questão: da fila; se a fila acabou e o inimigo ainda está de pé, uma extra difícil; senão, o chefe */
@@ -1889,7 +2090,7 @@ var VOZES = {"gargalhada": "SUQzBAAAAAAtTVRTU0UAAAAPAAADTGF2ZjYwLjE2LjEwMABHRU9C
     else if (E.monstro) q = extra();
     else { q = E.chefeQ; chefe = true; }
     E.q = q; E.chefe = chefe; E.respondida = false; E.usadas.push(q); E.ordem = embaralha(q.o.length);
-    if (chefe) { E.monstro = CHEFE; novo = true; }
+    if (chefe) { E.monstro = CHEFE; novo = true; musicaPerigo(); }      // o chefe chega: entra a camada de perigo, sem recomeçar a música
     else if (!E.monstro) { E.monstro = novoMonstro(q.d || 2); novo = true; }
     questao(novo);
   }
@@ -1959,9 +2160,9 @@ var VOZES = {"gargalhada": "SUQzBAAAAAAtTVRTU0UAAAAPAAADTGF2ZjYwLjE2LjEwMABHRU9C
   }
 
   function final(tipo) {
-    E.fase = "fim"; limpaMath(app); pintaHud(); placa.innerHTML = "";
+    E.fase = "fim"; musicaPara(0.6); limpaMath(app); pintaHud(); placa.innerHTML = "";
     var f = document.createElement("div"); f.className = "faixa " + tipo; f.innerHTML = "<span>" + (tipo === "vitoria" ? "Vitória!" : "Game Over") + "</span>"; cena.appendChild(f);
-    if (tipo === "vitoria") { SFX.vitoria(); setTimeout(function () { faiscas(300, 90, "#ffe066", 24); faiscas(660, 110, "#ff8fa6", 24); }, 1500); setTimeout(function () { faiscas(480, 70, "#bff1ff", 34); }, 3700); faiscas(TX, TY, "#ffe066", 26); faiscas(480, 120, "#bff1ff", 30); } else if (!(E.hist[E.hist.length - 1].chefe && CHEFE.fala)) SFX.derrota();
+    if (tipo === "vitoria") { SFX.vitoria(); setTimeout(function () { faiscas(300, 90, "#ffe066", 24); faiscas(660, 110, "#ff8fa6", 24); }, 1500); setTimeout(function () { faiscas(480, 70, "#bff1ff", 34); }, 3700); faiscas(TX, TY, "#ffe066", 26); faiscas(480, 120, "#bff1ff", 30); } else if (!(E.hist[E.hist.length - 1].chefe && (CHEFE.fala || temVoz("vitoria")))) SFX.derrota();
     var feitas = E.hist.length, certas = E.hist.filter(function (h) { return h.ok; }).length;
     var vencidos = E.hist.filter(function (h) { return h.ok && !h.chefe; }).length;
     var temas = porTema(), nome = primeiroNome(), ultimo = E.hist[feitas - 1];
@@ -2007,7 +2208,7 @@ var VOZES = {"gargalhada": "SUQzBAAAAAAtTVRTU0UAAAAPAAADTGF2ZjYwLjE2LjEwMABHRU9C
     }
   });
 
-  window.__jogo = { E: E, SFX: SFX };   // usado só nos testes
+  window.__jogo = { E: E, SFX: SFX, MUS: MUS, musicaToca: musicaToca, musicaPerigo: musicaPerigo, MUSICAS: MUSICAS };   // usado só nos testes
   montaCenario(); abertura();
 })();
 
