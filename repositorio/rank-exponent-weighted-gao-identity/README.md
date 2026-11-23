@@ -4,7 +4,7 @@ Programs and outputs for the computations in Section 9 of the paper
 
 > A. Lemos, V. G. L. Neumann, *Rank, exponent and the weighted Gao identity for finite abelian p-groups*.
 
-Web page of this folder: <https://vneumann-ufu.github.io/repositorio/rank-exponent-weighted-gao-identity/>
+Web page of this folder: <https://vneumann-ufu.github.io/repositorio/rank-exponent-weighted-gao-identity/index.html>
 
 ## Notation
 
@@ -92,8 +92,9 @@ and in Section 9.3.
 
 ## Checks of the SageMath script
 
-1. The numbers `mu_m(G)`: the searches of the C program, with the same numbers. The two large
-   searches of Proposition 9.1 are run only at the level `long`.
+1. The numbers `mu_m(G)`: the searches of the C program quoted in the paper (not its three
+   tests), with the same numbers. The two large searches of Proposition 9.1 are run only at the
+   level `long`.
 2. The shape of the sequences attaining `mu_p` in Z_3^2, Z_5^2, Z_7^2, Z_5^3 and Z_3^3
    (Section 9.3; part (1') of the output).
 3. Theorem 1.4: enumeration of the zero-sum free sequences over the groups listed in
