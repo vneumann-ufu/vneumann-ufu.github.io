@@ -1,0 +1,95 @@
+Outputs of verificacoes_artigo-19-11-26b.sage, 23 November 2026.
+Run with passagemath 10.8.14 (a pip-installable distribution of the Sage library; Python 3.13.18)
+on one core of an Intel Xeon processor at 2.1 GHz.  The numbers in square brackets are running
+times in seconds.
+
+== The level "medium" ==
+$ sage --version
+passagemath version 10.8.14, Release Date: 2026-11-15
+
+$ sage verificacoes_artigo-19-11-26b.sage medium
+(1) The numbers mu_m(G);  s_A(G) = exp(G) + mu_exp(G)(G)
+G = Z_3 + Z_3 : mode 0, nonzero orbits 4, sequences visited 33, m = 3, max(|T| - L_m(T)) = 2, m + max = 5 (exp + Omega = 5); sequences attaining the maximum: 12, of which with L_m(T) = 0: 6   [0 s]
+G = Z_5 + Z_5 : mode 0, nonzero orbits 6, sequences visited 240, m = 5, max(|T| - L_m(T)) = 2, m + max = 7 (exp + Omega = 7); sequences attaining the maximum: 15, of which with L_m(T) = 0: 15   [0 s]
+G = Z_7 + Z_7 : mode 0, nonzero orbits 8, sequences visited 3059, m = 7, max(|T| - L_m(T)) = 2, m + max = 9 (exp + Omega = 9); sequences attaining the maximum: 28, of which with L_m(T) = 0: 28   [0 s]
+G = Z_5 + Z_5 + Z_5 : mode 0, nonzero orbits 31, sequences visited 150165, m = 5, max(|T| - L_m(T)) = 3, m + max = 8 (exp + Omega = 8); sequences attaining the maximum: 3875, of which with L_m(T) = 0: 3875   [2 s]
+G = Z_9 + Z_3 : mode 0, nonzero orbits 7, sequences visited 7092, m = 9, max(|T| - L_m(T)) = 3, m + max = 12 (exp + Omega = 12); sequences attaining the maximum: 21, of which with L_m(T) = 0: 21   [0 s]
+G = Z_9 + Z_9 : mode 0, nonzero orbits 16, sequences visited 851949, m = 9, max(|T| - L_m(T)) = 4, m + max = 13 (exp + Omega = 13); sequences attaining the maximum: 432, of which with L_m(T) = 0: 432   [12 s]
+G = Z_3 + Z_3 + Z_3 : mode 0, nonzero orbits 13, sequences visited 5955, m = 3, max(|T| - L_m(T)) = 6, m + max = 9 (exp + Omega = 6); sequences attaining the maximum: 234, of which with L_m(T) = 0: 0   [0 s]
+G = Z_3 + Z_3 + Z_3 : mode 0, nonzero orbits 13, sequences visited 223536, m = 9, max(|T| - L_m(T)) = 3, m + max = 12 (exp + Omega = 6); sequences attaining the maximum: 234, of which with L_m(T) = 0: 234   [3 s]
+G = Z_3 + Z_3 + Z_3 : mode 0, nonzero orbits 13, sequences visited 37779, m = 7, max(|T| - L_m(T)) = 3, m + max = 10 (exp + Omega = 6); sequences attaining the maximum: 234, of which with L_m(T) = 0: 234   [0 s]
+G = Z_9 + Z_3 + Z_3 : mode 0, nonzero orbits 22, sequences visited 7745097, m = 9, max(|T| - L_m(T)) = 4, m + max = 13 (exp + Omega = 13); sequences attaining the maximum: 2826, of which with L_m(T) = 0: 2826   [91 s]
+G = Z_3 + Z_3 + Z_3 + Z_3 : mode 3, nonzero orbits 40, sequences visited 29338728, m = 9, max(|T| - L_m(T)) = 4, m + max = 13 (exp + Omega = 7); sequences attaining the maximum: 486, of which with L_m(T) = 0: 486   [500 s]
+(1') Shape of the sequences attaining mu in elementary groups
+   Z_3 + Z_3: mu = 2; sequences T attaining it, by (L(T), multiplicities of the orbits): [((0, (1, 1)), 6), ((2, (2, 2)), 6)]
+   Z_5 + Z_5: mu = 2; sequences T attaining it, by (L(T), multiplicities of the orbits): [((0, (1, 1)), 15)]
+   Z_7 + Z_7: mu = 2; sequences T attaining it, by (L(T), multiplicities of the orbits): [((0, (1, 1)), 28)]
+   Z_5 + Z_5 + Z_5: mu = 3; sequences T attaining it, by (L(T), multiplicities of the orbits): [((0, (1, 1, 1)), 3875)]
+   Z_3 + Z_3 + Z_3: mu = 6; sequences T attaining it, by (L(T), multiplicities of the orbits): [((2, (2, 2, 2, 2)), 234)]
+(2) Zero-sum free sequences and chain sequences (Theorem 1.4)
+    groups with rk(G) <= 2p-1:
+   Z_9                    rank 1, Omega 2: longest zero-sum free sequence 2; zero-sum free sequences by length [2, 1]; not chain sequences: 0
+   Z_27                   rank 1, Omega 3: longest zero-sum free sequence 3; zero-sum free sequences by length [3, 3, 1]; not chain sequences: 0
+   Z_25                   rank 1, Omega 2: longest zero-sum free sequence 2; zero-sum free sequences by length [2, 1]; not chain sequences: 0
+   Z_3 + Z_3              rank 2, Omega 2: longest zero-sum free sequence 2; zero-sum free sequences by length [4, 6]; not chain sequences: 0
+   Z_5 + Z_5              rank 2, Omega 2: longest zero-sum free sequence 2; zero-sum free sequences by length [6, 15]; not chain sequences: 0
+   Z_9 + Z_3              rank 2, Omega 3: longest zero-sum free sequence 3; zero-sum free sequences by length [7, 21, 21]; not chain sequences: 0
+   Z_9 + Z_9              rank 2, Omega 4: longest zero-sum free sequence 4; zero-sum free sequences by length [16, 120, 408, 432]; not chain sequences: 0
+   Z_27 + Z_3             rank 2, Omega 4: longest zero-sum free sequence 4; zero-sum free sequences by length [10, 45, 90, 66]; not chain sequences: 0
+   Z_25 + Z_5             rank 2, Omega 3: longest zero-sum free sequence 3; zero-sum free sequences by length [11, 55, 85]; not chain sequences: 0
+   Z_3 + Z_3 + Z_3        rank 3, Omega 3: longest zero-sum free sequence 3; zero-sum free sequences by length [13, 78, 234]; not chain sequences: 0
+   Z_5 + Z_5 + Z_5        rank 3, Omega 3: longest zero-sum free sequence 3; zero-sum free sequences by length [31, 465, 3875]; not chain sequences: 0
+   Z_9 + Z_3 + Z_3        rank 3, Omega 4: longest zero-sum free sequence 4; zero-sum free sequences by length [22, 231, 1368, 2826]; not chain sequences: 0
+   Z_25 + Z_5 + Z_5       rank 3, Omega 4: longest zero-sum free sequence 4; zero-sum free sequences by length [56, 1540, 25300, 121375]; not chain sequences: 0
+   Z_9 + Z_9 + Z_3        rank 3, Omega 5: longest zero-sum free sequence 5; zero-sum free sequences by length [49, 1176, 16920, 112392, 211896]; not chain sequences: 0
+   Z_4 + Z_2              rank 2, Omega 3: longest zero-sum free sequence 3; zero-sum free sequences by length [5, 10, 7]; not chain sequences: 0
+   Z_4 + Z_4              rank 2, Omega 4: longest zero-sum free sequence 4; zero-sum free sequences by length [9, 36, 69, 48]; not chain sequences: 0
+   Z_8 + Z_2              rank 2, Omega 4: longest zero-sum free sequence 4; zero-sum free sequences by length [7, 21, 29, 15]; not chain sequences: 0
+   Z_4 + Z_2 + Z_2        rank 3, Omega 4: longest zero-sum free sequence 4; zero-sum free sequences by length [11, 55, 146, 152]; not chain sequences: 0
+   Z_4 + Z_4 + Z_2        rank 3, Omega 5: longest zero-sum free sequence 5; zero-sum free sequences by length [19, 171, 894, 2472, 2496]; not chain sequences: 0
+   Z_4 + Z_4 + Z_4        rank 3, Omega 6: longest zero-sum free sequence 6; zero-sum free sequences by length [35, 595, 6230, 39368, 122304, 125440]; not chain sequences: 0
+   Z_8 + Z_4 + Z_2        rank 3, Omega 6: longest zero-sum free sequence 6; zero-sum free sequences by length [27, 351, 2750, 12652, 29344, 25744]; not chain sequences: 0
+   Z_9 + Z_3 + Z_3 + Z_3  rank 4, Omega 5: longest zero-sum free sequence 5; zero-sum free sequences by length [67, 2211, 46215, 603018, 2609334]; not chain sequences: 0
+    2-groups with rank >= 4 and rk(2G) <= 2:
+   Z_4 + Z_2 + Z_2 + Z_2  rank 4, Omega 5: longest zero-sum free sequence 5; zero-sum free sequences by length [23, 253, 1680, 6608, 10584]; not chain sequences: 0
+   Z_8 + Z_2 + Z_2 + Z_2  rank 4, Omega 6: longest zero-sum free sequence 6; zero-sum free sequences by length [31, 465, 4320, 25452, 80808, 103320]; not chain sequences: 0
+   Z_4 + Z_4 + Z_2 + Z_2  rank 4, Omega 6: longest zero-sum free sequence 6; zero-sum free sequences by length [39, 741, 8808, 67296, 280584, 413952]; not chain sequences: 0
+   Z_4 + Z_2 + Z_2 + Z_2 + Z_2 rank 5, Omega 6: longest zero-sum free sequence 6; zero-sum free sequences by length [47, 1081, 15820, 156520, 968016, 2433536]; not chain sequences: 0
+   Z_16 + Z_2 + Z_2 + Z_2 rank 4, Omega 7: longest zero-sum free sequence 7; zero-sum free sequences by length [39, 741, 8852, 69616, 330820, 849856, 907928]; not chain sequences: 0
+   Z_8 + Z_4 + Z_2 + Z_2  rank 4, Omega 7: longest zero-sum free sequence 7; zero-sum free sequences by length [55, 1485, 25480, 291480, 2027752, 7061232, 9075968]; not chain sequences: 0
+(3) The sequence of Proposition 4.10
+   p = 2: weights (c_0,...,c_p) != 0 satisfying (i): 12; among them, those which can be completed to a zero-sum: 0; every term lies in the subgroup generated by the others: True; brute force over all weights: 0 nonempty zero-sum subsequences
+   p = 3: weights (c_0,...,c_p) != 0 satisfying (i): 216; among them, those which can be completed to a zero-sum: 0; every term lies in the subgroup generated by the others: True; brute force over all weights: 0 nonempty zero-sum subsequences
+   p = 5: weights (c_0,...,c_p) != 0 satisfying (i): 75000; among them, those which can be completed to a zero-sum: 0; every term lies in the subgroup generated by the others: True
+(4) The weights lemma (Lemma 6.1)
+   p = 3, d = 1, s = 1: 2 multisets satisfying the hypothesis, 0 in the configuration (E); 'good weights exist' <=> 'not (E)' for all of them
+   p = 3, d = 1, s = 2: 5 multisets satisfying the hypothesis, 0 in the configuration (E); 'good weights exist' <=> 'not (E)' for all of them
+   p = 3, d = 1, s = 3: 9 multisets satisfying the hypothesis, 0 in the configuration (E); 'good weights exist' <=> 'not (E)' for all of them
+   p = 3, d = 1, s = 4: 14 multisets satisfying the hypothesis, 0 in the configuration (E); 'good weights exist' <=> 'not (E)' for all of them
+   p = 3, d = 2, s = 1: 4 multisets satisfying the hypothesis, 0 in the configuration (E); 'good weights exist' <=> 'not (E)' for all of them
+   p = 3, d = 2, s = 2: 34 multisets satisfying the hypothesis, 4 in the configuration (E); 'good weights exist' <=> 'not (E)' for all of them
+   p = 3, d = 2, s = 3: 146 multisets satisfying the hypothesis, 4 in the configuration (E); 'good weights exist' <=> 'not (E)' for all of them
+   p = 3, d = 2, s = 4: 466 multisets satisfying the hypothesis, 4 in the configuration (E); 'good weights exist' <=> 'not (E)' for all of them
+   p = 5, d = 1, s = 1: 4 multisets satisfying the hypothesis, 0 in the configuration (E); 'good weights exist' <=> 'not (E)' for all of them
+   p = 5, d = 1, s = 2: 14 multisets satisfying the hypothesis, 0 in the configuration (E); 'good weights exist' <=> 'not (E)' for all of them
+   p = 5, d = 1, s = 3: 34 multisets satisfying the hypothesis, 0 in the configuration (E); 'good weights exist' <=> 'not (E)' for all of them
+   p = 5, d = 2, s = 1: 16 multisets satisfying the hypothesis, 0 in the configuration (E); 'good weights exist' <=> 'not (E)' for all of them
+   p = 5, d = 2, s = 2: 296 multisets satisfying the hypothesis, 0 in the configuration (E); 'good weights exist' <=> 'not (E)' for all of them
+   p = 5, d = 2, s = 3: 2856 multisets satisfying the hypothesis, 0 in the configuration (E); 'good weights exist' <=> 'not (E)' for all of them
+   p = 5, d = 3, s = 1: 64 multisets satisfying the hypothesis, 0 in the configuration (E); 'good weights exist' <=> 'not (E)' for all of them
+   p = 5, d = 3, s = 2: 6944 multisets satisfying the hypothesis, 0 in the configuration (E); 'good weights exist' <=> 'not (E)' for all of them
+   p = 5, d = 3, s = 3: 324704 multisets satisfying the hypothesis, 0 in the configuration (E); 'good weights exist' <=> 'not (E)' for all of them
+   p = 5, d = 4, s = 2: 166016 multisets satisfying the hypothesis, 3072 in the configuration (E); 'good weights exist' <=> 'not (E)' for all of them
+(5) Minimal zero-sum sequences (Example 9.2)
+   (0,1)(1,0)(1,3)(3,1) over Z_9^2 is a minimal zero-sum sequence: True
+   (0,1)(1,0)(1,5)(5,1) over Z_25^2 is a minimal zero-sum sequence: True
+   (0,1)(1,0)(1,7)(7,1) over Z_49^2 is a minimal zero-sum sequence: True
+   Z_9 + Z_3: (length, number of minimal zero-sum sequences up to units): [(1, 1), (2, 7), (3, 14), (4, 0)]
+   Z_9 + Z_9: (length, number of minimal zero-sum sequences up to units): [(1, 1), (2, 16), (3, 152), (4, 54), (5, 0)]
+done
+
+== The group Z_4^3 + Z_2 (the test which the level "long" adds to part (2)) ==
+The function check_chains of the script, called as check_chains(2, [4, 4, 4, 2]) after the script
+was preparsed by Sage (running time: 1898 s):
+   Z_4 + Z_4 + Z_4 + Z_2  rank 4, Omega 7: longest zero-sum free sequence 7; zero-sum free sequences by length [71, 2485, 55832, 851200, 8059240, 36314880, 50792448]; not chain sequences: 14336
+      not chain sequences (length: number): [(6, 14336)]; among them, sequences in which every term lies in the subgroup generated by the others: [(6, 14336)]; example: [(0, 0, 1, 0), (0, 0, 1, 1), (0, 1, 0, 0), (1, 0, 0, 0), (1, 2, 0, 1), (2, 1, 2, 1)]

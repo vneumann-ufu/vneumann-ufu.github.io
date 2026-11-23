@@ -1,0 +1,52 @@
+Outputs of busca_sA (compiled from busca_sA-19-11-26.c with gcc -O2), 19 November 2026.
+Each block: the command and the line printed by the program.
+
+== Small groups and tests ==
+$ ./busca_sA 3 0 0 2 3 3
+G = Z_3 + Z_3 : mode 0, nonzero orbits 4, sequences visited 33, m = 3, max(|T| - L_m(T)) = 2, m + max = 5 (exp + Omega = 5); sequences attaining the maximum: 12, of which with L_m(T) = 0: 6
+
+$ ./busca_sA 5 0 0 2 5 5
+G = Z_5 + Z_5 : mode 0, nonzero orbits 6, sequences visited 240, m = 5, max(|T| - L_m(T)) = 2, m + max = 7 (exp + Omega = 7); sequences attaining the maximum: 15, of which with L_m(T) = 0: 15
+
+$ ./busca_sA 7 0 0 2 7 7
+G = Z_7 + Z_7 : mode 0, nonzero orbits 8, sequences visited 3059, m = 7, max(|T| - L_m(T)) = 2, m + max = 9 (exp + Omega = 9); sequences attaining the maximum: 28, of which with L_m(T) = 0: 28
+
+$ ./busca_sA 5 0 0 3 5 5 5
+G = Z_5 + Z_5 + Z_5 : mode 0, nonzero orbits 31, sequences visited 150165, m = 5, max(|T| - L_m(T)) = 3, m + max = 8 (exp + Omega = 8); sequences attaining the maximum: 3875, of which with L_m(T) = 0: 3875
+
+$ ./busca_sA 3 0 0 2 9 3
+G = Z_9 + Z_3 : mode 0, nonzero orbits 7, sequences visited 7092, m = 9, max(|T| - L_m(T)) = 3, m + max = 12 (exp + Omega = 12); sequences attaining the maximum: 21, of which with L_m(T) = 0: 21
+
+$ ./busca_sA 3 0 0 2 9 9
+G = Z_9 + Z_9 : mode 0, nonzero orbits 16, sequences visited 851949, m = 9, max(|T| - L_m(T)) = 4, m + max = 13 (exp + Omega = 13); sequences attaining the maximum: 432, of which with L_m(T) = 0: 432
+
+$ ./busca_sA 3 0 0 3 3 3 3
+G = Z_3 + Z_3 + Z_3 : mode 0, nonzero orbits 13, sequences visited 5955, m = 3, max(|T| - L_m(T)) = 6, m + max = 9 (exp + Omega = 6); sequences attaining the maximum: 234, of which with L_m(T) = 0: 0
+
+$ ./busca_sA 3 0 0 3 9 3 3
+G = Z_9 + Z_3 + Z_3 : mode 0, nonzero orbits 22, sequences visited 7745097, m = 9, max(|T| - L_m(T)) = 4, m + max = 13 (exp + Omega = 13); sequences attaining the maximum: 2826, of which with L_m(T) = 0: 2826
+
+$ ./busca_sA 3 9 0 3 3 3 3
+G = Z_3 + Z_3 + Z_3 : mode 0, nonzero orbits 13, sequences visited 223536, m = 9, max(|T| - L_m(T)) = 3, m + max = 12 (exp + Omega = 6); sequences attaining the maximum: 234, of which with L_m(T) = 0: 234
+
+$ ./busca_sA 3 7 0 3 3 3 3
+G = Z_3 + Z_3 + Z_3 : mode 0, nonzero orbits 13, sequences visited 37779, m = 7, max(|T| - L_m(T)) = 3, m + max = 10 (exp + Omega = 6); sequences attaining the maximum: 234, of which with L_m(T) = 0: 234
+
+$ ./busca_sA 13 0 0 2 13 13
+G = Z_13 + Z_13 : mode 0, nonzero orbits 14, sequences visited 9657882, m = 13, max(|T| - L_m(T)) = 2, m + max = 15 (exp + Omega = 15); sequences attaining the maximum: 91, of which with L_m(T) = 0: 91
+
+$ ./busca_sA 3 9 0 4 3 9 3 3 RESTR 0 1
+G = Z_3 + Z_9 + Z_3 + Z_3 : mode 0, restricted to x_0 = x_1 mod p, nonzero orbits 22, sequences visited 7745097, m = 9, max(|T| - L_m(T)) = 4, m + max = 13 (exp + Omega = 14); sequences attaining the maximum: 2826, of which with L_m(T) = 0: 2826
+
+$ ./busca_sA 3 9 0 4 9 3 3 3 RESTR 3 0
+G = Z_9 + Z_3 + Z_3 + Z_3 : mode 0, restricted to x_3 = x_0 mod p, nonzero orbits 22, sequences visited 7745097, m = 9, max(|T| - L_m(T)) = 4, m + max = 13 (exp + Omega = 14); sequences attaining the maximum: 2826, of which with L_m(T) = 0: 2826
+
+== The three large searches of Proposition 9.1 ==
+$ ./busca_sA 3 9 3 4 3 3 3 3  0 0 0 1  0 0 1 0
+G = Z_3 + Z_3 + Z_3 + Z_3 : mode 3, nonzero orbits 40, sequences visited 29338728, m = 9, max(|T| - L_m(T)) = 4, m + max = 13 (exp + Omega = 7); sequences attaining the maximum: 486, of which with L_m(T) = 0: 486
+
+$ ./busca_sA 3 9 1 3 9 9 3  1 0 0
+G = Z_9 + Z_9 + Z_3 : mode 1, nonzero orbits 49, sequences visited 316798011, m = 9, max(|T| - L_m(T)) = 5, m + max = 14 (exp + Omega = 14); sequences attaining the maximum: 14958, of which with L_m(T) = 0: 14958
+
+$ ./busca_sA 3 9 2 4 9 3 3 3  1 0 0 0  1 1 0 0
+G = Z_9 + Z_3 + Z_3 + Z_3 : mode 2, nonzero orbits 67, sequences visited 308363482, m = 9, max(|T| - L_m(T)) = 5, m + max = 14 (exp + Omega = 14); sequences attaining the maximum: 3618, of which with L_m(T) = 0: 3618
