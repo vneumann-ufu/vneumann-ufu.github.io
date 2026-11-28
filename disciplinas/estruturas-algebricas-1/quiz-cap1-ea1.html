@@ -199,12 +199,12 @@ var BANK = [
   "ref": "Seção 1.2 das notas",
   "q": "Em $\\Z$, defina $x \\sim y \\iff x + y = 10$. Essa relação é de equivalência?",
   "o": [
-   "Não: por exemplo, $1$ não está relacionado com $1$.",
-   "Sim, pois é simétrica.",
-   "Não, porque não é simétrica.",
-   "Sim, pois $5 \\sim 5$."
+   "Não: $1 \\nsim 1$, pois $1 + 1 \\neq 10$.",
+   "Sim, pois é simétrica: $x + y = 10$ implica $y + x = 10$.",
+   "Não, porque não é simétrica: $1 \\sim 9$, mas $9 \\nsim 1$.",
+   "Sim, pois $5 \\sim 5$, e então a relação é reflexiva."
   ],
-  "e": "Para ser reflexiva, precisaríamos de $x + x = 10$ para todo $x$, o que só vale para $x = 5$. Um único exemplo $(5 \\sim 5)$ não prova uma propriedade para todos os elementos.",
+  "e": "Para ser reflexiva, precisaríamos de $x + x = 10$ para todo $x$, o que só vale para $x = 5$. Um único exemplo $(5 \\sim 5)$ não prova uma propriedade para todos os elementos. E ela é simétrica: $9 + 1 = 10$, logo $9 \\sim 1$.",
   "d": 1
  },
  {
@@ -278,11 +278,11 @@ var BANK = [
   "q": "Em $\\Z$, defina $x \\sim y \\iff$ existe $n \\in \\Z$ com $|x - y| = 2^{n}$. Essa relação é de equivalência?",
   "o": [
    "Não: $|x - x| = 0$ não é potência de $2$, então $x \\nsim x$.",
-   "Sim.",
-   "Não: falha só a simétrica.",
-   "Sim, pois $2^{0} = 1$."
+   "Sim: as três propriedades valem para todos $x$, $y$, $z \\in \\Z$.",
+   "Não: falha só a simétrica, pois $|x - y| \\neq |y - x|$.",
+   "Sim, pois $2^{0} = 1$, e então $x \\sim x + 1$ para todo $x$."
   ],
-  "e": "Nenhuma potência $2^{n}$ é zero, então a relação não é reflexiva (a transitividade também falha).",
+  "e": "Nenhuma potência $2^{n}$ é zero, então a relação não é reflexiva (a transitividade também falha). A simétrica vale, pois $|x - y| = |y - x|$; e $x \\sim x + 1$ não diz nada sobre $x \\sim x$.",
   "d": 3
  },
  {
@@ -421,9 +421,9 @@ var BANK = [
   "q": "Qual condição NÃO faz parte da definição de partição $\\mathcal{P}$ de um conjunto $A$?",
   "o": [
    "Todos os blocos têm o mesmo número de elementos.",
-   "Nenhum bloco é vazio.",
-   "Blocos distintos são disjuntos.",
-   "A união dos blocos é $A$."
+   "Nenhum bloco da partição é o conjunto vazio.",
+   "Dois blocos distintos não têm elementos em comum.",
+   "Todo elemento de $A$ está em algum bloco."
   ],
   "e": "Uma partição exige blocos não vazios, disjuntos dois a dois, cuja união é $A$. Os blocos podem ter tamanhos diferentes: $\\{\\{0\\}, \\Z \\setminus \\{0\\}\\}$ é uma partição de $\\Z$.",
   "d": 2

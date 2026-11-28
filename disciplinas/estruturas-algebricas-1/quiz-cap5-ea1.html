@@ -473,11 +473,11 @@ var BANK = [
   "q": "Seja $\\alpha = (1\\ 3\\ 5\\ 7\\ 9)(2\\ 4\\ 6)(8\\ 10)$. Para quais $m$ a potência $\\alpha^{m}$ é um $5$-ciclo?",
   "o": [
    "Quando $6$ divide $m$ e $5$ não divide $m$.",
-   "Quando $5$ divide $m$.",
-   "Somente para $m = 5$.",
-   "Quando $30$ divide $m$."
+   "Quando $5$ divide $m$, pois o $5$-ciclo tem ordem $5$.",
+   "Somente para $m = 6$, o mmc das ordens $3$ e $2$.",
+   "Quando $30$ divide $m$, o mmc das ordens dos ciclos."
   ],
-  "e": "$\\alpha^{m} = (1\\ 3\\ 5\\ 7\\ 9)^{m}(2\\ 4\\ 6)^{m}(8\\ 10)^{m}$. Para sobrar só um $5$-ciclo, os dois últimos fatores devem ser $I$ ($3 \\mid m$ e $2 \\mid m$) e o primeiro não pode ser $I \\ (5 \\nmid m)$.",
+  "e": "$\\alpha^{m} = (1\\ 3\\ 5\\ 7\\ 9)^{m}(2\\ 4\\ 6)^{m}(8\\ 10)^{m}$. Para sobrar só um $5$-ciclo, os dois últimos fatores devem ser $I$ ($3 \\mid m$ e $2 \\mid m$) e o primeiro não pode ser $I \\ (5 \\nmid m)$. Por exemplo, $m = 6$ e $m = 12$ servem; se $5 \\mid m$, o $5$-ciclo desaparece.",
   "d": 3
  },
  {
@@ -538,9 +538,9 @@ var BANK = [
   "q": "Por que $(1\\ 2\\ 3\\ 4)$ não é produto de $3$-ciclos?",
   "o": [
    "Porque $(1\\ 2\\ 3\\ 4)$ é ímpar e todo produto de $3$-ciclos é par.",
-   "Porque $4$ não é múltiplo de $3$.",
-   "Porque $3$ não divide a ordem $4$.",
-   "Porque $3$-ciclos não comutam."
+   "Porque $4$ não é múltiplo de $3$, e os comprimentos não batem.",
+   "Porque $3$ não divide a ordem $4$ de $(1\\ 2\\ 3\\ 4)$.",
+   "Porque $3$-ciclos não comutam entre si, em geral."
   ],
   "e": "Cada $3$-ciclo é par, e produto de permutações pares é par; $(1\\ 2\\ 3\\ 4)$ é produto de $3$ transposições, logo é ímpar.",
   "d": 2

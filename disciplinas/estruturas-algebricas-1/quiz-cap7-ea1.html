@@ -512,11 +512,11 @@ var BANK = [
   "q": "O grupo $D_{4}/\\langle r^{2}\\rangle$ é:",
   "o": [
    "um grupo de Klein (todo elemento tem ordem $\\le 2$)",
-   "cíclico de ordem $4$",
-   "cíclico de ordem $2$",
+   "cíclico de ordem $4$, gerado pela classe de $r$",
+   "cíclico de ordem $2$, pois $|D_{4}|/|\\langle r^{2}\\rangle| = 2$",
    "não é grupo, pois $\\langle r^{2}\\rangle$ não é normal"
   ],
-  "e": "$\\langle r^{2}\\rangle$ é normal e $D_{4}/\\langle r^{2}\\rangle = \\{N, rN, sN, rsN\\}$ tem $4$ elementos. Como $(rN)^{2} = r^{2}N = N$, $(sN)^{2} = N$ e $(rsN)^{2} = N$, todos os elementos têm ordem $\\le 2$.",
+  "e": "$\\langle r^{2}\\rangle$ é normal e $D_{4}/\\langle r^{2}\\rangle = \\{N, rN, sN, rsN\\}$ tem $4$ elementos. Como $(rN)^{2} = r^{2}N = N$, $(sN)^{2} = N$ e $(rsN)^{2} = N$, todos os elementos têm ordem $\\le 2$. A ordem é $8/2 = 4$, e a classe de $r$ tem ordem $2$, não $4$.",
   "d": 2
  },
  {
@@ -706,7 +706,7 @@ var BANK = [
   "ref": "Seção 7.3 das notas",
   "q": "Por que a operação $(aN)(bN) = (ab)N$ em $G/N$ não depende dos representantes $a$ e $b$?",
   "o": [
-   "Porque $(aN)(bN)$ é um produto de conjuntos, que só depende de $aN$ e $bN$.",
+   "Porque o produto de conjuntos $(aN)(bN)$ só depende de $aN$ e $bN$.",
    "Porque $G$ é abeliano, e então $ab$ não depende da ordem.",
    "Porque $aN = Na$ implica $ab = ba$ para todos $a$, $b \\in G$.",
    "Porque $a$ e $b$ estão em $N$, e então $aN = bN = N$."

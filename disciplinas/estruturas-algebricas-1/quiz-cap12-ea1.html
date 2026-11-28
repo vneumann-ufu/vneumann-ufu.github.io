@@ -187,9 +187,9 @@ var BANK = [
   "q": "Na construção de $\\operatorname{Frac}(A)$, onde se usa que $A$ não tem divisores de zero?",
   "o": [
    "Para garantir $bd \\neq 0$ e a transitividade da relação $\\sim$.",
-   "Para garantir que $A$ tem unidade.",
-   "Para garantir que $A$ é finito.",
-   "Não é usado."
+   "Para garantir que $A$ tem unidade, como $\\Z$ tem.",
+   "Para garantir que $A$ é finito e as frações são poucas.",
+   "Não é usado: basta que $A$ seja comutativo."
   ],
   "e": "Se $b$, $d \\neq 0$, precisamos de $bd \\neq 0$ para que a soma e o produto sejam frações; e, na transitividade, cancelamos $d$ em $d(af) = d(be)$.",
   "d": 2
@@ -239,11 +239,11 @@ var BANK = [
   "q": "Qual é o zero de $\\operatorname{Frac}(A)$?",
   "o": [
    "$0/d$, para qualquer $d \\neq 0$",
-   "$0/0$",
-   "$d/d$",
-   "$1/0$"
+   "$0/0$, pois $0 \\cdot d = 0$ para todo $d$",
+   "$d/d$, para qualquer $d \\neq 0$",
+   "$1/d$, para qualquer $d \\neq 0$"
   ],
-  "e": "$0/d = 0/d'$ para todos $d$, $d' \\neq 0$, pois $0\\cdot d' = d\\cdot 0$. Frações com denominador zero não existem.",
+  "e": "$0/d = 0/d'$ para todos $d$, $d' \\neq 0$, pois $0\\cdot d' = d\\cdot 0$. Frações com denominador zero não existem. Já $d/d$ é a unidade de $\\operatorname{Frac}(A)$.",
   "d": 1
  },
  {
@@ -278,7 +278,7 @@ var BANK = [
   "q": "A função $\\iota \\colon A \\longrightarrow \\operatorname{Frac}(A)$, $\\iota (a) = ad/d$ (com $d \\neq 0$ fixo), é:",
   "o": [
    "um homomorfismo injetor que não depende de $d$",
-   "sobrejetora",
+   "sobrejetora, pois toda fração é da forma $ad/d$",
    "um homomorfismo que depende de $d$",
    "bem definida só se $A$ tem unidade"
   ],
@@ -330,8 +330,8 @@ var BANK = [
   "q": "Por que a soma em $\\operatorname{Frac}(A)$ não pode ser definida por $a/b + c/d = (a + c)/(b + d)$?",
   "o": [
    "Porque dependeria dos representantes: $1/1 + 1/2$ daria $2/3$, mas $2/2 + 1/2$ daria $3/4$.",
-   "Porque essa fórmula só vale em $\\Z$.",
-   "Porque $a + c$ é sempre igual a $ad + bc$.",
+   "Porque essa fórmula só vale em $\\Z$, e $A$ pode ser outro anel.",
+   "Porque $a + c$ é sempre igual a $ad + bc$, e a fórmula daria o mesmo.",
    "Não há problema: as duas fórmulas dão o mesmo resultado."
   ],
   "e": "$1/1 = 2/2$, mas $2/3 \\neq 3/4$, pois $2 \\cdot 4 \\neq 3 \\cdot 3$. Uma operação em um conjunto quociente só faz sentido se não depender dos representantes.",
@@ -343,9 +343,9 @@ var BANK = [
   "q": "Fixe $d \\neq 0$ em $A$ e seja $\\iota (a) = ad/d$. Por que $\\iota$ não depende de $d$?",
   "o": [
    "Porque $(ad)d' = d(ad')$, isto é, $ad/d = ad'/d'$ para todo $d' \\neq 0$.",
-   "Porque $d/d = 1$ em $A$.",
-   "Porque $d$ é invertível em $A$.",
-   "Porque $A$ é finito."
+   "Porque $d/d = 1$ em $A$, e então $ad/d = a$.",
+   "Porque $d$ é invertível em $A$, e então $d/d$ não depende de $d$.",
+   "Porque $A$ é finito, e então só há um $d$ possível."
   ],
   "e": "É só a definição de igualdade de frações com a comutatividade. $A$ pode não ter unidade (por exemplo, $2\\Z$), então $d/d = 1$ não faz sentido dentro de $A$.",
   "d": 3
@@ -421,9 +421,9 @@ var BANK = [
   "q": "Qual afirmação é verdadeira?",
   "o": [
    "$\\operatorname{Frac}(A)$ é o menor corpo que contém uma cópia de $A$.",
-   "$\\operatorname{Frac}(A)$ só existe se $A$ tem unidade.",
-   "$\\operatorname{Frac}(\\Z_{6})$ é um corpo.",
-   "$\\operatorname{Frac}(A)$ é sempre infinito."
+   "$\\operatorname{Frac}(A)$ só existe quando $A$ tem unidade.",
+   "$\\operatorname{Frac}(\\Z_{6})$ é um corpo, como $\\operatorname{Frac}(\\Z)$.",
+   "$\\operatorname{Frac}(A)$ é sempre um conjunto infinito."
   ],
   "e": "Todo elemento de $\\operatorname{Frac}(A)$ é $ab^{-1}$ com $a$, $b \\in A$, e $\\operatorname{Frac}(A)$ é único a menos de isomorfismo. A construção vale para $2\\Z$ (sem unidade), exige ausência de divisores de zero ($\\Z_{6}$ tem) e $\\operatorname{Frac}(\\Z_{p}) = \\Z_{p}$ é finito.",
   "d": 2
@@ -433,10 +433,10 @@ var BANK = [
   "ref": "Seção 12.4 das notas",
   "q": "Qual é o corpo de frações de $\\Q[x]$?",
   "o": [
-   "$\\Q (x)$, o corpo das funções racionais $f(x)/g(x)$",
-   "$\\Q[x]$",
-   "$\\Q$",
-   "$\\R$"
+   "$\\Q (x)$, o corpo das funções racionais",
+   "$\\Q[x]$, pois já é um corpo",
+   "$\\Q$, o corpo dos coeficientes",
+   "$\\R$, o corpo dos números reais"
   ],
   "e": "$\\Q[x]$ não é corpo ($x$ não é invertível); suas frações $f(x)/g(x)$, com $g \\neq 0$, formam o corpo $\\Q (x)$.",
   "d": 2
@@ -498,12 +498,12 @@ var BANK = [
   "ref": "Seção 12.4 das notas",
   "q": "Por que $\\operatorname{Frac}(2\\Z) = \\Q$?",
   "o": [
-   "Porque todo racional $p/q$ se escreve como $2p/2q$, quociente de elementos de $2\\Z$.",
-   "Porque $2\\Z$ tem unidade.",
-   "Porque $2\\Z = \\Z$.",
+   "Porque todo racional $p/q$ é igual a $2p/2q$, com $2p$, $2q \\in 2\\Z$.",
+   "Porque $2\\Z$ tem unidade, e então suas frações dão $\\Q$.",
+   "Porque $2\\Z = \\Z$ como anéis, e $\\operatorname{Frac}(\\Z) = \\Q$.",
    "Porque $\\operatorname{Frac}(2\\Z)$ só contém frações com numerador par."
   ],
-  "e": "A inclusão $2\\Z \\longrightarrow \\Q$ é um homomorfismo injetor e todo elemento de $\\Q$ é quociente de elementos de $2\\Z$. Pelo teorema de unicidade, $\\operatorname{Frac}(2\\Z) \\cong \\Q$. Por exemplo, $1/3 = 2/6$.",
+  "e": "A inclusão $2\\Z \\longrightarrow \\Q$ é um homomorfismo injetor e todo elemento de $\\Q$ é quociente de elementos de $2\\Z$. Pelo teorema de unicidade, $\\operatorname{Frac}(2\\Z) \\cong \\Q$. Por exemplo, $1/3 = 2/6$. $2\\Z$ não tem unidade e não é isomorfo a $\\Z$.",
   "d": 2
  },
  {
@@ -537,10 +537,10 @@ var BANK = [
   "ref": "Seção 12.4 das notas",
   "q": "O anel $\\Z_{6}$ tem corpo de frações?",
   "o": [
-   "Não: a construção exige um anel de integridade, e $\\overline{2} \\cdot \\overline{3} = \\overline{0}$ em $\\Z_{6}$.",
-   "Sim, é $\\Q$.",
-   "Sim, é o próprio $\\Z_{6}$.",
-   "Sim, é $\\Z_{3}$."
+   "Não: $\\Z_{6}$ não é anel de integridade, pois $\\overline{2} \\cdot \\overline{3} = \\overline{0}$.",
+   "Sim, é $\\Q$, como para $\\Z$.",
+   "Sim, é o próprio $\\Z_{6}$, que já é um corpo finito.",
+   "Sim, é $\\Z_{3}$, pois $\\Z_{6}$ contém $\\Z_{3}$."
   ],
   "e": "Sem divisores de zero falha a transitividade da relação e $bd$ pode ser $0$. Além disso, um anel com divisores de zero não cabe dentro de nenhum corpo.",
   "d": 1

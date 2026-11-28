@@ -290,12 +290,12 @@ var BANK = [
   "ref": "Seção 6.1 das notas",
   "q": "Considerando $\\Z$ como subgrupo de $(\\Q, +)$, qual é a classe lateral $\\Z + 1/2$?",
   "o": [
-   "$\\{k + 1/2 \\colon k \\in \\Z \\} = \\{\\dots, -1/2, 1/2, 3/2, \\dots \\}$",
+   "$\\{k + 1/2 \\colon k \\in \\Z \\}$",
    "$\\{k/2 \\colon k \\in \\Z \\}$",
-   "$\\Z$",
-   "$\\{1/2\\}$"
+   "$\\{k \\colon k \\in \\Z \\} = \\Z$",
+   "$\\{1/2, -1/2\\}$"
   ],
-  "e": "$\\Z + 1/2 = \\{k + 1/2 \\colon k \\in \\Z \\}$. Ela não contém os inteiros, então não é $\\Z$ nem $\\{k/2 \\colon k \\in \\Z \\}$. Já $\\Z + (-1) = \\Z$, pois $-1 \\in \\Z$.",
+  "e": "$\\Z + 1/2 = \\{k + 1/2 \\colon k \\in \\Z \\}$. Ela não contém os inteiros, então não é $\\Z$ nem $\\{k/2 \\colon k \\in \\Z \\}$. Já $\\Z + (-1) = \\Z$, pois $-1 \\in \\Z$. E ela é infinita: contém $3/2$, $5/2$, $-3/2$ etc.",
   "d": 2
  },
  {
@@ -639,14 +639,14 @@ var BANK = [
  {
   "t": 2,
   "ref": "Seção 6.4 das notas",
-  "q": "Para achar a ordem de um elemento de $\\Z_{10}^{*}$ (que tem $4$ elementos), quais potências basta calcular?",
+  "q": "Para achar a ordem de um elemento de $\\Z_{10}^{*}$ (que tem $4$ elementos), quais potências basta calcular, no mínimo?",
   "o": [
    "As potências $1$ e $2$: se nenhuma dá $\\overline{1}$, a ordem é $4$.",
-   "Todas as potências de $1$ a $10$.",
-   "Apenas a potência $4$.",
-   "As potências $1$, $2$, $3$ e $4$."
+   "Todas as potências de $1$ a $10$, pois o módulo é $10$.",
+   "Apenas a potência $4$: se ela dá $\\overline{1}$, a ordem é $4$.",
+   "As potências $1$, $2$, $3$ e $4$, até aparecer $\\overline{1}$."
   ],
-  "e": "Pelo teorema de Lagrange, as ordens possíveis são $1$, $2$ e $4$. Calcular só a potência $4$ não decide nada, pois $x^{4} = \\overline{1}$ para todo $x \\in \\Z_{10}^{*}$.",
+  "e": "Pelo teorema de Lagrange, as ordens possíveis são $1$, $2$ e $4$. Calcular só a potência $4$ não decide nada, pois $x^{4} = \\overline{1}$ para todo $x \\in \\Z_{10}^{*}$. Calcular as potências $1$ a $4$ também resolve, mas a $3$ e a $4$ não acrescentam nada.",
   "d": 2
  },
  {
@@ -655,9 +655,9 @@ var BANK = [
   "q": "Um aluno quis calcular $2^{100} \\bmod 15$ usando $2^{14} \\equiv 1 \\pmod{15}$. Qual é o erro?",
   "o": [
    "$15$ não é primo; o correto é usar Euler–Fermat: $2^{\\varphi (15)} = 2^{8} \\equiv 1 \\pmod{15}$.",
-   "Não há erro: $2^{14} \\equiv 1 \\pmod{15}$.",
-   "O erro é que $\\operatorname{mdc}(2, 15) \\neq 1$.",
-   "O correto seria usar $2^{15} \\equiv 1 \\pmod{15}$."
+   "Não há erro: $2^{14} \\equiv 1 \\pmod{15}$, pelo pequeno teorema de Fermat.",
+   "O erro é que $\\operatorname{mdc}(2, 15) \\neq 1$, e então nenhuma potência dá $1$.",
+   "O correto seria usar $2^{15} \\equiv 1 \\pmod{15}$, pois o módulo é $15$."
   ],
   "e": "O pequeno teorema de Fermat vale para módulo primo. Na verdade, $2^{14} = 16384 \\equiv 4 \\pmod{15}$. Com $\\varphi (15) = 8$ o cálculo funciona.",
   "d": 2

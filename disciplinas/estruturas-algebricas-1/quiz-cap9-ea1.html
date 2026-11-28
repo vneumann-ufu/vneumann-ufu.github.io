@@ -291,9 +291,9 @@ var BANK = [
   "q": "O conjunto $\\{x \\in \\Q \\colon x \\notin \\Z \\}$, com as operações de $\\Q$, é um anel?",
   "o": [
    "Não: não contém $0$, e $1/2 + 1/2 = 1$ está fora do conjunto.",
-   "Sim, pois $\\Q$ é um anel.",
-   "Sim, mas sem unidade.",
-   "Não, pois o produto não é comutativo."
+   "Sim, pois $\\Q$ é um anel e o conjunto está contido em $\\Q$.",
+   "Sim, mas sem unidade, pois $1 \\in \\Z$ fica de fora.",
+   "Não, pois o produto de dois não inteiros não é comutativo."
   ],
   "e": "Um subconjunto de um anel só é anel com as mesmas operações se for fechado para a soma e o produto e contiver o $0$. Aqui falham as duas coisas.",
   "d": 2
@@ -304,11 +304,11 @@ var BANK = [
   "q": "Seja $A$ um anel em que $x^{2} = x$ para todo $x \\in A$. O que se pode concluir?",
   "o": [
    "$x = -x$ para todo $x \\in A$, e $A$ é comutativo.",
-   "$A = \\{0, 1\\}$.",
-   "$A$ é um corpo.",
-   "$A$ não pode ter unidade."
+   "$A = \\{0, 1\\}$, pois só $0$ e $1$ satisfazem $x^{2} = x$.",
+   "$A$ é um corpo, pois todo $x \\neq 0$ satisfaz $x \\cdot x = x$.",
+   "$A$ não pode ter unidade, pois teríamos $1 = -1$."
   ],
-  "e": "De $(x + x)^{2} = x + x$ obtemos $4x = 2x$, isto é, $2x = 0$. De $(x + y)^{2} = x + y$ obtemos $xy + yx = 0$, logo $xy = -yx = yx$. O anel $\\Z_{2} \\oplus \\Z_{2}$ satisfaz $x^{2} = x$, tem unidade e não é $\\{0, 1\\}$ nem corpo.",
+  "e": "De $(x + x)^{2} = x + x$ obtemos $4x = 2x$, isto é, $2x = 0$. De $(x + y)^{2} = x + y$ obtemos $xy + yx = 0$, logo $xy = -yx = yx$. O anel $\\Z_{2} \\oplus \\Z_{2}$ satisfaz $x^{2} = x$, tem unidade e não é $\\{0, 1\\}$ nem corpo. Ter $1 = -1$ não impede a unidade: em $\\Z_{2}$, $\\overline{1} = -\\overline{1}$.",
   "d": 3
  },
  {
@@ -602,12 +602,12 @@ var BANK = [
   "ref": "Seção 9.4 das notas",
   "q": "Por que a característica de um anel de integridade, quando positiva, é um número primo?",
   "o": [
-   "Se $p = mn$ com $1 \\lt m$, $n \\lt p$, então $(ma)(na) = (pa)a = 0$, e um dos fatores seria $0$, contra a minimalidade de $p$.",
-   "Porque todo anel de integridade finito é $\\Z_{p}$.",
-   "Porque $p$ divide o número de elementos do anel.",
-   "Porque $pa = 0$ para todo $a$."
+   "Porque $p = mn$, com $1 \\lt m, n \\lt p$, daria $(ma)(na) = (pa)a = 0$.",
+   "Porque todo anel de integridade finito é $\\Z_{p}$, com $p$ primo.",
+   "Porque $p$ divide o número de elementos do anel, que é primo.",
+   "Porque $pa = 0$ para todo $a$, e isso só acontece com $p$ primo."
   ],
-  "e": "A ausência de divisores de zero é o ponto principal: em $\\Z_{6}$, que tem divisores de zero, $6 \\cdot \\overline{1} = \\overline{0}$ e $6$ não é primo.",
+  "e": "Se $p = mn$ com $1 \\lt m, n \\lt p$ e $pa = 0$ com $a \\neq 0$, então $(ma)(na) = (mn)(aa) = (pa)a = 0$; sem divisores de zero, $ma = 0$ ou $na = 0$, contra a minimalidade de $p$. A ausência de divisores de zero é o ponto principal: em $\\Z_{6}$, que tem divisores de zero, $6 \\cdot \\overline{1} = \\overline{0}$ e $6$ não é primo. Além disso, há anéis de integridade de característica positiva que são infinitos, e corpos finitos que não são $\\Z_{p}$.",
   "d": 3
  },
  {

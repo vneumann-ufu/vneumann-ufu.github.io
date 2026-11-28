@@ -277,12 +277,12 @@ var BANK = [
   "ref": "Seção 3.1 das notas",
   "q": "O conjunto $H = \\{a + b\\sqrt{2} \\colon a, b \\in \\Q, a + b\\sqrt{2} \\neq 0\\}$ é subgrupo de $(\\R^{*}, \\cdot)$?",
   "o": [
-   "Sim: $H$ é fechado para o produto e $(a + b\\sqrt{2})^{-1} = (a - b\\sqrt{2})/(a^{2} - 2b^{2})$ está em $H$.",
-   "Não: o inverso de $1 + \\sqrt{2}$ não está em $H$.",
-   "Não: o produto de dois elementos de $H$ pode ser $0$.",
-   "Não: $H$ não contém o neutro $1$."
+   "Sim: $H$ é fechado para o produto e para inversos, pois $a^{2} - 2b^{2} \\neq 0$.",
+   "Não: o inverso de $1 + \\sqrt{2}$ é $1/(1 + \\sqrt{2})$, que não está em $H$.",
+   "Não: o produto de dois elementos de $H$ pode ser $0$, e $0 \\notin H$.",
+   "Não: o neutro $1$ não se escreve como $a + b\\sqrt{2}$, então $1 \\notin H$."
   ],
-  "e": "Como $\\sqrt{2}$ é irracional, $a^{2} - 2b^{2} \\neq 0$ quando $a + b\\sqrt{2} \\neq 0$, e o inverso tem coeficientes racionais. Por exemplo, $(1 + \\sqrt{2})^{-1} = -1 + \\sqrt{2} \\in H$. O produto de reais não nulos é não nulo, e $1 = 1 + 0\\sqrt{2} \\in H$.",
+  "e": "$(a + b\\sqrt{2})^{-1} = (a - b\\sqrt{2})/(a^{2} - 2b^{2})$. Como $\\sqrt{2}$ é irracional, $a^{2} - 2b^{2} \\neq 0$ quando $a + b\\sqrt{2} \\neq 0$, e o inverso tem coeficientes racionais. Por exemplo, $(1 + \\sqrt{2})^{-1} = -1 + \\sqrt{2} \\in H$. O produto de reais não nulos é não nulo, e $1 = 1 + 0\\sqrt{2} \\in H$.",
   "d": 3
  },
  {
@@ -434,11 +434,11 @@ var BANK = [
   "q": "Por que $\\overline{2}$ e $\\overline{8}$ têm a mesma ordem em $\\Z_{15}^{*}$?",
   "o": [
    "Porque $\\overline{8} = \\overline{2}^{3}$ e $\\operatorname{mdc}(|\\overline{2}|, 3) = \\operatorname{mdc}(4, 3) = 1$.",
-   "Porque $\\overline{8} = \\overline{2} \\cdot \\overline{4}$.",
-   "Porque $2$ e $8$ são pares.",
-   "Porque $2$ divide $8$."
+   "Porque $\\overline{8} = \\overline{2} \\cdot \\overline{4}$, e $\\overline{4}$ tem ordem $2$.",
+   "Porque $2$ e $8$ são pares, e pares têm a mesma ordem.",
+   "Porque $2$ divide $8$, e então $|\\overline{8}|$ divide $|\\overline{2}|$."
   ],
-  "e": "Em $\\Z_{15}^{*}$, as potências de $\\overline{2}$ são $\\overline{2}$, $\\overline{4}$, $\\overline{8}$, $\\overline{1}$, então $|\\overline{2}| = 4$ e $|\\overline{2}^{3}| = 4/\\operatorname{mdc}(4, 3) = 4$. Outra forma: $\\overline{2} \\cdot \\overline{8} = \\overline{16} = \\overline{1}$, logo $\\overline{8} = \\overline{2}^{-1}$, e um elemento e seu inverso têm a mesma ordem.",
+  "e": "Em $\\Z_{15}^{*}$, as potências de $\\overline{2}$ são $\\overline{2}$, $\\overline{4}$, $\\overline{8}$, $\\overline{1}$, então $|\\overline{2}| = 4$ e $|\\overline{2}^{3}| = 4/\\operatorname{mdc}(4, 3) = 4$. Outra forma: $\\overline{2} \\cdot \\overline{8} = \\overline{16} = \\overline{1}$, logo $\\overline{8} = \\overline{2}^{-1}$, e um elemento e seu inverso têm a mesma ordem. Ser par não decide nada: $\\overline{4}$ tem ordem $2$.",
   "d": 3
  },
  {

@@ -200,9 +200,9 @@ var BANK = [
   "q": "O anel dos inteiros de Gauss $\\Z[i] = \\{a + bi \\colon a, b \\in \\Z \\}$ é:",
   "o": [
    "um domínio de integridade que não é corpo",
-   "um corpo",
-   "um anel com divisores de zero",
-   "não é subanel de $\\C$"
+   "um corpo, pois é subanel do corpo $\\C$",
+   "um anel com divisores de zero, como $\\Z \\oplus \\Z$",
+   "não é subanel de $\\C$, pois $i \\notin \\Z$"
   ],
   "e": "$\\Z[i]$ é subanel de $\\C$ que contém $1$, então não tem divisores de zero. Não é corpo: $2$ não tem inverso em $\\Z[i]$, pois $1/2 \\notin \\Z[i]$.",
   "d": 2
@@ -317,11 +317,11 @@ var BANK = [
   "q": "O conjunto $\\{a + b\\sqrt[3]{2} \\colon a, b \\in \\Q \\}$ é subcorpo de $\\R$?",
   "o": [
    "Não: $(\\sqrt[3]{2})^{2} = \\sqrt[3]{4}$ não é da forma $a + b\\sqrt[3]{2}$.",
-   "Sim, como $\\Q[\\sqrt{2}]$.",
-   "Sim, pois contém $1$.",
-   "Não, pois não contém $0$."
+   "Sim, como $\\Q[\\sqrt{2}]$: o inverso se acha pelo conjugado.",
+   "Sim, pois contém $1$ e é fechado para a diferença.",
+   "Não, pois não contém $0$, que não é dessa forma."
   ],
-  "e": "O conjunto nem é subanel, pois não é fechado para o produto. A diferença com $\\Q[\\sqrt{2}]$ é que $(\\sqrt{2})^{2} = 2$ é racional, enquanto $(\\sqrt[3]{2})^{2}$ não é combinação de $1$ e $\\sqrt[3]{2}$ com coeficientes racionais.",
+  "e": "O conjunto nem é subanel, pois não é fechado para o produto. A diferença com $\\Q[\\sqrt{2}]$ é que $(\\sqrt{2})^{2} = 2$ é racional, enquanto $(\\sqrt[3]{2})^{2}$ não é combinação de $1$ e $\\sqrt[3]{2}$ com coeficientes racionais. E $0 = 0 + 0\\sqrt[3]{2}$ está no conjunto.",
   "d": 3
  },
  {
@@ -355,12 +355,12 @@ var BANK = [
   "ref": "Seção 10.1 das notas",
   "q": "Verdadeiro ou falso: se $B$ é um subanel comutativo de $A$, então $A$ é comutativo.",
   "o": [
-   "Falso: as matrizes diagonais formam um subanel comutativo de $M_{2}(\\R)$, que não é comutativo.",
-   "Verdadeiro: $B$ “herda” a comutatividade de $A$ e vice-versa.",
-   "Verdadeiro, se $B$ tiver unidade.",
-   "Falso, mas só para anéis finitos."
+   "Falso: as matrizes diagonais formam um subanel comutativo de $M_{2}(\\R)$.",
+   "Verdadeiro: $B$ “herda” a comutatividade de $A$, e $A$ a de $B$.",
+   "Verdadeiro, se $B$ tiver unidade, pois ela é a unidade de $A$.",
+   "Falso, mas só para anéis finitos; para infinitos, vale."
   ],
-  "e": "A recíproca é que vale: se $A$ é comutativo, todo subanel de $A$ é comutativo. As diagonais têm a unidade $I_{2}$, então ter unidade não salva a afirmação.",
+  "e": "$M_{2}(\\R)$ não é comutativo. A recíproca é que vale: se $A$ é comutativo, todo subanel de $A$ é comutativo. As diagonais têm a unidade $I_{2}$, então ter unidade não salva a afirmação.",
   "d": 2
  },
  {
@@ -395,9 +395,9 @@ var BANK = [
   "q": "A função $f\\colon \\Z_{4} \\longrightarrow \\Z_{10}$, $f(\\overline{x}) = \\overline{5x}$, é homomorfismo de anéis e $f(\\overline{1}) = \\overline{5}$. O que isso mostra?",
   "o": [
    "Um homomorfismo de anéis com unidade pode não levar $1$ em $1$.",
-   "$f$ não é homomorfismo.",
-   "$\\Z_{10}$ não tem unidade.",
-   "$f$ é um isomorfismo."
+   "$f$ não é homomorfismo, pois $f(\\overline{1}) \\neq \\overline{1}$.",
+   "$\\Z_{10}$ não tem unidade, pois $\\overline{5}$ faz o papel de $\\overline{1}$.",
+   "$f$ é um isomorfismo, pois leva $\\overline{1}$ em $\\overline{5}$."
   ],
   "e": "Só garantimos $f(1) = 1$ em casos especiais: $f$ sobrejetora, ou contradomínio domínio de integridade com $f \\neq 0$. $\\Z_{10}$ tem divisores de zero.",
   "d": 2
@@ -525,8 +525,8 @@ var BANK = [
   "q": "A função $f\\colon \\Z \\longrightarrow \\Z \\oplus \\Z$, $f(x) = (0, x)$, é:",
   "o": [
    "um homomorfismo injetor de anéis que não leva $1$ na unidade $(1, 1)$.",
-   "não é homomorfismo, pois $f(1) \\neq (1, 1)$.",
-   "um isomorfismo de anéis.",
+   "não é homomorfismo de anéis, pois $f(1) = (0, 1) \\neq (1, 1)$.",
+   "um isomorfismo de anéis, pois é injetor.",
    "não é homomorfismo, pois $(0, x)(0, y) \\neq (0, xy)$."
   ],
   "e": "$(0, x) + (0, y) = (0, x + y)$ e $(0, x)(0, y) = (0, xy)$. O núcleo é $\\{0\\}$. A definição de homomorfismo de anéis das notas não exige $f(1) = 1$.",
@@ -550,10 +550,10 @@ var BANK = [
   "ref": "Seção 10.4 das notas",
   "q": "Por que os corpos $\\Q[\\sqrt{2}]$ e $\\Q[\\sqrt{3}]$ não são isomorfos?",
   "o": [
-   "Um isomorfismo $f$ teria $f(\\sqrt{2})^{2} = f(2) = 2$, mas nenhum elemento de $\\Q[\\sqrt{3}]$ tem quadrado $2$.",
-   "Porque têm cardinalidades diferentes.",
-   "Porque um deles é corpo e o outro não.",
-   "Porque $\\sqrt{2}$ e $\\sqrt{3}$ são números irracionais diferentes."
+   "Um isomorfismo $f$ daria $f(\\sqrt{2})^{2} = 2$, e nenhum elemento de $\\Q[\\sqrt{3}]$ tem quadrado $2$.",
+   "Porque têm cardinalidades diferentes: $\\Q[\\sqrt{3}]$ tem mais elementos.",
+   "Porque $\\Q[\\sqrt{3}]$ não é corpo: $\\sqrt{3}$ não tem inverso nele.",
+   "Porque $\\sqrt{2}$ e $\\sqrt{3}$ são irracionais diferentes, e isso basta."
   ],
   "e": "$f(1) = 1$, então $f(2) = f(1 + 1) = 2$. Se $(a + b\\sqrt{3})^{2} = a^{2} + 3b^{2} + 2ab\\sqrt{3} = 2$, então $ab = 0$, e nem $a^{2} = 2$ nem $3b^{2} = 2$ têm solução racional. Os dois corpos são infinitos enumeráveis.",
   "d": 3

@@ -277,10 +277,10 @@ var BANK = [
   "ref": "Seção 4.2 das notas",
   "q": "Por que uma isometria $f \\in D_{n}$ fica determinada por $f(\\overline{0})$ e $f(\\overline{1})$?",
   "o": [
-   "Porque $f$ leva vértices vizinhos em vértices vizinhos; sabendo onde vão $\\overline{0}$ e $\\overline{1}$, os demais vértices ficam determinados.",
-   "Porque toda $f \\in D_{n}$ é uma rotação.",
-   "Porque toda função de $\\Z_{n}$ em $\\Z_{n}$ é determinada por dois valores.",
-   "Porque $f(\\overline{0}) = \\overline{0}$ para toda $f \\in D_{n}$."
+   "Porque $f$ leva vizinhos em vizinhos: sabendo $f(\\overline{0})$ e $f(\\overline{1})$, os outros valores ficam determinados.",
+   "Porque toda $f \\in D_{n}$ é uma rotação, e uma rotação fica determinada por $f(\\overline{0})$.",
+   "Porque toda função de $\\Z_{n}$ em $\\Z_{n}$ fica determinada por dois de seus valores.",
+   "Porque $f(\\overline{0}) = \\overline{0}$ para toda $f \\in D_{n}$, e então basta saber $f(\\overline{1})$."
   ],
   "e": "$f(\\overline{2})$ é o vizinho de $f(\\overline{1})$ diferente de $f(\\overline{0})$, e assim por diante. Isso dá no máximo $n \\cdot 2 = 2n$ isometrias. As reflexões, por exemplo, não fixam $\\overline{0}$ em geral.",
   "d": 3
@@ -525,9 +525,9 @@ var BANK = [
   "q": "Para $n \\ge 3$, o grupo $D_{n}$ é cíclico?",
   "o": [
    "Não: nenhum elemento tem ordem $2n$.",
-   "Sim, gerado por $r$.",
-   "Sim, gerado por $s$.",
-   "Só quando $n$ é primo."
+   "Sim, gerado por $r$, que tem ordem $n$.",
+   "Sim, gerado por $rs$, que não é rotação.",
+   "Só quando $n$ é primo, pois então $r$ gera tudo."
   ],
   "e": "As rotações têm ordem que divide $n$ e as reflexões têm ordem $2$; como $|D_{n}| = 2n$, nenhum elemento gera o grupo.",
   "d": 2
@@ -602,12 +602,12 @@ var BANK = [
   "ref": "Seção 4.4 das notas",
   "q": "O subconjunto $H = \\{e, r^{3}, r^{6}, r^{2}s, r^{5}s, r^{8}s\\}$ de $D_{9}$ é um subgrupo?",
   "o": [
-   "Sim: $H$ é finito e fechado; por exemplo, $(r^{2}s)(r^{5}s) = r^{6}$ e $r^{3}(r^{2}s) = r^{5}s$.",
+   "Sim: $H$ é finito e fechado para o produto.",
    "Não: $(r^{2}s)(r^{5}s) = r^{7}s$ não está em $H$.",
-   "Não: $H$ não contém $s$.",
-   "Não: $6$ não divide $18$."
+   "Não: $H$ não contém $s$, e todo subgrupo com reflexões contém $s$.",
+   "Não: $6$ não divide $18 = |D_{9}|$."
   ],
-  "e": "As rotações de $H$ formam $\\langle r^{3}\\rangle$, e as reflexões são $r^{k}s$ com $k \\equiv 2 \\pmod{3}$. Com as regras $r^{i}(r^{j}s) = r^{i+j}s$ e $(r^{i}s)(r^{j}s) = r^{i-j}$, todos os produtos caem em $H$. Um subgrupo não precisa conter $s$, e $6$ divide $18$.",
+  "e": "As rotações de $H$ formam $\\langle r^{3}\\rangle$, e as reflexões são $r^{k}s$ com $k \\equiv 2 \\pmod{3}$. Com as regras $r^{i}(r^{j}s) = r^{i+j}s$ e $(r^{i}s)(r^{j}s) = r^{i-j}$, todos os produtos caem em $H$; por exemplo, $(r^{2}s)(r^{5}s) = r^{-3} = r^{6}$ e $r^{3}(r^{2}s) = r^{5}s$. Um subgrupo não precisa conter $s$, e $6$ divide $18$.",
   "d": 3
  },
  {
@@ -628,10 +628,10 @@ var BANK = [
   "ref": "Seção 4.4 das notas",
   "q": "Em $D_{12}$, o subconjunto $H = \\{e, r^{6}, rs, r^{7}s\\}$ é:",
   "o": [
-   "um subgrupo de ordem $4$ em que todo elemento diferente de $e$ tem ordem $2$.",
-   "um subgrupo cíclico de ordem $4$.",
+   "um subgrupo de ordem $4$ que não é cíclico.",
+   "um subgrupo cíclico de ordem $4$, gerado por $rs$.",
    "não é subgrupo: $(rs)(r^{7}s) = r^{8}$ não está em $H$.",
-   "não é subgrupo, pois não contém $s$."
+   "não é subgrupo, pois não contém $s$ nem $r$."
   ],
   "e": "$r^{6}(rs) = r^{7}s$, $(rs)(r^{7}s) = r^{1-7} = r^{-6} = r^{6}$ e todos os elementos $\\neq e$ têm ordem $2$. É um grupo de Klein, que não é cíclico. Somar os expoentes em $(rs)(r^{7}s)$ é o erro mais comum.",
   "d": 3

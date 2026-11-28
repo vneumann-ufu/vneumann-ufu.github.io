@@ -291,11 +291,11 @@ var BANK = [
   "q": "O subconjunto $\\{x \\in \\Z \\colon \\operatorname{mdc}(x, 5) = 1\\}$ de $\\Z$ é:",
   "o": [
    "nem subanel nem ideal, pois não contém $0$.",
-   "um ideal.",
-   "um subanel, mas não ideal.",
-   "um ideal, mas não subanel."
+   "um ideal, pois é fechado para o produto por inteiros.",
+   "um subanel, mas não ideal, pois contém $1$.",
+   "um ideal, mas não subanel, pois não tem unidade."
   ],
-  "e": "$\\operatorname{mdc}(0, 5) = 5$, então $0$ não está no conjunto. Além disso, $1 + 4 = 5$ também fica de fora: não é fechado para a soma.",
+  "e": "$\\operatorname{mdc}(0, 5) = 5$, então $0$ não está no conjunto. Além disso, $1 + 4 = 5$ também fica de fora: não é fechado para a soma. E não é fechado para o produto por inteiros: $5 \\cdot 1 = 5$.",
   "d": 1
  },
  {
@@ -433,10 +433,10 @@ var BANK = [
   "ref": "Seção 11.3 das notas",
   "q": "Por que o produto $(a + I)(b + I) = ab + I$ está bem definido quando $I$ é ideal?",
   "o": [
-   "Se $a' = a + x$ e $b' = b + y$ com $x$, $y \\in I$, então $a'b' - ab = ay + xb + xy \\in I$, porque $I$ é ideal.",
-   "Porque $I$ é um subanel.",
-   "Porque $A$ é comutativo.",
-   "Porque $(A, +)$ é abeliano."
+   "Se $a' - a = x$ e $b' - b = y$ estão em $I$, então $a'b' - ab = ay + xb + xy \\in I$, por absorção.",
+   "Porque $I$ é um subanel, e então é fechado para o produto.",
+   "Porque $A$ é comutativo, e então $(a + I)(b + I) = (b + I)(a + I)$.",
+   "Porque $(A, +)$ é abeliano, e então $I$ é normal em $(A, +)$."
   ],
   "e": "É preciso que $ay$ e $xb$ estejam em $I$, e isso usa a propriedade de absorção do ideal. Um subanel não basta: $\\Z$ é subanel de $\\Q$ e $0 + \\Z = 1 + \\Z$, mas $(1/2 + \\Z)(0 + \\Z)$ daria $0 + \\Z$ e $(1/2 + \\Z)(1 + \\Z)$ daria $1/2 + \\Z$, que são classes diferentes.",
   "d": 2
