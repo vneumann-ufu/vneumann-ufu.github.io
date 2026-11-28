@@ -746,11 +746,11 @@ var BANK = [
   "q": "Por que o teorema “todo anel de integridade finito com pelo menos dois elementos é corpo” exige <i>pelo menos dois elementos</i>?",
   "o": [
    "Porque o anel $\\{0\\}$ é finito e é anel de integridade, mas não é corpo, pois num corpo $1 \\neq 0$.",
-   "Porque, sem isso, o anel poderia não ser comutativo.",
-   "Porque um anel com um só elemento tem divisores de zero.",
-   "Não é preciso: a hipótese só deixa o enunciado mais claro."
+   "Porque o anel $\\{0\\}$ não tem unidade, e a demonstração precisa de uma unidade para começar.",
+   "Porque, num anel com um só elemento, $0 \\cdot 0 = 0$ faz de $0$ um divisor de zero.",
+   "Não é preciso: todo anel de integridade finito é corpo, e a hipótese só deixa o enunciado mais claro."
   ],
-  "e": "Na demonstração, a hipótese garante que existe $a \\in A$ com $a \\neq 0$, e é com esse $a$ que se constrói a função $x \\longmapsto ax$. O anel $\\{0\\}$ não tem elementos não nulos, logo não tem divisores de zero; mas a definição de corpo exige $1 \\neq 0$.",
+  "e": "Na demonstração, a hipótese garante que existe $a \\in A$ com $a \\neq 0$, e é com esse $a$ que se constrói a função $x \\longmapsto ax$. O anel $\\{0\\}$ tem unidade ($1 = 0$) e não tem divisores de zero, pois um divisor de zero é, por definição, não nulo; logo é anel de integridade. Mas a definição de corpo exige $1 \\neq 0$.",
   "d": 3
  },
  {
@@ -758,12 +758,12 @@ var BANK = [
   "ref": "Seção 9.3 das notas",
   "q": "<b>Estratégia.</b> Na prova de que todo anel de integridade finito $A$ com pelo menos dois elementos é corpo, como se encontra a unidade de $A$?",
   "o": [
-   "Fixa-se $a \\neq 0$; como $x \\longmapsto ax$ é bijetora, existe $e$ com $ae = a$; cancelando $a$ em $a(eb) = (ae)b = ab$, obtém-se $eb = b$ para todo $b$.",
-   "Não é preciso encontrá-la: todo anel finito tem unidade.",
-   "Toma-se $e = aa^{-1}$, para um $a \\neq 0$ qualquer.",
-   "Toma-se $e = \\overline{1}$, como em $\\Z_{n}$."
+   "Fixa-se $a \\neq 0$; como $x \\longmapsto ax$ é bijetora, existe $e$ com $ae = a$; cancelando $a$ em $a(eb) = ab$, vê-se que $eb = b$ para todo $b$.",
+   "Não é preciso encontrá-la: todo anel finito tem unidade, e por isso a demonstração começa supondo que existe $1 \\in A$.",
+   "Toma-se $e = aa^{-1}$ para um $a \\neq 0$; como $a$ é invertível em $A$, obtém-se $eb = b$ para todo $b$.",
+   "Toma-se $e = \\overline{1}$, como em $\\Z_{n}$, pois todo anel de integridade finito é um dos anéis $\\Z_{n}$."
   ],
-  "e": "Ainda não se sabe se $A$ tem unidade, então não se pode falar em $a^{-1}$. E nem todo anel finito tem unidade: $\\{\\overline{0}, \\overline{2}\\} \\subseteq \\Z_{4}$ é um anel com as operações de $\\Z_{4}$ e não tem unidade, pois $\\overline{2} \\cdot \\overline{2} = \\overline{0}$. A sobrejetividade de $x \\longmapsto ax$ dá o candidato $e$, e o cancelamento mostra que ele serve para todo $b$.",
+  "e": "Ainda não se sabe se $A$ tem unidade, então não se pode falar em $a^{-1}$. Nem todo anel finito tem unidade: $\\{\\overline{0}, \\overline{2}\\} \\subseteq \\Z_{4}$ é um anel com as operações de $\\Z_{4}$ e não tem unidade, pois $\\overline{2} \\cdot \\overline{2} = \\overline{0}$. E $\\overline{1}$ só faz sentido em $\\Z_{n}$: há anéis de integridade finitos que não são nenhum $\\Z_{n}$, como um corpo com $4$ elementos. A sobrejetividade de $x \\longmapsto ax$ dá o candidato $e$, e o cancelamento mostra que ele serve para todo $b$.",
   "d": 3
  },
  {

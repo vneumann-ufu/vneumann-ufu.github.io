@@ -199,7 +199,7 @@ var BANK = [
   "ref": "Seção 8.2 das notas",
   "q": "Qual é o núcleo do homomorfismo $\\det$: $\\mathrm{GL}(n, \\R) \\longrightarrow \\R^{*}$?",
   "o": [
-   "$\\mathrm{SL}(n, \\R) = \\{A \\colon \\det A = 1\\}$",
+   "$\\{A \\colon \\det A = 1\\}$",
    "$\\{I_{n}\\}$",
    "$\\mathrm{GL}(n, \\R)$",
    "$\\{A \\colon \\det A = 0\\}$"
@@ -317,11 +317,11 @@ var BANK = [
   "q": "A função $h\\colon \\C^{*} \\longrightarrow \\C^{*}$, $h(z) = -z$, é um homomorfismo?",
   "o": [
    "Não: $h(1) = -1$, e um homomorfismo leva o neutro no neutro.",
-   "Sim, pois $h(zw) = -zw$.",
-   "Sim, pois $h$ é bijetora.",
-   "Não, pois $h$ não é injetora."
+   "Sim, pois $h(zw) = -zw = h(z)h(w)$ para todos $z$, $w$.",
+   "Sim, pois $h$ é bijetora e leva $\\C^{*}$ em $\\C^{*}$.",
+   "Não, pois $h$ não é injetora: $h(z) = h(-z)$."
   ],
-  "e": "$h(zw) = -zw$, mas $h(z)h(w) = (-z)(-w) = zw$. O teste mais rápido é o neutro: $h(1) = -1 \\neq 1$. Ser bijetora não torna uma função homomorfismo.",
+  "e": "$h(zw) = -zw$, mas $h(z)h(w) = (-z)(-w) = zw$. O teste mais rápido é o neutro: $h(1) = -1 \\neq 1$. Ser bijetora não torna uma função homomorfismo. E $h$ é injetora: $h(-z) = z \\neq -z = h(z)$.",
   "d": 1
  },
  {
@@ -329,12 +329,12 @@ var BANK = [
   "ref": "Seção 8.1 das notas",
   "q": "A função $f\\colon S_{4} \\longrightarrow A_{4}$, $f(\\sigma) = \\sigma^{2}$, é um homomorfismo?",
   "o": [
-   "Não: com $\\sigma = (1\\ 2)$ e $\\tau = (1\\ 3)$, $(\\sigma \\tau)^{2} = (1\\ 2\\ 3)$, mas $\\sigma^{2}\\tau^{2} = I$.",
-   "Sim, pois $\\sigma^{2}$ é sempre par.",
-   "Sim, pois $(\\sigma \\tau)^{2} = \\sigma^{2}\\tau^{2}$.",
-   "Não, pois a imagem não está contida em $A_{4}$."
+   "Não: $(\\sigma \\tau)^{2} \\neq \\sigma^{2}\\tau^{2}$ para $\\sigma = (1\\ 2)$ e $\\tau = (1\\ 3)$.",
+   "Sim, pois $\\sigma^{2}$ é sempre par e está em $A_{4}$.",
+   "Sim, pois $(\\sigma \\tau)^{2} = \\sigma^{2}\\tau^{2}$ para todas $\\sigma$, $\\tau$.",
+   "Não, pois a imagem de $f$ não está contida em $A_{4}$."
   ],
-  "e": "$\\sigma \\tau = (1\\ 2)(1\\ 3) = (1\\ 3\\ 2)$ e $(1\\ 3\\ 2)^{2} = (1\\ 2\\ 3)$. A igualdade $(\\sigma \\tau)^{2} = \\sigma^{2}\\tau^{2}$ vale em grupos abelianos, e $S_{4}$ não é abeliano. A imagem está em $A_{4}$: todo quadrado é par.",
+  "e": "$\\sigma \\tau = (1\\ 2)(1\\ 3) = (1\\ 3\\ 2)$ e $(1\\ 3\\ 2)^{2} = (1\\ 2\\ 3)$, mas $\\sigma^{2}\\tau^{2} = I$. A igualdade $(\\sigma \\tau)^{2} = \\sigma^{2}\\tau^{2}$ vale em grupos abelianos, e $S_{4}$ não é abeliano. A imagem está em $A_{4}$: todo quadrado é par.",
   "d": 2
  },
  {
@@ -342,10 +342,10 @@ var BANK = [
   "ref": "Seção 8.1 das notas",
   "q": "A regra $\\gamma (\\overline{n}) = \\overline{5n}$ define uma função de $\\Z_{160}$ em $\\Z_{120}$?",
   "o": [
-   "Não: $\\overline{0} = \\overline{160}$ em $\\Z_{160}$, mas $\\overline{0} \\neq \\overline{800} = \\overline{80}$ em $\\Z_{120}$.",
-   "Sim, e é um homomorfismo.",
-   "Sim, mas não é homomorfismo.",
-   "Não, porque $5$ não divide $120$."
+   "Não: $\\overline{0} = \\overline{160}$, mas $\\overline{5 \\cdot 160} = \\overline{80} \\neq \\overline{0}$ em $\\Z_{120}$.",
+   "Sim, e é um homomorfismo, pois $\\overline{5(n + m)} = \\overline{5n} + \\overline{5m}$.",
+   "Sim, mas não é homomorfismo, pois $\\overline{5}$ não é invertível em $\\Z_{120}$.",
+   "Não, porque $5$ não divide $120$, e então a regra não faz sentido."
   ],
   "e": "Para estar bem definida, a imagem não pode depender do representante. Como $800 = 6 \\cdot 120 + 80$, dois representantes da mesma classe têm imagens diferentes. (E $5$ divide $120$.)",
   "d": 2
@@ -420,12 +420,12 @@ var BANK = [
   "ref": "Seção 8.1 das notas",
   "q": "A regra $f(\\overline{n}) = \\overline{3n}$ define uma função de $\\Z_{15}$ em $\\Z_{20}$?",
   "o": [
-   "Não: $\\overline{0} = \\overline{15}$ em $\\Z_{15}$, mas $\\overline{0} \\neq \\overline{45} = \\overline{5}$ em $\\Z_{20}$.",
-   "Sim, e é um homomorfismo.",
-   "Sim, pois $3$ divide $15$.",
-   "Não, pois $3$ não divide $20$."
+   "Não: $\\overline{0} = \\overline{15}$, mas $\\overline{3 \\cdot 15} = \\overline{5} \\neq \\overline{0}$ em $\\Z_{20}$.",
+   "Sim, e é um homomorfismo, pois $\\overline{3(n + m)} = \\overline{3n} + \\overline{3m}$.",
+   "Sim, pois $3$ divide $15$, e então a regra respeita as classes.",
+   "Não, pois $3$ não divide $20$, e então a regra não faz sentido."
   ],
-  "e": "Para a regra estar bem definida, a imagem não pode depender do representante da classe. Os representantes $0$ e $15$ dão a mesma classe em $\\Z_{15}$, mas $3 \\cdot 0 = 0$ e $3 \\cdot 15 = 45 = 2 \\cdot 20 + 5$ dão classes diferentes em $\\Z_{20}$.",
+  "e": "Para a regra estar bem definida, a imagem não pode depender do representante da classe. Os representantes $0$ e $15$ dão a mesma classe em $\\Z_{15}$, mas $3 \\cdot 0 = 0$ e $3 \\cdot 15 = 45 = 2 \\cdot 20 + 5$ dão classes diferentes em $\\Z_{20}$. O que importa é se $20$ divide $3 \\cdot 15$, e não se $3$ divide $15$ ou $20$.",
   "d": 2
  },
  {
@@ -433,7 +433,7 @@ var BANK = [
   "ref": "Seção 8.2 das notas",
   "q": "Seja $f\\colon \\Z \\longrightarrow D_{8}$, $f(j) = r^{j}$. Quais são $\\ker f$ e $\\operatorname{im} f$?",
   "o": [
-   "$\\ker f = 8\\Z$ e $\\operatorname{im} f = R_{8} = \\langle r\\rangle$",
+   "$\\ker f = 8\\Z$ e $\\operatorname{im} f = R_{8}$",
    "$\\ker f = \\{0\\}$ e $\\operatorname{im} f = D_{8}$",
    "$\\ker f = 8\\Z$ e $\\operatorname{im} f = D_{8}$",
    "$\\ker f = 16\\Z$ e $\\operatorname{im} f = R_{8}$"
@@ -459,10 +459,10 @@ var BANK = [
   "ref": "Seção 8.3 das notas",
   "q": "Por que $\\Z_{4}$ não é isomorfo a $\\Z_{2} \\times \\Z_{2}$?",
   "o": [
-   "$\\Z_{4}$ tem um elemento de ordem $4$ e $\\Z_{2} \\times \\Z_{2}$ não tem.",
-   "Porque têm ordens diferentes.",
-   "Porque $\\Z_{4}$ não é abeliano.",
-   "Porque não existe função bijetora entre eles."
+   "Porque $\\Z_{4}$ tem um elemento de ordem $4$ e $\\Z_{2} \\times \\Z_{2}$ não tem.",
+   "Porque têm ordens diferentes: $|\\Z_{2} \\times \\Z_{2}| = 2$.",
+   "Porque $\\Z_{4}$ não é abeliano e $\\Z_{2} \\times \\Z_{2}$ é.",
+   "Porque não existe função bijetora de $\\Z_{4}$ em $\\Z_{2} \\times \\Z_{2}$."
   ],
   "e": "Isomorfismos preservam ordens de elementos. $\\overline{1}$ tem ordem $4$ em $\\Z_{4}$, e em $\\Z_{2} \\times \\Z_{2}$ todo elemento $x$ satisfaz $2x = 0$. Os dois grupos têm $4$ elementos e são abelianos.",
   "d": 1
@@ -538,9 +538,9 @@ var BANK = [
   "q": "Quantos homomorfismos existem de $\\Z_{5}$ em $S_{3}$?",
   "o": [
    "Apenas $1$, o que leva tudo em $I$.",
-   "Nenhum.",
-   "$5$",
-   "$6$"
+   "Nenhum, pois $5$ não divide $|S_{3}| = 6$.",
+   "$5$, um para cada elemento de $\\Z_{5}$.",
+   "$6$, um para cada escolha de $f(\\overline{1})$."
   ],
   "e": "Seja $b = f(\\overline{1})$. A ordem de $b$ divide $|\\overline{1}| = 5$ (pois $f(a)^{n} = f(a^{n})$) e divide $|S_{3}| = 6$ (Lagrange); logo $|b| = 1$ e $b = I$. Então $f(\\overline{n}) = b^{n} = I$ para todo $\\overline{n}$. A função constante igual a $I$ é sempre um homomorfismo, então existe exatamente um.",
   "d": 2
@@ -551,9 +551,9 @@ var BANK = [
   "q": "Quantos homomorfismos existem de $\\Z_{4}$ em $\\Z_{3}$?",
   "o": [
    "Apenas $1$, o que leva tudo em $\\overline{0}$.",
-   "Nenhum.",
-   "$3$",
-   "$4$"
+   "Nenhum, pois $4$ e $3$ são primos entre si.",
+   "$3$, um para cada escolha de $f(\\overline{1})$.",
+   "$4$, um para cada elemento de $\\Z_{4}$."
   ],
   "e": "Seja $b = f(\\overline{1})$. A ordem de $b$ divide $|\\overline{1}| = 4$ e divide $|\\Z_{3}| = 3$ (Lagrange), logo divide $\\operatorname{mdc}(4, 3) = 1$. Então $b = \\overline{0}$ e $f(\\overline{n}) = n \\cdot f(\\overline{1}) = \\overline{0}$. A função constante igual a $\\overline{0}$ é sempre um homomorfismo.",
   "d": 2
@@ -564,11 +564,11 @@ var BANK = [
   "q": "Quantos homomorfismos existem de $\\Z_{8}$ em $\\Z_{10}$?",
   "o": [
    "$2$: $\\overline{n} \\longmapsto \\overline{0}$ e $\\overline{n} \\longmapsto \\overline{5n}$.",
-   "$1$: só o trivial.",
-   "$4$",
+   "$1$: só o trivial $\\overline{n} \\longmapsto \\overline{0}$, pois $8 \\nmid 10$.",
+   "$4$: $\\overline{n} \\longmapsto \\overline{kn}$ com $k = 0$, $2$, $5$ ou $8$.",
    "$10$, um para cada escolha de $f(\\overline{1})$."
   ],
-  "e": "A ordem de $f(\\overline{1})$ divide $|\\overline{1}| = 8$ e $|\\Z_{10}| = 10$, logo divide $\\operatorname{mdc}(8, 10) = 2$. Os elementos de $\\Z_{10}$ de ordem $1$ ou $2$ são $\\overline{0}$ e $\\overline{5}$. Como $f(\\overline{n}) = n \\cdot f(\\overline{1})$, há no máximo dois homomorfismos, e os dois existem: $\\overline{n} \\longmapsto \\overline{5n}$ está bem definida porque $5 \\cdot 8 = 40$ é múltiplo de $10$.",
+  "e": "A ordem de $f(\\overline{1})$ divide $|\\overline{1}| = 8$ e $|\\Z_{10}| = 10$, logo divide $\\operatorname{mdc}(8, 10) = 2$. Os elementos de $\\Z_{10}$ de ordem $1$ ou $2$ são $\\overline{0}$ e $\\overline{5}$. Como $f(\\overline{n}) = n \\cdot f(\\overline{1})$, há no máximo dois homomorfismos, e os dois existem: $\\overline{n} \\longmapsto \\overline{5n}$ está bem definida porque $5 \\cdot 8 = 40$ é múltiplo de $10$. Com $k = 2$ ou $k = 8$, a regra nem está bem definida: $2 \\cdot 8 = 16$ e $8 \\cdot 8 = 64$ não são múltiplos de $10$.",
   "d": 3
  },
  {
@@ -615,7 +615,7 @@ var BANK = [
   "ref": "Seção 8.2 das notas",
   "q": "<b>Ache o erro.</b> <i>Afirmação:</i> se $\\ker f = \\{1_{G}\\}$, então o homomorfismo $f$ é injetor.<br><i>“Demonstração”:</i><br>(1) Suponha $f(a) = f(b)$.<br>(2) Como o núcleo é trivial, $a = b$.<br>O que falta?",
   "o": [
-   "Justificar o passo (2): $f(a) = f(b)$ dá $f(ab^{-1}) = 1_{H}$, logo $ab^{-1} \\in \\ker f$ e $ab^{-1} = 1_{G}$.",
+   "Justificar o passo (2): de $f(a) = f(b)$ vem $f(ab^{-1}) = 1_{H}$, logo $ab^{-1} = 1_{G}$.",
    "A afirmação é falsa: há homomorfismos de núcleo trivial que não são injetores.",
    "O núcleo trivial só diz algo sobre $f(1_{G})$ e não ajuda a provar a injetividade.",
    "Nada: “núcleo trivial” e “injetor” são, por definição, a mesma coisa."
@@ -628,7 +628,7 @@ var BANK = [
   "ref": "Seção 8.2 das notas",
   "q": "<b>Hipótese e objetivo.</b> Para provar que $\\ker f \\lhd G$ pelo critério da conjugação, tomamos $x \\in G$ e $a \\in \\ker f$. O que se quer provar, e como?",
   "o": [
-   "Que $xax^{-1} \\in \\ker f$: $f(xax^{-1}) = f(x) \\cdot 1_{H} \\cdot f(x)^{-1} = 1_{H}$.",
+   "Que $xax^{-1} \\in \\ker f$: $f(xax^{-1}) = f(x)\\, 1_{H}\\, f(x)^{-1} = 1_{H}$.",
    "Que $xa = ax$: $f(xa) = f(x)f(a) = f(a)f(x) = f(ax)$.",
    "Que $f(x) \\in \\ker f$: $f(f(x)) = f(1_{G}) = 1_{H}$.",
    "Que $xax^{-1} = a$: $f(xax^{-1}) = f(x)f(a)f(x)^{-1} = f(a)$."

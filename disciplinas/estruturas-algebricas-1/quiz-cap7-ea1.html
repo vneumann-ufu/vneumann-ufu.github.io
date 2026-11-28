@@ -200,9 +200,9 @@ var BANK = [
   "q": "Por que $A_{n} \\lhd S_{n}$?",
   "o": [
    "Porque $A_{n}$ tem índice $2$ em $S_{n}$.",
-   "Porque $A_{n}$ é abeliano.",
-   "Porque $A_{n}$ é cíclico.",
-   "Porque $|A_{n}|$ é primo."
+   "Porque $A_{n}$ é abeliano, e subgrupos abelianos são normais.",
+   "Porque $A_{n}$ é cíclico, gerado por um $3$-ciclo.",
+   "Porque a ordem $|A_{n}| = n!/2$ é um número primo."
   ],
   "e": "$|S_{n}:A_{n}| = n!/(n!/2) = 2$, e todo subgrupo de índice $2$ é normal. $A_{n}$ não é abeliano para $n \\ge 4$.",
   "d": 1
@@ -238,12 +238,12 @@ var BANK = [
   "ref": "Seção 7.1 das notas",
   "q": "Por que $\\mathrm{SL}(n, \\R)$ é normal em $\\mathrm{GL}(n, \\R)$?",
   "o": [
-   "Porque $\\det (ABA^{-1}) = \\det B = 1$ para $A \\in \\mathrm{GL}$ e $B \\in \\mathrm{SL}$.",
-   "Porque $\\mathrm{GL}(n, \\R)$ é abeliano.",
-   "Porque $\\mathrm{SL}(n, \\R)$ é abeliano.",
-   "Porque $\\mathrm{SL}(n, \\R)$ é finito."
+   "Porque $\\det (ABA^{-1}) = \\det B$ para todos $A \\in \\mathrm{GL}$ e $B \\in \\mathrm{SL}$.",
+   "Porque $\\mathrm{GL}(n, \\R)$ é abeliano, e então todo subgrupo dele é normal.",
+   "Porque $\\mathrm{SL}(n, \\R)$ é abeliano, e isso garante a normalidade.",
+   "Porque $\\mathrm{SL}(n, \\R)$ tem índice $2$ em $\\mathrm{GL}(n, \\R)$."
   ],
-  "e": "Basta verificar a caracterização $xHx^{-1} \\subseteq H$: $\\det (ABA^{-1}) = \\det A \\cdot \\det B \\cdot (\\det A)^{-1} = \\det B$.",
+  "e": "Basta verificar a caracterização $xHx^{-1} \\subseteq H$: $\\det (ABA^{-1}) = \\det A \\cdot \\det B \\cdot (\\det A)^{-1} = \\det B$. Para $n \\ge 2$, $\\mathrm{GL}(n, \\R)$ e $\\mathrm{SL}(n, \\R)$ não são abelianos, e o índice de $\\mathrm{SL}(n, \\R)$ é infinito.",
   "d": 2
  },
  {
@@ -265,9 +265,9 @@ var BANK = [
   "q": "O subgrupo $\\{I, (1\\ 2)\\}$ é normal em $S_{3}$?",
   "o": [
    "Não: $(1\\ 3)(1\\ 2)(1\\ 3) = (2\\ 3)$ não está no subgrupo.",
-   "Sim, pois tem índice $3$.",
-   "Sim, pois é abeliano.",
-   "Sim, pois $(1\\ 2)$ tem ordem $2$."
+   "Sim, pois tem índice $3$, e subgrupos de índice ímpar são normais.",
+   "Sim, pois é abeliano, e todo subgrupo abeliano é normal.",
+   "Sim, pois $(1\\ 2)$ tem ordem $2$ e é o seu próprio inverso."
   ],
   "e": "Conjugando $(1\\ 2)$ por $(1\\ 3)$, obtemos $(2\\ 3)$, que não está em $\\{I, (1\\ 2)\\}$. Ser abeliano não torna um subgrupo normal.",
   "d": 2
@@ -317,9 +317,9 @@ var BANK = [
   "q": "Por que $A_{3} = \\langle (1\\ 2\\ 3)\\rangle$ é normal em $S_{3}$?",
   "o": [
    "Porque é o único subgrupo de ordem $3$ de $S_{3}$ (e também porque tem índice $2$).",
-   "Porque $A_{3}$ é abeliano.",
+   "Porque $A_{3}$ é abeliano, e todo subgrupo abeliano de $S_{3}$ é normal.",
    "Porque $(1\\ 2\\ 3)$ comuta com todos os elementos de $S_{3}$.",
-   "Porque $S_{3}$ é abeliano."
+   "Porque $S_{3}$ é abeliano, e então todos os seus subgrupos são normais."
   ],
   "e": "Os únicos elementos de ordem $3$ de $S_{3}$ são $(1\\ 2\\ 3)$ e $(1\\ 3\\ 2)$, então há um só subgrupo de ordem $3$; cada $aHa^{-1}$ é subgrupo da mesma ordem, logo é igual a $H$. Ser abeliano não basta: $\\{I, (1\\ 2)\\}$ é abeliano e não é normal.",
   "d": 2
@@ -356,9 +356,9 @@ var BANK = [
   "q": "Sejam $M$, $N \\lhd G$ com $M \\cap N = \\{1\\}$. O que se pode concluir?",
   "o": [
    "$mn = nm$ para todos $m \\in M$ e $n \\in N$.",
-   "$G$ é abeliano.",
-   "$M = N$.",
-   "$MN = \\{1\\}$."
+   "$G$ é abeliano, pois $M$ e $N$ comutam entre si.",
+   "$M = N$, pois os dois são normais em $G$.",
+   "$MN = \\{1\\}$, pois $M \\cap N = \\{1\\}$."
   ],
   "e": "O elemento $m n m^{-1} n^{-1} = (m n m^{-1}) n^{-1}$ está em $N$, e $= m \\ (n m^{-1} n^{-1})$ está em $M$. Logo está em $M \\cap N = \\{1\\}$, isto é, $mn = nm$. Os outros elementos de $G$ não precisam comutar.",
   "d": 3
@@ -369,9 +369,9 @@ var BANK = [
   "q": "O subgrupo $H = \\{I, (1\\ 2)(3\\ 4)\\}$ é normal em $A_{4}$?",
   "o": [
    "Não: $(1\\ 2\\ 3)(1\\ 2)(3\\ 4)(1\\ 3\\ 2) = (1\\ 4)(2\\ 3) \\notin H$.",
-   "Sim, pois tem índice $2$ em $A_{4}$.",
-   "Sim, pois $A_{4}$ é abeliano.",
-   "Sim, pois $(1\\ 2)(3\\ 4)$ tem ordem $2$."
+   "Sim, pois tem índice $2$ em $A_{4}$, e subgrupos de índice $2$ são normais.",
+   "Sim, pois $A_{4}$ é abeliano, e então todo subgrupo de $A_{4}$ é normal.",
+   "Sim, pois $(1\\ 2)(3\\ 4)$ tem ordem $2$ e comuta com $(1\\ 3)(2\\ 4)$."
   ],
   "e": "Com $x = (1\\ 2\\ 3)$ e $x^{-1} = (1\\ 3\\ 2)$, o produto $x h x^{-1}$ (aplicando da direita para a esquerda) dá $(1\\ 4)(2\\ 3)$, que não está em $H$. O índice de $H$ em $A_{4}$ é $12/2 = 6$, e $A_{4}$ não é abeliano.",
   "d": 2
@@ -395,9 +395,9 @@ var BANK = [
   "q": "Por que $V = \\{I, (1\\ 2)(3\\ 4), (1\\ 3)(2\\ 4), (1\\ 4)(2\\ 3)\\}$ é normal em $A_{4}$?",
   "o": [
    "Porque é o único subgrupo de ordem $4$ de $A_{4}$.",
-   "Porque tem índice $2$ em $A_{4}$.",
-   "Porque $A_{4}$ é abeliano.",
-   "Porque $V$ é abeliano."
+   "Porque tem índice $2$ em $A_{4}$, e subgrupos de índice $2$ são normais.",
+   "Porque $A_{4}$ é abeliano, e então todo subgrupo dele é normal.",
+   "Porque $V$ é abeliano, e todo subgrupo abeliano é normal."
   ],
   "e": "Para todo $a \\in A_{4}$, $aVa^{-1}$ é subgrupo de ordem $4$, logo é igual a $V$. O índice é $12/4 = 3$, não $2$; $A_{4}$ não é abeliano; e ser abeliano não torna um subgrupo normal: $\\{I, (1\\ 2)(3\\ 4)\\} \\subseteq V$ é abeliano e não é normal em $A_{4}$.",
   "d": 2
@@ -408,9 +408,9 @@ var BANK = [
   "q": "Seja $G$ um grupo que tem exatamente um elemento $t$ de ordem $2$. O que se pode concluir?",
   "o": [
    "$xt = tx$ para todo $x \\in G$.",
-   "$G$ é abeliano.",
-   "$G$ é cíclico.",
-   "$|G| = 2$."
+   "$G$ é abeliano, pois $t$ comuta com todos.",
+   "$G$ é cíclico, gerado por $t$.",
+   "$|G| = 2$, pois $\\{1, t\\}$ é o único subgrupo."
   ],
   "e": "$\\{1, t\\}$ é o único subgrupo de ordem $2$, logo é normal. Então $xtx^{-1} \\in \\{1, t\\}$, e $xtx^{-1} \\neq 1$ (senão $t = 1$). Logo $xtx^{-1} = t$, isto é, $xt = tx$. Isso diz que $t$ comuta com todos, não que quaisquer dois elementos comutam; e $\\Z_{4}$ tem um só elemento de ordem $2$ e tem $4$ elementos.",
   "d": 3
@@ -420,7 +420,7 @@ var BANK = [
   "ref": "Seção 7.2 das notas",
   "q": "Em $D_{4}$, o subgrupo $K = \\{e, r^{2}\\}$ é normal. Ele é o único subgrupo de ordem $2$ de $D_{4}$?",
   "o": [
-   "Não: $\\{e, s\\}$, por exemplo, também tem ordem $2$. Um subgrupo normal não precisa ser único na sua ordem.",
+   "Não: $\\{e, s\\}$, por exemplo, também tem ordem $2$.",
    "Sim, e é por isso que $K$ é normal.",
    "Sim, pois $r^{2}$ é o único elemento de ordem $2$ de $D_{4}$.",
    "Não, e por isso $K$ não é normal."
@@ -433,10 +433,10 @@ var BANK = [
   "ref": "Seção 7.2 das notas",
   "q": "Todo subgrupo de $R_{n} = \\langle r\\rangle$ é normal em $D_{n}$?",
   "o": [
-   "Sim: $(r^{j}s) r^{k} \\ (r^{j}s) = r^{-k}$, e todo subgrupo contém os inversos dos seus elementos.",
-   "Não: só $R_{n}$, que tem índice $2$.",
-   "Só os subgrupos de índice $2$.",
-   "Só quando $n$ é primo."
+   "Sim: $(r^{j}s) r^{k} (r^{j}s) = r^{-k}$, e um subgrupo contém os inversos dos seus elementos.",
+   "Não: só o próprio $R_{n}$, que tem índice $2$ em $D_{n}$; os outros têm índice maior.",
+   "Não: só os subgrupos de $R_{n}$ que têm índice $2$ em $D_{n}$ são normais.",
+   "Só quando $n$ é primo, pois então $R_{n}$ não tem subgrupos além de $\\{e\\}$ e $R_{n}$."
   ],
   "e": "Conjugando $r^{k}$ por uma rotação obtemos $r^{k}$, e por uma reflexão obtemos $r^{-k} = (r^{k})^{-1}$. Por exemplo, $\\langle r^{2}\\rangle = \\{e, r^{2}, r^{4}\\}$ é normal em $D_{6}$, embora tenha índice $4$.",
   "d": 3
@@ -459,12 +459,12 @@ var BANK = [
   "ref": "Seção 7.1 das notas",
   "q": "Por que $\\langle r^{2}\\rangle = \\{e, r^{2}, r^{4}, r^{6}\\}$ é normal em $D_{8}$?",
   "o": [
-   "Para $x = r^{j}$, $x r^{2i} x^{-1} = r^{2i}$; para $x = r^{j}s$, $x r^{2i} x^{-1} = r^{-2i}$. Nos dois casos o resultado está em $\\langle r^{2}\\rangle$.",
-   "Porque tem índice $2$ em $D_{8}$.",
+   "Porque, para todo $x \\in D_{8}$, $x r^{2i} x^{-1}$ é $r^{2i}$ ou $r^{-2i}$.",
+   "Porque tem índice $2$ em $D_{8}$, e subgrupos de índice $2$ são normais.",
    "Porque é o único subgrupo de ordem $4$ de $D_{8}$.",
-   "Porque $D_{8}$ é abeliano."
+   "Porque $D_{8}$ é abeliano, e então todo subgrupo dele é normal."
   ],
-  "e": "O índice é $16/4 = 4$, não $2$. $\\{e, r^{4}, s, r^{4}s\\}$ também é subgrupo de ordem $4$, então $\\langle r^{2}\\rangle$ não é o único. $D_{8}$ não é abeliano. A conta usa as regras $(r^{j}s)r^{2i} = r^{j-2i}s$ e $(r^{j-2i}s)(r^{j}s) = r^{-2i}$, e $r^{-2i} = r^{8-2i} \\in \\langle r^{2}\\rangle$.",
+  "e": "Para $x = r^{j}$, $x r^{2i} x^{-1} = r^{2i}$; para $x = r^{j}s$, $x r^{2i} x^{-1} = r^{-2i}$; nos dois casos o resultado está em $\\langle r^{2}\\rangle$. O índice é $16/4 = 4$, não $2$. $\\{e, r^{4}, s, r^{4}s\\}$ também é subgrupo de ordem $4$, então $\\langle r^{2}\\rangle$ não é o único. $D_{8}$ não é abeliano. A conta usa as regras $(r^{j}s)r^{2i} = r^{j-2i}s$ e $(r^{j-2i}s)(r^{j}s) = r^{-2i}$, e $r^{-2i} = r^{8-2i} \\in \\langle r^{2}\\rangle$.",
   "d": 2
  },
  {
@@ -525,11 +525,11 @@ var BANK = [
   "q": "Por que exigimos $N \\lhd G$ para definir o grupo quociente $G/N$?",
   "o": [
    "Para que $(aN)(bN) = abN$ não dependa dos representantes.",
-   "Para que $G/N$ seja abeliano.",
-   "Para que $N$ seja finito.",
-   "Para que $|G/N|$ divida $|G|$."
+   "Para que $G/N$ seja abeliano, mesmo quando $G$ não é.",
+   "Para que $N$ seja finito e $G/N$ tenha poucos elementos.",
+   "Para que $|G/N| = |G|/|N|$ divida a ordem de $G$."
   ],
-  "e": "Com $N$ normal vale $(aN)(bN) = a(Nb)N = a(bN)N = abN$, e a operação fica bem definida. $G/N$ não precisa ser abeliano.",
+  "e": "Com $N$ normal vale $(aN)(bN) = a(Nb)N = a(bN)N = abN$, e a operação fica bem definida. $G/N$ não precisa ser abeliano. Também não é a normalidade que faz $|G/N|$ dividir $|G|$: isso vem do Teorema de Lagrange.",
   "d": 1
  },
  {
@@ -566,7 +566,7 @@ var BANK = [
    "$a^{-1}N$",
    "$aN$",
    "$N$",
-   "Na"
+   "$Na$"
   ],
   "e": "$(aN)(a^{-1}N) = (aa^{-1})N = N$, que é o neutro de $G/N$.",
   "d": 1
@@ -706,12 +706,12 @@ var BANK = [
   "ref": "Seção 7.3 das notas",
   "q": "Por que a operação $(aN)(bN) = (ab)N$ em $G/N$ não depende dos representantes $a$ e $b$?",
   "o": [
-   "Porque $(aN)(bN)$ é o produto dos conjuntos $aN$ e $bN$, que só depende dos conjuntos.",
-   "Porque $G$ é abeliano.",
-   "Porque $aN =$ Na implica $ab = ba$.",
-   "Porque $a$ e $b$ estão em $N$."
+   "Porque $(aN)(bN)$ é um produto de conjuntos, que só depende de $aN$ e $bN$.",
+   "Porque $G$ é abeliano, e então $ab$ não depende da ordem.",
+   "Porque $aN = Na$ implica $ab = ba$ para todos $a$, $b \\in G$.",
+   "Porque $a$ e $b$ estão em $N$, e então $aN = bN = N$."
   ],
-  "e": "Pelo lema, o produto de conjuntos $(aN)(bN)$ é igual a $(ab)N$ quando $N \\lhd G$. Se $aN = a'N$ e $bN = b'N$, os conjuntos são os mesmos, logo $(ab)N = (a'b')N$. Não é preciso que $G$ seja abeliano, e $aN =$ Na não significa que $a$ comuta com cada elemento de $N$.",
+  "e": "Pelo lema, o produto de conjuntos $(aN)(bN)$ é igual a $(ab)N$ quando $N \\lhd G$. Se $aN = a'N$ e $bN = b'N$, os conjuntos são os mesmos, logo $(ab)N = (a'b')N$. Não é preciso que $G$ seja abeliano, e $aN = Na$ não significa que $a$ comuta com cada elemento de $N$.",
   "d": 3
  },
  {
@@ -720,9 +720,9 @@ var BANK = [
   "q": "Na prova do teorema de Cauchy (caso abeliano), com $N = \\langle a\\rangle$, $|a| = m$ e $p \\nmid m$, por que $p$ divide $|G/N|$?",
   "o": [
    "Porque $|G| = m\\cdot |G/N|$, $p$ divide $|G|$, $p$ é primo e $p \\nmid m$.",
-   "Porque $|G/N| \\lt |G|$.",
-   "Porque $G/N$ é abeliano.",
-   "Porque $N = \\langle a\\rangle$ é cíclico."
+   "Porque $|G/N| \\lt |G|$, e a hipótese de indução vale para $G/N$.",
+   "Porque $G/N$ é abeliano, como quociente de um grupo abeliano.",
+   "Porque $N = \\langle a\\rangle$ é cíclico e $p$ não divide $|N| = m$."
   ],
   "e": "Se um primo divide um produto, ele divide um dos fatores; como $p \\nmid m$, $p$ divide $|G/N|$. As outras afirmações são verdadeiras e também são usadas na prova ($|G/N| \\lt |G|$ permite usar a hipótese de indução), mas não explicam por que $p$ divide $|G/N|$.",
   "d": 3
@@ -759,9 +759,9 @@ var BANK = [
   "q": "<b>Lacunas.</b> Prove que um subgrupo $H$ de índice $2$ é normal. Seja $a \\notin H$. As classes à esquerda são $H$ e $aH$, e as à direita são $H$ e $Ha$. Como cada partição tem dois blocos e um deles é $H$, ______, e então $aH = Ha$. O que preenche a lacuna?",
   "o": [
    "$aH = G \\setminus H$ e $Ha = G \\setminus H$",
-   "$aH = H$ e $Ha = H$",
-   "$aH$ e $Ha$ são disjuntos",
-   "$aH = a^{-1}H$ e $Ha = Ha^{-1}$"
+   "$aH = H$ e $Ha = H$, pois $H$ está nas duas partições",
+   "$aH \\cap Ha = \\emptyset$, pois classes distintas são disjuntas",
+   "$aH = G$ e $Ha = G$, pois $G$ é a união dos dois blocos"
   ],
   "e": "Numa partição em dois blocos, o outro bloco é o complementar de $H$. Então $aH = G \\setminus H = Ha$. Para $a \\in H$, $aH = H = Ha$. Logo $aH = Ha$ para todo $a \\in G$, e $H \\lhd G$.",
   "d": 2

@@ -707,9 +707,9 @@ var BANK = [
   "q": "Seja $n \\ge 2$. Quais são os subanéis de $\\Z_{n}$?",
   "o": [
    "Os conjuntos $d\\Z_{n} = \\{\\overline{dk} \\colon k \\in \\Z\\}$, com $d$ divisor positivo de $n$.",
-   "Apenas $\\{\\overline{0}\\}$ e $\\Z_{n}$.",
-   "Os conjuntos $d\\Z_{n}$ com $d$ primo.",
-   "Os subgrupos de $(\\Z_{n}, +)$ que contêm $\\overline{1}$."
+   "Apenas $\\{\\overline{0}\\}$ e $\\Z_{n}$, pois um subanel de $\\Z_{n}$ precisa conter $\\overline{1}$.",
+   "Os conjuntos $d\\Z_{n}$ com $d$ primo, pois só nesse caso $d\\Z_{n}$ é fechado para o produto.",
+   "Os subgrupos de $(\\Z_{n}, +)$ que contêm $\\overline{1}$, pois o subanel herda a unidade de $\\Z_{n}$."
   ],
   "e": "Todo subanel é subgrupo de $(\\Z_{n}, +)$, e os subgrupos de $\\Z_{n}$ são os $\\langle \\overline{d} \\rangle = d\\Z_{n}$ com $d \\mid n$. Cada um deles é fechado para o produto: $\\overline{da} \\cdot \\overline{db} = \\overline{d(dab)}$. Um subgrupo que contém $\\overline{1}$ é o próprio $\\Z_{n}$.",
   "d": 2
@@ -746,9 +746,9 @@ var BANK = [
   "q": "O subanel $\\{\\overline{0}, \\overline{10}\\}$ de $\\Z_{20}$:",
   "o": [
    "não tem unidade, pois $\\overline{10} \\cdot \\overline{10} = \\overline{0}$.",
-   "tem unidade $\\overline{10}$.",
-   "tem unidade $\\overline{1}$, a de $\\Z_{20}$.",
-   "não é subanel, pois não contém $\\overline{1}$."
+   "tem unidade $\\overline{10}$, pois $\\overline{10} \\cdot \\overline{0} = \\overline{0}$.",
+   "tem unidade $\\overline{1}$, que é a unidade de $\\Z_{20}$.",
+   "não é subanel de $\\Z_{20}$, pois não contém $\\overline{1}$."
   ],
   "e": "A unidade teria de ser $\\overline{0}$ ou $\\overline{10}$. Mas $\\overline{0} \\cdot \\overline{10} = \\overline{0}$ e $\\overline{10} \\cdot \\overline{10} = \\overline{100} = \\overline{0}$: nenhum dos dois dá $\\overline{10}$. Um subanel não precisa conter o $\\overline{1}$ do anel: $\\{\\overline{0}, \\overline{10}\\} = 10\\Z_{20}$ é subanel.",
   "d": 3
@@ -799,7 +799,7 @@ var BANK = [
   "o": [
    "Porque ela vale para todos os elementos de $A$, em particular para os de $B$.",
    "Porque $a - b \\in B$ garante a associatividade do produto.",
-   "Porque $B$ é comutativo.",
+   "Porque $B$ é comutativo, e então o produto em $B$ não depende da ordem.",
    "É preciso verificar: a associatividade é uma das condições do critério."
   ],
   "e": "A associatividade e a distributividade são igualdades que valem para quaisquer elementos de $A$; como os elementos de $B$ são elementos de $A$, elas valem em $B$. O que precisa ser verificado é que as operações não saem de $B$: $a - b \\in B$ (com $B \\neq \\emptyset$, isso faz de $(B, +)$ um subgrupo de $(A, +)$) e $ab \\in B$.",
